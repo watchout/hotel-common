@@ -1,0 +1,45 @@
+{
+  "name": "hotel-common-development",
+  "description": "Hotel Common AI Development Optimization Environment",
+  "version": "1.0.0",
+  "type": "development",
+  "node_version": "18",
+  "package_manager": "npm",
+  "scripts": {
+    "setup": "npm install",
+    "build": "npm run build",
+    "test": "npm run test",
+    "rag": "npm run enhanced-rag",
+    "guardrails": "npm run actual-guardrails",
+    "monitor": "npm run monitor-guardrails"
+  },
+  "environment_variables": {
+    "NODE_ENV": "development",
+    "PROJECT_TYPE": "hotel-common"
+  },
+  "dependencies": [
+    "typescript",
+    "prisma",
+    "@prisma/client",
+    "express",
+    "langchain",
+    "@langchain/openai",
+    "chokidar",
+    "dotenv"
+  ],
+  "workspace": {
+    "root": "/Users/kaneko/hotel-common",
+    "config_files": [
+      "package.json",
+      "tsconfig.json",
+      "prisma/schema.prisma",
+      ".cursor/instructions.md"
+    ]
+  },
+  "ai_optimization": {
+    "rag_enabled": true,
+    "guardrails_enabled": true,
+    "token_optimization": true,
+    "english_thinking": true
+  }
+} 
