@@ -1,0 +1,12 @@
+{
+  "timestamp": "2025-07-24T00:21:16.512Z",
+  "overall_status": "NORMAL",
+  "integration_progress": "85%",
+  "database_health": "HEALTHY",
+  "system_connections": "1/4",
+  "critical_issues": 1,
+  "typescript_errors": 0,
+  "next_actions": [
+    "システム接続設定の確認・修正"
+  ]
+}

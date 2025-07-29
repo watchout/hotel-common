@@ -1,0 +1,71 @@
+// 統合管理画面用 Adminテーブル設計
+
+model Admin {
+  id                    String    @id @default(cuid())
+  
+  // 基本情報
+  email                 String    @unique
+  username              String    @unique
+  displayName           String
+  passwordHash          String    @map("password_hash")
+  
+  // 権限レベル（階層管理）
+  adminLevel            AdminLevel @map("admin_level")
+  // chainadmin: テナント一覧まで
+  // groupadmin: チェーン一覧まで  
+  // superadmin: グループ一覧まで（システム開発者）
+  
+  // アクセス範囲制限
+  accessibleGroupIds    String[]  @map("accessible_group_ids")
+  accessibleChainIds    String[]  @map("accessible_chain_ids") 
+  accessibleTenantIds   String[]  @map("accessible_tenant_ids")
+  
+  // セキュリティ
+  lastLoginAt           DateTime? @map("last_login_at")
+  loginAttempts         Int       @default(0) @map("login_attempts")
+  lockedUntil           DateTime? @map("locked_until")
+  
+  // 2FA（将来拡張）
+  totpSecret            String?   @map("totp_secret")
+  totpEnabled           Boolean   @default(false) @map("totp_enabled")
+  
+  // 監査ログ
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+  createdBy             String?   @map("created_by")
+  isActive              Boolean   @default(true) @map("is_active")
+  
+  // リレーション
+  adminLogs             AdminLog[]
+  
+  @@map("Admin")
+}
+
+model AdminLog {
+  id              String      @id @default(cuid())
+  adminId         String      @map("admin_id")
+  action          String      // "LOGIN", "VIEW_TENANTS", "VIEW_CHAINS", "VIEW_GROUPS"
+  targetType      String?     @map("target_type") // "tenant", "chain", "group"
+  targetId        String?     @map("target_id")
+  ipAddress       String?     @map("ip_address")
+  userAgent       String?     @map("user_agent")
+  success         Boolean     @default(true)
+  errorMessage    String?     @map("error_message")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  
+  // リレーション
+  admin           Admin       @relation(fields: [adminId], references: [id])
+  
+  @@index([adminId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("AdminLog")
+}
+
+enum AdminLevel {
+  chainadmin  // テナント一覧まで閲覧可能
+  groupadmin  // チェーン一覧まで閲覧可能
+  superadmin  // グループ一覧まで閲覧可能（システム開発者）
+  
+  @@map("AdminLevel")
+} 

@@ -1,0 +1,176 @@
+{
+  "ui": {
+    "buttons": {
+      "login": "ログイン",
+      "logout": "ログアウト",
+      "checkin": "チェックイン",
+      "checkout": "チェックアウト",
+      "reserve": "予約する",
+      "cancel": "キャンセル",
+      "confirm": "確認",
+      "save": "保存",
+      "edit": "編集",
+      "delete": "削除",
+      "search": "検索",
+      "filter": "フィルター",
+      "refresh": "更新",
+      "back": "戻る",
+      "next": "次へ",
+      "submit": "送信",
+      "close": "閉じる"
+    },
+    "labels": {
+      "name": "氏名",
+      "email": "メールアドレス",
+      "phone": "電話番号",
+      "address": "住所",
+      "date": "日付",
+      "time": "時間",
+      "room": "部屋",
+      "guest": "ゲスト",
+      "adults": "大人",
+      "children": "子供",
+      "nights": "泊数",
+      "price": "料金",
+      "total": "合計",
+      "status": "ステータス"
+    },
+    "navigation": {
+      "dashboard": "ダッシュボード",
+      "reservations": "予約管理",
+      "guests": "ゲスト管理",
+      "rooms": "客室管理",
+      "services": "サービス",
+      "reports": "レポート",
+      "settings": "設定",
+      "help": "ヘルプ",
+      "profile": "プロフィール",
+      "notifications": "通知"
+    },
+    "titles": {
+      "checkin_process": "チェックイン手続き",
+      "checkout_process": "チェックアウト手続き",
+      "reservation_form": "予約フォーム",
+      "guest_information": "ゲスト情報",
+      "room_selection": "客室選択",
+      "payment_information": "お支払い情報",
+      "confirmation": "確認画面",
+      "search_results": "検索結果"
+    },
+    "placeholders": {
+      "search_guest": "ゲスト名で検索",
+      "search_reservation": "予約番号で検索",
+      "enter_email": "メールアドレスを入力",
+      "enter_phone": "電話番号を入力",
+      "select_date": "日付を選択",
+      "select_room": "客室を選択"
+    }
+  },
+  "messages": {
+    "success": {
+      "login_successful": "ログインしました",
+      "logout_successful": "ログアウトしました",
+      "checkin_completed": "チェックインが完了しました",
+      "checkout_completed": "チェックアウトが完了しました",
+      "reservation_confirmed": "予約が確定しました",
+      "reservation_cancelled": "予約をキャンセルしました",
+      "profile_updated": "プロフィールを更新しました",
+      "payment_processed": "お支払いが完了しました",
+      "data_saved": "データを保存しました"
+    },
+    "error": {
+      "network_error": "ネットワークエラーが発生しました",
+      "invalid_credentials": "認証情報が正しくありません",
+      "reservation_not_found": "予約が見つかりません",
+      "room_not_available": "客室が利用できません",
+      "payment_failed": "お支払いに失敗しました",
+      "server_error": "サーバーエラーが発生しました",
+      "validation_error": "入力内容に誤りがあります",
+      "permission_denied": "権限がありません"
+    },
+    "warning": {
+      "unsaved_changes": "保存されていない変更があります",
+      "confirm_deletion": "本当に削除しますか？",
+      "confirm_cancellation": "本当にキャンセルしますか？",
+      "session_expiring": "セッションの有効期限が近づいています",
+      "connection_unstable": "接続が不安定です"
+    },
+    "info": {
+      "loading": "読み込み中...",
+      "processing": "処理中...",
+      "no_data": "データがありません",
+      "select_option": "選択してください",
+      "optional_field": "任意項目"
+    }
+  },
+  "content": {
+    "descriptions": {
+      "hotel_welcome": "当ホテルへようこそ",
+      "checkin_instructions": "チェックインのお手続きをご案内いたします",
+      "checkout_instructions": "チェックアウトのお手続きをご案内いたします",
+      "room_amenities": "客室設備・アメニティ",
+      "hotel_services": "ホテルサービスのご案内",
+      "emergency_contact": "緊急時のご連絡先"
+    },
+    "instructions": {
+      "scan_qr_code": "QRコードをスキャンしてください",
+      "enter_reservation_number": "予約番号を入力してください",
+      "confirm_guest_details": "ゲスト情報をご確認ください",
+      "select_payment_method": "お支払い方法を選択してください",
+      "sign_document": "書類にご署名ください"
+    },
+    "help": {
+      "how_to_checkin": "チェックイン方法",
+      "how_to_checkout": "チェックアウト方法", 
+      "wifi_connection": "Wi-Fi接続方法",
+      "room_service": "ルームサービスのご利用方法",
+      "concierge_service": "コンシェルジュサービス"
+    },
+    "legal": {
+      "privacy_policy": "プライバシーポリシー",
+      "terms_of_service": "利用規約",
+      "cancellation_policy": "キャンセルポリシー",
+      "data_protection": "個人情報保護方針"
+    }
+  },
+  "business": {
+    "hotel": {
+      "front_desk": "フロントデスク",
+      "concierge": "コンシェルジュ",
+      "housekeeping": "ハウスキーピング",
+      "restaurant": "レストラン",
+      "spa": "スパ",
+      "gym": "ジム",
+      "business_center": "ビジネスセンター",
+      "parking": "駐車場"
+    },
+    "reservation": {
+      "booking_reference": "予約番号",
+      "check_in_date": "チェックイン日",
+      "check_out_date": "チェックアウト日",
+      "room_type": "客室タイプ",
+      "rate_plan": "料金プラン",
+      "special_requests": "特別なご要望",
+      "booking_status": "予約状況",
+      "confirmation_number": "確認番号"
+    },
+    "guest": {
+      "guest_name": "ゲスト名",
+      "contact_information": "連絡先情報",
+      "identification": "身分証明書",
+      "loyalty_member": "ロイヤルティメンバー",
+      "preferences": "ご希望・設定",
+      "special_needs": "特別なご要望",
+      "emergency_contact": "緊急連絡先"
+    },
+    "service": {
+      "room_service": "ルームサービス",
+      "laundry": "ランドリーサービス",
+      "transportation": "交通サービス",
+      "tour_booking": "ツアー予約",
+      "wake_up_call": "モーニングコール",
+      "extra_bed": "エキストラベッド",
+      "late_checkout": "レイトチェックアウト"
+    }
+  }
+} 

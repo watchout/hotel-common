@@ -1,0 +1,2 @@
+  "guardrails:fast": "node scripts/lightweight-cursor-integration.js demo",
+  "practical": "node scripts/practical-solution.js",

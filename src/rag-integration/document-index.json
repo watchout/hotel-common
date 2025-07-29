@@ -1,0 +1,5212 @@
+{
+  "lastUpdated": "2025-07-29T06:40:50.321Z",
+  "totalDocuments": 140,
+  "projectBreakdown": {
+    "hotel-common": {
+      "count": 23,
+      "files": [
+        "CRM_Implementation_Priority_Matrix.md",
+        "CRM_System_Implementation_Guide.md",
+        "Hotel_Group_Hierarchy_Management_Architecture.md",
+        "Integration_Management_Operating_System.md",
+        "Room_Grade_Management_System_Design.md",
+        "Room_Management_Cross_System_Design.md",
+        "ai-agent-compliance-strategy.md",
+        "api-client-standardization-design.md",
+        "clear-instruction-template.md",
+        "documentation-sharing-strategy.md",
+        "event-driven-architecture-design.md",
+        "hotel-member-migration-setup.md",
+        "hotel-saas-phase1-integration-guide.md",
+        "hotel-saas-phase2-5-implementation-guide.md",
+        "phase1-postgresql-unified-infrastructure.md",
+        "pin-jwt-integration-spec.md",
+        "pms-permission-management-spec.md",
+        "sso-frontend-implementation-guide.md",
+        "staged-minimum-integration-strategy.md",
+        "sun-demo-release-support-guide.md",
+        "system-integration-map.md",
+        "unified-authentication-infrastructure-design.md",
+        "zod-integration-examples.md"
+      ]
+    },
+    "hotel-saas": {
+      "count": 35,
+      "files": [
+        "API_SPEC.md",
+        "ARCHITECTURE.md",
+        "ARCHITECTURE_EXPANSION_PLAN.md",
+        "Color.md",
+        "DATA_MIGRATION_SPEC.md",
+        "DEVELOPMENT_FLOW.md",
+        "DEVELOPMENT_RULES.md",
+        "DEVELOPMENT_RULES_CHECKLIST.md",
+        "DEVELOPMENT_TROUBLESHOOTING_GUIDE.md",
+        "IMPLEMENTATION_PLAN.md",
+        "MOBILE_APP_SPECIFICATION.md",
+        "MVP_DEV_TASKS.md",
+        "MVP_OVERVIEW.md",
+        "NEXT_FEATURES_ROADMAP.md",
+        "PLACE_MANAGEMENT_SPEC.md",
+        "PLAN_FEATURES_MATRIX.md",
+        "PREVENTION_MEASURES_SUMMARY.md",
+        "STATUS_SUMMARY_2025.md",
+        "UI_COMPONENTS.md",
+        "UI_STYLE_GUIDE.md",
+        "ai-response-optimization-rules.md",
+        "api-integration-spec.md",
+        "api.md",
+        "auth-integration-spec.md",
+        "backend-requirements.md",
+        "database-integration-spec.md",
+        "development-setup.md",
+        "er.md",
+        "front-desk-layout-specification.md",
+        "hotel-saas-phase1-integration-guide.md",
+        "integration-migration-plan.md",
+        "multilingual-implementation.md",
+        "requirements.md",
+        "ui_spec.md",
+        "websocket-integration-spec.md"
+      ]
+    },
+    "hotel-member": {
+      "count": 15,
+      "files": [
+        "ADVANCED_FEATURES_ROADMAP.md",
+        "AI_BUILD_TECH_SPEC.md",
+        "CRM_Integration_Roadmap.md",
+        "DEVELOPMENT_RULES.md",
+        "INTEGRATION_QUESTIONS.md",
+        "MVP_UPDATED_SPEC.md",
+        "PRICING_PLAN_SPEC.md",
+        "PROJECT_STATUS.md",
+        "SYSTEM_ADMIN_SPEC.md",
+        "Suno_CRM_Implementation_Instructions.md",
+        "Suno_Hierarchy_Implementation_Instructions.md",
+        "VMV_FEATURE_MATRIX.md",
+        "VMV_STATEMENT.md",
+        "hotel-member-hierarchy-integration-guide.md",
+        "multilingual-implementation.md"
+      ]
+    },
+    "hotel-pms": {
+      "count": 36,
+      "files": [
+        "Luna_Detailed_Implementation_Specification.md",
+        "Luna_Urgent_Implementation_Instructions.md",
+        "Staff-Table-Integration-Request.md",
+        "agent-terminal-kotowari-log-analysis.md",
+        "ai-rules-deployment-plan.md",
+        "checkin-unified-specification.md",
+        "cursor-agent-window-technical-assessment.md",
+        "cursor-agent-window-updated-assessment.md",
+        "cursor-integration-quality-assessment.md",
+        "database-schema.md",
+        "development-management-sheet.md",
+        "feature-pricing-matrix.md",
+        "integration-implementation-plan.md",
+        "integration-requirements-questions.md",
+        "iza-driven-development-flow.md",
+        "iza-speed-optimization-guide.md",
+        "login-system-enhancement-plan.md",
+        "marketing-creatives.md",
+        "multilingual-implementation.md",
+        "naming-story.md",
+        "offline-error-handling.md",
+        "phase-1-ui-wireframe.md",
+        "phase-1-use-case-definition.md",
+        "pricing_examples.md",
+        "pricing_implementation_guide.md",
+        "pricing_system_specification.md",
+        "project-checklist.md",
+        "queue-state-ui.md",
+        "requirements-framework.md",
+        "staff-table-detailed-design.md",
+        "sync-flow.md",
+        "sync-log.md",
+        "system-integration.md",
+        "tech-stack.md",
+        "ui-implementation-specification.md",
+        "vmv.md"
+      ]
+    },
+    "hotel-marketing": {
+      "count": 31,
+      "files": [
+        "AI_Concierge_Marketing_Strategy.md",
+        "AI_GPU_Cost_Analysis.md",
+        "CRM_Complete_Stakeholder_Integration_Package.md",
+        "CRM_Comprehensive_Requirements_Package.md",
+        "CRM_Comprehensive_Requirements_Package_CORRECTED.md",
+        "CRM_Final_Specification_with_Pricing.md",
+        "CRM_Handover_Summary_Checklist.md",
+        "CRM_Iza_Implementation_Final_Package.md",
+        "CRM_Marketing_Analysis_Package.md",
+        "CRM_Realistic_Pricing_Model.md",
+        "CRM_Revised_Pricing_Architecture.md",
+        "Comprehensive_Hotel_Pricing_Compatibility_Analysis.md",
+        "Detailed_Implementation_Examples.md",
+        "Hotel_Marketing_Expert_Responses.md",
+        "Hotel_Marketing_Strategy_Meeting.md",
+        "Hotel_Operators_Advanced_Pricing_Feedback.md",
+        "Iza_Implementation_Package.md",
+        "Multilingual_Support_Specification.md",
+        "PMS_Advanced_Room_Pricing_Consultant_Analysis.md",
+        "PMS_Agency_Partnership_Strategy.md",
+        "PMS_Agent_Margin_Rank_System.md",
+        "PMS_Agent_Margin_Rank_System_Professional.md",
+        "PMS_Core_Features_Technical_Specification.md",
+        "PMS_Hyperpower_Marketing_Strategy.md",
+        "PMS_Market_Reality_Check.md",
+        "PMS_Requirements_Final_Integration.md",
+        "PMS_UI_Design_Final_Feedback.md",
+        "Pricing_System_Management_UI.md",
+        "Pricing_UI_Creation_System_Specification.md",
+        "Realistic_CRM_Pricing_Strategy.md",
+        "Unified_Business_Leisure_Pricing_Architecture.md"
+      ]
+    }
+  },
+  "documentMap": {
+    "CRM_Implementation_Priority_Matrix.md": {
+      "project": "hotel-common",
+      "path": "./docs/CRM_Implementation_Priority_Matrix.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "CRM_System_Implementation_Guide.md": {
+      "project": "hotel-common",
+      "path": "./docs/CRM_System_Implementation_Guide.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing"
+      ]
+    },
+    "Hotel_Group_Hierarchy_Management_Architecture.md": {
+      "project": "hotel-common",
+      "path": "./docs/Hotel_Group_Hierarchy_Management_Architecture.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "Integration_Management_Operating_System.md": {
+      "project": "hotel-common",
+      "path": "./docs/Integration_Management_Operating_System.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "Room_Grade_Management_System_Design.md": {
+      "project": "hotel-common",
+      "path": "./docs/Room_Grade_Management_System_Design.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "development"
+      ]
+    },
+    "Room_Management_Cross_System_Design.md": {
+      "project": "hotel-common",
+      "path": "./docs/Room_Management_Cross_System_Design.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "ai-agent-compliance-strategy.md": {
+      "project": "hotel-common",
+      "path": "./docs/ai-agent-compliance-strategy.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "api-client-standardization-design.md": {
+      "project": "hotel-common",
+      "path": "./docs/api-client-standardization-design.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "marketing",
+        "development"
+      ]
+    },
+    "clear-instruction-template.md": {
+      "project": "hotel-common",
+      "path": "./docs/clear-instruction-template.md",
+      "categories": [
+        "integration",
+        "database",
+        "development"
+      ]
+    },
+    "documentation-sharing-strategy.md": {
+      "project": "hotel-common",
+      "path": "./docs/documentation-sharing-strategy.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "event-driven-architecture-design.md": {
+      "project": "hotel-common",
+      "path": "./docs/event-driven-architecture-design.md",
+      "categories": [
+        "integration",
+        "database",
+        "pricing",
+        "crm",
+        "marketing"
+      ]
+    },
+    "hotel-member-migration-setup.md": {
+      "project": "hotel-common",
+      "path": "./docs/hotel-member-migration-setup.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "hotel-saas-phase1-integration-guide.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/hotel-saas-phase1-integration-guide.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "pricing"
+      ]
+    },
+    "hotel-saas-phase2-5-implementation-guide.md": {
+      "project": "hotel-common",
+      "path": "./docs/hotel-saas-phase2-5-implementation-guide.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "phase1-postgresql-unified-infrastructure.md": {
+      "project": "hotel-common",
+      "path": "./docs/phase1-postgresql-unified-infrastructure.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "pin-jwt-integration-spec.md": {
+      "project": "hotel-common",
+      "path": "./docs/pin-jwt-integration-spec.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux"
+      ]
+    },
+    "pms-permission-management-spec.md": {
+      "project": "hotel-common",
+      "path": "./docs/pms-permission-management-spec.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm"
+      ]
+    },
+    "sso-frontend-implementation-guide.md": {
+      "project": "hotel-common",
+      "path": "./docs/sso-frontend-implementation-guide.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "crm"
+      ]
+    },
+    "staged-minimum-integration-strategy.md": {
+      "project": "hotel-common",
+      "path": "./docs/staged-minimum-integration-strategy.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "sun-demo-release-support-guide.md": {
+      "project": "hotel-common",
+      "path": "./docs/sun-demo-release-support-guide.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "system-integration-map.md": {
+      "project": "hotel-common",
+      "path": "./docs/system-integration-map.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "unified-authentication-infrastructure-design.md": {
+      "project": "hotel-common",
+      "path": "./docs/unified-authentication-infrastructure-design.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "zod-integration-examples.md": {
+      "project": "hotel-common",
+      "path": "./docs/zod-integration-examples.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "API_SPEC.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/API_SPEC.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "pricing"
+      ]
+    },
+    "ARCHITECTURE.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/ARCHITECTURE.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "ARCHITECTURE_EXPANSION_PLAN.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/ARCHITECTURE_EXPANSION_PLAN.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "Color.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/Color.md",
+      "categories": [
+        "ui-ux"
+      ]
+    },
+    "DATA_MIGRATION_SPEC.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/DATA_MIGRATION_SPEC.md",
+      "categories": [
+        "authentication",
+        "database",
+        "development"
+      ]
+    },
+    "DEVELOPMENT_FLOW.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/DEVELOPMENT_FLOW.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "marketing",
+        "development"
+      ]
+    },
+    "DEVELOPMENT_RULES.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/DEVELOPMENT_RULES.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "DEVELOPMENT_RULES_CHECKLIST.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/DEVELOPMENT_RULES_CHECKLIST.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "DEVELOPMENT_TROUBLESHOOTING_GUIDE.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/DEVELOPMENT_TROUBLESHOOTING_GUIDE.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "IMPLEMENTATION_PLAN.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/IMPLEMENTATION_PLAN.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux"
+      ]
+    },
+    "MOBILE_APP_SPECIFICATION.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/MOBILE_APP_SPECIFICATION.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "MVP_DEV_TASKS.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/MVP_DEV_TASKS.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "MVP_OVERVIEW.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/MVP_OVERVIEW.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "NEXT_FEATURES_ROADMAP.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/NEXT_FEATURES_ROADMAP.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "PLACE_MANAGEMENT_SPEC.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/PLACE_MANAGEMENT_SPEC.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux"
+      ]
+    },
+    "PLAN_FEATURES_MATRIX.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/PLAN_FEATURES_MATRIX.md",
+      "categories": [
+        "integration",
+        "ui-ux",
+        "pricing",
+        "crm"
+      ]
+    },
+    "PREVENTION_MEASURES_SUMMARY.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/PREVENTION_MEASURES_SUMMARY.md",
+      "categories": [
+        "integration",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "STATUS_SUMMARY_2025.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/STATUS_SUMMARY_2025.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "UI_COMPONENTS.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/UI_COMPONENTS.md",
+      "categories": [
+        "ui-ux"
+      ]
+    },
+    "UI_STYLE_GUIDE.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/UI_STYLE_GUIDE.md",
+      "categories": [
+        "integration",
+        "ui-ux"
+      ]
+    },
+    "ai-response-optimization-rules.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/ai-response-optimization-rules.md",
+      "categories": [
+        "database"
+      ]
+    },
+    "api-integration-spec.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/api-integration-spec.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "api.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/api.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "pricing"
+      ]
+    },
+    "auth-integration-spec.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/auth-integration-spec.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux"
+      ]
+    },
+    "backend-requirements.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/backend-requirements.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux"
+      ]
+    },
+    "database-integration-spec.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/database-integration-spec.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "development"
+      ]
+    },
+    "development-setup.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/development-setup.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "er.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/er.md",
+      "categories": [
+        "pricing"
+      ]
+    },
+    "front-desk-layout-specification.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/front-desk-layout-specification.md",
+      "categories": [
+        "integration",
+        "ui-ux"
+      ]
+    },
+    "integration-migration-plan.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/integration-migration-plan.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database"
+      ]
+    },
+    "multilingual-implementation.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/multilingual-implementation.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing"
+      ]
+    },
+    "requirements.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/requirements.md",
+      "categories": [
+        "integration",
+        "ui-ux"
+      ]
+    },
+    "ui_spec.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/ui_spec.md",
+      "categories": [
+        "ui-ux",
+        "pricing",
+        "development"
+      ]
+    },
+    "websocket-integration-spec.md": {
+      "project": "hotel-saas",
+      "path": "../hotel-saas/docs/websocket-integration-spec.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux"
+      ]
+    },
+    "ADVANCED_FEATURES_ROADMAP.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/ADVANCED_FEATURES_ROADMAP.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "AI_BUILD_TECH_SPEC.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/AI_BUILD_TECH_SPEC.md",
+      "categories": [
+        "database",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "CRM_Integration_Roadmap.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/CRM_Integration_Roadmap.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "INTEGRATION_QUESTIONS.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/INTEGRATION_QUESTIONS.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "MVP_UPDATED_SPEC.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/MVP_UPDATED_SPEC.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "PRICING_PLAN_SPEC.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/PRICING_PLAN_SPEC.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "PROJECT_STATUS.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/PROJECT_STATUS.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "SYSTEM_ADMIN_SPEC.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/SYSTEM_ADMIN_SPEC.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux"
+      ]
+    },
+    "Suno_CRM_Implementation_Instructions.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/Suno_CRM_Implementation_Instructions.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "Suno_Hierarchy_Implementation_Instructions.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/Suno_Hierarchy_Implementation_Instructions.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "VMV_FEATURE_MATRIX.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/VMV_FEATURE_MATRIX.md",
+      "categories": [
+        "integration",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "VMV_STATEMENT.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/VMV_STATEMENT.md",
+      "categories": [
+        "integration",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "hotel-member-hierarchy-integration-guide.md": {
+      "project": "hotel-member",
+      "path": "../hotel-member/docs/hotel-member-hierarchy-integration-guide.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "crm",
+        "marketing"
+      ]
+    },
+    "Luna_Detailed_Implementation_Specification.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/Luna_Detailed_Implementation_Specification.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "Luna_Urgent_Implementation_Instructions.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/Luna_Urgent_Implementation_Instructions.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "Staff-Table-Integration-Request.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/Staff-Table-Integration-Request.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "agent-terminal-kotowari-log-analysis.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/agent-terminal-kotowari-log-analysis.md",
+      "categories": [
+        "integration",
+        "development"
+      ]
+    },
+    "ai-rules-deployment-plan.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/ai-rules-deployment-plan.md",
+      "categories": [
+        "integration",
+        "database",
+        "crm",
+        "development"
+      ]
+    },
+    "checkin-unified-specification.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/checkin-unified-specification.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux"
+      ]
+    },
+    "cursor-agent-window-technical-assessment.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/cursor-agent-window-technical-assessment.md",
+      "categories": [
+        "integration",
+        "development"
+      ]
+    },
+    "cursor-agent-window-updated-assessment.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/cursor-agent-window-updated-assessment.md",
+      "categories": [
+        "integration",
+        "development"
+      ]
+    },
+    "cursor-integration-quality-assessment.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/cursor-integration-quality-assessment.md",
+      "categories": [
+        "integration",
+        "crm",
+        "development"
+      ]
+    },
+    "database-schema.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/database-schema.md",
+      "categories": [
+        "authentication",
+        "database",
+        "ui-ux",
+        "pricing",
+        "development"
+      ]
+    },
+    "development-management-sheet.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/development-management-sheet.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "feature-pricing-matrix.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/feature-pricing-matrix.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "integration-implementation-plan.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/integration-implementation-plan.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "integration-requirements-questions.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/integration-requirements-questions.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "iza-driven-development-flow.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/iza-driven-development-flow.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "iza-speed-optimization-guide.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/iza-speed-optimization-guide.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "login-system-enhancement-plan.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/login-system-enhancement-plan.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "marketing-creatives.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/marketing-creatives.md",
+      "categories": [
+        "pricing",
+        "marketing"
+      ]
+    },
+    "naming-story.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/naming-story.md",
+      "categories": [
+        "development"
+      ]
+    },
+    "offline-error-handling.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/offline-error-handling.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux"
+      ]
+    },
+    "phase-1-ui-wireframe.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/phase-1-ui-wireframe.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing"
+      ]
+    },
+    "phase-1-use-case-definition.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/phase-1-use-case-definition.md",
+      "categories": [
+        "database",
+        "ui-ux",
+        "pricing"
+      ]
+    },
+    "pricing_examples.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/pricing_examples.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "pricing_implementation_guide.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/pricing_implementation_guide.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "pricing_system_specification.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/pricing_system_specification.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "project-checklist.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/project-checklist.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "queue-state-ui.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/queue-state-ui.md",
+      "categories": [
+        "ui-ux",
+        "development"
+      ]
+    },
+    "requirements-framework.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/requirements-framework.md",
+      "categories": [
+        "authentication",
+        "database",
+        "ui-ux",
+        "pricing",
+        "development"
+      ]
+    },
+    "staff-table-detailed-design.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/staff-table-detailed-design.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "sync-flow.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/sync-flow.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing"
+      ]
+    },
+    "sync-log.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/sync-log.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "system-integration.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/system-integration.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "crm",
+        "development"
+      ]
+    },
+    "tech-stack.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/tech-stack.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "development"
+      ]
+    },
+    "ui-implementation-specification.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/ui-implementation-specification.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "vmv.md": {
+      "project": "hotel-pms",
+      "path": "../hotel-pms/docs/vmv.md",
+      "categories": [
+        "ui-ux",
+        "pricing"
+      ]
+    },
+    "AI_Concierge_Marketing_Strategy.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/AI_Concierge_Marketing_Strategy.md",
+      "categories": [
+        "integration",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "AI_GPU_Cost_Analysis.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/AI_GPU_Cost_Analysis.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm"
+      ]
+    },
+    "CRM_Complete_Stakeholder_Integration_Package.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/CRM_Complete_Stakeholder_Integration_Package.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "CRM_Comprehensive_Requirements_Package.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/CRM_Comprehensive_Requirements_Package.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "CRM_Comprehensive_Requirements_Package_CORRECTED.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/CRM_Comprehensive_Requirements_Package_CORRECTED.md",
+      "categories": [
+        "integration",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "CRM_Final_Specification_with_Pricing.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/CRM_Final_Specification_with_Pricing.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "CRM_Handover_Summary_Checklist.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/CRM_Handover_Summary_Checklist.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "CRM_Iza_Implementation_Final_Package.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/CRM_Iza_Implementation_Final_Package.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "CRM_Marketing_Analysis_Package.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/CRM_Marketing_Analysis_Package.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "CRM_Realistic_Pricing_Model.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/CRM_Realistic_Pricing_Model.md",
+      "categories": [
+        "integration",
+        "database",
+        "pricing",
+        "crm"
+      ]
+    },
+    "CRM_Revised_Pricing_Architecture.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/CRM_Revised_Pricing_Architecture.md",
+      "categories": [
+        "integration",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "Comprehensive_Hotel_Pricing_Compatibility_Analysis.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/Comprehensive_Hotel_Pricing_Compatibility_Analysis.md",
+      "categories": [
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "Detailed_Implementation_Examples.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/Detailed_Implementation_Examples.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "development"
+      ]
+    },
+    "Hotel_Marketing_Expert_Responses.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/Hotel_Marketing_Expert_Responses.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "Hotel_Marketing_Strategy_Meeting.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/Hotel_Marketing_Strategy_Meeting.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "Hotel_Operators_Advanced_Pricing_Feedback.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/Hotel_Operators_Advanced_Pricing_Feedback.md",
+      "categories": [
+        "integration",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "Iza_Implementation_Package.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/Iza_Implementation_Package.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "Multilingual_Support_Specification.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/Multilingual_Support_Specification.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "PMS_Advanced_Room_Pricing_Consultant_Analysis.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/PMS_Advanced_Room_Pricing_Consultant_Analysis.md",
+      "categories": [
+        "integration",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "PMS_Agency_Partnership_Strategy.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/PMS_Agency_Partnership_Strategy.md",
+      "categories": [
+        "integration",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "PMS_Agent_Margin_Rank_System.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/PMS_Agent_Margin_Rank_System.md",
+      "categories": [
+        "integration",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "PMS_Agent_Margin_Rank_System_Professional.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/PMS_Agent_Margin_Rank_System_Professional.md",
+      "categories": [
+        "integration",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "PMS_Core_Features_Technical_Specification.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/PMS_Core_Features_Technical_Specification.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    },
+    "PMS_Hyperpower_Marketing_Strategy.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/PMS_Hyperpower_Marketing_Strategy.md",
+      "categories": [
+        "ui-ux",
+        "pricing",
+        "crm",
+        "marketing"
+      ]
+    },
+    "PMS_Market_Reality_Check.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/PMS_Market_Reality_Check.md",
+      "categories": [
+        "integration",
+        "database",
+        "pricing",
+        "crm",
+        "marketing"
+      ]
+    },
+    "PMS_Requirements_Final_Integration.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/PMS_Requirements_Final_Integration.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "crm",
+        "development"
+      ]
+    },
+    "PMS_UI_Design_Final_Feedback.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/PMS_UI_Design_Final_Feedback.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "ui-ux",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "Pricing_System_Management_UI.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/Pricing_System_Management_UI.md",
+      "categories": [
+        "authentication",
+        "ui-ux",
+        "pricing",
+        "crm"
+      ]
+    },
+    "Pricing_UI_Creation_System_Specification.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/Pricing_UI_Creation_System_Specification.md",
+      "categories": [
+        "authentication",
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "marketing",
+        "development"
+      ]
+    },
+    "Realistic_CRM_Pricing_Strategy.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/Realistic_CRM_Pricing_Strategy.md",
+      "categories": [
+        "integration",
+        "database",
+        "pricing",
+        "crm",
+        "marketing",
+        "development"
+      ]
+    },
+    "Unified_Business_Leisure_Pricing_Architecture.md": {
+      "project": "hotel-marketing",
+      "path": "../hotel-marketing/docs/Unified_Business_Leisure_Pricing_Architecture.md",
+      "categories": [
+        "integration",
+        "database",
+        "ui-ux",
+        "pricing",
+        "crm",
+        "development"
+      ]
+    }
+  },
+  "searchCategories": {
+    "authentication": [
+      {
+        "file": "CRM_Implementation_Priority_Matrix.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "CRM_System_Implementation_Guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Group_Hierarchy_Management_Architecture.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Integration_Management_Operating_System.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "ai-agent-compliance-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "api-client-standardization-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "documentation-sharing-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-member-migration-setup.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase1-integration-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase2-5-implementation-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "phase1-postgresql-unified-infrastructure.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "pin-jwt-integration-spec.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "pms-permission-management-spec.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "sso-frontend-implementation-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "staged-minimum-integration-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "sun-demo-release-support-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "system-integration-map.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "unified-authentication-infrastructure-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "zod-integration-examples.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "API_SPEC.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ARCHITECTURE.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ARCHITECTURE_EXPANSION_PLAN.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DATA_MIGRATION_SPEC.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "IMPLEMENTATION_PLAN.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MOBILE_APP_SPECIFICATION.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MVP_DEV_TASKS.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MVP_OVERVIEW.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "NEXT_FEATURES_ROADMAP.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "PLACE_MANAGEMENT_SPEC.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "STATUS_SUMMARY_2025.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "api-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "api.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "auth-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "backend-requirements.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "database-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "development-setup.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase1-integration-guide.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "integration-migration-plan.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "websocket-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "CRM_Integration_Roadmap.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "INTEGRATION_QUESTIONS.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "MVP_UPDATED_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "PROJECT_STATUS.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Suno_CRM_Implementation_Instructions.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Suno_Hierarchy_Implementation_Instructions.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "hotel-member-hierarchy-integration-guide.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Luna_Detailed_Implementation_Specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "Staff-Table-Integration-Request.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "checkin-unified-specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "database-schema.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "development-management-sheet.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "feature-pricing-matrix.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-implementation-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-requirements-questions.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "iza-driven-development-flow.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "iza-speed-optimization-guide.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "login-system-enhancement-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "offline-error-handling.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_implementation_guide.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "project-checklist.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "requirements-framework.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "staff-table-detailed-design.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "sync-flow.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "system-integration.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "tech-stack.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "ui-implementation-specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "CRM_Complete_Stakeholder_Integration_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Comprehensive_Requirements_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Final_Specification_with_Pricing.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Handover_Summary_Checklist.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Iza_Implementation_Final_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Marketing_Analysis_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Iza_Implementation_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Multilingual_Support_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Core_Features_Technical_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_UI_Design_Final_Feedback.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Pricing_System_Management_UI.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Pricing_UI_Creation_System_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      }
+    ],
+    "integration": [
+      {
+        "file": "CRM_Implementation_Priority_Matrix.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "CRM_System_Implementation_Guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Group_Hierarchy_Management_Architecture.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Integration_Management_Operating_System.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Room_Grade_Management_System_Design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Room_Management_Cross_System_Design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "ai-agent-compliance-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "api-client-standardization-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "clear-instruction-template.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "documentation-sharing-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "event-driven-architecture-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-member-migration-setup.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase1-integration-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase2-5-implementation-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "phase1-postgresql-unified-infrastructure.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "pin-jwt-integration-spec.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "pms-permission-management-spec.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "sso-frontend-implementation-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "staged-minimum-integration-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "sun-demo-release-support-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "system-integration-map.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "unified-authentication-infrastructure-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "zod-integration-examples.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "API_SPEC.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ARCHITECTURE.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ARCHITECTURE_EXPANSION_PLAN.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_FLOW.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES_CHECKLIST.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_TROUBLESHOOTING_GUIDE.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "IMPLEMENTATION_PLAN.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MOBILE_APP_SPECIFICATION.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MVP_DEV_TASKS.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MVP_OVERVIEW.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "NEXT_FEATURES_ROADMAP.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "PLACE_MANAGEMENT_SPEC.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "PLAN_FEATURES_MATRIX.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "PREVENTION_MEASURES_SUMMARY.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "STATUS_SUMMARY_2025.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "UI_STYLE_GUIDE.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "api-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "api.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "auth-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "backend-requirements.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "database-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "development-setup.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "front-desk-layout-specification.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase1-integration-guide.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "integration-migration-plan.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "requirements.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "websocket-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ADVANCED_FEATURES_ROADMAP.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "CRM_Integration_Roadmap.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "INTEGRATION_QUESTIONS.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "MVP_UPDATED_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "PRICING_PLAN_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "PROJECT_STATUS.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "SYSTEM_ADMIN_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Suno_CRM_Implementation_Instructions.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Suno_Hierarchy_Implementation_Instructions.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "VMV_FEATURE_MATRIX.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "VMV_STATEMENT.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "hotel-member-hierarchy-integration-guide.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Luna_Detailed_Implementation_Specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "Luna_Urgent_Implementation_Instructions.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "Staff-Table-Integration-Request.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "agent-terminal-kotowari-log-analysis.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "ai-rules-deployment-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "checkin-unified-specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "cursor-agent-window-technical-assessment.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "cursor-agent-window-updated-assessment.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "cursor-integration-quality-assessment.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "development-management-sheet.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "feature-pricing-matrix.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-implementation-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-requirements-questions.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "iza-driven-development-flow.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "iza-speed-optimization-guide.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "login-system-enhancement-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "offline-error-handling.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "phase-1-ui-wireframe.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_examples.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_implementation_guide.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_system_specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "project-checklist.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "staff-table-detailed-design.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "sync-flow.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "sync-log.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "system-integration.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "tech-stack.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "ui-implementation-specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "AI_Concierge_Marketing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "AI_GPU_Cost_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Complete_Stakeholder_Integration_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Comprehensive_Requirements_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Comprehensive_Requirements_Package_CORRECTED.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Final_Specification_with_Pricing.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Handover_Summary_Checklist.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Iza_Implementation_Final_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Marketing_Analysis_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Realistic_Pricing_Model.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Revised_Pricing_Architecture.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Detailed_Implementation_Examples.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Expert_Responses.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Strategy_Meeting.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Operators_Advanced_Pricing_Feedback.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Iza_Implementation_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Multilingual_Support_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Advanced_Room_Pricing_Consultant_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agency_Partnership_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agent_Margin_Rank_System.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agent_Margin_Rank_System_Professional.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Core_Features_Technical_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Market_Reality_Check.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Requirements_Final_Integration.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_UI_Design_Final_Feedback.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Pricing_UI_Creation_System_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Realistic_CRM_Pricing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Unified_Business_Leisure_Pricing_Architecture.md",
+        "project": "hotel-marketing",
+        "score": 10
+      }
+    ],
+    "database": [
+      {
+        "file": "CRM_Implementation_Priority_Matrix.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "CRM_System_Implementation_Guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Group_Hierarchy_Management_Architecture.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Integration_Management_Operating_System.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Room_Grade_Management_System_Design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Room_Management_Cross_System_Design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "ai-agent-compliance-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "api-client-standardization-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "clear-instruction-template.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "documentation-sharing-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "event-driven-architecture-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-member-migration-setup.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase1-integration-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase2-5-implementation-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "phase1-postgresql-unified-infrastructure.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "pin-jwt-integration-spec.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "pms-permission-management-spec.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "staged-minimum-integration-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "sun-demo-release-support-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "system-integration-map.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "unified-authentication-infrastructure-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "ARCHITECTURE.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ARCHITECTURE_EXPANSION_PLAN.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DATA_MIGRATION_SPEC.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_FLOW.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES_CHECKLIST.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_TROUBLESHOOTING_GUIDE.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "IMPLEMENTATION_PLAN.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MVP_DEV_TASKS.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MVP_OVERVIEW.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "NEXT_FEATURES_ROADMAP.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "PLACE_MANAGEMENT_SPEC.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "STATUS_SUMMARY_2025.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ai-response-optimization-rules.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "auth-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "backend-requirements.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "database-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "development-setup.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "integration-migration-plan.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "websocket-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ADVANCED_FEATURES_ROADMAP.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "AI_BUILD_TECH_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "CRM_Integration_Roadmap.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "INTEGRATION_QUESTIONS.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "MVP_UPDATED_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "PRICING_PLAN_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "PROJECT_STATUS.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "SYSTEM_ADMIN_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Suno_CRM_Implementation_Instructions.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Luna_Detailed_Implementation_Specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "Luna_Urgent_Implementation_Instructions.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "Staff-Table-Integration-Request.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "ai-rules-deployment-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "database-schema.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "development-management-sheet.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-implementation-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-requirements-questions.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "iza-driven-development-flow.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "login-system-enhancement-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "offline-error-handling.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "phase-1-ui-wireframe.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "phase-1-use-case-definition.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_examples.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_implementation_guide.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_system_specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "project-checklist.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "requirements-framework.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "staff-table-detailed-design.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "sync-flow.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "sync-log.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "tech-stack.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "AI_GPU_Cost_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Complete_Stakeholder_Integration_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Comprehensive_Requirements_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Final_Specification_with_Pricing.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Handover_Summary_Checklist.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Iza_Implementation_Final_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Realistic_Pricing_Model.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Comprehensive_Hotel_Pricing_Compatibility_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Detailed_Implementation_Examples.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Expert_Responses.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Strategy_Meeting.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Iza_Implementation_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Multilingual_Support_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Core_Features_Technical_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Market_Reality_Check.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Requirements_Final_Integration.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Pricing_UI_Creation_System_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Realistic_CRM_Pricing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Unified_Business_Leisure_Pricing_Architecture.md",
+        "project": "hotel-marketing",
+        "score": 10
+      }
+    ],
+    "api": [],
+    "ui-ux": [
+      {
+        "file": "CRM_Implementation_Priority_Matrix.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "CRM_System_Implementation_Guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Group_Hierarchy_Management_Architecture.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Integration_Management_Operating_System.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Room_Grade_Management_System_Design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Room_Management_Cross_System_Design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "ai-agent-compliance-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "api-client-standardization-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "documentation-sharing-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-member-migration-setup.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase1-integration-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase2-5-implementation-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "phase1-postgresql-unified-infrastructure.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "pin-jwt-integration-spec.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "pms-permission-management-spec.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "sso-frontend-implementation-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "staged-minimum-integration-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "sun-demo-release-support-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "system-integration-map.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "unified-authentication-infrastructure-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "zod-integration-examples.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "API_SPEC.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ARCHITECTURE.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ARCHITECTURE_EXPANSION_PLAN.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "Color.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_FLOW.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES_CHECKLIST.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_TROUBLESHOOTING_GUIDE.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "IMPLEMENTATION_PLAN.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MOBILE_APP_SPECIFICATION.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MVP_DEV_TASKS.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MVP_OVERVIEW.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "NEXT_FEATURES_ROADMAP.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "PLACE_MANAGEMENT_SPEC.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "PLAN_FEATURES_MATRIX.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "PREVENTION_MEASURES_SUMMARY.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "STATUS_SUMMARY_2025.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "UI_COMPONENTS.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "UI_STYLE_GUIDE.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "api-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "api.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "auth-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "backend-requirements.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "database-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "development-setup.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "front-desk-layout-specification.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase1-integration-guide.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "requirements.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ui_spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "websocket-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ADVANCED_FEATURES_ROADMAP.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "AI_BUILD_TECH_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "CRM_Integration_Roadmap.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "INTEGRATION_QUESTIONS.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "MVP_UPDATED_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "PRICING_PLAN_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "PROJECT_STATUS.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "SYSTEM_ADMIN_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Suno_CRM_Implementation_Instructions.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Suno_Hierarchy_Implementation_Instructions.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "VMV_FEATURE_MATRIX.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "VMV_STATEMENT.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "hotel-member-hierarchy-integration-guide.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Luna_Detailed_Implementation_Specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "Luna_Urgent_Implementation_Instructions.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "Staff-Table-Integration-Request.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "checkin-unified-specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "database-schema.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "development-management-sheet.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "feature-pricing-matrix.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-implementation-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-requirements-questions.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "iza-speed-optimization-guide.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "login-system-enhancement-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "offline-error-handling.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "phase-1-ui-wireframe.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "phase-1-use-case-definition.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_examples.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_implementation_guide.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_system_specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "project-checklist.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "queue-state-ui.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "requirements-framework.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "staff-table-detailed-design.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "sync-flow.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "sync-log.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "tech-stack.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "ui-implementation-specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "vmv.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "AI_Concierge_Marketing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "AI_GPU_Cost_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Complete_Stakeholder_Integration_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Comprehensive_Requirements_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Comprehensive_Requirements_Package_CORRECTED.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Final_Specification_with_Pricing.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Handover_Summary_Checklist.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Iza_Implementation_Final_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Marketing_Analysis_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Revised_Pricing_Architecture.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Comprehensive_Hotel_Pricing_Compatibility_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Detailed_Implementation_Examples.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Expert_Responses.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Strategy_Meeting.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Operators_Advanced_Pricing_Feedback.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Iza_Implementation_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Multilingual_Support_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Advanced_Room_Pricing_Consultant_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agency_Partnership_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agent_Margin_Rank_System.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agent_Margin_Rank_System_Professional.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Core_Features_Technical_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Hyperpower_Marketing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Requirements_Final_Integration.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_UI_Design_Final_Feedback.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Pricing_System_Management_UI.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Pricing_UI_Creation_System_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Unified_Business_Leisure_Pricing_Architecture.md",
+        "project": "hotel-marketing",
+        "score": 10
+      }
+    ],
+    "pricing": [
+      {
+        "file": "CRM_System_Implementation_Guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Group_Hierarchy_Management_Architecture.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Room_Grade_Management_System_Design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Room_Management_Cross_System_Design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "event-driven-architecture-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "sun-demo-release-support-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "API_SPEC.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ARCHITECTURE_EXPANSION_PLAN.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "PLAN_FEATURES_MATRIX.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "api.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "database-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "er.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase1-integration-guide.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ui_spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ADVANCED_FEATURES_ROADMAP.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "INTEGRATION_QUESTIONS.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "MVP_UPDATED_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "PRICING_PLAN_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Suno_CRM_Implementation_Instructions.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "VMV_FEATURE_MATRIX.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "database-schema.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "feature-pricing-matrix.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-requirements-questions.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "iza-driven-development-flow.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "iza-speed-optimization-guide.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "marketing-creatives.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "phase-1-ui-wireframe.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "phase-1-use-case-definition.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_examples.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_implementation_guide.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_system_specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "requirements-framework.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "sync-flow.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "vmv.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "AI_Concierge_Marketing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "AI_GPU_Cost_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Complete_Stakeholder_Integration_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Comprehensive_Requirements_Package_CORRECTED.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Final_Specification_with_Pricing.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Handover_Summary_Checklist.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Iza_Implementation_Final_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Realistic_Pricing_Model.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Revised_Pricing_Architecture.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Comprehensive_Hotel_Pricing_Compatibility_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Detailed_Implementation_Examples.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Expert_Responses.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Strategy_Meeting.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Operators_Advanced_Pricing_Feedback.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Advanced_Room_Pricing_Consultant_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agency_Partnership_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Core_Features_Technical_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Hyperpower_Marketing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Market_Reality_Check.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Pricing_System_Management_UI.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Pricing_UI_Creation_System_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Realistic_CRM_Pricing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Unified_Business_Leisure_Pricing_Architecture.md",
+        "project": "hotel-marketing",
+        "score": 10
+      }
+    ],
+    "crm": [
+      {
+        "file": "CRM_Implementation_Priority_Matrix.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "CRM_System_Implementation_Guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Group_Hierarchy_Management_Architecture.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Integration_Management_Operating_System.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Room_Management_Cross_System_Design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "ai-agent-compliance-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "documentation-sharing-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "event-driven-architecture-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-member-migration-setup.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase2-5-implementation-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "phase1-postgresql-unified-infrastructure.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "pms-permission-management-spec.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "sso-frontend-implementation-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "sun-demo-release-support-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "system-integration-map.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "unified-authentication-infrastructure-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "zod-integration-examples.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "ARCHITECTURE_EXPANSION_PLAN.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "NEXT_FEATURES_ROADMAP.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "PLAN_FEATURES_MATRIX.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "STATUS_SUMMARY_2025.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ADVANCED_FEATURES_ROADMAP.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "CRM_Integration_Roadmap.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "INTEGRATION_QUESTIONS.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "MVP_UPDATED_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "PRICING_PLAN_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Suno_CRM_Implementation_Instructions.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Suno_Hierarchy_Implementation_Instructions.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "VMV_FEATURE_MATRIX.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "VMV_STATEMENT.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "hotel-member-hierarchy-integration-guide.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Luna_Detailed_Implementation_Specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "Luna_Urgent_Implementation_Instructions.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "Staff-Table-Integration-Request.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "ai-rules-deployment-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "cursor-integration-quality-assessment.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "development-management-sheet.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "feature-pricing-matrix.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-implementation-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-requirements-questions.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "iza-driven-development-flow.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "iza-speed-optimization-guide.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_examples.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_implementation_guide.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_system_specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "project-checklist.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "staff-table-detailed-design.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "system-integration.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "ui-implementation-specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "AI_Concierge_Marketing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "AI_GPU_Cost_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Complete_Stakeholder_Integration_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Comprehensive_Requirements_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Comprehensive_Requirements_Package_CORRECTED.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Final_Specification_with_Pricing.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Handover_Summary_Checklist.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Iza_Implementation_Final_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Marketing_Analysis_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Realistic_Pricing_Model.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Revised_Pricing_Architecture.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Comprehensive_Hotel_Pricing_Compatibility_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Expert_Responses.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Strategy_Meeting.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Operators_Advanced_Pricing_Feedback.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Iza_Implementation_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Multilingual_Support_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Advanced_Room_Pricing_Consultant_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agency_Partnership_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agent_Margin_Rank_System.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agent_Margin_Rank_System_Professional.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Core_Features_Technical_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Hyperpower_Marketing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Market_Reality_Check.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Requirements_Final_Integration.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_UI_Design_Final_Feedback.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Pricing_System_Management_UI.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Realistic_CRM_Pricing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Unified_Business_Leisure_Pricing_Architecture.md",
+        "project": "hotel-marketing",
+        "score": 10
+      }
+    ],
+    "marketing": [
+      {
+        "file": "CRM_Implementation_Priority_Matrix.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "CRM_System_Implementation_Guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Room_Management_Cross_System_Design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "api-client-standardization-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "event-driven-architecture-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "sun-demo-release-support-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "unified-authentication-infrastructure-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_FLOW.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "STATUS_SUMMARY_2025.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ADVANCED_FEATURES_ROADMAP.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "CRM_Integration_Roadmap.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "INTEGRATION_QUESTIONS.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Suno_CRM_Implementation_Instructions.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "VMV_STATEMENT.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "hotel-member-hierarchy-integration-guide.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Luna_Detailed_Implementation_Specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-implementation-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "marketing-creatives.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "ui-implementation-specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "AI_Concierge_Marketing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Complete_Stakeholder_Integration_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Comprehensive_Requirements_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Comprehensive_Requirements_Package_CORRECTED.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Final_Specification_with_Pricing.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Handover_Summary_Checklist.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Iza_Implementation_Final_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Marketing_Analysis_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Revised_Pricing_Architecture.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Expert_Responses.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Strategy_Meeting.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Operators_Advanced_Pricing_Feedback.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Multilingual_Support_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Advanced_Room_Pricing_Consultant_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agency_Partnership_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agent_Margin_Rank_System.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agent_Margin_Rank_System_Professional.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Hyperpower_Marketing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Market_Reality_Check.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_UI_Design_Final_Feedback.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Pricing_UI_Creation_System_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Realistic_CRM_Pricing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      }
+    ],
+    "development": [
+      {
+        "file": "CRM_Implementation_Priority_Matrix.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Group_Hierarchy_Management_Architecture.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Integration_Management_Operating_System.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Room_Grade_Management_System_Design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "Room_Management_Cross_System_Design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "ai-agent-compliance-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "api-client-standardization-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "clear-instruction-template.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "documentation-sharing-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-member-migration-setup.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase1-integration-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "hotel-saas-phase2-5-implementation-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "phase1-postgresql-unified-infrastructure.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "staged-minimum-integration-strategy.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "sun-demo-release-support-guide.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "system-integration-map.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "unified-authentication-infrastructure-design.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "zod-integration-examples.md",
+        "project": "hotel-common",
+        "score": 10
+      },
+      {
+        "file": "ARCHITECTURE.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ARCHITECTURE_EXPANSION_PLAN.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DATA_MIGRATION_SPEC.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_FLOW.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES_CHECKLIST.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_TROUBLESHOOTING_GUIDE.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MOBILE_APP_SPECIFICATION.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MVP_DEV_TASKS.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "MVP_OVERVIEW.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "NEXT_FEATURES_ROADMAP.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "PREVENTION_MEASURES_SUMMARY.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "STATUS_SUMMARY_2025.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "api-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "database-integration-spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "development-setup.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ui_spec.md",
+        "project": "hotel-saas",
+        "score": 10
+      },
+      {
+        "file": "ADVANCED_FEATURES_ROADMAP.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "AI_BUILD_TECH_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "CRM_Integration_Roadmap.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "DEVELOPMENT_RULES.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "INTEGRATION_QUESTIONS.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "MVP_UPDATED_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "PRICING_PLAN_SPEC.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "PROJECT_STATUS.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Suno_CRM_Implementation_Instructions.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Suno_Hierarchy_Implementation_Instructions.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "VMV_FEATURE_MATRIX.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "VMV_STATEMENT.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "multilingual-implementation.md",
+        "project": "hotel-member",
+        "score": 10
+      },
+      {
+        "file": "Luna_Detailed_Implementation_Specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "Luna_Urgent_Implementation_Instructions.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "Staff-Table-Integration-Request.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "agent-terminal-kotowari-log-analysis.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "ai-rules-deployment-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "cursor-agent-window-technical-assessment.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "cursor-agent-window-updated-assessment.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "cursor-integration-quality-assessment.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "database-schema.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "development-management-sheet.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "feature-pricing-matrix.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-implementation-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "integration-requirements-questions.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "iza-driven-development-flow.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "iza-speed-optimization-guide.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "login-system-enhancement-plan.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "naming-story.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_examples.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_implementation_guide.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "pricing_system_specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "project-checklist.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "queue-state-ui.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "requirements-framework.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "staff-table-detailed-design.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "sync-log.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "system-integration.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "tech-stack.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "ui-implementation-specification.md",
+        "project": "hotel-pms",
+        "score": 10
+      },
+      {
+        "file": "AI_Concierge_Marketing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Complete_Stakeholder_Integration_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Comprehensive_Requirements_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Comprehensive_Requirements_Package_CORRECTED.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Final_Specification_with_Pricing.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Handover_Summary_Checklist.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Iza_Implementation_Final_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Marketing_Analysis_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "CRM_Revised_Pricing_Architecture.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Comprehensive_Hotel_Pricing_Compatibility_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Detailed_Implementation_Examples.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Expert_Responses.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Marketing_Strategy_Meeting.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Hotel_Operators_Advanced_Pricing_Feedback.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Iza_Implementation_Package.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Multilingual_Support_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Advanced_Room_Pricing_Consultant_Analysis.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agency_Partnership_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agent_Margin_Rank_System.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Agent_Margin_Rank_System_Professional.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Core_Features_Technical_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_Requirements_Final_Integration.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "PMS_UI_Design_Final_Feedback.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Pricing_UI_Creation_System_Specification.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Realistic_CRM_Pricing_Strategy.md",
+        "project": "hotel-marketing",
+        "score": 10
+      },
+      {
+        "file": "Unified_Business_Leisure_Pricing_Architecture.md",
+        "project": "hotel-marketing",
+        "score": 10
+      }
+    ]
+  }
+}

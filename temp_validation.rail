@@ -1,0 +1,22 @@
+
+<rail version="0.1">
+<output>
+    <string name="validated_code" description="Validated and improved code">
+        <validators>
+            <RegexMatch regex=".*tenant_id.*" />
+            <Length min="10" max="10000" />
+        </validators>
+    </string>
+</output>
+<prompt>
+Please validate this TypeScript/JavaScript code for:
+1. Tenant ID presence where required
+2. Proper error handling
+3. Type safety
+4. Security best practices
+
+Code to validate:
+{{code}}
+</prompt>
+</rail>
+      

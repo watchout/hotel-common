@@ -1,0 +1,176 @@
+{
+  "ui": {
+    "buttons": {
+      "login": "登录",
+      "logout": "退出登录",
+      "checkin": "入住登记",
+      "checkout": "退房",
+      "reserve": "预订",
+      "cancel": "取消",
+      "confirm": "确认",
+      "save": "保存",
+      "edit": "编辑",
+      "delete": "删除",
+      "search": "搜索",
+      "filter": "筛选",
+      "refresh": "刷新",
+      "back": "返回",
+      "next": "下一步",
+      "submit": "提交",
+      "close": "关闭"
+    },
+    "labels": {
+      "name": "姓名",
+      "email": "电子邮箱",
+      "phone": "电话号码",
+      "address": "地址",
+      "date": "日期",
+      "time": "时间",
+      "room": "客房",
+      "guest": "客人",
+      "adults": "成人",
+      "children": "儿童",
+      "nights": "晚数",
+      "price": "价格",
+      "total": "总计",
+      "status": "状态"
+    },
+    "navigation": {
+      "dashboard": "仪表板",
+      "reservations": "预订管理",
+      "guests": "客人管理",
+      "rooms": "客房管理",
+      "services": "服务",
+      "reports": "报告",
+      "settings": "设置",
+      "help": "帮助",
+      "profile": "个人资料",
+      "notifications": "通知"
+    },
+    "titles": {
+      "checkin_process": "入住办理流程",
+      "checkout_process": "退房办理流程",
+      "reservation_form": "预订表单",
+      "guest_information": "客人信息",
+      "room_selection": "客房选择",
+      "payment_information": "付款信息",
+      "confirmation": "确认页面",
+      "search_results": "搜索结果"
+    },
+    "placeholders": {
+      "search_guest": "按客人姓名搜索",
+      "search_reservation": "按预订号搜索",
+      "enter_email": "请输入电子邮箱",
+      "enter_phone": "请输入电话号码",
+      "select_date": "请选择日期",
+      "select_room": "请选择客房"
+    }
+  },
+  "messages": {
+    "success": {
+      "login_successful": "登录成功",
+      "logout_successful": "退出登录成功",
+      "checkin_completed": "入住办理完成",
+      "checkout_completed": "退房办理完成",
+      "reservation_confirmed": "预订已确认",
+      "reservation_cancelled": "预订已取消",
+      "profile_updated": "个人资料更新成功",
+      "payment_processed": "付款处理成功",
+      "data_saved": "数据保存成功"
+    },
+    "error": {
+      "network_error": "网络错误",
+      "invalid_credentials": "认证信息无效",
+      "reservation_not_found": "未找到预订",
+      "room_not_available": "客房不可用",
+      "payment_failed": "付款失败",
+      "server_error": "服务器错误",
+      "validation_error": "验证错误",
+      "permission_denied": "权限不足"
+    },
+    "warning": {
+      "unsaved_changes": "您有未保存的更改",
+      "confirm_deletion": "您确定要删除吗？",
+      "confirm_cancellation": "您确定要取消吗？",
+      "session_expiring": "您的会话即将过期",
+      "connection_unstable": "连接不稳定"
+    },
+    "info": {
+      "loading": "加载中...",
+      "processing": "处理中...",
+      "no_data": "暂无数据",
+      "select_option": "请选择选项",
+      "optional_field": "可选字段"
+    }
+  },
+  "content": {
+    "descriptions": {
+      "hotel_welcome": "欢迎光临本酒店",
+      "checkin_instructions": "我们将为您办理入住手续",
+      "checkout_instructions": "我们将为您办理退房手续",
+      "room_amenities": "客房设施和用品",
+      "hotel_services": "酒店服务信息",
+      "emergency_contact": "紧急联系方式"
+    },
+    "instructions": {
+      "scan_qr_code": "请扫描二维码",
+      "enter_reservation_number": "请输入您的预订号",
+      "confirm_guest_details": "请确认客人信息",
+      "select_payment_method": "请选择付款方式",
+      "sign_document": "请在文件上签名"
+    },
+    "help": {
+      "how_to_checkin": "如何办理入住",
+      "how_to_checkout": "如何办理退房",
+      "wifi_connection": "如何连接Wi-Fi",
+      "room_service": "如何使用客房服务",
+      "concierge_service": "礼宾服务"
+    },
+    "legal": {
+      "privacy_policy": "隐私政策",
+      "terms_of_service": "服务条款",
+      "cancellation_policy": "取消政策",
+      "data_protection": "数据保护政策"
+    }
+  },
+  "business": {
+    "hotel": {
+      "front_desk": "前台",
+      "concierge": "礼宾部",
+      "housekeeping": "客房部",
+      "restaurant": "餐厅",
+      "spa": "水疗中心",
+      "gym": "健身房",
+      "business_center": "商务中心",
+      "parking": "停车场"
+    },
+    "reservation": {
+      "booking_reference": "预订参考号",
+      "check_in_date": "入住日期",
+      "check_out_date": "退房日期",
+      "room_type": "客房类型",
+      "rate_plan": "价格计划",
+      "special_requests": "特殊要求",
+      "booking_status": "预订状态",
+      "confirmation_number": "确认号"
+    },
+    "guest": {
+      "guest_name": "客人姓名",
+      "contact_information": "联系信息",
+      "identification": "身份证明",
+      "loyalty_member": "会员",
+      "preferences": "偏好设置",
+      "special_needs": "特殊需求",
+      "emergency_contact": "紧急联系人"
+    },
+    "service": {
+      "room_service": "客房服务",
+      "laundry": "洗衣服务",
+      "transportation": "交通服务",
+      "tour_booking": "旅游预订",
+      "wake_up_call": "叫醒服务",
+      "extra_bed": "加床",
+      "late_checkout": "延时退房"
+    }
+  }
+} 

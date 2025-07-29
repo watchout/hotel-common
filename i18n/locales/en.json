@@ -1,0 +1,176 @@
+{
+  "ui": {
+    "buttons": {
+      "login": "Login",
+      "logout": "Logout",
+      "checkin": "Check In",
+      "checkout": "Check Out",
+      "reserve": "Make Reservation",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "save": "Save",
+      "edit": "Edit",
+      "delete": "Delete",
+      "search": "Search",
+      "filter": "Filter",
+      "refresh": "Refresh",
+      "back": "Back",
+      "next": "Next",
+      "submit": "Submit",
+      "close": "Close"
+    },
+    "labels": {
+      "name": "Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "address": "Address",
+      "date": "Date",
+      "time": "Time",
+      "room": "Room",
+      "guest": "Guest",
+      "adults": "Adults",
+      "children": "Children",
+      "nights": "Nights",
+      "price": "Price",
+      "total": "Total",
+      "status": "Status"
+    },
+    "navigation": {
+      "dashboard": "Dashboard",
+      "reservations": "Reservations",
+      "guests": "Guest Management",
+      "rooms": "Room Management",
+      "services": "Services",
+      "reports": "Reports",
+      "settings": "Settings",
+      "help": "Help",
+      "profile": "Profile",
+      "notifications": "Notifications"
+    },
+    "titles": {
+      "checkin_process": "Check-in Process",
+      "checkout_process": "Check-out Process",
+      "reservation_form": "Reservation Form",
+      "guest_information": "Guest Information",
+      "room_selection": "Room Selection",
+      "payment_information": "Payment Information",
+      "confirmation": "Confirmation",
+      "search_results": "Search Results"
+    },
+    "placeholders": {
+      "search_guest": "Search by guest name",
+      "search_reservation": "Search by reservation number",
+      "enter_email": "Enter email address",
+      "enter_phone": "Enter phone number",
+      "select_date": "Select date",
+      "select_room": "Select room"
+    }
+  },
+  "messages": {
+    "success": {
+      "login_successful": "Successfully logged in",
+      "logout_successful": "Successfully logged out",
+      "checkin_completed": "Check-in completed successfully",
+      "checkout_completed": "Check-out completed successfully",
+      "reservation_confirmed": "Reservation confirmed",
+      "reservation_cancelled": "Reservation cancelled",
+      "profile_updated": "Profile updated successfully",
+      "payment_processed": "Payment processed successfully",
+      "data_saved": "Data saved successfully"
+    },
+    "error": {
+      "network_error": "Network error occurred",
+      "invalid_credentials": "Invalid credentials",
+      "reservation_not_found": "Reservation not found",
+      "room_not_available": "Room not available",
+      "payment_failed": "Payment failed",
+      "server_error": "Server error occurred",
+      "validation_error": "Validation error",
+      "permission_denied": "Permission denied"
+    },
+    "warning": {
+      "unsaved_changes": "You have unsaved changes",
+      "confirm_deletion": "Are you sure you want to delete?",
+      "confirm_cancellation": "Are you sure you want to cancel?",
+      "session_expiring": "Your session is about to expire",
+      "connection_unstable": "Connection is unstable"
+    },
+    "info": {
+      "loading": "Loading...",
+      "processing": "Processing...",
+      "no_data": "No data available",
+      "select_option": "Please select an option",
+      "optional_field": "Optional field"
+    }
+  },
+  "content": {
+    "descriptions": {
+      "hotel_welcome": "Welcome to our hotel",
+      "checkin_instructions": "We will guide you through the check-in process",
+      "checkout_instructions": "We will guide you through the check-out process",
+      "room_amenities": "Room amenities and facilities",
+      "hotel_services": "Hotel services information",
+      "emergency_contact": "Emergency contact information"
+    },
+    "instructions": {
+      "scan_qr_code": "Please scan the QR code",
+      "enter_reservation_number": "Please enter your reservation number",
+      "confirm_guest_details": "Please confirm guest details",
+      "select_payment_method": "Please select payment method",
+      "sign_document": "Please sign the document"
+    },
+    "help": {
+      "how_to_checkin": "How to check in",
+      "how_to_checkout": "How to check out",
+      "wifi_connection": "How to connect to Wi-Fi",
+      "room_service": "How to use room service",
+      "concierge_service": "Concierge service"
+    },
+    "legal": {
+      "privacy_policy": "Privacy Policy",
+      "terms_of_service": "Terms of Service",
+      "cancellation_policy": "Cancellation Policy",
+      "data_protection": "Data Protection Policy"
+    }
+  },
+  "business": {
+    "hotel": {
+      "front_desk": "Front Desk",
+      "concierge": "Concierge",
+      "housekeeping": "Housekeeping",
+      "restaurant": "Restaurant",
+      "spa": "Spa",
+      "gym": "Gym",
+      "business_center": "Business Center",
+      "parking": "Parking"
+    },
+    "reservation": {
+      "booking_reference": "Booking Reference",
+      "check_in_date": "Check-in Date",
+      "check_out_date": "Check-out Date",
+      "room_type": "Room Type",
+      "rate_plan": "Rate Plan",
+      "special_requests": "Special Requests",
+      "booking_status": "Booking Status",
+      "confirmation_number": "Confirmation Number"
+    },
+    "guest": {
+      "guest_name": "Guest Name",
+      "contact_information": "Contact Information",
+      "identification": "Identification",
+      "loyalty_member": "Loyalty Member",
+      "preferences": "Preferences",
+      "special_needs": "Special Needs",
+      "emergency_contact": "Emergency Contact"
+    },
+    "service": {
+      "room_service": "Room Service",
+      "laundry": "Laundry Service",
+      "transportation": "Transportation Service",
+      "tour_booking": "Tour Booking",
+      "wake_up_call": "Wake-up Call",
+      "extra_bed": "Extra Bed",
+      "late_checkout": "Late Check-out"
+    }
+  }
+} 
