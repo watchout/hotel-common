@@ -13,6 +13,15 @@
     "guardrails": "npm run actual-guardrails",
     "monitor": "npm run monitor-guardrails"
   },
+  "background_agents": {
+    "continuous_guardrails": {
+      "command": "node",
+      "args": ["scripts/continuous-guardrails-monitor.js"],
+      "description": "24時間ガードレール品質監視",
+      "auto_start": true,
+      "restart_on_failure": true
+    }
+  },
   "environment_variables": {
     "NODE_ENV": "development",
     "PROJECT_TYPE": "hotel-common"

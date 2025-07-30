@@ -101,6 +101,7 @@
     "enhanced-rag": "node scripts/enhanced-rag-system.js",
     "actual-guardrails": "node scripts/actual-guardrails-system.js",
     "monitor-guardrails": "node scripts/continuous-guardrails-monitor.js",
+    "start-background-guardrails": "node scripts/continuous-guardrails-monitor.js",
     "english-thinking": "node scripts/english-thinking-optimizer.js",
     "code-quality": "node scripts/actual-guardrails-system.js",
     "optimize-tokens": "node scripts/english-thinking-optimizer.js",
