@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - NODE_ENV=production
+    environment:
+      - NODE_ENV=production
+    restart: always
+    command: npm start
+    # 本番環境ではソースコードのボリュームマウントを削除
+    volumes: []
+
+  db:
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?Database password is required}
+    # 本番環境ではポート公開を制限
+    ports: []
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # バックアップ用のボリュームを追加
+      - postgres_backup:/var/lib/postgresql/backup
+
+  redis:
+    restart: always
+    # 本番環境ではポート公開を制限
+    ports: []
+    command: redis-server --appendonly yes
+
+  # 本番環境用のバックアップサービスを追加
+  backup:
+    image: postgres:14
+    volumes:
+      - postgres_backup:/backup
+    depends_on:
+      - db
+    command: |
+      bash -c '
+        mkdir -p /backup
+        while true; do
+          pg_dump -h db -U $$POSTGRES_USER -d $$POSTGRES_DB -F c -f /backup/backup_$$(date +%Y%m%d_%H%M%S).dump
+          echo "Backup completed at $$(date)"
+          sleep 86400
+        done
+      '
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB:-hotel_common}
+    restart: always
+
+volumes:
+  postgres_data:
+  postgres_backup:
