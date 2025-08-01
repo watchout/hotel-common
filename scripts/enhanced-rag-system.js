@@ -53,6 +53,16 @@ class EnhancedRAGSystem {
 
         const documents = [];
         const technicalFiles = [
+            // ai-development-optimization（文献1-7）
+            'docs/ai-development-optimization/reference-materials/01-llm-pitfalls-analysis.md',
+            'docs/ai-development-optimization/reference-materials/02-token-optimization-techniques.md',
+            'docs/ai-development-optimization/reference-materials/03-llm-guardrails-enterprise-guide.md',
+            'docs/ai-development-optimization/reference-materials/04-cursor-cost-optimization-mcp-integration.md',
+            'docs/ai-development-optimization/reference-materials/05-llm-development-process-optimization.md',
+            'docs/ai-development-optimization/reference-materials/06-weel-rag-development-cases.md',
+            'docs/ai-development-optimization/reference-materials/07-alibaba-prompt-engineering-best-practices.md',
+            'docs/ai-development-optimization/reference-materials/collection-status.md',
+
             // 基本技術仕様
             'docs/API_SPEC.md',
             'docs/ARCHITECTURE.md',

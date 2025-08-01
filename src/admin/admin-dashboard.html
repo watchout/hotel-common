@@ -301,54 +301,61 @@
                 <button id="logoutBtn" class="btn btn-secondary" style="width: auto; margin-left: 15px;">ログアウト</button>
             </div>
 
-            <div class="dashboard-grid">
-                <!-- 統合状況カード -->
-                <div class="card">
-                    <h3>🔗 システム統合状況</h3>
-                    <div id="integrationStatus" class="integration-status">
-                        <div class="system-status system-partial">
-                            <h4>hotel-saas</h4>
-                            <div class="status-indicator status-partial"></div>
-                            <span>60% 統合済み</span>
-                            <p style="margin-top: 10px; font-size: 0.9rem;">Customer model追加中</p>
-                        </div>
-                        
-                        <div class="system-status system-disconnected">
-                            <h4>hotel-member</h4>
-                            <div class="status-indicator status-inactive"></div>
-                            <span>0% 統合済み</span>
-                            <p style="margin-top: 10px; font-size: 0.9rem;">DB接続修正必要</p>
-                        </div>
-                        
-                        <div class="system-status system-partial">
-                            <h4>hotel-pms</h4>
-                            <div class="status-indicator status-partial"></div>
-                            <span>20% 統合済み</span>
-                            <p style="margin-top: 10px; font-size: 0.9rem;">Schema移行必要</p>
-                        </div>
+                    <div class="dashboard-grid">
+            <!-- 統合状況カード -->
+            <div class="card">
+                <h3>🔗 システム統合状況</h3>
+                <div id="integrationStatus" class="integration-status">
+                    <div class="system-status system-partial">
+                        <h4>hotel-saas</h4>
+                        <div class="status-indicator status-partial"></div>
+                        <span>60% 統合済み</span>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Customer model追加中</p>
+                    </div>
+                    
+                    <div class="system-status system-disconnected">
+                        <h4>hotel-member</h4>
+                        <div class="status-indicator status-inactive"></div>
+                        <span>0% 統合済み</span>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">DB接続修正必要</p>
+                    </div>
+                    
+                    <div class="system-status system-partial">
+                        <h4>hotel-pms</h4>
+                        <div class="status-indicator status-partial"></div>
+                        <span>20% 統合済み</span>
+                        <p style="margin-top: 10px; font-size: 0.9rem;">Schema移行必要</p>
                     </div>
                 </div>
+            </div>
 
-                <!-- テナント管理カード -->
-                <div class="card" id="tenantsCard">
-                    <h3>🏢 テナント管理</h3>
-                    <button id="loadTenants" class="btn">テナント一覧を表示</button>
-                    <div id="tenantsData"></div>
-                </div>
+            <!-- テナント管理カード -->
+            <div class="card" id="tenantsCard">
+                <h3>🏢 テナント管理</h3>
+                <button id="loadTenants" class="btn">テナント一覧を表示</button>
+                <div id="tenantsData"></div>
+            </div>
 
-                <!-- チェーン管理カード -->
-                <div class="card" id="chainsCard" style="display: none;">
-                    <h3>🏪 チェーン管理</h3>
-                    <button id="loadChains" class="btn">チェーン一覧を表示</button>
-                    <div id="chainsData"></div>
-                </div>
+            <!-- テナントサービス管理カード -->
+            <div class="card" id="tenantServicesCard">
+                <h3>🔄 テナントサービス管理</h3>
+                <p>テナントごとのサービス利用状況とプラン設定を管理します。</p>
+                <button id="openTenantServiceManagement" class="btn" style="margin-top: 15px;">サービス管理画面を開く</button>
+            </div>
 
-                <!-- グループ管理カード -->
-                <div class="card" id="groupsCard" style="display: none;">
-                    <h3>🏢 グループ管理</h3>
-                    <button id="loadGroups" class="btn">グループ一覧を表示</button>
-                    <div id="groupsData"></div>
-                </div>
+            <!-- チェーン管理カード -->
+            <div class="card" id="chainsCard" style="display: none;">
+                <h3>🏪 チェーン管理</h3>
+                <button id="loadChains" class="btn">チェーン一覧を表示</button>
+                <div id="chainsData"></div>
+            </div>
+
+            <!-- グループ管理カード -->
+            <div class="card" id="groupsCard" style="display: none;">
+                <h3>🏢 グループ管理</h3>
+                <button id="loadGroups" class="btn">グループ一覧を表示</button>
+                <div id="groupsData"></div>
+            </div>
             </div>
         </div>
     </div>
@@ -573,6 +580,15 @@
             loginError.style.display = 'none';
         }
 
+        // テナントサービス管理画面を開く
+        document.getElementById('openTenantServiceManagement').addEventListener('click', () => {
+            // 新しいウィンドウでテナントサービス管理画面を開く
+            const tenantServiceWindow = window.open('/admin/tenant-service-management', 'TenantServiceManagement', 'width=1200,height=800');
+            
+            // 親ウィンドウの認証トークンを子ウィンドウに渡す
+            tenantServiceWindow.authToken = authToken;
+        });
+        
         // 初期化時の統合状況リアルタイム更新（将来拡張）
         setInterval(async () => {
             if (currentAdmin && currentAdmin.adminLevel === 'superadmin') {

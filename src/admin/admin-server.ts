@@ -31,6 +31,11 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(currentDir, 'admin-dashboard.html'))
 })
 
+// テナントサービス管理画面
+app.get('/admin/tenant-service-management', (req, res) => {
+  res.sendFile(path.join(currentDir, 'tenant-service-management.html'))
+})
+
 // Admin API
 app.use('/api/admin', adminRouter)
 

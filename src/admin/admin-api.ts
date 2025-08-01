@@ -1,194 +1,65 @@
-import express from 'express'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import { hotelDb } from '../database'
-import { HotelLogger } from '../utils/logger'
-import type { Admin, AdminLevel } from '../generated/prisma'
+/**
+ * 管理者用API
+ * 
+ * このファイルは、管理者用のAPIエンドポイントを提供します。
+ */
+import express from 'express';
+import { PrismaClient } from '../generated/prisma';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import { getTenantServices, updateTenantService } from '../api/tenant-service-api';
 
-// Express Request型拡張
-declare global {
-  namespace Express {
-    interface Request {
-      admin?: {
-        id: string
-        email: string
-        username: string
-        displayName: string
-        adminLevel: 'chainadmin' | 'groupadmin' | 'superadmin'
-        accessibleGroupIds: string[]
-        accessibleChainIds: string[]
-        accessibleTenantIds: string[]
-        isActive: boolean
-      }
-    }
-  }
-}
-
-const router = express.Router()
-const logger = HotelLogger.getInstance()
-
-// JWT設定
-const JWT_SECRET = process.env.ADMIN_JWT_SECRET || 'admin-secret-key'
-const JWT_EXPIRES_IN = '8h'
+const prisma = new PrismaClient();
+const router = express.Router();
+const JWT_SECRET = process.env.JWT_SECRET || 'admin-secret-key';
 
 // 認証ミドルウェア
-const authenticateAdmin = async (req: any, res: any, next: any) => {
+const authMiddleware = (req: any, res: any, next: any) => {
   try {
-    const token = req.headers.authorization?.replace('Bearer ', '')
-    
+    const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-      return res.status(401).json({ error: 'ADMIN_TOKEN_REQUIRED' })
+      return res.status(401).json({ success: false, error: '認証が必要です' });
     }
-    
-    const decoded: any = jwt.verify(token, JWT_SECRET)
-    const admin = await hotelDb.admin.findUnique({
-      where: { id: decoded.adminId },
-      select: {
-        id: true,
-        email: true,
-        username: true,
-        displayName: true,
-        adminLevel: true,
-        accessibleGroupIds: true,
-        accessibleChainIds: true,
-        accessibleTenantIds: true,
-        isActive: true
-      }
-    })
-    
-    if (!admin || !admin.isActive) {
-      return res.status(401).json({ error: 'ADMIN_INVALID_TOKEN' })
-    }
-    
-    req.admin = admin
-    next()
+
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.admin = decoded;
+    next();
   } catch (error) {
-    res.status(401).json({ error: 'ADMIN_TOKEN_INVALID' })
+    return res.status(401).json({ success: false, error: '無効なトークンです' });
   }
-}
-
-// 権限レベルチェック
-const requireAdminLevel = (requiredLevel: 'chainadmin' | 'groupadmin' | 'superadmin') => {
-  const levelHierarchy = {
-    chainadmin: 1,
-    groupadmin: 2,
-    superadmin: 3
-  }
-  
-  return (req: any, res: any, next: any) => {
-    const userLevel = levelHierarchy[req.admin.adminLevel as keyof typeof levelHierarchy]
-    const reqLevel = levelHierarchy[requiredLevel]
-    
-    if (userLevel >= reqLevel) {
-      next()
-    } else {
-      res.status(403).json({ 
-        error: 'ADMIN_INSUFFICIENT_PERMISSION',
-        required: requiredLevel,
-        current: req.admin.adminLevel
-      })
-    }
-  }
-}
-
-// ログ記録ヘルパー
-const logAdminAction = async (
-  adminId: string,
-  action: string,
-  success: boolean = true,
-  targetType?: string,
-  targetId?: string,
-  req?: any,
-  errorMessage?: string
-) => {
-  try {
-    await hotelDb.adminLog.create({
-      data: {
-        adminId,
-        action,
-        targetType,
-        targetId,
-        ipAddress: req?.ip || req?.connection?.remoteAddress,
-        userAgent: req?.get('User-Agent'),
-        success,
-        errorMessage
-      }
-    })
-  } catch (error) {
-    logger.error('管理者ログ記録エラー:', error as Error)
-  }
-}
-
-// ===== 認証API =====
+};
 
 // ログイン
 router.post('/auth/login', async (req, res) => {
   try {
-    const { email, password } = req.body
-    
-    if (!email || !password) {
-      return res.status(400).json({ 
-        error: 'EMAIL_PASSWORD_REQUIRED' 
-      })
-    }
-    
-    const admin = await hotelDb.admin.findUnique({
+    const { email, password } = req.body;
+
+    const admin = await prisma.admin.findUnique({
       where: { email }
-    })
-    
-    if (!admin || !admin.isActive) {
-      await logAdminAction('unknown', 'LOGIN', false, undefined, undefined, req, 'Admin not found')
-      return res.status(401).json({ error: 'INVALID_CREDENTIALS' })
+    });
+
+    if (!admin) {
+      return res.status(401).json({ success: false, error: 'メールアドレスまたはパスワードが正しくありません' });
     }
-    
-    // アカウントロック確認
-    if (admin.lockedUntil && admin.lockedUntil > new Date()) {
-      await logAdminAction(admin.id, 'LOGIN', false, undefined, undefined, req, 'Account locked')
-      return res.status(423).json({ 
-        error: 'ACCOUNT_LOCKED',
-        lockedUntil: admin.lockedUntil
-      })
+
+    const isPasswordValid = await bcrypt.compare(password, admin.passwordHash);
+    if (!isPasswordValid) {
+      return res.status(401).json({ success: false, error: 'メールアドレスまたはパスワードが正しくありません' });
     }
-    
-    const passwordValid = await bcrypt.compare(password, admin.passwordHash)
-    
-    if (!passwordValid) {
-      // ログイン試行回数を増やす
-      const newAttempts = admin.loginAttempts + 1
-      const updateData: any = { loginAttempts: newAttempts }
-      
-      // 5回失敗で30分ロック
-      if (newAttempts >= 5) {
-        updateData.lockedUntil = new Date(Date.now() + 30 * 60 * 1000)
-      }
-      
-      await hotelDb.admin.update({
-        where: { id: admin.id },
-        data: updateData
-      })
-      
-      await logAdminAction(admin.id, 'LOGIN', false, undefined, undefined, req, 'Invalid password')
-      return res.status(401).json({ error: 'INVALID_CREDENTIALS' })
-    }
-    
-    // ログイン成功 - 試行回数リセット
-    await hotelDb.admin.update({
+
+    // 最終ログイン日時を更新
+    await prisma.admin.update({
       where: { id: admin.id },
-      data: {
-        lastLoginAt: new Date(),
-        loginAttempts: 0,
-        lockedUntil: null
-      }
-    })
-    
+      data: { lastLoginAt: new Date() }
+    });
+
+    // JWTトークンを生成
     const token = jwt.sign(
-      { adminId: admin.id, adminLevel: admin.adminLevel },
+      { id: admin.id, email: admin.email, adminLevel: admin.adminLevel },
       JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
-    )
-    
-    await logAdminAction(admin.id, 'LOGIN', true, undefined, undefined, req)
-    
+      { expiresIn: '8h' }
+    );
+
     res.json({
       success: true,
       token,
@@ -199,160 +70,148 @@ router.post('/auth/login', async (req, res) => {
         displayName: admin.displayName,
         adminLevel: admin.adminLevel
       }
-    })
-    
+    });
   } catch (error) {
-    logger.error('管理者ログインエラー:', error as Error)
-    res.status(500).json({ error: 'LOGIN_ERROR' })
+    console.error('Login error:', error);
+    res.status(500).json({ success: false, error: 'ログイン処理中にエラーが発生しました' });
   }
-})
+});
 
-// ===== データ取得API =====
-
-// テナント一覧（chainadmin以上）
-router.get('/tenants', authenticateAdmin, requireAdminLevel('chainadmin'), async (req, res) => {
+// テナント一覧を取得
+router.get('/tenants', authMiddleware, async (req, res) => {
   try {
-    const admin = req.admin!
-    
-    // アクセス可能テナントフィルタ
-    let whereClause: any = {}
-    if (admin.adminLevel === 'chainadmin' && admin.accessibleTenantIds.length > 0) {
-      whereClause.id = { in: admin.accessibleTenantIds }
-    }
-    
-    const tenants = await hotelDb.tenant.findMany({
-      where: whereClause,
+    const tenants = await prisma.tenant.findMany({
       select: {
         id: true,
         name: true,
         domain: true,
         planType: true,
+        planCategory: true,
         status: true,
-        contactName: true,
-        contactEmail: true,
         createdAt: true
-      },
-      orderBy: { name: 'asc' }
-    })
-    
-          await logAdminAction(req.admin!.id, 'VIEW_TENANTS', true, 'tenant', undefined, req)
-      
-      res.json({
-        success: true,
-        tenants,
-        count: tenants.length
-      })
-    
-  } catch (error) {
-    logger.error('テナント一覧取得エラー:', error as Error)
-    res.status(500).json({ error: 'TENANTS_FETCH_ERROR' })
-  }
-})
+      }
+    });
 
-// チェーン一覧（groupadmin以上）
-router.get('/chains', authenticateAdmin, requireAdminLevel('groupadmin'), async (req, res) => {
+    res.json({ success: true, tenants });
+  } catch (error) {
+    console.error('Get tenants error:', error);
+    res.status(500).json({ success: false, error: 'テナント一覧の取得中にエラーが発生しました' });
+  }
+});
+
+// チェーン一覧を取得（モック）
+router.get('/chains', authMiddleware, async (req, res) => {
   try {
-    const admin = req.admin!
-    
-    // TODO: チェーン概念の実装
-    // 現在はテナントをグループ化した概念として返す
+    // モックデータ
     const chains = [
-      {
-        id: 'chain-1',
-        name: 'Sample Hotel Chain',
-        tenantsCount: await hotelDb.tenant.count(),
-        status: 'active'
-      }
-    ]
-    
-    await logAdminAction(admin.id, 'VIEW_CHAINS', true, 'chain', undefined, req)
-    
-    res.json({
-      success: true,
-      chains,
-      count: chains.length
-    })
-    
-  } catch (error) {
-    logger.error('チェーン一覧取得エラー:', error as Error)
-    res.status(500).json({ error: 'CHAINS_FETCH_ERROR' })
-  }
-})
+      { id: 'chain_1', name: 'ホテルチェーンA', tenantsCount: 15, status: 'active' },
+      { id: 'chain_2', name: 'ホテルチェーンB', tenantsCount: 8, status: 'active' },
+      { id: 'chain_3', name: 'ホテルチェーンC', tenantsCount: 3, status: 'inactive' }
+    ];
 
-// グループ一覧（superadmin専用）
-router.get('/groups', authenticateAdmin, requireAdminLevel('superadmin'), async (req, res) => {
+    res.json({ success: true, chains });
+  } catch (error) {
+    console.error('Get chains error:', error);
+    res.status(500).json({ success: false, error: 'チェーン一覧の取得中にエラーが発生しました' });
+  }
+});
+
+// グループ一覧を取得（モック）
+router.get('/groups', authMiddleware, async (req, res) => {
   try {
-    const admin = req.admin!
-    
-    // TODO: グループ概念の実装
-    // 現在は全体統計として返す
+    // モックデータ
     const groups = [
-      {
-        id: 'group-1',
-        name: 'Hotel Management Group',
-        chainsCount: 1,
-        tenantsCount: await hotelDb.tenant.count(),
-        status: 'active'
-      }
-    ]
-    
-    await logAdminAction(admin.id, 'VIEW_GROUPS', true, 'group', undefined, req)
-    
-    res.json({
-      success: true,
-      groups,
-      count: groups.length
-    })
-    
-  } catch (error) {
-    logger.error('グループ一覧取得エラー:', error as Error)
-    res.status(500).json({ error: 'GROUPS_FETCH_ERROR' })
-  }
-})
+      { id: 'group_1', name: 'ホテルグループX', chainsCount: 3, tenantsCount: 25, status: 'active' },
+      { id: 'group_2', name: 'ホテルグループY', chainsCount: 1, tenantsCount: 12, status: 'active' },
+      { id: 'group_3', name: 'ホテルグループZ', chainsCount: 2, tenantsCount: 8, status: 'active' }
+    ];
 
-// 統合状況ダッシュボード（superadmin専用）
-router.get('/integration-status', authenticateAdmin, requireAdminLevel('superadmin'), async (req, res) => {
+    res.json({ success: true, groups });
+  } catch (error) {
+    console.error('Get groups error:', error);
+    res.status(500).json({ success: false, error: 'グループ一覧の取得中にエラーが発生しました' });
+  }
+});
+
+// システム統合状況を取得（モック）
+router.get('/integration-status', authMiddleware, async (req, res) => {
   try {
-    const admin = req.admin!
-    
-    // 各システムの統合状況を返す
-    const integrationStatus = {
-      overview: {
-        totalTenants: await hotelDb.tenant.count(),
-        totalStaff: await hotelDb.staff.count(),
-        totalCustomers: await hotelDb.customers.count(),
-        totalReservations: await hotelDb.reservation.count()
-      },
-      systems: {
-        'hotel-saas': {
-          status: 'PARTIAL',
-          integrationLevel: 60,
-          issues: ['Customer model missing', 'Staff migration pending']
-        },
-        'hotel-member': {
-          status: 'DISCONNECTED', 
-          integrationLevel: 0,
-          issues: ['DB connection failed', 'Schema not integrated']
-        },
-        'hotel-pms': {
-          status: 'MINIMAL',
-          integrationLevel: 20,
-          issues: ['Limited schema integration', 'Staff migration pending']
-        }
-      }
-    }
-    
-    await logAdminAction(admin.id, 'VIEW_INTEGRATION_STATUS', true, 'system', undefined, req)
-    
-    res.json({
-      success: true,
-      integrationStatus
-    })
-    
-  } catch (error) {
-    logger.error('統合状況取得エラー:', error as Error)
-    res.status(500).json({ error: 'INTEGRATION_STATUS_ERROR' })
-  }
-})
+    // モックデータ
+    const status = {
+      'hotel-saas': { progress: 60, status: 'partial', message: 'Customer model追加中' },
+      'hotel-member': { progress: 0, status: 'disconnected', message: 'DB接続修正必要' },
+      'hotel-pms': { progress: 20, status: 'partial', message: 'Schema移行必要' }
+    };
 
-export default router 
+    res.json({ success: true, status });
+  } catch (error) {
+    console.error('Get integration status error:', error);
+    res.status(500).json({ success: false, error: '統合状況の取得中にエラーが発生しました' });
+  }
+});
+
+// テナントのサービス情報を取得
+router.get('/tenant-services/:tenantId', authMiddleware, async (req, res) => {
+  try {
+    const { tenantId } = req.params;
+    const result = await getTenantServices(tenantId);
+
+    if (result.success) {
+      res.json({ success: true, services: result.data });
+    } else {
+      res.status(404).json({ success: false, error: result.error });
+    }
+  } catch (error) {
+    console.error('Get tenant services error:', error);
+    res.status(500).json({ success: false, error: 'テナントサービスの取得中にエラーが発生しました' });
+  }
+});
+
+// テナントのサービス情報を更新
+router.put('/tenant-services/:tenantId/:serviceId', authMiddleware, async (req, res) => {
+  try {
+    const { tenantId, serviceId } = req.params;
+    const { planType, isActive } = req.body;
+
+    // サービスIDからサービスタイプを取得
+    const service = await prisma.tenant_services.findUnique({
+      where: { id: serviceId }
+    });
+
+    if (!service) {
+      return res.status(404).json({ success: false, error: '指定されたサービスが見つかりません' });
+    }
+
+    const result = await updateTenantService(tenantId, service.service_type, planType, isActive);
+
+    if (result.success) {
+      res.json({ success: true, service: result.data });
+    } else {
+      res.status(500).json({ success: false, error: result.error });
+    }
+  } catch (error) {
+    console.error('Update tenant service error:', error);
+    res.status(500).json({ success: false, error: 'テナントサービスの更新中にエラーが発生しました' });
+  }
+});
+
+// テナントに新しいサービスを追加
+router.post('/tenant-services/:tenantId', authMiddleware, async (req, res) => {
+  try {
+    const { tenantId } = req.params;
+    const { serviceType, planType, isActive } = req.body;
+
+    const result = await updateTenantService(tenantId, serviceType, planType, isActive);
+
+    if (result.success) {
+      res.json({ success: true, service: result.data });
+    } else {
+      res.status(500).json({ success: false, error: result.error });
+    }
+  } catch (error) {
+    console.error('Add tenant service error:', error);
+    res.status(500).json({ success: false, error: 'テナントサービスの追加中にエラーが発生しました' });
+  }
+});
+
+export default router;

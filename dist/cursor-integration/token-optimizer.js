@@ -1,459 +1,72 @@
-// ⚡ トークン最適化システム - 90%削減の実現
-// Custom Instructionsの4,000トークンを400トークンに最適化
 /**
- * トークン最適化システム
- * 90%削減を実現する複数戦略の組み合わせ
+ * 🚀 トークン最適化システム (文献2準拠)
+ * 言語切り替えによる30-50%削減
  */
-export class TokenOptimizer {
-    TARGET_REDUCTION = 0.9; // 90%削減目標
-    MAX_TOKENS_PER_REQUEST = 1000; // 上限
-    /**
-     * メイン最適化処理
-     */
-    async optimize(content, context) {
-        const startTime = Date.now();
-        const originalTokens = this.estimateTokens(content);
-        const strategies = [];
-        let optimized = content;
-        try {
-            // 戦略1: 不要情報の除去 (30%削減)
-            const filtered = await this.removeIrrelevantInfo(optimized, context);
-            if (filtered.length < optimized.length) {
-                optimized = filtered;
-                strategies.push('不要情報除去');
-            }
-            // 戦略2: RAG情報の圧縮 (25%削減)
-            const ragOptimized = await this.optimizeRAGContent(optimized, context.relevantRAG);
-            if (ragOptimized.length < optimized.length) {
-                optimized = ragOptimized;
-                strategies.push('RAG情報圧縮');
-            }
-            // 戦略3: コンテキスト最適化 (20%削減)
-            const contextOptimized = await this.optimizeContext(optimized, context);
-            if (contextOptimized.length < optimized.length) {
-                optimized = contextOptimized;
-                strategies.push('コンテキスト最適化');
-            }
-            // 戦略4: プロンプト圧縮 (15%削減)
-            const compressed = await this.compressPrompt(optimized, context);
-            if (compressed.length < optimized.length) {
-                optimized = compressed;
-                strategies.push('プロンプト圧縮');
-            }
-            // 戦略5: セマンティック圧縮 (10%削減)
-            const semantic = await this.semanticCompression(optimized, context);
-            if (semantic.length < optimized.length) {
-                optimized = semantic;
-                strategies.push('セマンティック圧縮');
-            }
-            // 戦略6: 最終最適化
-            optimized = await this.finalOptimization(optimized, context);
-            strategies.push('最終最適化');
-            const optimizedTokens = this.estimateTokens(optimized);
-            const reductionPercentage = (originalTokens - optimizedTokens) / originalTokens;
-            return {
-                originalTokens,
-                optimizedTokens,
-                reductionPercentage,
-                optimizedContent: optimized,
-                optimizationStrategies: strategies,
-                processingTime: Date.now() - startTime
-            };
-        }
-        catch (error) {
-            console.error('トークン最適化エラー:', error);
-            return {
-                originalTokens,
-                optimizedTokens: originalTokens,
-                reductionPercentage: 0,
-                optimizedContent: content,
-                optimizationStrategies: ['最適化エラー'],
-                processingTime: Date.now() - startTime
-            };
-        }
+/**
+ * トークン効率化プロンプト生成
+ */
+export function createEfficientPrompt(task, context, config) {
+    if (config.taskType === 'simple') {
+        return `Task: ${task}. Context: ${context}. Output in ${config.outputLanguage} with Japanese comments.`;
     }
-    /**
-     * 戦略1: 不要情報の除去
-     * Custom Instructionsの冗長な指示を除去
-     */
-    async removeIrrelevantInfo(content, context) {
-        let optimized = content;
-        // 1. 冗長な指示文除去
-        const redundantPatterns = [
-            /Before ANY response, ALWAYS execute:.*/s,
-            /You are integrated with hotel-common.*/s,
-            /Reference hotel-common docs:.*/s,
-            /Apply specialized knowledge.*/s,
-            /NEVER compromise.*/s
-        ];
-        for (const pattern of redundantPatterns) {
-            optimized = optimized.replace(pattern, '');
-        }
-        // 2. 重複する品質基準除去
-        optimized = this.removeDuplicateQualityStandards(optimized);
-        // 3. 形式的な説明除去
-        optimized = this.removeFormalInstructions(optimized);
-        // 4. 空行・余分な文字除去
-        optimized = optimized
-            .replace(/\n\s*\n\s*\n/g, '\n\n') // 連続空行
-            .replace(/^\s+|\s+$/gm, '') // 行の前後空白
-            .trim();
-        return optimized;
+    if (config.taskType === 'complex') {
+        return `Think step-by-step in English (save tokens):
+1. Analyze: ${task}
+2. Design solution for: ${context}
+3. Implement with hotel-common constraints
+
+Output final result in Japanese with detailed comments.
+Token budget: ${config.tokenBudget}`;
     }
-    /**
-     * 戦略2: RAG情報の圧縮
-     * 関連情報のみを抽出・要約
-     */
-    async optimizeRAGContent(content, ragResults) {
-        if (!ragResults || ragResults.length === 0)
-            return content;
-        // 1. 最重要RAG情報のみ抽出
-        const topRAG = ragResults
-            .sort((a, b) => b.relevanceScore - a.relevanceScore)
-            .slice(0, 2); // 上位2件のみ
-        // 2. RAG情報を簡潔な形式に変換
-        const compressedRAG = topRAG.map(rag => ({
-            type: rag.type,
-            key: this.extractKeyInfo(rag.content),
-            source: this.abbreviateSource(rag.source)
-        }));
-        // 3. 元のRAG情報を圧縮版に置換
-        let optimized = content;
-        // 既存のRAG参照を除去
-        optimized = optimized.replace(/Reference hotel-common docs:.*?\n\n/s, '');
-        // 圧縮されたRAG情報を追加
-        if (compressedRAG.length > 0) {
-            const ragSummary = compressedRAG
-                .map(rag => `${rag.type}: ${rag.key} (${rag.source})`)
-                .join('; ');
-            optimized = `${optimized}\n\nRAG: ${ragSummary}`;
-        }
-        return optimized;
+    if (config.taskType === 'debug') {
+        return `Debug efficiently in English:
+Issue: ${task}
+Context: ${context}
+Output: Japanese solution with explanation.
+Max tokens: ${config.tokenBudget}`;
     }
-    /**
-     * 戦略3: コンテキスト最適化
-     * プロジェクト固有情報のみに絞り込み
-     */
-    async optimizeContext(content, context) {
-        let optimized = content;
-        // 1. プロジェクト特化
-        const projectSpecificInfo = this.getProjectSpecificInfo(context.project);
-        // 2. 汎用的な指示を特化指示に置換
-        switch (context.project) {
-            case 'hotel-saas':
-                optimized = optimized.replace(/Apply appropriate agent specialization.*/s, 'Focus: Customer UX, accessibility, booking flow optimization');
-                break;
-            case 'hotel-member':
-                optimized = optimized.replace(/Apply appropriate agent specialization.*/s, 'Focus: Security, privacy, GDPR compliance, authentication');
-                break;
-            case 'hotel-pms':
-                optimized = optimized.replace(/Apply appropriate agent specialization.*/s, 'Focus: 24/7 operations, front desk efficiency, system reliability');
-                break;
-        }
-        // 3. ファイル種別特化
-        if (context.fileType) {
-            optimized = this.addFileTypeOptimization(optimized, context.fileType);
-        }
-        // 4. 意図特化
-        optimized = this.addIntentOptimization(optimized, context.intent);
-        return optimized;
-    }
-    /**
-     * 戦略4: プロンプト圧縮
-     * 簡潔で効果的な表現に変換
-     */
-    async compressPrompt(content, context) {
-        let optimized = content;
-        // 1. 長文指示の短縮
-        const compressionMap = new Map([
-            ['TypeScript Safety: Ensure strict type checking, no `any` types', 'TS: strict types, no any'],
-            ['Security Compliance: Validate authentication, data protection', 'Security: auth + data protection'],
-            ['Performance Standards: Check for performance optimizations', 'Performance: optimize'],
-            ['Code Quality: Apply professional coding standards', 'Quality: professional standards'],
-            ['hotel-industry-grade quality, security, and performance', 'hotel-grade quality']
-        ]);
-        for (const [long, short] of compressionMap) {
-            optimized = optimized.replace(new RegExp(long, 'g'), short);
-        }
-        // 2. 箇条書きの圧縮
-        optimized = this.compressBulletPoints(optimized);
-        // 3. 例文の除去（必要最小限のみ保持）
-        optimized = this.removeUnnecessaryExamples(optimized);
-        return optimized;
-    }
-    /**
-     * 戦略5: セマンティック圧縮
-     * 意味を保持しながら表現を最適化
-     */
-    async semanticCompression(content, context) {
-        let optimized = content;
-        // 1. 同義語の統一
-        const synonymMap = new Map([
-            ['implement', 'add'],
-            ['optimize', 'improve'],
-            ['validate', 'check'],
-            ['execute', 'run'],
-            ['professional', 'quality']
-        ]);
-        for (const [synonym, standard] of synonymMap) {
-            optimized = optimized.replace(new RegExp(synonym, 'gi'), standard);
-        }
-        // 2. 修飾語の削除
-        optimized = optimized
-            .replace(/\b(very|really|quite|extremely|highly)\s+/gi, '')
-            .replace(/\b(always|never|must|should)\s+/gi, '');
-        // 3. 助詞・接続詞の最適化
-        optimized = optimized
-            .replace(/\b(however|therefore|furthermore|moreover),?\s*/gi, '')
-            .replace(/\bin order to\b/gi, 'to')
-            .replace(/\bmake sure to\b/gi, '');
-        return optimized;
-    }
-    /**
-     * 戦略6: 最終最適化
-     * 仕上げの調整
-     */
-    async finalOptimization(content, context) {
-        let optimized = content;
-        // 1. トークン上限チェック
-        if (this.estimateTokens(optimized) > this.MAX_TOKENS_PER_REQUEST) {
-            optimized = this.enforceTokenLimit(optimized);
-        }
-        // 2. 最重要情報の確保
-        optimized = this.ensureEssentialInfo(optimized, context);
-        // 3. 最終的な品質確認
-        optimized = this.finalQualityCheck(optimized);
-        return optimized;
-    }
-    // ユーティリティメソッド
-    /**
-     * トークン数推定
-     */
-    estimateTokens(text) {
-        // GPT系の概算：4文字 ≈ 1トークン
-        return Math.ceil(text.length / 4);
-    }
-    /**
-     * 重複品質基準除去
-     */
-    removeDuplicateQualityStandards(content) {
-        // TypeScript関連の重複除去
-        const tsPattern = /TypeScript.*?(?=Security|Performance|$)/s;
-        const tsMatches = content.match(new RegExp(tsPattern, 'g'));
-        if (tsMatches && tsMatches.length > 1) {
-            // 最初の記述のみ保持
-            content = content.replace(tsPattern, '').replace(tsMatches[0], tsMatches[0]);
-        }
-        return content;
-    }
-    /**
-     * 形式的指示除去
-     */
-    removeFormalInstructions(content) {
-        const formalPatterns = [
-            /Remember: You are not just providing code.*/s,
-            /Structure responses as:.*/s,
-            /\*\*Remember:.*/s
-        ];
-        for (const pattern of formalPatterns) {
-            content = content.replace(pattern, '');
-        }
-        return content;
-    }
-    /**
-     * RAG重要情報抽出
-     */
-    extractKeyInfo(ragContent) {
-        // 最初の100文字 + キーワード
-        const summary = ragContent.substring(0, 100);
-        const keywords = this.extractKeywords(ragContent);
-        return `${summary}... [${keywords.slice(0, 3).join(', ')}]`;
-    }
-    /**
-     * ソース略語化
-     */
-    abbreviateSource(source) {
-        return source
-            .replace('docs/ai-development-optimization/', 'ai-opt/')
-            .replace('system-integration-', 'sys-int-')
-            .replace('.md', '');
-    }
-    /**
-     * プロジェクト特化情報取得
-     */
-    getProjectSpecificInfo(project) {
-        const projectInfo = {
-            'hotel-saas': 'Sun/UX-focused',
-            'hotel-member': 'Suno/Security-focused',
-            'hotel-pms': 'Luna/Operations-focused'
+    return task; // fallback
+}
+/**
+ * トークン使用量推定
+ */
+export function estimateTokenUsage(text, language) {
+    // 文献2に基づく推定値
+    const multipliers = {
+        english: 1.0,
+        japanese: 3.0, // 日本語は3倍のトークン
+        chinese: 0.5 // 中国語は50%のトークン
+    };
+    const baseTokens = Math.ceil(text.length / 4); // 基準：英語4文字=1トークン
+    return Math.ceil(baseTokens * multipliers[language]);
+}
+/**
+ * hotel-common特化最適化クラス
+ */
+export class HotelCommonTokenOptimizer {
+    config;
+    constructor(config = {}) {
+        this.config = {
+            taskType: 'complex',
+            internalLanguage: 'english',
+            outputLanguage: 'japanese',
+            tokenBudget: 4000,
+            ...config
         };
-        return projectInfo[project] || 'General';
     }
-    /**
-     * ファイル種別最適化追加
-     */
-    addFileTypeOptimization(content, fileType) {
-        const typeOptimizations = {
-            'ts': 'TypeScript best practices',
-            'vue': 'Vue.js composition API',
-            'js': 'Modern JavaScript ES2020+',
-            'md': 'Markdown documentation'
+    optimizePrompt(task, context = '') {
+        const originalPrompt = `${task}\n${context}`;
+        const optimizedPrompt = createEfficientPrompt(task, context, this.config);
+        const originalTokens = estimateTokenUsage(originalPrompt, 'japanese');
+        const optimizedTokens = estimateTokenUsage(optimizedPrompt, this.config.internalLanguage);
+        const savedTokens = originalTokens - optimizedTokens;
+        const savedCostUSD = (savedTokens / 1000000) * 3.0; // $3/1M tokens
+        return {
+            originalPrompt,
+            optimizedPrompt,
+            estimatedTokenSaving: savedTokens,
+            estimatedCostSaving: `$${savedCostUSD.toFixed(4)}`,
+            language: this.config.internalLanguage
         };
-        const optimization = typeOptimizations[fileType];
-        if (optimization) {
-            content = `${content}\nFile: ${optimization}`;
-        }
-        return content;
-    }
-    /**
-     * 意図最適化追加
-     */
-    addIntentOptimization(content, intent) {
-        const intentOptimizations = {
-            'optimization': 'Focus: performance improvement',
-            'bugfix': 'Focus: error resolution',
-            'feature': 'Focus: new functionality',
-            'security': 'Focus: security enhancement'
-        };
-        const optimization = intentOptimizations[intent];
-        if (optimization) {
-            content = `${content}\nIntent: ${optimization}`;
-        }
-        return content;
-    }
-    /**
-     * 箇条書き圧縮
-     */
-    compressBulletPoints(content) {
-        // 長い箇条書きを短縮
-        return content.replace(/- (.{50,})/g, (match, text) => {
-            const shortened = text.substring(0, 30) + '...';
-            return `- ${shortened}`;
-        });
-    }
-    /**
-     * 不要な例文除去
-     */
-    removeUnnecessaryExamples(content) {
-        // 長い例文ブロックを除去
-        return content.replace(/```[\s\S]*?```/g, (match) => {
-            if (match.length > 200) {
-                return '```[example code]```';
-            }
-            return match;
-        });
-    }
-    /**
-     * トークン上限強制
-     */
-    enforceTokenLimit(content) {
-        const maxLength = this.MAX_TOKENS_PER_REQUEST * 4; // 4文字/トークンの概算
-        if (content.length > maxLength) {
-            // 重要度に基づいてカット
-            const important = this.extractMostImportant(content, maxLength * 0.8);
-            return important + '\n[Content truncated for optimization]';
-        }
-        return content;
-    }
-    /**
-     * 最重要情報確保
-     */
-    ensureEssentialInfo(content, context) {
-        const essentials = [
-            context.project,
-            context.intent,
-            'TypeScript',
-            'Security',
-            'Quality'
-        ];
-        for (const essential of essentials) {
-            if (!content.toLowerCase().includes(essential.toLowerCase())) {
-                content = `${content}\nEssential: ${essential}`;
-            }
-        }
-        return content;
-    }
-    /**
-     * 最終品質確認
-     */
-    finalQualityCheck(content) {
-        // 基本的な整合性チェック
-        if (content.trim().length === 0) {
-            return 'Error: Content optimization resulted in empty output';
-        }
-        // 最小限の指示を確保
-        if (!content.includes('TypeScript') && !content.includes('Quality')) {
-            content = `${content}\nBasic: TypeScript + Quality standards`;
-        }
-        return content.trim();
-    }
-    /**
-     * 最重要部分抽出
-     */
-    extractMostImportant(content, maxLength) {
-        const lines = content.split('\n');
-        const important = [];
-        let currentLength = 0;
-        // 重要度順で行を選択
-        const prioritizedLines = this.prioritizeLines(lines);
-        for (const line of prioritizedLines) {
-            if (currentLength + line.length > maxLength)
-                break;
-            important.push(line);
-            currentLength += line.length;
-        }
-        return important.join('\n');
-    }
-    /**
-     * 行の重要度付け
-     */
-    prioritizeLines(lines) {
-        return lines.sort((a, b) => {
-            const aScore = this.getLineImportanceScore(a);
-            const bScore = this.getLineImportanceScore(b);
-            return bScore - aScore;
-        });
-    }
-    /**
-     * 行の重要度スコア計算
-     */
-    getLineImportanceScore(line) {
-        let score = 0;
-        // 重要キーワードでスコア加算
-        const importantKeywords = ['TypeScript', 'Security', 'Performance', 'Quality', 'hotel-'];
-        for (const keyword of importantKeywords) {
-            if (line.includes(keyword))
-                score += 10;
-        }
-        // プロジェクト名でスコア加算
-        if (line.includes('hotel-saas') || line.includes('hotel-member') || line.includes('hotel-pms')) {
-            score += 15;
-        }
-        // コード例は低優先度
-        if (line.includes('```') || line.includes('example')) {
-            score -= 5;
-        }
-        return score;
-    }
-    /**
-     * キーワード抽出
-     */
-    extractKeywords(content) {
-        const words = content
-            .replace(/[^\w\s]/g, ' ')
-            .split(/\s+/)
-            .filter(word => word.length > 3)
-            .map(word => word.toLowerCase());
-        // 頻度カウント
-        const frequency = new Map();
-        for (const word of words) {
-            frequency.set(word, (frequency.get(word) || 0) + 1);
-        }
-        // 頻度順ソート
-        return Array.from(frequency.entries())
-            .sort((a, b) => b[1] - a[1])
-            .map(([word]) => word)
-            .slice(0, 10);
     }
 }
-export default TokenOptimizer;
