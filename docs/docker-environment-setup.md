@@ -52,12 +52,12 @@ docker-compose exec app npm run seed
 
 ### アプリケーションの動作確認
 
-ブラウザで `http://localhost:3000` にアクセスし、アプリケーションが正常に動作していることを確認します。
+ブラウザで `http://localhost:3100` にアクセスし、アプリケーションが正常に動作していることを確認します。
 
 ### データベースの確認
 
 ```bash
-docker-compose exec db psql -U postgres -d hotel_common
+docker-compose exec db psql -U hotel_app -d hotel_unified_db
 ```
 
 ## 開発ワークフロー
