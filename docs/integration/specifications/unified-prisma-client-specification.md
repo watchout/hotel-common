@@ -144,7 +144,7 @@ npm install
 #### **Step 2: 環境変数設定**
 ```bash
 # .env に追加
-DATABASE_URL=postgresql://kaneko@localhost:5432/hotel_unified_db
+DATABASE_URL=postgresql://hotel_app:${DB_PASSWORD}@localhost:5432/hotel_unified_db
 HOTEL_SYSTEM_NAME=hotel-saas  # システム名（hotel-member, hotel-pms）
 TENANT_ID=your-tenant-id
 ```

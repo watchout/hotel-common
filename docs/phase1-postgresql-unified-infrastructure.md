@@ -81,7 +81,7 @@ ORM: Prisma v6.11.1
 
 ### **環境変数設定**
 ```
-DATABASE_URL="postgresql://kaneko@localhost:5432/hotel_unified_db?schema=public"
+DATABASE_URL="postgresql://hotel_app:${DB_PASSWORD}@localhost:5432/hotel_unified_db?schema=public"
 API_PORT="3400"
 各システム連携URL設定完了
 ```

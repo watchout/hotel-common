@@ -234,7 +234,7 @@ project/
 ### ローカル環境
 
 - Docker関連の問題: `docker-compose down -v && docker-compose up -d`
-- ポート競合: `.env`ファイルでポート番号を変更
+- ポート競合: 各システムは固定ポート（saas=3100 / member=3200(+8080) / pms=3300(±3301) / common=3400）を使用し、vite.config.tsでは`strictPort: true`を設定して他ポートへの自動移行を禁止。ポートが使用中の場合は、既存プロセスを停止してから起動する
 - データベース接続エラー: `DATABASE_URL`の確認
 
 ### 開発サーバー
