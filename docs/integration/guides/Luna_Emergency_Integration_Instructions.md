@@ -20,7 +20,7 @@
 ### **統合完了の具体的基準**
 ```bash
 # 以下のコマンドが成功すること
-psql postgresql://kaneko@localhost:5432/hotel_unified_db -c "SELECT * FROM room_grades LIMIT 1;"
+psql postgresql://hotel_app:${DB_PASSWORD}@localhost:5432/hotel_unified_db -c "SELECT * FROM room_grades LIMIT 1;"
 curl -s http://localhost:3300/api/room-grades | grep -q "grade_name"
 
 # 期待される結果
@@ -50,7 +50,7 @@ cp database.sqlite database.sqlite.backup_$(date +%Y%m%d_%H%M%S)
 # 2.1 .envファイル作成
 cat > .env << 'EOF'
 # PostgreSQL統一基盤接続設定
-DATABASE_URL="postgresql://kaneko@localhost:5432/hotel_unified_db"
+DATABASE_URL="postgresql://hotel_app:${DB_PASSWORD}@localhost:5432/hotel_unified_db"
 
 # hotel-commonライブラリ統合設定
 HOTEL_COMMON_API_URL="http://localhost:3400"
@@ -176,7 +176,7 @@ curl -s http://localhost:3300/api/room-grades
 完了時は以下の証拠を添付して報告：
 ```bash
 # 実行ログ
-psql postgresql://kaneko@localhost:5432/hotel_unified_db -c "SELECT grade_name FROM room_grades;"
+psql postgresql://hotel_app:${DB_PASSWORD}@localhost:5432/hotel_unified_db -c "SELECT grade_name FROM room_grades;"
 curl -s http://localhost:3300/api/room-grades | jq .
 ```
 

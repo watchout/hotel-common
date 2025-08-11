@@ -234,23 +234,24 @@ model DeviceAccessLog {
 }
 
 model DeviceRoom {
-  id              Int               @id @default(autoincrement())
-  tenantId        String
-  macAddress      String?
-  ipAddress       String?
-  deviceName      String
-  roomId          String?
-  isActive        Boolean           @default(true)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime
-  lastUsedAt      DateTime?
-  deviceType      String?
-  isDeleted       Boolean           @default(false)
-  deletedAt       DateTime?
-  placeId         Int?
-  AiConversation  AiConversation[]
-  DeviceAccessLog DeviceAccessLog[]
-  Place           Place?            @relation(fields: [placeId], references: [id])
+  id               Int                @id @default(autoincrement())
+  tenantId         String
+  macAddress       String?
+  ipAddress        String?
+  deviceName       String
+  roomId           String?
+  isActive         Boolean            @default(true)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime
+  lastUsedAt       DateTime?
+  deviceType       String?
+  isDeleted        Boolean            @default(false)
+  deletedAt        DateTime?
+  placeId          Int?
+  AiConversation   AiConversation[]
+  DeviceAccessLog  DeviceAccessLog[]
+  Place            Place?             @relation(fields: [placeId], references: [id])
+  DeviceVideoCache DeviceVideoCache[]
 
   @@index([placeId])
   @@index([tenantId])
@@ -584,42 +585,43 @@ model MenuComboItem {
 }
 
 model MenuItem {
-  id                                             Int             @id @default(autoincrement())
+  id                                             Int                @id @default(autoincrement())
   tenantId                                       String
   name                                           String
   name_ja                                        String
   description                                    String?
   description_ja                                 String?
-  price                                          Int
-  taxRate                                        Int             @default(10)
   categoryId                                     Int?
   imageUrl                                       String?
-  stockAvailable                                 Boolean         @default(true)
+  stockAvailable                                 Boolean            @default(true)
   stockQty                                       Int?
-  isSecret                                       Boolean         @default(false)
+  isSecret                                       Boolean            @default(false)
   secretCode                                     String?
-  isSet                                          Boolean         @default(false)
-  isFeatured                                     Boolean         @default(false)
+  isSet                                          Boolean            @default(false)
+  isFeatured                                     Boolean            @default(false)
   showFrom                                       DateTime?
   showTo                                         DateTime?
-  isPreview                                      Boolean         @default(false)
-  showRankingDay                                 Boolean         @default(true)
-  showRankingWeek                                Boolean         @default(true)
-  showRankingMonth                               Boolean         @default(true)
-  order                                          Int             @default(0)
-  categoryOrder                                  Int             @default(0)
-  createdAt                                      DateTime        @default(now())
+  isPreview                                      Boolean            @default(false)
+  showRankingDay                                 Boolean            @default(true)
+  showRankingWeek                                Boolean            @default(true)
+  showRankingMonth                               Boolean            @default(true)
+  order                                          Int                @default(0)
+  categoryOrder                                  Int                @default(0)
+  createdAt                                      DateTime           @default(now())
   updatedAt                                      DateTime
-  isDeleted                                      Boolean         @default(false)
+  isDeleted                                      Boolean            @default(false)
   deletedAt                                      DateTime?
-  costPrice                                      Int?
   ComboMeta                                      ComboMeta?
   MenuAsset                                      MenuAsset[]
-  MenuComboItem_MenuComboItem_childIdToMenuItem  MenuComboItem[] @relation("MenuComboItem_childIdToMenuItem")
-  MenuComboItem_MenuComboItem_parentIdToMenuItem MenuComboItem[] @relation("MenuComboItem_parentIdToMenuItem")
-  Category                                       Category?       @relation(fields: [categoryId], references: [id])
+  MenuComboItem_MenuComboItem_childIdToMenuItem  MenuComboItem[]    @relation("MenuComboItem_childIdToMenuItem")
+  MenuComboItem_MenuComboItem_parentIdToMenuItem MenuComboItem[]    @relation("MenuComboItem_parentIdToMenuItem")
+  Category                                       Category?          @relation(fields: [categoryId], references: [id])
   OrderItem                                      OrderItem[]
   MenuItemToTag                                  MenuItemToTag[]
+  CampaignItem                                   CampaignItem[]
+  CampaignUsageLog                               CampaignUsageLog[]
+  priceRules                                     PriceRule[]
+  gachaMenuItems                                 GachaMenuItem[]
 
   @@index([categoryId, categoryOrder])
 }
@@ -640,20 +642,22 @@ model OperationLog {
 }
 
 model Order {
-  id        Int         @id @default(autoincrement())
-  tenantId  String
-  roomId    String
-  placeId   Int?
-  status    String      @default("received")
-  items     Json
-  total     Int
-  createdAt DateTime    @default(now())
-  updatedAt DateTime
-  paidAt    DateTime?
-  isDeleted Boolean     @default(false)
-  deletedAt DateTime?
-  Place     Place?      @relation(fields: [placeId], references: [id])
-  OrderItem OrderItem[]
+  id               Int                @id @default(autoincrement())
+  tenantId         String
+  roomId           String
+  placeId          Int?
+  status           String             @default("received")
+  items            Json
+  total            Int
+  isGachaOrder     Boolean            @default(false)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime
+  paidAt           DateTime?
+  isDeleted        Boolean            @default(false)
+  deletedAt        DateTime?
+  Place            Place?             @relation(fields: [placeId], references: [id])
+  OrderItem        OrderItem[]
+  CampaignUsageLog CampaignUsageLog[]
 
   @@index([placeId])
   @@index([tenantId])
@@ -661,25 +665,30 @@ model Order {
 }
 
 model OrderItem {
-  id          Int       @id @default(autoincrement())
-  tenantId    String
-  orderId     Int
-  menuItemId  Int
-  name        String
-  price       Int
-  quantity    Int
-  status      String    @default("pending")
-  notes       String?
-  deliveredAt DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime
-  MenuItem    MenuItem  @relation(fields: [menuItemId], references: [id])
-  Order       Order     @relation(fields: [orderId], references: [id])
+  id            Int        @id @default(autoincrement())
+  tenantId      String
+  orderId       Int
+  menuItemId    Int
+  name          String
+  price         Int
+  quantity      Int
+  status        String     @default("pending")
+  notes         String?
+  isGachaResult Boolean    @default(false)
+  gachaMenuId   Int?
+  originalPrice Decimal?
+  deliveredAt   DateTime?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime
+  MenuItem      MenuItem   @relation(fields: [menuItemId], references: [id])
+  Order         Order      @relation(fields: [orderId], references: [id])
+  GachaMenu     GachaMenu? @relation(fields: [gachaMenuId], references: [id])
 
   @@index([menuItemId])
   @@index([orderId])
   @@index([tenantId])
   @@index([tenantId, status])
+  @@index([gachaMenuId])
 }
 
 model Place {
@@ -1020,34 +1029,31 @@ model Tag {
   @@index([tenantId])
 }
 
-// === SYSTEM MANAGEMENT MODELS ===
-// システム管理・マイグレーション用モデル
-
 model SchemaVersion {
-  version        String   @id
-  description    String
-  rollbackSql    String?  @map("rollback_sql")
-  appliedAt      DateTime @default(now()) @map("applied_at")
-  appliedBy      String?  @map("applied_by")
-  
+  version     String   @id
+  description String
+  rollbackSql String?  @map("rollback_sql")
+  appliedAt   DateTime @default(now()) @map("applied_at")
+  appliedBy   String?  @map("applied_by")
+
   @@map("schema_version")
 }
 
 model SystemEvent {
-  id             String   @id @default(cuid())
-  tenantId       String   @map("tenant_id")
-  userId         String?  @map("user_id")
-  eventType      String   @map("event_type")
-  sourceSystem   String   @map("source_system")
-  targetSystem   String   @map("target_system")
-  entityType     String   @map("entity_type")
-  entityId       String   @map("entity_id")
-  action         String
-  eventData      Json?    @map("event_data")
-  createdAt      DateTime @default(now()) @map("created_at")
-  processedAt    DateTime? @map("processed_at")
-  status         String   @default("PENDING")
-  
+  id           String    @id @default(cuid())
+  tenantId     String    @map("tenant_id")
+  userId       String?   @map("user_id")
+  eventType    String    @map("event_type")
+  sourceSystem String    @map("source_system")
+  targetSystem String    @map("target_system")
+  entityType   String    @map("entity_type")
+  entityId     String    @map("entity_id")
+  action       String
+  eventData    Json?     @map("event_data")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  processedAt  DateTime? @map("processed_at")
+  status       String    @default("PENDING")
+
   @@index([tenantId])
   @@index([eventType])
   @@index([status])
@@ -1056,146 +1062,120 @@ model SystemEvent {
 }
 
 model Tenant {
-  id                  String               @id
+  id                  String              @id
   name                String
-  domain              String?              @unique
-  planType            String               @default("economy")
-  planCategory        String               @default("omotenasuai")
+  domain              String?             @unique
+  planType            String              @default("economy") // 従来のプラン（下位互換性のため残す）
+  planCategory        String              @default("omotenasuai") // 従来のプラン（下位互換性のため残す）
   planSelectedAt      DateTime?
-  planChangeable      Boolean              @default(true)
+  planChangeable      Boolean             @default(true)
   planLockReason      String?
-  maxDevices          Int                  @default(30)
-  status              String               @default("active")
+  maxDevices          Int                 @default(30)
+  status              String              @default("active")
   contactName         String
   contactEmail        String
   contactPhone        String?
-  contractStartDate   DateTime             @default(now())
-  monthlyPrice        Int                  @default(29800)
+  contractStartDate   DateTime            @default(now())
+  monthlyPrice        Int                 @default(29800) // 従来の料金（下位互換性のため残す）
   agentId             String?
   agentCommissionRate Float?
-  createdAt           DateTime             @default(now())
+  // プレミアム機能フラグ
+  enableSecretMenu    Boolean             @default(false) // シークレットメニュー機能
+  enableGachaMenu     Boolean             @default(false) // ガチャメニュー機能
+  createdAt           DateTime            @default(now())
   updatedAt           DateTime
+  additional_devices  AdditionalDevices[]
+  customers           Customers[]
   MemberGradeAccess   MemberGradeAccess[]
+  monthly_billings    MonthlyBillings[]
+  plan_change_logs    PlanChangeLogs[]
+  referrals           Referrals[]
   Reservation         Reservation[]
   Room                Room[]
   RoomGrade           RoomGrade[]
   Staff               Staff[]
-  agents              agents?              @relation(fields: [agentId], references: [id])
-  additional_devices  additional_devices[]
-  customers           customers[]
-  monthly_billings    monthly_billings[]
-  plan_change_logs    plan_change_logs[]
-  referrals           referrals[]
-  usage_statistics    usage_statistics[]
+  TenantSystemPlan    TenantSystemPlan[] // 新しいシステム別プラン
+  agents              Agents?             @relation(fields: [agentId], references: [id])
+  usage_statistics    UsageStatistics[]
+  priceRules          PriceRule[]
+  gachaMenus          GachaMenu[]
+  gachaMenuItems      GachaMenuItem[]
 }
 
-// === STAFF MANAGEMENT SYSTEM ===
-// Luna申請承認: 統合スタッフ管理システム
-
 model Staff {
-  id                    String    @id @default(cuid())
-  tenantId              String    @map("tenant_id")
-  staffCode             String    @map("staff_code")
-  staffNumber           String    @map("staff_number")
-  
-  // 個人基本情報
-  lastName              String    @map("last_name")
-  firstName             String    @map("first_name")
-  lastNameKana          String?   @map("last_name_kana")
-  firstNameKana         String?   @map("first_name_kana")
-  displayName           String    @map("display_name")
-  employeeId            String?   @unique @map("employee_id")
-  
-  // 認証情報（JWT統合仕様準拠）
-  email                 String?   @unique
-  emailVerifiedAt       DateTime? @map("email_verified_at")
-  pinHash               String?   @map("pin_hash")
-  passwordHash          String?   @map("password_hash")
-  passwordChangedAt     DateTime? @map("password_changed_at")
-  failedLoginCount      Int       @default(0) @map("failed_login_count")
-  lockedUntil           DateTime? @map("locked_until")
-  lastLoginAt           DateTime? @map("last_login_at")
-  
-  // 2FA情報（将来拡張）
-  totpSecret            String?   @map("totp_secret")
-  totpEnabled           Boolean   @default(false) @map("totp_enabled")
-  backupCodes           Json?     @map("backup_codes")
-  
-  // 権限情報
-  defaultRoleId         String?   @map("default_role_id")
-  baseLevel             Int       @default(1) @map("base_level")
-  departmentCode        String?   @map("department_code")
-  positionTitle         String?   @map("position_title")
-  
-  // 雇用情報
-  hireDate              DateTime? @map("hire_date")
-  employmentType        String    @default("full_time") @map("employment_type")
-  employmentStatus      String    @default("active") @map("employment_status")
-  terminationDate       DateTime? @map("termination_date")
-  terminationReason     String?   @map("termination_reason")
-  
-  // 連絡先情報
-  phoneNumber           String?   @map("phone_number")
-  emergencyContact      Json?     @map("emergency_contact")
-  address               Json?
-  
-  // プロフィール情報
-  photoUrl              String?   @map("photo_url")
-  bio                   String?
-  skills                Json?
-  
-  // 勤務情報
-  shiftPattern          String?   @map("shift_pattern")
-  hourlyRate            Decimal?  @map("hourly_rate") @db.Decimal(10,2)
-  salary                Decimal?  @db.Decimal(10,2)
-  supervisorId          String?   @map("supervisor_id")
-  
-  // 設定・制限
-  accessRestrictions    Json      @default("{}") @map("access_restrictions")
-  notificationSettings Json      @default("{}") @map("notification_settings")
-  uiPreferences         Json      @default("{}") @map("ui_preferences")
-  
-  // セキュリティ・監査
-  securityClearance     String?   @map("security_clearance")
-  accessCardId          String?   @map("access_card_id")
-  
-  // システム管理
-  isActive              Boolean   @default(true) @map("is_active")
-  isSystemUser          Boolean   @default(false) @map("is_system_user")
-  notes                 String?
-  
-  // hotel-common統合用
-  hotelCommonUserId     String?   @map("hotel_common_user_id")
-  legacyUserData        Json?     @map("legacy_user_data")
-  
-  // タイムスタンプ
-  createdAt             DateTime  @default(now()) @map("created_at")
-  updatedAt             DateTime  @updatedAt @map("updated_at")
-  createdBy             String?   @map("created_by")
-  updatedBy             String?   @map("updated_by")
-  deletedAt             DateTime? @map("deleted_at")
-  
-  // Relations
-  tenant                Tenant    @relation(fields: [tenantId], references: [id])
-  supervisor            Staff?    @relation("StaffSupervisor", fields: [supervisorId], references: [id])
-  subordinates          Staff[]   @relation("StaffSupervisor")
-  
-  // 関連エンティティ
-  attendances           Attendance[]
-  attendanceApprovals   Attendance[] @relation("AttendanceApproval")
-  workSchedules         WorkSchedule[]
-  schedulesCreated      WorkSchedule[] @relation("ScheduleCreator")
-  schedulesUpdated      WorkSchedule[] @relation("ScheduleUpdater")
-  handoverNotesFrom     HandoverNote[] @relation("HandoverFrom")
-  handoverNotesTo       HandoverNote[] @relation("HandoverTo") 
-  handoverAcknowledged  HandoverNote[] @relation("HandoverAcknowledged")
-  notifications         StaffNotification[]
-  notificationsFrom     StaffNotification[] @relation("NotificationFrom")
-  auditLogs             AuditLog[]
-  createdStaff          Staff[] @relation("StaffCreator")
-  updatedStaff          Staff[] @relation("StaffUpdater")
-  createdByStaff        Staff? @relation("StaffCreator", fields: [createdBy], references: [id])
-  updatedByStaff        Staff? @relation("StaffUpdater", fields: [updatedBy], references: [id])
+  id                   String              @id @default(cuid())
+  tenantId             String              @map("tenant_id")
+  staffCode            String              @map("staff_code")
+  staffNumber          String              @map("staff_number")
+  lastName             String              @map("last_name")
+  firstName            String              @map("first_name")
+  lastNameKana         String?             @map("last_name_kana")
+  firstNameKana        String?             @map("first_name_kana")
+  displayName          String              @map("display_name")
+  employeeId           String?             @unique @map("employee_id")
+  email                String?             @unique
+  emailVerifiedAt      DateTime?           @map("email_verified_at")
+  pinHash              String?             @map("pin_hash")
+  passwordHash         String?             @map("password_hash")
+  passwordChangedAt    DateTime?           @map("password_changed_at")
+  failedLoginCount     Int                 @default(0) @map("failed_login_count")
+  lockedUntil          DateTime?           @map("locked_until")
+  lastLoginAt          DateTime?           @map("last_login_at")
+  totpSecret           String?             @map("totp_secret")
+  totpEnabled          Boolean             @default(false) @map("totp_enabled")
+  backupCodes          Json?               @map("backup_codes")
+  defaultRoleId        String?             @map("default_role_id")
+  baseLevel            Int                 @default(1) @map("base_level")
+  departmentCode       String?             @map("department_code")
+  positionTitle        String?             @map("position_title")
+  hireDate             DateTime?           @map("hire_date")
+  employmentType       String              @default("full_time") @map("employment_type")
+  employmentStatus     String              @default("active") @map("employment_status")
+  terminationDate      DateTime?           @map("termination_date")
+  terminationReason    String?             @map("termination_reason")
+  phoneNumber          String?             @map("phone_number")
+  emergencyContact     Json?               @map("emergency_contact")
+  address              Json?
+  photoUrl             String?             @map("photo_url")
+  bio                  String?
+  skills               Json?
+  shiftPattern         String?             @map("shift_pattern")
+  hourlyRate           Decimal?            @map("hourly_rate") @db.Decimal(10, 2)
+  salary               Decimal?            @db.Decimal(10, 2)
+  supervisorId         String?             @map("supervisor_id")
+  accessRestrictions   Json                @default("{}") @map("access_restrictions")
+  notificationSettings Json                @default("{}") @map("notification_settings")
+  uiPreferences        Json                @default("{}") @map("ui_preferences")
+  securityClearance    String?             @map("security_clearance")
+  accessCardId         String?             @map("access_card_id")
+  isActive             Boolean             @default(true) @map("is_active")
+  isSystemUser         Boolean             @default(false) @map("is_system_user")
+  notes                String?
+  hotelCommonUserId    String?             @map("hotel_common_user_id")
+  legacyUserData       Json?               @map("legacy_user_data")
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
+  createdBy            String?             @map("created_by")
+  updatedBy            String?             @map("updated_by")
+  deletedAt            DateTime?           @map("deleted_at")
+  attendanceApprovals  Attendance[]        @relation("AttendanceApproval")
+  attendances          Attendance[]
+  auditLogs            AuditLog[]
+  handoverAcknowledged HandoverNote[]      @relation("HandoverAcknowledged")
+  handoverNotesFrom    HandoverNote[]      @relation("HandoverFrom")
+  handoverNotesTo      HandoverNote[]      @relation("HandoverTo")
+  createdByStaff       Staff?              @relation("StaffCreator", fields: [createdBy], references: [id])
+  createdStaff         Staff[]             @relation("StaffCreator")
+  supervisor           Staff?              @relation("StaffSupervisor", fields: [supervisorId], references: [id])
+  subordinates         Staff[]             @relation("StaffSupervisor")
+  tenant               Tenant              @relation(fields: [tenantId], references: [id])
+  updatedByStaff       Staff?              @relation("StaffUpdater", fields: [updatedBy], references: [id])
+  updatedStaff         Staff[]             @relation("StaffUpdater")
+  notificationsFrom    StaffNotification[] @relation("NotificationFrom")
+  notifications        StaffNotification[]
+  schedulesCreated     WorkSchedule[]      @relation("ScheduleCreator")
+  workSchedules        WorkSchedule[]
+  schedulesUpdated     WorkSchedule[]      @relation("ScheduleUpdater")
 
   @@unique([tenantId, staffCode])
   @@unique([tenantId, staffNumber])
@@ -1209,39 +1189,28 @@ model Staff {
 }
 
 model Attendance {
-  id                    String    @id @default(cuid())
-  tenantId              String    @map("tenant_id")
-  staffId               String    @map("staff_id")
-  staffNumber           String    @map("staff_number")
-  
-  // 勤怠時刻
-  workDate              DateTime  @map("work_date")
-  clockInTime           DateTime  @map("clock_in_time")
-  clockOutTime          DateTime? @map("clock_out_time")
-  breakStartTime        DateTime? @map("break_start_time")
-  breakEndTime          DateTime? @map("break_end_time")
-  
-  // 勤務時間計算
-  workDurationMinutes   Int?      @map("work_duration_minutes")
-  overtimeMinutes       Int       @default(0) @map("overtime_minutes")
-  breakDurationMinutes  Int       @default(0) @map("break_duration_minutes")
-  
-  // ステータス
-  attendanceStatus      String    @default("present") @map("attendance_status")
-  
-  // 備考・承認
-  notes                 String?
-  approvedByStaffId     String?   @map("approved_by_staff_id")
-  approvedAt            DateTime? @map("approved_at")
-  
-  createdAt             DateTime  @default(now()) @map("created_at")
-  updatedAt             DateTime  @updatedAt @map("updated_at")
-  
-  // Relations
-  staff                 Staff     @relation(fields: [staffId], references: [id])
-  approvedByStaff       Staff?    @relation("AttendanceApproval", fields: [approvedByStaffId], references: [id])
-  notifications         StaffNotification[] @relation("NotificationAttendance")
-  
+  id                   String              @id @default(cuid())
+  tenantId             String              @map("tenant_id")
+  staffId              String              @map("staff_id")
+  staffNumber          String              @map("staff_number")
+  workDate             DateTime            @map("work_date")
+  clockInTime          DateTime            @map("clock_in_time")
+  clockOutTime         DateTime?           @map("clock_out_time")
+  breakStartTime       DateTime?           @map("break_start_time")
+  breakEndTime         DateTime?           @map("break_end_time")
+  workDurationMinutes  Int?                @map("work_duration_minutes")
+  overtimeMinutes      Int                 @default(0) @map("overtime_minutes")
+  breakDurationMinutes Int                 @default(0) @map("break_duration_minutes")
+  attendanceStatus     String              @default("present") @map("attendance_status")
+  notes                String?
+  approvedByStaffId    String?             @map("approved_by_staff_id")
+  approvedAt           DateTime?           @map("approved_at")
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
+  approvedByStaff      Staff?              @relation("AttendanceApproval", fields: [approvedByStaffId], references: [id])
+  staff                Staff               @relation(fields: [staffId], references: [id])
+  notifications        StaffNotification[] @relation("NotificationAttendance")
+
   @@unique([staffId, workDate])
   @@index([tenantId])
   @@index([workDate])
@@ -1250,37 +1219,27 @@ model Attendance {
 }
 
 model WorkSchedule {
-  id                    String    @id @default(cuid())
-  tenantId              String    @map("tenant_id")
-  staffId               String    @map("staff_id")
-  staffNumber           String    @map("staff_number")
-  
-  // スケジュール情報
-  scheduleDate          DateTime  @map("schedule_date")
-  scheduledStartTime    DateTime  @map("scheduled_start_time")
-  scheduledEndTime      DateTime  @map("scheduled_end_time")
-  
-  // シフト種別
-  shiftType             String    @default("full_day") @map("shift_type")
-  
-  // フラグ
-  isWorkingDay          Boolean   @default(true) @map("is_working_day")
-  isHoliday             Boolean   @default(false) @map("is_holiday")
-  isPaidLeave           Boolean   @default(false) @map("is_paid_leave")
-  
-  // 管理情報
-  notes                 String?
-  createdBy             String?   @map("created_by")
-  updatedBy             String?   @map("updated_by")
-  createdAt             DateTime  @default(now()) @map("created_at")
-  updatedAt             DateTime  @updatedAt @map("updated_at")
-  
-  // Relations
-  staff                 Staff     @relation(fields: [staffId], references: [id])
-  createdByStaff        Staff?    @relation("ScheduleCreator", fields: [createdBy], references: [id])
-  updatedByStaff        Staff?    @relation("ScheduleUpdater", fields: [updatedBy], references: [id])
-  notifications         StaffNotification[] @relation("NotificationSchedule")
-  
+  id                 String              @id @default(cuid())
+  tenantId           String              @map("tenant_id")
+  staffId            String              @map("staff_id")
+  staffNumber        String              @map("staff_number")
+  scheduleDate       DateTime            @map("schedule_date")
+  scheduledStartTime DateTime            @map("scheduled_start_time")
+  scheduledEndTime   DateTime            @map("scheduled_end_time")
+  shiftType          String              @default("full_day") @map("shift_type")
+  isWorkingDay       Boolean             @default(true) @map("is_working_day")
+  isHoliday          Boolean             @default(false) @map("is_holiday")
+  isPaidLeave        Boolean             @default(false) @map("is_paid_leave")
+  notes              String?
+  createdBy          String?             @map("created_by")
+  updatedBy          String?             @map("updated_by")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  notifications      StaffNotification[] @relation("NotificationSchedule")
+  createdByStaff     Staff?              @relation("ScheduleCreator", fields: [createdBy], references: [id])
+  staff              Staff               @relation(fields: [staffId], references: [id])
+  updatedByStaff     Staff?              @relation("ScheduleUpdater", fields: [updatedBy], references: [id])
+
   @@unique([staffId, scheduleDate])
   @@index([tenantId])
   @@index([scheduleDate])
@@ -1289,54 +1248,39 @@ model WorkSchedule {
 }
 
 model HandoverNote {
-  id                    String    @id @default(cuid())
-  tenantId              String    @map("tenant_id")
-  
-  // 申し送り基本情報
-  fromStaffId           String    @map("from_staff_id")
-  toStaffId             String?   @map("to_staff_id")
-  toDepartment          String?   @map("to_department")
-  shiftHandoverId       String?   @map("shift_handover_id")
-  
-  // 内容
-  title                 String
-  content               String
-  priority              String    @default("MEDIUM")
-  category              String
-  
-  // 関連エンティティ
-  relatedReservationId  String?   @map("related_reservation_id")
-  relatedRoomId         String?   @map("related_room_id")
-  relatedCustomerId     String?   @map("related_customer_id")
-  
-  // メディア管理
-  photoUrls             Json      @default("[]") @map("photo_urls")
-  videoUrls             Json      @default("[]") @map("video_urls")
-  documentUrls          Json      @default("[]") @map("document_urls")
-  mediaMetadata         Json      @default("{}") @map("media_metadata")
-  
-  // ステータス管理
-  status                String    @default("PENDING")
-  acknowledgedAt        DateTime? @map("acknowledged_at")
-  acknowledgedByStaffId String?   @map("acknowledged_by_staff_id")
-  resolvedAt            DateTime? @map("resolved_at")
-  resolutionNotes       String?   @map("resolution_notes")
-  
-  // 緊急度・フォローアップ
-  requiresImmediateAction Boolean @default(false) @map("requires_immediate_action")
-  followUpRequired      Boolean   @default(false) @map("follow_up_required")
-  followUpDeadline      DateTime? @map("follow_up_deadline")
-  
-  createdAt             DateTime  @default(now()) @map("created_at")
-  updatedAt             DateTime  @updatedAt @map("updated_at")
-  deletedAt             DateTime? @map("deleted_at")
-  
-  // Relations
-  fromStaff             Staff     @relation("HandoverFrom", fields: [fromStaffId], references: [id])
-  toStaff               Staff?    @relation("HandoverTo", fields: [toStaffId], references: [id])
-  acknowledgedByStaff   Staff?    @relation("HandoverAcknowledged", fields: [acknowledgedByStaffId], references: [id])
-  notifications         StaffNotification[] @relation("NotificationHandover")
-  
+  id                      String              @id @default(cuid())
+  tenantId                String              @map("tenant_id")
+  fromStaffId             String              @map("from_staff_id")
+  toStaffId               String?             @map("to_staff_id")
+  toDepartment            String?             @map("to_department")
+  shiftHandoverId         String?             @map("shift_handover_id")
+  title                   String
+  content                 String
+  priority                String              @default("MEDIUM")
+  category                String
+  relatedReservationId    String?             @map("related_reservation_id")
+  relatedRoomId           String?             @map("related_room_id")
+  relatedCustomerId       String?             @map("related_customer_id")
+  photoUrls               Json                @default("[]") @map("photo_urls")
+  videoUrls               Json                @default("[]") @map("video_urls")
+  documentUrls            Json                @default("[]") @map("document_urls")
+  mediaMetadata           Json                @default("{}") @map("media_metadata")
+  status                  String              @default("PENDING")
+  acknowledgedAt          DateTime?           @map("acknowledged_at")
+  acknowledgedByStaffId   String?             @map("acknowledged_by_staff_id")
+  resolvedAt              DateTime?           @map("resolved_at")
+  resolutionNotes         String?             @map("resolution_notes")
+  requiresImmediateAction Boolean             @default(false) @map("requires_immediate_action")
+  followUpRequired        Boolean             @default(false) @map("follow_up_required")
+  followUpDeadline        DateTime?           @map("follow_up_deadline")
+  createdAt               DateTime            @default(now()) @map("created_at")
+  updatedAt               DateTime            @updatedAt @map("updated_at")
+  deletedAt               DateTime?           @map("deleted_at")
+  acknowledgedByStaff     Staff?              @relation("HandoverAcknowledged", fields: [acknowledgedByStaffId], references: [id])
+  fromStaff               Staff               @relation("HandoverFrom", fields: [fromStaffId], references: [id])
+  toStaff                 Staff?              @relation("HandoverTo", fields: [toStaffId], references: [id])
+  notifications           StaffNotification[] @relation("NotificationHandover")
+
   @@index([tenantId])
   @@index([fromStaffId])
   @@index([toStaffId])
@@ -1348,44 +1292,31 @@ model HandoverNote {
 }
 
 model StaffNotification {
-  id                    String    @id @default(cuid())
-  tenantId              String    @map("tenant_id")
-  
-  // 通知対象
-  staffId               String    @map("staff_id")
-  fromStaffId           String?   @map("from_staff_id")
-  
-  // 通知内容
-  type                  String
-  title                 String
-  message               String
-  priority              String    @default("MEDIUM")
-  
-  // 関連エンティティ
-  relatedHandoverId     String?   @map("related_handover_id")
-  relatedAttendanceId   String?   @map("related_attendance_id")
-  relatedScheduleId     String?   @map("related_schedule_id")
-  
-  // ステータス
-  isRead                Boolean   @default(false) @map("is_read")
-  readAt                DateTime? @map("read_at")
-  isDelivered           Boolean   @default(false) @map("is_delivered")
-  deliveredAt           DateTime? @map("delivered_at")
-  
-  // 配信設定
-  deliveryMethods       Json      @default("[\"in_app\"]") @map("delivery_methods")
-  scheduledFor          DateTime? @map("scheduled_for")
-  
-  createdAt             DateTime  @default(now()) @map("created_at")
-  expiresAt             DateTime? @map("expires_at")
-  
-  // Relations
-  staff                 Staff     @relation(fields: [staffId], references: [id])
-  fromStaff             Staff?    @relation("NotificationFrom", fields: [fromStaffId], references: [id])
-  relatedHandover       HandoverNote? @relation("NotificationHandover", fields: [relatedHandoverId], references: [id])
-  relatedAttendance     Attendance? @relation("NotificationAttendance", fields: [relatedAttendanceId], references: [id])
-  relatedSchedule       WorkSchedule? @relation("NotificationSchedule", fields: [relatedScheduleId], references: [id])
-  
+  id                  String        @id @default(cuid())
+  tenantId            String        @map("tenant_id")
+  staffId             String        @map("staff_id")
+  fromStaffId         String?       @map("from_staff_id")
+  type                String
+  title               String
+  message             String
+  priority            String        @default("MEDIUM")
+  relatedHandoverId   String?       @map("related_handover_id")
+  relatedAttendanceId String?       @map("related_attendance_id")
+  relatedScheduleId   String?       @map("related_schedule_id")
+  isRead              Boolean       @default(false) @map("is_read")
+  readAt              DateTime?     @map("read_at")
+  isDelivered         Boolean       @default(false) @map("is_delivered")
+  deliveredAt         DateTime?     @map("delivered_at")
+  deliveryMethods     Json          @default("[\"in_app\"]") @map("delivery_methods")
+  scheduledFor        DateTime?     @map("scheduled_for")
+  createdAt           DateTime      @default(now()) @map("created_at")
+  expiresAt           DateTime?     @map("expires_at")
+  fromStaff           Staff?        @relation("NotificationFrom", fields: [fromStaffId], references: [id])
+  relatedAttendance   Attendance?   @relation("NotificationAttendance", fields: [relatedAttendanceId], references: [id])
+  relatedHandover     HandoverNote? @relation("NotificationHandover", fields: [relatedHandoverId], references: [id])
+  relatedSchedule     WorkSchedule? @relation("NotificationSchedule", fields: [relatedScheduleId], references: [id])
+  staff               Staff         @relation(fields: [staffId], references: [id])
+
   @@index([tenantId])
   @@index([staffId])
   @@index([type])
@@ -1395,41 +1326,340 @@ model StaffNotification {
 }
 
 model AuditLog {
-  id                    String    @id @default(cuid())
-  tenantId              String    @map("tenant_id")
-  
-  // 操作情報
-  staffId               String?   @map("staff_id")
-  staffNumber           String?   @map("staff_number")
-  staffName             String?   @map("staff_name")
-  
-  // 対象情報
-  tableName             String    @map("table_name")
-  recordId              String    @map("record_id")
-  operation             String
-  
-  // 変更内容
-  oldValues             Json?     @map("old_values")
-  newValues             Json?     @map("new_values")
-  changedFields         Json?     @map("changed_fields")
-  
-  // セッション情報
-  sessionId             String?   @map("session_id")
-  ipAddress             String?   @map("ip_address")
-  userAgent             String?   @map("user_agent")
-  requestId             String?   @map("request_id")
-  
-  createdAt             DateTime  @default(now()) @map("created_at")
-  
-  // Relations
-  staff                 Staff?    @relation(fields: [staffId], references: [id])
-  
+  id            String   @id @default(cuid())
+  tenantId      String   @map("tenant_id")
+  staffId       String?  @map("staff_id")
+  staffNumber   String?  @map("staff_number")
+  staffName     String?  @map("staff_name")
+  tableName     String   @map("table_name")
+  recordId      String   @map("record_id")
+  operation     String
+  oldValues     Json?    @map("old_values")
+  newValues     Json?    @map("new_values")
+  changedFields Json?    @map("changed_fields")
+  sessionId     String?  @map("session_id")
+  ipAddress     String?  @map("ip_address")
+  userAgent     String?  @map("user_agent")
+  requestId     String?  @map("request_id")
+  createdAt     DateTime @default(now()) @map("created_at")
+  staff         Staff?   @relation(fields: [staffId], references: [id])
+
   @@index([tenantId])
   @@index([staffId])
   @@index([tableName])
   @@index([operation])
   @@index([createdAt])
   @@map("AuditLog")
+}
+
+model ResponseTree {
+  id          String    @id @default(cuid())
+  tenantId    String    @default("test-tenant-001") // 将来的にはテナントごとに管理
+  name        String
+  description String?
+  isActive    Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+  version     Int       @default(1)
+
+  // 関連
+  nodes    ResponseNode[]
+  versions ResponseTreeVersion[]
+
+  @@index([tenantId])
+  @@index([isActive])
+}
+
+model ResponseNode {
+  id          String  @id @default(cuid())
+  treeId      String
+  type        String // 'category' or 'question'
+  title       String
+  description String?
+  icon        String?
+  order       Int     @default(0)
+  parentId    String?
+  isRoot      Boolean @default(false)
+
+  // 質問ノード固有のフィールド
+  answer Json? // テキスト、メディア、関連質問を含む
+
+  // 関連
+  tree         ResponseTree              @relation(fields: [treeId], references: [id], onDelete: Cascade)
+  parent       ResponseNode?             @relation("NodeHierarchy", fields: [parentId], references: [id])
+  children     ResponseNode[]            @relation("NodeHierarchy")
+  translations ResponseNodeTranslation[]
+
+  @@index([treeId])
+  @@index([parentId])
+  @@index([type])
+}
+
+model ResponseNodeTranslation {
+  id       String @id @default(cuid())
+  nodeId   String
+  language String
+  title    String
+  answer   Json?
+
+  // 関連
+  node ResponseNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+
+  @@unique([nodeId, language])
+  @@index([language])
+}
+
+model ResponseTreeVersion {
+  id        String   @id @default(cuid())
+  treeId    String
+  version   Int
+  data      Json // ツリー全体のスナップショット
+  createdAt DateTime @default(now())
+  createdBy String
+  comment   String?
+
+  // 関連
+  tree ResponseTree @relation(fields: [treeId], references: [id], onDelete: Cascade)
+
+  @@unique([treeId, version])
+}
+
+// キャンペーンマスタ
+model Campaign {
+  id          Int      @id @default(autoincrement())
+  name        String // キャンペーン名
+  description String? // 説明
+  type        String // 'percentage' | 'fixed_amount'
+  value       Int // 割引値（%の場合は整数、金額の場合は円）
+  startDate   DateTime // 開始日時
+  endDate     DateTime // 終了日時
+  isActive    Boolean  @default(true) // 有効フラグ
+
+  // ビジュアル素材
+  mainImage     String // メイン画像（16:9必須）
+  mobileImage   String? // モバイル用画像
+  videoUrl      String? // 動画URL（Professionalプラン以上）
+  videoVersion  Int     @default(1) // 動画バージョン（キャッシュ制御用）
+  videoEtag     String? // 動画ETag（差分更新用）
+  videoDuration Int? // 動画長（秒）
+  videoSize     Int? // 動画サイズ（バイト）
+
+  // CTA設定
+  ctaTextJa    String // CTA日本語テキスト
+  ctaTextEn    String? // CTA英語テキスト
+  ctaType      String // 'room_service' | 'facility' | 'tourism' | 'survey' | 'menu_category' | 'menu_item' | 'external_url'
+  ctaTargetId  Int? // 遷移先ID
+  ctaTargetUrl String? // 外部URL
+
+  // 表示設定
+  displayType     String @default("normal") // 'normal' | 'welcome' | 'featured'
+  displayPriority Int    @default(1) // 表示優先度
+
+  // ウェルカム設定
+  welcomeSettings Json? // 自動再生、スキップボタン表示、セッション表示設定
+
+  // 時間帯・曜日制限
+  timeRestrictions Json? // 時間帯制限データ
+  dayRestrictions  Json? // 曜日制限データ
+
+  // 条件設定
+  minOrderAmount    Int? // 最小注文金額
+  maxUsageCount     Int? // 最大使用回数
+  currentUsageCount Int  @default(0) // 現在の使用回数
+
+  // 管理情報
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String? // 作成者
+  isDeleted Boolean  @default(false)
+
+  // リレーション
+  items        CampaignItem[] // 対象商品
+  usageLogs    CampaignUsageLog[] // 使用履歴
+  categories   CampaignCategoryRelation[] // カテゴリ関連
+  translations CampaignTranslation[] // 多言語翻訳
+  deviceCaches DeviceVideoCache[] // デバイスキャッシュ
+
+  @@index([isActive, startDate, endDate])
+  @@index([isDeleted])
+  @@index([displayType])
+}
+
+// キャンペーン対象商品
+model CampaignItem {
+  id         Int @id @default(autoincrement())
+  campaignId Int
+  menuItemId Int
+
+  // リレーション
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@unique([campaignId, menuItemId])
+  @@index([campaignId])
+  @@index([menuItemId])
+}
+
+// キャンペーン使用履歴
+model CampaignUsageLog {
+  id         Int    @id @default(autoincrement())
+  campaignId Int
+  orderId    Int
+  menuItemId Int
+  roomId     String
+
+  originalPrice  Int // 元価格
+  discountAmount Int // 割引額
+  finalPrice     Int // 最終価格
+
+  createdAt DateTime @default(now())
+
+  // リレーション
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  order    Order    @relation(fields: [orderId], references: [id])
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@index([campaignId])
+  @@index([orderId])
+  @@index([createdAt])
+}
+
+// キャンペーンカテゴリ
+model CampaignCategory {
+  id          Int      @id @default(autoincrement())
+  name        String // カテゴリ名
+  code        String   @unique // システム内部コード
+  description String? // 説明
+  icon        String? // アイコン名
+  color       String? // カラーコード
+  priority    Int      @default(0) // 表示優先順位
+  isSystem    Boolean  @default(false) // システム予約カテゴリ
+  isActive    Boolean  @default(true) // 有効フラグ
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // リレーション
+  campaigns CampaignCategoryRelation[]
+}
+
+// キャンペーンとカテゴリの関連
+model CampaignCategoryRelation {
+  id         Int @id @default(autoincrement())
+  campaignId Int
+  categoryId Int
+
+  // リレーション
+  campaign Campaign         @relation(fields: [campaignId], references: [id])
+  category CampaignCategory @relation(fields: [categoryId], references: [id])
+
+  @@unique([campaignId, categoryId])
+}
+
+// キャンペーン多言語
+model CampaignTranslation {
+  id           Int     @id @default(autoincrement())
+  campaignId   Int
+  languageCode String // 言語コード（ja, en, zh-cn等）
+  title        String // タイトル
+  description  String? // 説明
+  ctaText      String // CTAテキスト
+
+  // リレーション
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+
+  @@unique([campaignId, languageCode])
+}
+
+// デバイス動画キャッシュ管理
+model DeviceVideoCache {
+  id                 Int      @id @default(autoincrement())
+  deviceId           Int // デバイスID
+  roomId             String // 部屋ID
+  campaignId         Int // キャンペーンID（動画）
+  videoVersion       Int // キャッシュされた動画バージョン
+  videoEtag          String? // キャッシュされた動画ETag
+  lastUpdated        DateTime @default(now()) // 最終更新日時
+  nextUpdateSchedule DateTime // 次回更新予定日時
+  updateGroup        Int // 更新グループ（0-59）
+
+  // リレーション
+  device   DeviceRoom @relation(fields: [deviceId], references: [id])
+  campaign Campaign   @relation(fields: [campaignId], references: [id])
+
+  @@unique([deviceId, campaignId])
+  @@index([nextUpdateSchedule])
+  @@index([updateGroup])
+}
+
+model PriceRule {
+  id           Int       @id @default(autoincrement())
+  tenantId     String
+  menuItemId   Int
+  name         String // ルール名称（例：「通常価格」「キャンペーン価格」）
+  price        Decimal // 税抜価格
+  taxRate      Decimal // 税率
+  startDate    DateTime? // 適用開始日時
+  endDate      DateTime? // 適用終了日時
+  memberRankId String? // 会員ランク（nullの場合全会員対象）
+  campaignId   String? // キャンペーンID
+  isDefault    Boolean   @default(false) // デフォルト価格フラグ
+  priority     Int       @default(0) // 優先度（競合時に使用）
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id])
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@index([tenantId])
+  @@index([menuItemId])
+  @@index([isDefault])
+  @@index([startDate, endDate])
+  @@map("price_rules")
+}
+
+model GachaMenu {
+  id          Int       @id @default(autoincrement())
+  tenantId    String
+  name        String
+  description String?
+  price       Decimal
+  taxRate     Decimal   @default(10)
+  imageUrl    String?
+  isActive    Boolean   @default(true)
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant     Tenant          @relation(fields: [tenantId], references: [id])
+  items      GachaMenuItem[]
+  orderItems OrderItem[]
+
+  @@index([tenantId])
+  @@index([isActive])
+  @@map("gacha_menus")
+}
+
+model GachaMenuItem {
+  id          Int      @id @default(autoincrement())
+  tenantId    String
+  gachaMenuId Int
+  menuItemId  Int
+  weight      Int      @default(100)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant    Tenant    @relation(fields: [tenantId], references: [id])
+  gachaMenu GachaMenu @relation(fields: [gachaMenuId], references: [id], onDelete: Cascade)
+  menuItem  MenuItem  @relation(fields: [menuItemId], references: [id])
+
+  @@unique([gachaMenuId, menuItemId])
+  @@index([tenantId])
+  @@index([gachaMenuId])
+  @@index([menuItemId])
+  @@map("gacha_menu_items")
 }
 
 model MenuItemToTag {
@@ -1443,7 +1673,7 @@ model MenuItemToTag {
   @@map("_MenuItemToTag")
 }
 
-model additional_devices {
+model AdditionalDevices {
   id           String    @id
   tenantId     String
   deviceType   String
@@ -1463,7 +1693,7 @@ model additional_devices {
   @@index([tenantId])
 }
 
-model agents {
+model Agents {
   id               String      @id
   companyName      String
   contactName      String
@@ -1475,12 +1705,12 @@ model agents {
   continuingMargin Float       @default(0.15)
   createdAt        DateTime    @default(now())
   updatedAt        DateTime
+  referrals        Referrals[]
   Tenant           Tenant[]
-  referrals        referrals[]
 }
 
-model content_layout_assets {
-  id              Int             @id @default(autoincrement())
+model ContentLayoutAssets {
+  id              Int            @id @default(autoincrement())
   contentLayoutId Int
   filename        String
   originalName    String
@@ -1493,15 +1723,15 @@ model content_layout_assets {
   duration        Int?
   alt             String?
   caption         String?
-  order           Int             @default(0)
-  isPublic        Boolean         @default(true)
-  createdAt       DateTime        @default(now())
+  order           Int            @default(0)
+  isPublic        Boolean        @default(true)
+  createdAt       DateTime       @default(now())
   updatedAt       DateTime
-  content_layouts content_layouts @relation(fields: [contentLayoutId], references: [id], onDelete: Cascade)
+  content_layouts ContentLayouts @relation(fields: [contentLayoutId], references: [id], onDelete: Cascade)
 }
 
-model content_layout_revisions {
-  id              Int             @id @default(autoincrement())
+model ContentLayoutRevisions {
+  id              Int            @id @default(autoincrement())
   layoutId        Int
   version         Int
   title           String
@@ -1509,17 +1739,17 @@ model content_layout_revisions {
   styles          Json?
   content         String?
   changeLog       String?
-  changeType      String          @default("update")
+  changeType      String         @default("update")
   createdBy       String
-  createdAt       DateTime        @default(now())
-  content_layouts content_layouts @relation(fields: [layoutId], references: [id], onDelete: Cascade)
+  createdAt       DateTime       @default(now())
+  content_layouts ContentLayouts @relation(fields: [layoutId], references: [id], onDelete: Cascade)
 
   @@unique([layoutId, version])
   @@index([layoutId])
 }
 
-model content_layout_translations {
-  id               Int             @id @default(autoincrement())
+model ContentLayoutTranslations {
+  id               Int            @id @default(autoincrement())
   contentLayoutId  Int
   language         String
   title            String
@@ -1527,18 +1757,18 @@ model content_layout_translations {
   content          String?
   excerpt          String?
   translatedBy     String?
-  translatedAt     DateTime        @default(now())
-  isAutoTranslated Boolean         @default(false)
-  createdAt        DateTime        @default(now())
+  translatedAt     DateTime       @default(now())
+  isAutoTranslated Boolean        @default(false)
+  createdAt        DateTime       @default(now())
   updatedAt        DateTime
-  content_layouts  content_layouts @relation(fields: [contentLayoutId], references: [id], onDelete: Cascade)
+  content_layouts  ContentLayouts @relation(fields: [contentLayoutId], references: [id], onDelete: Cascade)
 
   @@unique([contentLayoutId, language])
 }
 
-model content_layouts {
-  id                          Int                           @id @default(autoincrement())
-  slug                        String                        @unique
+model ContentLayouts {
+  id                          Int                         @id @default(autoincrement())
+  slug                        String                      @unique
   type                        String
   category                    String?
   title                       String
@@ -1549,28 +1779,28 @@ model content_layouts {
   excerpt                     String?
   featuredImage               String?
   attachments                 Json?
-  status                      String                        @default("draft")
+  status                      String                      @default("draft")
   publishAt                   DateTime?
   expireAt                    DateTime?
-  featured                    Boolean                       @default(false)
-  priority                    Int                           @default(0)
-  language                    String                        @default("ja")
+  featured                    Boolean                     @default(false)
+  priority                    Int                         @default(0)
+  language                    String                      @default("ja")
   seo                         Json?
   permissions                 Json?
-  isTemplate                  Boolean                       @default(false)
+  isTemplate                  Boolean                     @default(false)
   templateId                  Int?
-  viewCount                   Int                           @default(0)
+  viewCount                   Int                         @default(0)
   createdBy                   String
   updatedBy                   String
-  createdAt                   DateTime                      @default(now())
+  createdAt                   DateTime                    @default(now())
   updatedAt                   DateTime
-  isDeleted                   Boolean                       @default(false)
+  isDeleted                   Boolean                     @default(false)
   deletedAt                   DateTime?
-  content_layout_assets       content_layout_assets[]
-  content_layout_revisions    content_layout_revisions[]
-  content_layout_translations content_layout_translations[]
-  content_layouts             content_layouts?              @relation("content_layoutsTocontent_layouts", fields: [templateId], references: [id])
-  other_content_layouts       content_layouts[]             @relation("content_layoutsTocontent_layouts")
+  content_layout_assets       ContentLayoutAssets[]
+  content_layout_revisions    ContentLayoutRevisions[]
+  content_layout_translations ContentLayoutTranslations[]
+  content_layouts             ContentLayouts?             @relation("content_layoutsToContentLayouts", fields: [templateId], references: [id])
+  other_content_layouts       ContentLayouts[]            @relation("content_layoutsToContentLayouts")
 
   @@index([isDeleted])
   @@index([language])
@@ -1578,7 +1808,7 @@ model content_layouts {
   @@index([type, category])
 }
 
-model customers {
+model Customers {
   id                   String    @id
   tenant_id            String
   name                 String
@@ -1607,7 +1837,7 @@ model customers {
   @@index([tenant_id])
 }
 
-model monthly_billings {
+model MonthlyBillings {
   id                    String    @id
   tenantId              String
   billingMonth          String
@@ -1635,7 +1865,7 @@ model monthly_billings {
   @@index([status])
 }
 
-model plan_change_logs {
+model PlanChangeLogs {
   id                   String   @id
   tenantId             String
   previousPlanType     String
@@ -1656,7 +1886,9 @@ model plan_change_logs {
   @@index([tenantId])
 }
 
-model plan_restrictions {
+// 旧プラン制限モデル - 互換性のために残す
+// 新しいシステムではSystemPlanRestrictionsを使用してください
+model PlanRestrictions {
   id                       String   @id
   planType                 String
   planCategory             String
@@ -1684,7 +1916,77 @@ model plan_restrictions {
   @@unique([planType, planCategory])
 }
 
-model referrals {
+// 新しいシステム別プラン制限モデル
+model SystemPlanRestrictions {
+  id                       String             @id
+  systemType               String // "saas", "pms", "member"
+  businessType             String // "general", "leisure", "overseas"
+  planType                 String // "economy", "professional", "enterprise", "ultimate"
+  planCategory             String
+  monthlyPrice             Int
+  maxDevices               Int                @default(30)
+  additionalDeviceCost     Int                @default(1200)
+  roomTerminalCost         Int                @default(1200)
+  frontDeskCost            Int                @default(5000)
+  kitchenCost              Int                @default(2000)
+  barCost                  Int                @default(2000)
+  housekeepingCost         Int                @default(2000)
+  managerCost              Int                @default(5000)
+  commonAreaCost           Int                @default(3500)
+  enableAiConcierge        Boolean            @default(false)
+  enableMultilingual       Boolean            @default(false)
+  enableLayoutEditor       Boolean            @default(false)
+  enableFacilityGuide      Boolean            @default(false)
+  enableAiBusinessSupport  Boolean            @default(false)
+  maxMonthlyOrders         Int                @default(1000)
+  maxMonthlyAiRequests     Int                @default(0)
+  maxStorageGB             Float              @default(5.0)
+  multilingualUpgradePrice Int                @default(3000)
+  description              String?
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime
+  TenantSystemPlan         TenantSystemPlan[]
+
+  @@unique([systemType, businessType, planType, planCategory])
+}
+
+// テナントとシステムプランの関連付けモデル
+model TenantSystemPlan {
+  id           String    @id
+  tenantId     String
+  systemType   String // "saas", "pms", "member"
+  planId       String
+  startDate    DateTime  @default(now())
+  endDate      DateTime?
+  isActive     Boolean   @default(true)
+  monthlyPrice Int
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime
+
+  Tenant     Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  SystemPlan SystemPlanRestrictions @relation(fields: [planId], references: [id])
+
+  @@unique([tenantId, systemType])
+  @@index([tenantId])
+  @@index([systemType])
+  @@index([planId])
+  @@index([isActive])
+}
+
+// データベース変更履歴ログ
+model DatabaseChangeLog {
+  id          Int      @id @default(autoincrement())
+  changeType  String
+  description String
+  details     Json?
+  createdBy   String?
+  createdAt   DateTime @default(now())
+
+  @@index([changeType])
+  @@index([createdAt])
+}
+
+model Referrals {
   id               String   @id
   referralCode     String   @unique
   agentId          String?
@@ -1695,11 +1997,11 @@ model referrals {
   commissionAmount Float
   createdAt        DateTime @default(now())
   updatedAt        DateTime
-  agents           agents?  @relation(fields: [agentId], references: [id])
+  agents           Agents?  @relation(fields: [agentId], references: [id])
   Tenant           Tenant   @relation(fields: [tenantId], references: [id])
 }
 
-model usage_statistics {
+model UsageStatistics {
   id                     String   @id
   tenantId               String
   month                  String
@@ -1723,6 +2025,49 @@ model usage_statistics {
   @@index([month])
 }
 
+model Admin {
+  id                  String     @id @default(cuid())
+  email               String     @unique
+  username            String     @unique
+  displayName         String     @map("display_name")
+  passwordHash        String     @map("password_hash")
+  adminLevel          AdminLevel @map("admin_level")
+  accessibleGroupIds  String[]   @map("accessible_group_ids")
+  accessibleChainIds  String[]   @map("accessible_chain_ids")
+  accessibleTenantIds String[]   @map("accessible_tenant_ids")
+  lastLoginAt         DateTime?  @map("last_login_at")
+  loginAttempts       Int        @default(0) @map("login_attempts")
+  lockedUntil         DateTime?  @map("locked_until")
+  totpSecret          String?    @map("totp_secret")
+  totpEnabled         Boolean    @default(false) @map("totp_enabled")
+  createdAt           DateTime   @default(now()) @map("created_at")
+  updatedAt           DateTime   @updatedAt @map("updated_at")
+  createdBy           String?    @map("created_by")
+  isActive            Boolean    @default(true) @map("is_active")
+  adminLogs           AdminLog[]
+
+  @@map("admin")
+}
+
+model AdminLog {
+  id           String   @id @default(cuid())
+  adminId      String   @map("admin_id")
+  action       String
+  targetType   String?  @map("target_type")
+  targetId     String?  @map("target_id")
+  ipAddress    String?  @map("ip_address")
+  userAgent    String?  @map("user_agent")
+  success      Boolean  @default(true)
+  errorMessage String?  @map("error_message")
+  createdAt    DateTime @default(now()) @map("created_at")
+  admin        Admin    @relation(fields: [adminId], references: [id])
+
+  @@index([adminId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("admin_log")
+}
+
 enum CreditCategory {
   CONCIERGE
   MARKETING_ANALYSIS
@@ -1735,75 +2080,10 @@ enum Role {
   staff
 }
 
-// === ADMIN MANAGEMENT SYSTEM ===
-// 統合管理画面用管理者テーブル
-
-model Admin {
-  id                    String    @id @default(cuid())
-  
-  // 基本情報
-  email                 String    @unique
-  username              String    @unique
-  displayName           String    @map("display_name")
-  passwordHash          String    @map("password_hash")
-  
-  // 権限レベル（階層管理）
-  adminLevel            AdminLevel @map("admin_level")
-  // chainadmin: テナント一覧まで
-  // groupadmin: チェーン一覧まで  
-  // superadmin: グループ一覧まで（システム開発者）
-  
-  // アクセス範囲制限
-  accessibleGroupIds    String[]  @map("accessible_group_ids")
-  accessibleChainIds    String[]  @map("accessible_chain_ids") 
-  accessibleTenantIds   String[]  @map("accessible_tenant_ids")
-  
-  // セキュリティ
-  lastLoginAt           DateTime? @map("last_login_at")
-  loginAttempts         Int       @default(0) @map("login_attempts")
-  lockedUntil           DateTime? @map("locked_until")
-  
-  // 2FA（将来拡張）
-  totpSecret            String?   @map("totp_secret")
-  totpEnabled           Boolean   @default(false) @map("totp_enabled")
-  
-  // 監査ログ
-  createdAt             DateTime  @default(now()) @map("created_at")
-  updatedAt             DateTime  @updatedAt @map("updated_at")
-  createdBy             String?   @map("created_by")
-  isActive              Boolean   @default(true) @map("is_active")
-  
-  // リレーション
-  adminLogs             AdminLog[]
-  
-  @@map("admin")
-}
-
-model AdminLog {
-  id              String      @id @default(cuid())
-  adminId         String      @map("admin_id")
-  action          String      // "LOGIN", "VIEW_TENANTS", "VIEW_CHAINS", "VIEW_GROUPS"
-  targetType      String?     @map("target_type") // "tenant", "chain", "group"
-  targetId        String?     @map("target_id")
-  ipAddress       String?     @map("ip_address")
-  userAgent       String?     @map("user_agent")
-  success         Boolean     @default(true)
-  errorMessage    String?     @map("error_message")
-  createdAt       DateTime    @default(now()) @map("created_at")
-  
-  // リレーション
-  admin           Admin       @relation(fields: [adminId], references: [id])
-  
-  @@index([adminId])
-  @@index([action])
-  @@index([createdAt])
-  @@map("admin_log")
-}
-
 enum AdminLevel {
-  chainadmin  // テナント一覧まで閲覧可能
-  groupadmin  // チェーン一覧まで閲覧可能
-  superadmin  // グループ一覧まで閲覧可能（システム開発者）
-  
+  chainadmin
+  groupadmin
+  superadmin
+
   @@map("AdminLevel")
 }

@@ -295,7 +295,7 @@ npm install @prisma/client drizzle-orm sqlite3
 # 2. 環境変数設定
 cat > .env << 'EOF'
 # PostgreSQL統一基盤
-DATABASE_URL="postgresql://kaneko@localhost:5432/hotel_unified_db"
+DATABASE_URL="postgresql://hotel_app:${DB_PASSWORD}@localhost:5432/hotel_unified_db"
 
 # ローカルDB設定
 LOCAL_DB_PATH="./data/pms-local.sqlite"

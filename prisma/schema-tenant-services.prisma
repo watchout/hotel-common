@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// テナントサービス管理
+model tenant_services {
+  id            String    @id
+  tenant_id     String
+  service_type  String
+  plan_type     String
+  is_active     Boolean   @default(true)
+  activated_at  DateTime  @default(now())
+  expires_at    DateTime?
+  service_config Json      @default("{}")
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @default(now())
+  Tenant        Tenant    @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+
+  @@unique([tenant_id, service_type])
+}
+
+// サービス別プラン制限
+model service_plan_restrictions {
+  id                      String    @id
+  service_type            String
+  plan_type               String
+  plan_category           String
+  
+  // 共通制限
+  max_users               Int       @default(10)
+  max_devices             Int       @default(5)
+  
+  // サービス固有制限
+  // hotel-saas固有
+  max_monthly_orders      Int?
+  enable_ai_concierge     Boolean?
+  enable_multilingual     Boolean?
+  
+  // hotel-pms固有
+  max_rooms               Int?
+  enable_revenue_management Boolean?
+  
+  // hotel-member固有
+  max_monthly_ai_requests Int?
+  enable_ai_crm           Boolean?
+  
+  monthly_price           Int       @default(9800)
+  created_at              DateTime  @default(now())
+  updated_at              DateTime  @default(now())
+
+  @@unique([service_type, plan_type, plan_category])
+}
+
+// サービス利用統計
+model service_usage_statistics {
+  id                  String   @id
+  tenant_id           String
+  service_type        String
+  month               String
+  
+  // 共通統計
+  active_users_count  Int      @default(0)
+  active_devices_count Int     @default(0)
+  
+  // サービス固有統計
+  usage_data          Json     @default("{}")
+  
+  created_at          DateTime @default(now())
+  updated_at          DateTime @default(now())
+  Tenant              Tenant   @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+
+  @@unique([tenant_id, service_type, month])
+}
+
+// Tenantモデルの参照用
+model Tenant {
+  id                    String                   @id
+  name                  String
+  domain                String?                  @unique
+  tenant_services       tenant_services[]
+  service_usage_statistics service_usage_statistics[]
+}

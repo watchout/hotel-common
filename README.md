@@ -224,13 +224,31 @@ npm run clean
 - **hotel-pms**: 3300
 - **hotel-common**: 3400
 
+## 🛡️ データベース安全性ルール
+
+データベース操作を行う際は、以下のルールに従ってください：
+
+- **安全なコマンド**: `npm run db:safe-*` コマンドを使用する
+- **定期的なバックアップ**: `npm run db:backup` でバックアップを作成
+- **状態確認**: `npm run db:status` で現在の状態を確認
+- **詳細ルール**: [データベース安全性ルール](docs/database/DATABASE_SAFETY_RULES.md) を参照
+
+```bash
+# 安全なデータベース操作
+npm run db:safe-generate  # Prismaクライアント生成
+npm run db:safe-push      # スキーマ変更を安全に適用
+npm run db:backup         # データベースのバックアップ
+npm run db:status         # データベースの状態確認
+npm run db:check          # データベース安全性チェック
+```
+
 ## 📋 TODO
 
-- [ ] Prismaスキーマ定義の追加
 - [ ] 単体テストの実装
 - [ ] API仕様書の自動生成
 - [ ] Docker化対応
 - [ ] 性能監視機能の追加
+- [x] データベース安全性ルールの実装
 
 ## �� ライセンス
 

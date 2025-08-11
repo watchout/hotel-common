@@ -21,7 +21,7 @@
 ```bash
 # 以下のコマンドが成功すること
 curl -s http://localhost:3200/api/health | grep -q "ok"
-psql postgresql://kaneko@localhost:5432/hotel_unified_db -c "SELECT * FROM customers LIMIT 1;"
+psql postgresql://hotel_app:${DB_PASSWORD}@localhost:5432/hotel_unified_db -c "SELECT * FROM customers LIMIT 1;"
 curl -s http://localhost:3200/api/customers | grep -q "customer_id"
 
 # 期待される結果
@@ -67,7 +67,7 @@ pip freeze > requirements.txt
 # 2.4 .env設定確認・補完
 cat >> .env << 'EOF'
 # 統一基盤設定（既存設定を確認・補完）
-DATABASE_URL=postgresql://kaneko@localhost:5432/hotel_unified_db
+DATABASE_URL=postgresql://hotel_app:${DB_PASSWORD}@localhost:5432/hotel_unified_db
 
 # hotel-common統合設定
 HOTEL_COMMON_API_URL=http://localhost:3400
