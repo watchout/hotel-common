@@ -13,9 +13,9 @@ export declare class HotelMigrationManager {
     getMigrationHistory(): Promise<{
         description: string;
         version: string;
-        rollbackSql: string | null;
-        appliedAt: Date;
-        appliedBy: string | null;
+        rollback_sql: string | null;
+        applied_at: Date;
+        applied_by: string | null;
     }[]>;
     validateIntegrity(): Promise<boolean>;
 }

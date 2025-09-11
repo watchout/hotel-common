@@ -45,7 +45,7 @@ export interface HierarchicalJWTPayload {
   user_id: string
   tenant_id: string
   email: string
-  role: 'STAFF' | 'MANAGER' | 'ADMIN' | 'OWNER' | 'SYSTEM'
+  role: 'STAFF' | 'MANAGER' | 'ADMIN' | 'OWNER' | 'SYSTEM' | 'SUPER_ADMIN'
   level: number
   permissions: string[]
   

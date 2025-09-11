@@ -4,6 +4,13 @@ export declare enum LogLevel {
     WARN = 2,
     ERROR = 3
 }
+/**
+ * ログエントリーインターフェース
+ *
+ * すべてのログデータは以下の標準フィールドを使用します。
+ * カスタムデータは必ず `data` オブジェクト内に配置してください。
+ * エラーオブジェクトは必ず `error` フィールドに配置してください。
+ */
 export interface LogEntry {
     timestamp: Date;
     level: LogLevel;
@@ -14,6 +21,7 @@ export interface LogEntry {
     requestId?: string;
     data?: any;
     error?: Error;
+    [key: string]: any;
 }
 export interface LoggerConfig {
     level: LogLevel;
@@ -22,6 +30,7 @@ export interface LoggerConfig {
     enableRedis: boolean;
     filePath?: string;
     module?: string;
+    name?: string;
 }
 export declare class HotelLogger {
     private config;
@@ -58,11 +67,13 @@ export declare class HotelLogger {
     /**
      * WARN レベルログ
      */
-    warn(message: string, options?: Partial<LogEntry>): Promise<void>;
+    warn(message: string, options?: Partial<LogEntry> | unknown): Promise<void>;
     /**
      * ERROR レベルログ
+     * @param message エラーメッセージ
+     * @param options ログオプション。errorフィールドにはErrorオブジェクトを渡してください
      */
-    error(message: string, options?: Partial<LogEntry>): Promise<void>;
+    error(message: string, options?: Partial<LogEntry> | unknown): Promise<void>;
     /**
      * 認証ログ
      */

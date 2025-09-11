@@ -1,11 +1,14 @@
-import { HierarchyPermissionManager } from './permission-manager';
-import { HierarchicalJwtManager } from './jwt-extension';
-import { HotelLogger } from '../utils/logger';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HierarchyMiddleware = void 0;
+const permission_manager_1 = require("./permission-manager");
+const jwt_extension_1 = require("./jwt-extension");
+const logger_1 = require("../utils/logger");
 /**
  * Hotel Group階層権限チェックミドルウェア
  */
-export class HierarchyMiddleware {
-    static logger = HotelLogger.getInstance();
+class HierarchyMiddleware {
+    static logger = logger_1.HotelLogger.getInstance();
     /**
      * 階層JWT認証ミドルウェア
      */
@@ -20,7 +23,7 @@ export class HierarchyMiddleware {
                     });
                 }
                 const token = authHeader.substring(7);
-                const decoded = HierarchicalJwtManager.verifyHierarchicalToken(token);
+                const decoded = jwt_extension_1.HierarchicalJwtManager.verifyHierarchicalToken(token);
                 if (!decoded) {
                     return res.status(401).json({
                         error: 'INVALID_TOKEN',
@@ -66,7 +69,7 @@ export class HierarchyMiddleware {
                     });
                 }
                 // 権限チェック実行
-                const accessResult = await HierarchyPermissionManager.checkHierarchyAccess({
+                const accessResult = await permission_manager_1.HierarchyPermissionManager.checkHierarchyAccess({
                     user_token: req.user,
                     target_resource: {
                         tenant_id: targetTenantId,
@@ -289,7 +292,7 @@ export class HierarchyMiddleware {
                         req.body?.tenant_id ||
                         req.query.tenant_id ||
                         req.user.tenant_id;
-                    const accessResult = await HierarchyPermissionManager.checkHierarchyAccess({
+                    const accessResult = await permission_manager_1.HierarchyPermissionManager.checkHierarchyAccess({
                         user_token: req.user,
                         target_resource: {
                             tenant_id: targetTenantId,
@@ -351,3 +354,4 @@ export class HierarchyMiddleware {
         };
     }
 }
+exports.HierarchyMiddleware = HierarchyMiddleware;

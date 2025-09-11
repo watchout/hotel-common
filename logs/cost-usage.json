@@ -1,0 +1,62 @@
+[
+  {
+    "date": "2025-07-30",
+    "time": "2025-07-30T07:51:52.414Z",
+    "task": "JWT認証API実装",
+    "inputTokens": 4500,
+    "outputTokens": 2800,
+    "directCost": 0.0555,
+    "cursorCost": 0.06659999999999999,
+    "savedCost": 0.011099999999999992
+  },
+  {
+    "date": "2025-07-30",
+    "time": "2025-07-30T07:51:52.415Z",
+    "task": "Prismaスキーマ設計",
+    "inputTokens": 3200,
+    "outputTokens": 1900,
+    "directCost": 0.0381,
+    "cursorCost": 0.045720000000000004,
+    "savedCost": 0.007620000000000002
+  },
+  {
+    "date": "2025-07-30",
+    "time": "2025-07-30T07:51:52.415Z",
+    "task": "TypeScriptエラー修正",
+    "inputTokens": 1800,
+    "outputTokens": 900,
+    "directCost": 0.0189,
+    "cursorCost": 0.02268,
+    "savedCost": 0.0037799999999999986
+  },
+  {
+    "date": "2025-07-30",
+    "time": "2025-07-30T07:53:14.468Z",
+    "task": "JWT認証API実装",
+    "inputTokens": 4500,
+    "outputTokens": 2800,
+    "directCost": 0.0555,
+    "cursorCost": 0.06659999999999999,
+    "savedCost": 0.011099999999999992
+  },
+  {
+    "date": "2025-07-30",
+    "time": "2025-07-30T07:53:14.468Z",
+    "task": "Prismaスキーマ設計",
+    "inputTokens": 3200,
+    "outputTokens": 1900,
+    "directCost": 0.0381,
+    "cursorCost": 0.045720000000000004,
+    "savedCost": 0.007620000000000002
+  },
+  {
+    "date": "2025-07-30",
+    "time": "2025-07-30T07:53:14.469Z",
+    "task": "TypeScriptエラー修正",
+    "inputTokens": 1800,
+    "outputTokens": 900,
+    "directCost": 0.0189,
+    "cursorCost": 0.02268,
+    "savedCost": 0.0037799999999999986
+  }
+]

@@ -1,11 +1,16 @@
 #!/usr/bin/env node
+"use strict";
 // 🚨 最終緊急対応：超簡素hotel-commonサーバー
 // ルーティングエラー回避、Sunoブロック解除最優先
-import express from 'express';
-import { createServer } from 'http';
-const app = express();
-const server = createServer(app);
-app.use(express.json());
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const http_1 = require("http");
+const app = (0, express_1.default)();
+const server = (0, http_1.createServer)(app);
+app.use(express_1.default.json());
 // CORS対応
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');

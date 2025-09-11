@@ -1,0 +1,615 @@
+PostgreSQL接続確認完了
+[32m[2025-09-07T22:27:47.347Z] INFO[0m [hotel-common]: 🎯 hotel-member階層権限管理統合初期化中...
+[32m[2025-09-07T22:27:47.347Z] INFO[0m [hotel-common]: ✅ hotel-member階層権限管理統合初期化完了
+[32m[2025-09-07T22:27:47.347Z] INFO[0m [hotel-common]: 
+🎯 hotel-member階層権限管理統合稼働中
+
+📊 対応機能:
+- 階層JWT認証統合
+- 顧客データ階層アクセス制御
+- 会員ランク・ポイント階層管理
+- グループ分析権限制御
+- FastAPI連携エンドポイント
+
+🔗 APIエンドポイント:
+- VERIFY_TOKEN: /api/hotel-member/hierarchy/auth/verify
+- CHECK_CUSTOMER_ACCESS: /api/hotel-member/hierarchy/permissions/check-customer-access
+- CHECK_MEMBERSHIP_RESTRICTIONS: /api/hotel-member/hierarchy/permissions/check-membership-restrictions
+- CHECK_ANALYTICS_ACCESS: /api/hotel-member/hierarchy/permissions/check-analytics-access
+- BATCH_CHECK: /api/hotel-member/hierarchy/permissions/batch-check
+- GET_ACCESSIBLE_TENANTS: /api/hotel-member/hierarchy/tenants/accessible
+- GET_PERMISSIONS_DETAIL: /api/hotel-member/hierarchy/user/permissions-detail
+- HEALTH_CHECK: /api/hotel-member/hierarchy/health
+
+🎯 実装戦略: 部分対応（顧客データ重点）
+⚡ パフォーマンス: 既存機能への影響最小化
+🔐 セキュリティ: 階層別データアクセス制御
+    
+hotel-member統合初期化完了
+
+🎉 hotel-common統合APIサーバー起動完了！
+
+📊 サーバー情報:
+- ポート: 3400
+- データベース: PostgreSQL (hotel_unified_db)
+- 監視対象システム: 4個
+
+🔗 利用可能エンドポイント:
+- GET  /health                    - サーバーヘルスチェック
+- GET  /api/systems/status        - システム接続状況
+- POST /api/systems/:name/test    - システム接続テスト
+- GET  /api/database/test         - データベース接続テスト
+- GET  /api/tenants              - テナント一覧
+- POST /api/auth/validate        - 認証検証
+- GET  /api/stats                - システム統計
+- GET  /api/v1/campaigns/health  - キャンペーン機能ヘルスチェック
+- GET  /api/apps/google-play     - Google Playアプリ一覧
+
+🎯 接続対象システム:
+- 🏪 hotel-saas (http://localhost:3100)
+- 🎯 hotel-member-frontend (http://localhost:3200)
+- 🎯 hotel-member-backend (http://localhost:8080)
+- 💼 hotel-pms (http://localhost:3300)
+        
+2025-09-07T22:27:48.075Z GET /health
+2025-09-07T22:27:48.183Z POST /api/v1/admin/front-desk/checkin
+[32m[2025-09-07T22:27:48.188Z] INFO[0m [hotel-common]: 統合チェックイン処理開始
+  Data: {
+  "tenant_id": "default",
+  "staff_id": "dev-user-009",
+  "type": "walk-in",
+  "room_number": "101",
+  "guest_count": 1
+}
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."notes", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."roomNumber" = $1 AND "public"."rooms"."tenantId" = $2 AND "public"."rooms"."isDeleted" = $3) LIMIT $4 OFFSET $5
+[31m[2025-09-07T22:27:48.209Z] ERROR[0m [hotel-common]: 統合チェックイン処理エラー:
+  Error: 客室 101 は利用できません（現在のステータス: occupied）
+  Stack: Error: 客室 101 は利用できません（現在のステータス: occupied）
+    at handleWalkInCheckin (/Users/kaneko/hotel-common/dist/routes/systems/common/front-desk-checkin.routes.js:240:15)
+    at async /Users/kaneko/hotel-common/dist/routes/systems/common/front-desk-checkin.routes.js:106:22
+2025-09-07T22:27:48.219Z GET /api/v1/admin/operation-logs
+prisma:query SELECT "public"."system_event"."id", "public"."system_event"."tenant_id", "public"."system_event"."user_id", "public"."system_event"."event_type", "public"."system_event"."source_system", "public"."system_event"."target_system", "public"."system_event"."entity_type", "public"."system_event"."entity_id", "public"."system_event"."action", "public"."system_event"."event_data", "public"."system_event"."created_at", "public"."system_event"."processed_at", "public"."system_event"."status" FROM "public"."system_event" WHERE "public"."system_event"."tenant_id" = $1 ORDER BY "public"."system_event"."created_at" DESC LIMIT $2 OFFSET $3
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."system_event"."id" FROM "public"."system_event" WHERE "public"."system_event"."tenant_id" = $1 OFFSET $2) AS "sub"
+[32m[2025-09-07T22:27:48.250Z] INFO[0m [hotel-common]: 管理者操作ログ一覧取得完了
+Performing initial health check...
+🔍 Health check started (0/4 systems connected)
+📊 Health check completed (1/4 systems connected)
+2025-09-07T22:29:16.332Z GET /api/v1/order/menu
+2025-09-07T22:29:16.348Z POST /api/v1/devices/check-status
+2025-09-07T22:29:31.091Z POST /api/auth/validate
+2025-09-07T22:29:31.242Z POST /api/auth/validate
+2025-09-07T22:29:31.247Z GET /api/v1/tenants/default
+prisma:query SELECT 1
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."status", "public"."Tenant"."contactEmail", "public"."Tenant"."features", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."createdAt" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+2025-09-07T22:29:32.110Z POST /api/auth/validate
+2025-09-07T22:29:32.115Z POST /api/auth/validate
+2025-09-07T22:29:32.119Z POST /api/auth/validate
+2025-09-07T22:29:32.121Z GET /api/v1/admin/front-desk/rooms
+prisma:query SELECT 1
+2025-09-07T22:29:32.124Z POST /api/auth/validate
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."notes", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+2025-09-07T22:29:32.132Z GET /api/v1/admin/front-desk/accounting
+2025-09-07T22:29:32.141Z GET /api/v1/admin/operation-logs
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+[32m[2025-09-07T22:29:32.148Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+[32m[2025-09-07T22:29:32.151Z] INFO[0m [hotel-common]: 管理者操作ログ一覧取得完了
+2025-09-07T22:29:32.152Z GET /api/v1/admin/orders
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."system_event"."id" FROM "public"."system_event" WHERE "public"."system_event"."tenant_id" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT "public"."system_event"."id", "public"."system_event"."tenant_id", "public"."system_event"."user_id", "public"."system_event"."event_type", "public"."system_event"."source_system", "public"."system_event"."target_system", "public"."system_event"."entity_type", "public"."system_event"."entity_id", "public"."system_event"."action", "public"."system_event"."event_data", "public"."system_event"."created_at", "public"."system_event"."processed_at", "public"."system_event"."status" FROM "public"."system_event" WHERE "public"."system_event"."tenant_id" = $1 ORDER BY "public"."system_event"."created_at" DESC LIMIT $2 OFFSET $3
+prisma:query SELECT "public"."Order"."id", "public"."Order"."tenantId", "public"."Order"."roomId", "public"."Order"."placeId", "public"."Order"."status", "public"."Order"."items", "public"."Order"."total", "public"."Order"."createdAt", "public"."Order"."updatedAt", "public"."Order"."paidAt", "public"."Order"."isDeleted", "public"."Order"."deletedAt", "public"."Order"."uuid", "public"."Order"."sessionId" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) ORDER BY "public"."Order"."createdAt" DESC LIMIT $4 OFFSET $5
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) OFFSET $4) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."transactions"."id" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2 AND "public"."transactions"."createdAt" >= $3 AND "public"."transactions"."createdAt" <= $4) OFFSET $5) AS "sub"
+prisma:query SELECT "public"."transactions"."id", "public"."transactions"."tenantId", "public"."transactions"."invoiceId", "public"."transactions"."paymentId", "public"."transactions"."type", "public"."transactions"."amount", "public"."transactions"."taxAmount", "public"."transactions"."totalAmount", "public"."transactions"."status", "public"."transactions"."description", "public"."transactions"."reference", "public"."transactions"."metadata", "public"."transactions"."createdAt", "public"."transactions"."updatedAt", "public"."transactions"."createdBy", "public"."transactions"."isDeleted", "public"."transactions"."deletedAt", "public"."transactions"."deletedBy" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2 AND "public"."transactions"."createdAt" >= $3 AND "public"."transactions"."createdAt" <= $4) ORDER BY "public"."transactions"."createdAt" DESC LIMIT $5 OFFSET $6
+prisma:query SELECT SUM("totalAmount") FROM (SELECT "public"."transactions"."totalAmount" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT("public"."transactions"."id"), "public"."transactions"."status" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2) GROUP BY "public"."transactions"."status" OFFSET $3
+prisma:query SELECT COUNT("public"."payments"."id"), "public"."payments"."paymentMethod" FROM "public"."payments" WHERE ("public"."payments"."tenantId" = $1 AND "public"."payments"."isDeleted" = $2) GROUP BY "public"."payments"."paymentMethod" OFFSET $3
+[32m[2025-09-07T22:29:32.186Z] INFO[0m [hotel-common]: フロントデスク会計取引一覧取得完了
+2025-09-07T22:29:38.911Z POST /api/auth/validate
+2025-09-07T22:29:39.053Z POST /api/auth/validate
+2025-09-07T22:29:39.056Z GET /api/v1/tenants/default
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."status", "public"."Tenant"."contactEmail", "public"."Tenant"."features", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."createdAt" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+2025-09-07T22:29:39.448Z POST /api/auth/validate
+2025-09-07T22:29:39.450Z POST /api/auth/validate
+2025-09-07T22:29:39.453Z GET /api/v1/admin/orders
+2025-09-07T22:29:39.456Z GET /api/v1/admin/front-desk/rooms
+2025-09-07T22:29:39.457Z POST /api/auth/validate
+prisma:query SELECT "public"."Order"."id", "public"."Order"."tenantId", "public"."Order"."roomId", "public"."Order"."placeId", "public"."Order"."status", "public"."Order"."items", "public"."Order"."total", "public"."Order"."createdAt", "public"."Order"."updatedAt", "public"."Order"."paidAt", "public"."Order"."isDeleted", "public"."Order"."deletedAt", "public"."Order"."uuid", "public"."Order"."sessionId" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) ORDER BY "public"."Order"."createdAt" DESC LIMIT $4 OFFSET $5
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."notes", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+2025-09-07T22:29:39.458Z POST /api/auth/validate
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) OFFSET $4) AS "sub"
+2025-09-07T22:29:39.459Z GET /api/v1/admin/front-desk/accounting
+2025-09-07T22:29:39.461Z GET /api/v1/admin/operation-logs
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+[32m[2025-09-07T22:29:39.462Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."transactions"."id" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2 AND "public"."transactions"."createdAt" >= $3 AND "public"."transactions"."createdAt" <= $4) OFFSET $5) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."system_event"."id" FROM "public"."system_event" WHERE "public"."system_event"."tenant_id" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT "public"."transactions"."id", "public"."transactions"."tenantId", "public"."transactions"."invoiceId", "public"."transactions"."paymentId", "public"."transactions"."type", "public"."transactions"."amount", "public"."transactions"."taxAmount", "public"."transactions"."totalAmount", "public"."transactions"."status", "public"."transactions"."description", "public"."transactions"."reference", "public"."transactions"."metadata", "public"."transactions"."createdAt", "public"."transactions"."updatedAt", "public"."transactions"."createdBy", "public"."transactions"."isDeleted", "public"."transactions"."deletedAt", "public"."transactions"."deletedBy" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2 AND "public"."transactions"."createdAt" >= $3 AND "public"."transactions"."createdAt" <= $4) ORDER BY "public"."transactions"."createdAt" DESC LIMIT $5 OFFSET $6
+prisma:query SELECT COUNT("public"."payments"."id"), "public"."payments"."paymentMethod" FROM "public"."payments" WHERE ("public"."payments"."tenantId" = $1 AND "public"."payments"."isDeleted" = $2) GROUP BY "public"."payments"."paymentMethod" OFFSET $3
+prisma:query SELECT COUNT("public"."transactions"."id"), "public"."transactions"."status" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2) GROUP BY "public"."transactions"."status" OFFSET $3
+prisma:query SELECT SUM("totalAmount") FROM (SELECT "public"."transactions"."totalAmount" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2) OFFSET $3) AS "sub"
+[32m[2025-09-07T22:29:39.465Z] INFO[0m [hotel-common]: フロントデスク会計取引一覧取得完了
+[32m[2025-09-07T22:29:39.465Z] INFO[0m [hotel-common]: 管理者操作ログ一覧取得完了
+prisma:query SELECT "public"."system_event"."id", "public"."system_event"."tenant_id", "public"."system_event"."user_id", "public"."system_event"."event_type", "public"."system_event"."source_system", "public"."system_event"."target_system", "public"."system_event"."entity_type", "public"."system_event"."entity_id", "public"."system_event"."action", "public"."system_event"."event_data", "public"."system_event"."created_at", "public"."system_event"."processed_at", "public"."system_event"."status" FROM "public"."system_event" WHERE "public"."system_event"."tenant_id" = $1 ORDER BY "public"."system_event"."created_at" DESC LIMIT $2 OFFSET $3
+2025-09-07T22:29:43.499Z GET /api/v1/admin/devices
+2025-09-07T22:29:45.217Z GET /api/v1/admin/devices
+🔍 Health check started (1/4 systems connected)
+2025-09-07T22:30:07.380Z POST /api/auth/validate
+2025-09-07T22:30:07.387Z POST /api/auth/validate
+2025-09-07T22:30:07.389Z GET /api/v1/tenants/default
+prisma:query SELECT 1
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."status", "public"."Tenant"."contactEmail", "public"."Tenant"."features", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."createdAt" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+2025-09-07T22:30:07.501Z GET /api/v1/admin/devices
+2025-09-07T22:30:08.184Z POST /api/auth/validate
+2025-09-07T22:30:08.187Z POST /api/auth/validate
+2025-09-07T22:30:08.191Z GET /api/v1/admin/orders
+2025-09-07T22:30:08.193Z GET /api/v1/admin/front-desk/rooms
+2025-09-07T22:30:08.196Z POST /api/auth/validate
+prisma:query SELECT 1
+prisma:query SELECT "public"."Order"."id", "public"."Order"."tenantId", "public"."Order"."roomId", "public"."Order"."placeId", "public"."Order"."status", "public"."Order"."items", "public"."Order"."total", "public"."Order"."createdAt", "public"."Order"."updatedAt", "public"."Order"."paidAt", "public"."Order"."isDeleted", "public"."Order"."deletedAt", "public"."Order"."uuid", "public"."Order"."sessionId" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) ORDER BY "public"."Order"."createdAt" DESC LIMIT $4 OFFSET $5
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) OFFSET $4) AS "sub"
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."notes", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+2025-09-07T22:30:08.197Z POST /api/auth/validate
+2025-09-07T22:30:08.198Z GET /api/v1/admin/front-desk/accounting
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+[32m[2025-09-07T22:30:08.199Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."transactions"."id" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2 AND "public"."transactions"."createdAt" >= $3 AND "public"."transactions"."createdAt" <= $4) OFFSET $5) AS "sub"
+prisma:query SELECT "public"."transactions"."id", "public"."transactions"."tenantId", "public"."transactions"."invoiceId", "public"."transactions"."paymentId", "public"."transactions"."type", "public"."transactions"."amount", "public"."transactions"."taxAmount", "public"."transactions"."totalAmount", "public"."transactions"."status", "public"."transactions"."description", "public"."transactions"."reference", "public"."transactions"."metadata", "public"."transactions"."createdAt", "public"."transactions"."updatedAt", "public"."transactions"."createdBy", "public"."transactions"."isDeleted", "public"."transactions"."deletedAt", "public"."transactions"."deletedBy" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2 AND "public"."transactions"."createdAt" >= $3 AND "public"."transactions"."createdAt" <= $4) ORDER BY "public"."transactions"."createdAt" DESC LIMIT $5 OFFSET $6
+2025-09-07T22:30:08.200Z GET /api/v1/admin/operation-logs
+prisma:query SELECT COUNT("public"."payments"."id"), "public"."payments"."paymentMethod" FROM "public"."payments" WHERE ("public"."payments"."tenantId" = $1 AND "public"."payments"."isDeleted" = $2) GROUP BY "public"."payments"."paymentMethod" OFFSET $3
+prisma:query SELECT COUNT("public"."transactions"."id"), "public"."transactions"."status" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2) GROUP BY "public"."transactions"."status" OFFSET $3
+prisma:query SELECT SUM("totalAmount") FROM (SELECT "public"."transactions"."totalAmount" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2) OFFSET $3) AS "sub"
+[32m[2025-09-07T22:30:08.201Z] INFO[0m [hotel-common]: フロントデスク会計取引一覧取得完了
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."system_event"."id" FROM "public"."system_event" WHERE "public"."system_event"."tenant_id" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT "public"."system_event"."id", "public"."system_event"."tenant_id", "public"."system_event"."user_id", "public"."system_event"."event_type", "public"."system_event"."source_system", "public"."system_event"."target_system", "public"."system_event"."entity_type", "public"."system_event"."entity_id", "public"."system_event"."action", "public"."system_event"."event_data", "public"."system_event"."created_at", "public"."system_event"."processed_at", "public"."system_event"."status" FROM "public"."system_event" WHERE "public"."system_event"."tenant_id" = $1 ORDER BY "public"."system_event"."created_at" DESC LIMIT $2 OFFSET $3
+[32m[2025-09-07T22:30:08.202Z] INFO[0m [hotel-common]: 管理者操作ログ一覧取得完了
+2025-09-07T22:30:13.383Z POST /api/v1/devices/check-status
+2025-09-07T22:30:13.391Z POST /api/auth/validate
+2025-09-07T22:30:13.394Z GET /api/v1/admin/front-desk/rooms
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."notes", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+[32m[2025-09-07T22:30:13.398Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+2025-09-07T22:30:15.495Z GET /api/v1/order/menu
+2025-09-07T22:30:15.507Z GET /api/v1/order/menu
+2025-09-07T22:30:39.226Z POST /api/auth/validate
+2025-09-07T22:30:39.280Z POST /api/v1/devices/check-status
+2025-09-07T22:30:39.286Z POST /api/auth/validate
+2025-09-07T22:30:39.288Z GET /api/v1/admin/front-desk/rooms
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."notes", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+[32m[2025-09-07T22:30:39.292Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+2025-09-07T22:30:44.547Z GET /api/v1/order/menu
+2025-09-07T22:30:44.567Z GET /api/v1/order/menu
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+2025-09-07T22:37:21.228Z GET /api/v1/order/menu
+2025-09-07T22:37:25.949Z POST /api/auth/validate
+2025-09-07T22:37:26.751Z POST /api/v1/devices/check-status
+2025-09-07T22:37:26.765Z POST /api/auth/validate
+2025-09-07T22:37:26.769Z GET /api/v1/admin/front-desk/rooms
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."notes", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+[32m[2025-09-07T22:37:26.798Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+🔍 Health check started (1/4 systems connected)
+2025-09-07T22:38:18.210Z POST /api/auth/validate
+2025-09-07T22:38:18.214Z GET /api/v1/admin/orders
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."roomId" = $3 AND "public"."Order"."status" = $4) OFFSET $5) AS "sub"
+prisma:query SELECT "public"."Order"."id", "public"."Order"."tenantId", "public"."Order"."roomId", "public"."Order"."placeId", "public"."Order"."status", "public"."Order"."items", "public"."Order"."total", "public"."Order"."createdAt", "public"."Order"."updatedAt", "public"."Order"."paidAt", "public"."Order"."isDeleted", "public"."Order"."deletedAt", "public"."Order"."uuid", "public"."Order"."sessionId" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."roomId" = $3 AND "public"."Order"."status" = $4) ORDER BY "public"."Order"."createdAt" DESC LIMIT $5 OFFSET $6
+2025-09-07T22:38:20.662Z POST /api/v1/auth/refresh
+2025-09-07T22:38:20.694Z POST /api/auth/validate
+2025-09-07T22:38:20.702Z GET /api/v1/admin/orders
+prisma:query SELECT "public"."Order"."id", "public"."Order"."tenantId", "public"."Order"."roomId", "public"."Order"."placeId", "public"."Order"."status", "public"."Order"."items", "public"."Order"."total", "public"."Order"."createdAt", "public"."Order"."updatedAt", "public"."Order"."paidAt", "public"."Order"."isDeleted", "public"."Order"."deletedAt", "public"."Order"."uuid", "public"."Order"."sessionId" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."roomId" = $3 AND "public"."Order"."status" = $4) ORDER BY "public"."Order"."createdAt" DESC LIMIT $5 OFFSET $6
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."roomId" = $3 AND "public"."Order"."status" = $4) OFFSET $5) AS "sub"
+2025-09-07T22:38:22.711Z POST /api/auth/validate
+2025-09-07T22:38:22.993Z POST /api/v1/devices/check-status
+2025-09-07T22:38:22.996Z POST /api/auth/validate
+2025-09-07T22:38:23.000Z GET /api/v1/admin/front-desk/rooms
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."notes", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+[32m[2025-09-07T22:38:23.004Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+2025-09-07T22:38:24.479Z GET /api/v1/order/menu
+2025-09-07T22:38:45.741Z POST /api/v1/devices/check-status
+2025-09-07T22:38:45.745Z POST /api/auth/validate
+2025-09-07T22:38:45.749Z GET /api/v1/admin/front-desk/rooms
+2025-09-07T22:38:45.751Z POST /api/auth/validate
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."notes", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+2025-09-07T22:38:45.754Z GET /api/v1/admin/front-desk/rooms
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+[32m[2025-09-07T22:38:45.755Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."notes", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+[32m[2025-09-07T22:38:45.796Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+2025-09-07T22:38:45.802Z POST /api/v1/devices/check-status
+2025-09-07T22:38:48.099Z GET /api/v1/order/menu
+2025-09-07T22:39:01.039Z GET /api/v1/order/menu
+🔍 Health check started (1/4 systems connected)
+2025-09-07T22:41:28.216Z POST /api/auth/validate
+2025-09-07T22:41:28.552Z POST /api/v1/devices/check-status
+2025-09-07T22:41:28.561Z POST /api/auth/validate
+2025-09-07T22:41:28.565Z GET /api/v1/admin/front-desk/rooms
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."notes", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+[32m[2025-09-07T22:41:28.569Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+2025-09-07T22:48:58.831Z POST /api/auth/validate
+2025-09-07T22:48:59.117Z POST /api/v1/devices/check-status
+2025-09-07T22:48:59.127Z POST /api/auth/validate
+2025-09-07T22:48:59.132Z GET /api/v1/admin/front-desk/rooms
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."notes", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+[32m[2025-09-07T22:48:59.164Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+2025-09-07T22:49:03.343Z GET /api/v1/order/menu
+🔍 Health check started (1/4 systems connected)
+2025-09-07T22:49:48.289Z GET /api/v1/order/menu
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+2025-09-07T23:03:08.346Z POST /api/auth/validate
+2025-09-07T23:03:08.428Z POST /api/auth/validate
+2025-09-07T23:03:08.434Z GET /api/v1/tenants/default
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."status", "public"."Tenant"."contactEmail", "public"."Tenant"."features", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."createdAt" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+2025-09-07T23:03:08.638Z POST /api/auth/validate
+2025-09-07T23:03:08.644Z GET /api/v1/admin/front-desk/rooms
+2025-09-07T23:03:08.662Z POST /api/auth/validate
+2025-09-07T23:03:08.694Z POST /api/auth/validate
+2025-09-07T23:03:08.695Z GET /api/v1/admin/orders
+2025-09-07T23:03:08.697Z POST /api/auth/validate
+2025-09-07T23:03:08.703Z GET /api/v1/admin/operation-logs
+2025-09-07T23:03:08.708Z GET /api/v1/admin/front-desk/accounting
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."transactions"."id" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2 AND "public"."transactions"."createdAt" >= $3 AND "public"."transactions"."createdAt" <= $4) OFFSET $5) AS "sub"
+prisma:query SELECT "public"."Order"."id", "public"."Order"."tenantId", "public"."Order"."roomId", "public"."Order"."placeId", "public"."Order"."status", "public"."Order"."items", "public"."Order"."total", "public"."Order"."createdAt", "public"."Order"."updatedAt", "public"."Order"."paidAt", "public"."Order"."isDeleted", "public"."Order"."deletedAt", "public"."Order"."uuid", "public"."Order"."sessionId" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) ORDER BY "public"."Order"."createdAt" DESC LIMIT $4 OFFSET $5
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."notes", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+[32m[2025-09-07T23:03:08.773Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+prisma:query SELECT "public"."system_event"."id", "public"."system_event"."tenant_id", "public"."system_event"."user_id", "public"."system_event"."event_type", "public"."system_event"."source_system", "public"."system_event"."target_system", "public"."system_event"."entity_type", "public"."system_event"."entity_id", "public"."system_event"."action", "public"."system_event"."event_data", "public"."system_event"."created_at", "public"."system_event"."processed_at", "public"."system_event"."status" FROM "public"."system_event" WHERE "public"."system_event"."tenant_id" = $1 ORDER BY "public"."system_event"."created_at" DESC LIMIT $2 OFFSET $3
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) OFFSET $4) AS "sub"
+prisma:query SELECT "public"."transactions"."id", "public"."transactions"."tenantId", "public"."transactions"."invoiceId", "public"."transactions"."paymentId", "public"."transactions"."type", "public"."transactions"."amount", "public"."transactions"."taxAmount", "public"."transactions"."totalAmount", "public"."transactions"."status", "public"."transactions"."description", "public"."transactions"."reference", "public"."transactions"."metadata", "public"."transactions"."createdAt", "public"."transactions"."updatedAt", "public"."transactions"."createdBy", "public"."transactions"."isDeleted", "public"."transactions"."deletedAt", "public"."transactions"."deletedBy" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2 AND "public"."transactions"."createdAt" >= $3 AND "public"."transactions"."createdAt" <= $4) ORDER BY "public"."transactions"."createdAt" DESC LIMIT $5 OFFSET $6
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."system_event"."id" FROM "public"."system_event" WHERE "public"."system_event"."tenant_id" = $1 OFFSET $2) AS "sub"
+[32m[2025-09-07T23:03:08.801Z] INFO[0m [hotel-common]: 管理者操作ログ一覧取得完了
+prisma:query SELECT SUM("totalAmount") FROM (SELECT "public"."transactions"."totalAmount" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT("public"."transactions"."id"), "public"."transactions"."status" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2) GROUP BY "public"."transactions"."status" OFFSET $3
+prisma:query SELECT COUNT("public"."payments"."id"), "public"."payments"."paymentMethod" FROM "public"."payments" WHERE ("public"."payments"."tenantId" = $1 AND "public"."payments"."isDeleted" = $2) GROUP BY "public"."payments"."paymentMethod" OFFSET $3
+[32m[2025-09-07T23:03:08.809Z] INFO[0m [hotel-common]: フロントデスク会計取引一覧取得完了
+2025-09-07T23:03:16.188Z POST /api/v1/devices/check-status
+2025-09-07T23:03:16.195Z GET /api/v1/order/menu
+2025-09-07T23:03:35.335Z POST /api/v1/auth/login
+prisma:query SELECT 1
+prisma:query SELECT "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted" FROM "public"."staff" WHERE ("public"."staff"."email" = $1 AND "public"."staff"."is_active" = $2 AND "public"."staff"."is_deleted" = $3) OFFSET $4
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."contactEmail", "public"."Tenant"."createdAt", "public"."Tenant"."deleted_at", "public"."Tenant"."deleted_by", "public"."Tenant"."features", "public"."Tenant"."is_deleted", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."status" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query UPDATE "public"."staff" SET "last_login_at" = $1 WHERE ("public"."staff"."id" = $2 AND 1=1) RETURNING "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted"
+[32m[2025-09-07T23:03:35.381Z] INFO[0m [hotel-common] [tenant:default]: ログイン成功
+2025-09-07T23:03:35.624Z POST /api/auth/validate
+2025-09-07T23:03:35.630Z GET /api/v1/tenants/default
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."status", "public"."Tenant"."contactEmail", "public"."Tenant"."features", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."createdAt" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+2025-09-07T23:03:35.764Z POST /api/auth/validate
+2025-09-07T23:03:35.773Z GET /api/v1/admin/orders
+prisma:query SELECT 1
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) OFFSET $4) AS "sub"
+2025-09-07T23:03:35.784Z POST /api/auth/validate
+prisma:query SELECT "public"."Order"."id", "public"."Order"."tenantId", "public"."Order"."roomId", "public"."Order"."placeId", "public"."Order"."status", "public"."Order"."items", "public"."Order"."total", "public"."Order"."createdAt", "public"."Order"."updatedAt", "public"."Order"."paidAt", "public"."Order"."isDeleted", "public"."Order"."deletedAt", "public"."Order"."uuid", "public"."Order"."sessionId" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) ORDER BY "public"."Order"."createdAt" DESC LIMIT $4 OFFSET $5
+2025-09-07T23:03:35.802Z POST /api/auth/validate
+2025-09-07T23:03:35.804Z POST /api/auth/validate
+2025-09-07T23:03:35.806Z GET /api/v1/admin/devices/count
+2025-09-07T23:03:35.808Z GET /api/v1/admin/orders/monthly-count
+2025-09-07T23:03:35.812Z GET /api/v1/admin/summary
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT COUNT(*), "public"."device_rooms"."deviceType", "public"."device_rooms"."status" FROM "public"."device_rooms" WHERE "public"."device_rooms"."tenantId" = $1 GROUP BY "public"."device_rooms"."deviceType", "public"."device_rooms"."status" OFFSET $2
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query 
+      SELECT 
+        DATE_TRUNC('month', "createdAt") as month,
+        COUNT(*) as order_count,
+        SUM("total") as total_revenue,
+        AVG("total") as average_order_value
+      FROM "Order"
+      WHERE "tenantId" = $1
+        AND "createdAt" >= $2
+        AND "isDeleted" = false
+      GROUP BY DATE_TRUNC('month', "createdAt")
+      ORDER BY month DESC
+    
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."device_rooms"."id" FROM "public"."device_rooms" WHERE ("public"."device_rooms"."tenantId" = $1 AND "public"."device_rooms"."status" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."createdAt" >= $3) OFFSET $4) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."device_rooms"."id" FROM "public"."device_rooms" WHERE "public"."device_rooms"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."campaigns"."id" FROM "public"."campaigns" WHERE "public"."campaigns"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."campaigns"."id" FROM "public"."campaigns" WHERE ("public"."campaigns"."tenantId" = $1 AND "public"."campaigns"."status" = CAST($2::text AS "public"."CampaignStatus")) OFFSET $3) AS "sub"
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 500
+📊 Health check completed (0/4 systems connected)
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 500
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 500
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 503
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 503
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 503
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 503
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 503
+2025-09-07T23:36:13.390Z POST /api/auth/validate
+2025-09-07T23:36:13.436Z POST /api/auth/validate
+2025-09-07T23:36:13.441Z GET /api/v1/tenants/default
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."status", "public"."Tenant"."contactEmail", "public"."Tenant"."features", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."createdAt" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+2025-09-07T23:36:13.709Z POST /api/auth/validate
+2025-09-07T23:36:13.714Z GET /api/v1/admin/summary
+2025-09-07T23:36:13.722Z POST /api/auth/validate
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."device_rooms"."id" FROM "public"."device_rooms" WHERE "public"."device_rooms"."tenantId" = $1 OFFSET $2) AS "sub"
+2025-09-07T23:36:13.733Z POST /api/auth/validate
+2025-09-07T23:36:13.734Z POST /api/auth/validate
+2025-09-07T23:36:13.734Z GET /api/v1/admin/devices/count
+prisma:query SELECT COUNT(*), "public"."device_rooms"."deviceType", "public"."device_rooms"."status" FROM "public"."device_rooms" WHERE "public"."device_rooms"."tenantId" = $1 GROUP BY "public"."device_rooms"."deviceType", "public"."device_rooms"."status" OFFSET $2
+2025-09-07T23:36:13.738Z GET /api/v1/admin/orders
+2025-09-07T23:36:13.739Z GET /api/v1/admin/orders/monthly-count
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) OFFSET $4) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."device_rooms"."id" FROM "public"."device_rooms" WHERE ("public"."device_rooms"."tenantId" = $1 AND "public"."device_rooms"."status" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."campaigns"."id" FROM "public"."campaigns" WHERE ("public"."campaigns"."tenantId" = $1 AND "public"."campaigns"."status" = CAST($2::text AS "public"."CampaignStatus")) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."campaigns"."id" FROM "public"."campaigns" WHERE "public"."campaigns"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."createdAt" >= $3) OFFSET $4) AS "sub"
+prisma:query SELECT "public"."Order"."id", "public"."Order"."tenantId", "public"."Order"."roomId", "public"."Order"."placeId", "public"."Order"."status", "public"."Order"."items", "public"."Order"."total", "public"."Order"."createdAt", "public"."Order"."updatedAt", "public"."Order"."paidAt", "public"."Order"."isDeleted", "public"."Order"."deletedAt", "public"."Order"."uuid", "public"."Order"."sessionId" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) ORDER BY "public"."Order"."createdAt" DESC LIMIT $4 OFFSET $5
+prisma:query 
+      SELECT 
+        DATE_TRUNC('month', "createdAt") as month,
+        COUNT(*) as order_count,
+        SUM("total") as total_revenue,
+        AVG("total") as average_order_value
+      FROM "Order"
+      WHERE "tenantId" = $1
+        AND "createdAt" >= $2
+        AND "isDeleted" = false
+      GROUP BY DATE_TRUNC('month', "createdAt")
+      ORDER BY month DESC
+    
+2025-09-07T23:36:23.242Z POST /api/auth/validate
+2025-09-07T23:36:23.283Z POST /api/auth/validate
+2025-09-07T23:36:23.292Z GET /api/v1/tenants/default
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."status", "public"."Tenant"."contactEmail", "public"."Tenant"."features", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."createdAt" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+2025-09-07T23:36:23.537Z POST /api/auth/validate
+2025-09-07T23:36:23.542Z GET /api/v1/admin/summary
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."campaigns"."id" FROM "public"."campaigns" WHERE "public"."campaigns"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."campaigns"."id" FROM "public"."campaigns" WHERE ("public"."campaigns"."tenantId" = $1 AND "public"."campaigns"."status" = CAST($2::text AS "public"."CampaignStatus")) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."createdAt" >= $3) OFFSET $4) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."device_rooms"."id" FROM "public"."device_rooms" WHERE "public"."device_rooms"."tenantId" = $1 OFFSET $2) AS "sub"
+2025-09-07T23:36:23.547Z POST /api/auth/validate
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."device_rooms"."id" FROM "public"."device_rooms" WHERE ("public"."device_rooms"."tenantId" = $1 AND "public"."device_rooms"."status" = $2) OFFSET $3) AS "sub"
+2025-09-07T23:36:23.563Z POST /api/auth/validate
+2025-09-07T23:36:23.563Z POST /api/auth/validate
+2025-09-07T23:36:23.564Z GET /api/v1/admin/devices/count
+prisma:query SELECT COUNT(*), "public"."device_rooms"."deviceType", "public"."device_rooms"."status" FROM "public"."device_rooms" WHERE "public"."device_rooms"."tenantId" = $1 GROUP BY "public"."device_rooms"."deviceType", "public"."device_rooms"."status" OFFSET $2
+2025-09-07T23:36:23.567Z GET /api/v1/admin/orders/monthly-count
+prisma:query 
+      SELECT 
+        DATE_TRUNC('month', "createdAt") as month,
+        COUNT(*) as order_count,
+        SUM("total") as total_revenue,
+        AVG("total") as average_order_value
+      FROM "Order"
+      WHERE "tenantId" = $1
+        AND "createdAt" >= $2
+        AND "isDeleted" = false
+      GROUP BY DATE_TRUNC('month', "createdAt")
+      ORDER BY month DESC
+    
+2025-09-07T23:36:23.570Z GET /api/v1/admin/orders
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) OFFSET $4) AS "sub"
+prisma:query SELECT "public"."Order"."id", "public"."Order"."tenantId", "public"."Order"."roomId", "public"."Order"."placeId", "public"."Order"."status", "public"."Order"."items", "public"."Order"."total", "public"."Order"."createdAt", "public"."Order"."updatedAt", "public"."Order"."paidAt", "public"."Order"."isDeleted", "public"."Order"."deletedAt", "public"."Order"."uuid", "public"."Order"."sessionId" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) ORDER BY "public"."Order"."createdAt" DESC LIMIT $4 OFFSET $5
+2025-09-07T23:36:37.901Z POST /api/v1/auth/login
+prisma:query SELECT 1
+prisma:query SELECT "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted" FROM "public"."staff" WHERE ("public"."staff"."email" = $1 AND "public"."staff"."is_active" = $2 AND "public"."staff"."is_deleted" = $3) OFFSET $4
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."contactEmail", "public"."Tenant"."createdAt", "public"."Tenant"."deleted_at", "public"."Tenant"."deleted_by", "public"."Tenant"."features", "public"."Tenant"."is_deleted", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."status" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query UPDATE "public"."staff" SET "last_login_at" = $1 WHERE ("public"."staff"."id" = $2 AND 1=1) RETURNING "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted"
+[32m[2025-09-07T23:36:37.914Z] INFO[0m [hotel-common] [tenant:default]: ログイン成功
+2025-09-07T23:36:38.116Z POST /api/auth/validate
+2025-09-07T23:36:38.119Z GET /api/v1/tenants/default
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."status", "public"."Tenant"."contactEmail", "public"."Tenant"."features", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."createdAt" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+2025-09-07T23:36:38.187Z POST /api/auth/validate
+2025-09-07T23:36:38.194Z POST /api/auth/validate
+2025-09-07T23:36:38.217Z POST /api/auth/validate
+2025-09-07T23:36:38.217Z GET /api/v1/admin/summary
+2025-09-07T23:36:38.218Z GET /api/v1/admin/devices/count
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT 1
+2025-09-07T23:36:38.220Z POST /api/auth/validate
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."device_rooms"."id" FROM "public"."device_rooms" WHERE ("public"."device_rooms"."tenantId" = $1 AND "public"."device_rooms"."status" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT 1
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."campaigns"."id" FROM "public"."campaigns" WHERE "public"."campaigns"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."device_rooms"."id" FROM "public"."device_rooms" WHERE "public"."device_rooms"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."createdAt" >= $3) OFFSET $4) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*), "public"."device_rooms"."deviceType", "public"."device_rooms"."status" FROM "public"."device_rooms" WHERE "public"."device_rooms"."tenantId" = $1 GROUP BY "public"."device_rooms"."deviceType", "public"."device_rooms"."status" OFFSET $2
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."campaigns"."id" FROM "public"."campaigns" WHERE ("public"."campaigns"."tenantId" = $1 AND "public"."campaigns"."status" = CAST($2::text AS "public"."CampaignStatus")) OFFSET $3) AS "sub"
+2025-09-07T23:36:38.224Z GET /api/v1/admin/orders
+2025-09-07T23:36:38.226Z GET /api/v1/admin/orders/monthly-count
+prisma:query SELECT "public"."Order"."id", "public"."Order"."tenantId", "public"."Order"."roomId", "public"."Order"."placeId", "public"."Order"."status", "public"."Order"."items", "public"."Order"."total", "public"."Order"."createdAt", "public"."Order"."updatedAt", "public"."Order"."paidAt", "public"."Order"."isDeleted", "public"."Order"."deletedAt", "public"."Order"."uuid", "public"."Order"."sessionId" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) ORDER BY "public"."Order"."createdAt" DESC LIMIT $4 OFFSET $5
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) OFFSET $4) AS "sub"
+prisma:query 
+      SELECT 
+        DATE_TRUNC('month', "createdAt") as month,
+        COUNT(*) as order_count,
+        SUM("total") as total_revenue,
+        AVG("total") as average_order_value
+      FROM "Order"
+      WHERE "tenantId" = $1
+        AND "createdAt" >= $2
+        AND "isDeleted" = false
+      GROUP BY DATE_TRUNC('month', "createdAt")
+      ORDER BY month DESC
+    
+🔍 Health check started (0/4 systems connected)
+📊 Health check completed (1/4 systems connected)
+2025-09-07T23:38:39.515Z POST /api/v1/devices/check-status
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+2025-09-07T23:47:55.357Z POST /api/auth/validate
+2025-09-07T23:47:55.364Z GET /api/v1/menu/items
+2025-09-07T23:47:55.389Z POST /api/auth/validate
+2025-09-07T23:47:55.393Z GET /api/v1/menu/categories
+2025-09-07T23:47:56.100Z POST /api/auth/validate
+2025-09-07T23:47:56.107Z GET /api/v1/menu/items
+2025-09-07T23:47:56.128Z POST /api/auth/validate
+2025-09-07T23:47:56.132Z GET /api/v1/menu/categories
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+2025-09-07T23:52:35.028Z POST /api/auth/validate
+2025-09-07T23:52:38.128Z POST /api/v1/auth/login
+prisma:query SELECT "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted" FROM "public"."staff" WHERE ("public"."staff"."email" = $1 AND "public"."staff"."is_active" = $2 AND "public"."staff"."is_deleted" = $3) OFFSET $4
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."contactEmail", "public"."Tenant"."createdAt", "public"."Tenant"."deleted_at", "public"."Tenant"."deleted_by", "public"."Tenant"."features", "public"."Tenant"."is_deleted", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."status" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query UPDATE "public"."staff" SET "last_login_at" = $1 WHERE ("public"."staff"."id" = $2 AND 1=1) RETURNING "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted"
+[32m[2025-09-07T23:52:38.157Z] INFO[0m [hotel-common] [tenant:default]: ログイン成功
+2025-09-07T23:52:38.368Z POST /api/auth/validate
+2025-09-07T23:52:38.372Z GET /api/v1/tenants/default
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."status", "public"."Tenant"."contactEmail", "public"."Tenant"."features", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."createdAt" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+2025-09-07T23:52:39.207Z POST /api/auth/validate
+2025-09-07T23:52:39.210Z POST /api/auth/validate
+2025-09-07T23:52:39.216Z POST /api/auth/validate
+2025-09-07T23:52:39.222Z POST /api/auth/validate
+2025-09-07T23:52:39.227Z GET /api/v1/admin/orders/monthly-count
+2025-09-07T23:52:39.228Z GET /api/v1/admin/summary
+2025-09-07T23:52:39.229Z GET /api/v1/admin/devices/count
+2025-09-07T23:52:39.230Z GET /api/v1/admin/orders
+prisma:query 
+      SELECT 
+        DATE_TRUNC('month', "createdAt") as month,
+        COUNT(*) as order_count,
+        SUM("total") as total_revenue,
+        AVG("total") as average_order_value
+      FROM "Order"
+      WHERE "tenantId" = $1
+        AND "createdAt" >= $2
+        AND "isDeleted" = false
+      GROUP BY DATE_TRUNC('month', "createdAt")
+      ORDER BY month DESC
+    
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."campaigns"."id" FROM "public"."campaigns" WHERE "public"."campaigns"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."createdAt" >= $3) OFFSET $4) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."device_rooms"."id" FROM "public"."device_rooms" WHERE ("public"."device_rooms"."tenantId" = $1 AND "public"."device_rooms"."status" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*), "public"."device_rooms"."deviceType", "public"."device_rooms"."status" FROM "public"."device_rooms" WHERE "public"."device_rooms"."tenantId" = $1 GROUP BY "public"."device_rooms"."deviceType", "public"."device_rooms"."status" OFFSET $2
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."device_rooms"."id" FROM "public"."device_rooms" WHERE "public"."device_rooms"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."campaigns"."id" FROM "public"."campaigns" WHERE ("public"."campaigns"."tenantId" = $1 AND "public"."campaigns"."status" = CAST($2::text AS "public"."CampaignStatus")) OFFSET $3) AS "sub"
+prisma:query SELECT "public"."Order"."id", "public"."Order"."tenantId", "public"."Order"."roomId", "public"."Order"."placeId", "public"."Order"."status", "public"."Order"."items", "public"."Order"."total", "public"."Order"."createdAt", "public"."Order"."updatedAt", "public"."Order"."paidAt", "public"."Order"."isDeleted", "public"."Order"."deletedAt", "public"."Order"."uuid", "public"."Order"."sessionId" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) ORDER BY "public"."Order"."createdAt" DESC LIMIT $4 OFFSET $5
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) OFFSET $4) AS "sub"
+2025-09-07T23:52:41.728Z POST /api/auth/validate
+2025-09-07T23:52:41.734Z GET /api/v1/menu/items
+2025-09-07T23:52:41.748Z POST /api/auth/validate
+2025-09-07T23:52:41.750Z GET /api/v1/menu/categories
+🔍 Health check started (1/4 systems connected)
+2025-09-07T23:54:45.141Z POST /api/auth/validate
+2025-09-07T23:54:47.572Z POST /api/v1/auth/login
+prisma:query SELECT 1
+prisma:query SELECT "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted" FROM "public"."staff" WHERE ("public"."staff"."email" = $1 AND "public"."staff"."is_active" = $2 AND "public"."staff"."is_deleted" = $3) OFFSET $4
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."contactEmail", "public"."Tenant"."createdAt", "public"."Tenant"."deleted_at", "public"."Tenant"."deleted_by", "public"."Tenant"."features", "public"."Tenant"."is_deleted", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."status" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query UPDATE "public"."staff" SET "last_login_at" = $1 WHERE ("public"."staff"."id" = $2 AND 1=1) RETURNING "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted"
+[32m[2025-09-07T23:54:47.586Z] INFO[0m [hotel-common] [tenant:default]: ログイン成功
+2025-09-07T23:54:47.766Z POST /api/auth/validate
+2025-09-07T23:54:47.769Z GET /api/v1/tenants/default
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."status", "public"."Tenant"."contactEmail", "public"."Tenant"."features", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."createdAt" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+2025-09-07T23:54:48.071Z POST /api/auth/validate
+2025-09-07T23:54:48.075Z POST /api/auth/validate
+2025-09-07T23:54:48.081Z GET /api/v1/admin/devices/count
+2025-09-07T23:54:48.085Z GET /api/v1/admin/summary
+2025-09-07T23:54:48.086Z POST /api/auth/validate
+prisma:query SELECT COUNT(*), "public"."device_rooms"."deviceType", "public"."device_rooms"."status" FROM "public"."device_rooms" WHERE "public"."device_rooms"."tenantId" = $1 GROUP BY "public"."device_rooms"."deviceType", "public"."device_rooms"."status" OFFSET $2
+prisma:query SELECT 1
+2025-09-07T23:54:48.087Z POST /api/auth/validate
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT 1
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2) OFFSET $3) AS "sub"
+2025-09-07T23:54:48.089Z GET /api/v1/admin/orders
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."device_rooms"."id" FROM "public"."device_rooms" WHERE "public"."device_rooms"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."campaigns"."id" FROM "public"."campaigns" WHERE "public"."campaigns"."tenantId" = $1 OFFSET $2) AS "sub"
+prisma:query SELECT 1
+prisma:query SELECT "public"."Order"."id", "public"."Order"."tenantId", "public"."Order"."roomId", "public"."Order"."placeId", "public"."Order"."status", "public"."Order"."items", "public"."Order"."total", "public"."Order"."createdAt", "public"."Order"."updatedAt", "public"."Order"."paidAt", "public"."Order"."isDeleted", "public"."Order"."deletedAt", "public"."Order"."uuid", "public"."Order"."sessionId" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) ORDER BY "public"."Order"."createdAt" DESC LIMIT $4 OFFSET $5
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."campaigns"."id" FROM "public"."campaigns" WHERE ("public"."campaigns"."tenantId" = $1 AND "public"."campaigns"."status" = CAST($2::text AS "public"."CampaignStatus")) OFFSET $3) AS "sub"
+2025-09-07T23:54:48.092Z GET /api/v1/admin/orders/monthly-count
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."createdAt" >= $3) OFFSET $4) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."device_rooms"."id" FROM "public"."device_rooms" WHERE ("public"."device_rooms"."tenantId" = $1 AND "public"."device_rooms"."status" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."Order"."id" FROM "public"."Order" WHERE ("public"."Order"."tenantId" = $1 AND "public"."Order"."isDeleted" = $2 AND "public"."Order"."status" = $3) OFFSET $4) AS "sub"
+prisma:query 
+      SELECT 
+        DATE_TRUNC('month', "createdAt") as month,
+        COUNT(*) as order_count,
+        SUM("total") as total_revenue,
+        AVG("total") as average_order_value
+      FROM "Order"
+      WHERE "tenantId" = $1
+        AND "createdAt" >= $2
+        AND "isDeleted" = false
+      GROUP BY DATE_TRUNC('month', "createdAt")
+      ORDER BY month DESC
+    
+2025-09-07T23:55:01.184Z POST /api/auth/validate
+2025-09-07T23:55:01.192Z GET /api/v1/menu/items
+2025-09-07T23:55:01.224Z POST /api/auth/validate
+2025-09-07T23:55:01.228Z GET /api/v1/menu/categories
+🔍 Health check started (1/4 systems connected)
+2025-09-07T23:57:31.619Z POST /api/auth/validate
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)

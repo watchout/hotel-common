@@ -1,17 +1,22 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TokenOptimizationSystem = exports.HotelCommonContextManager = exports.LanguageOptimizer = void 0;
 // Core system exports
-export { LanguageOptimizer } from './core/language-optimizer';
-export { HotelCommonContextManager } from './core/context-manager';
+var language_optimizer_1 = require("./core/language-optimizer");
+Object.defineProperty(exports, "LanguageOptimizer", { enumerable: true, get: function () { return language_optimizer_1.LanguageOptimizer; } });
+var context_manager_1 = require("./core/context-manager");
+Object.defineProperty(exports, "HotelCommonContextManager", { enumerable: true, get: function () { return context_manager_1.HotelCommonContextManager; } });
 // Imports for internal use
-import { LanguageOptimizer } from './core/language-optimizer';
-import { HotelCommonContextManager } from './core/context-manager';
-export class TokenOptimizationSystem {
+const language_optimizer_2 = require("./core/language-optimizer");
+const context_manager_2 = require("./core/context-manager");
+class TokenOptimizationSystem {
     languageOptimizer;
     contextManager;
     config;
     constructor(config) {
         this.config = config;
-        this.languageOptimizer = new LanguageOptimizer();
-        this.contextManager = new HotelCommonContextManager();
+        this.languageOptimizer = new language_optimizer_2.LanguageOptimizer();
+        this.contextManager = new context_manager_2.HotelCommonContextManager();
     }
     async optimizeRequest(request, context) {
         // コンテキスト追加
@@ -36,3 +41,4 @@ export class TokenOptimizationSystem {
         };
     }
 }
+exports.TokenOptimizationSystem = TokenOptimizationSystem;

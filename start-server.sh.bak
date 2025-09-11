@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# 色の設定
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+echo -e "${YELLOW}hotel-common統合サーバーを起動します...${NC}"
+
+# 環境変数の設定
+export HOTEL_COMMON_PORT=3400
+export WEBSOCKET_PORT=3401
+export DATABASE_URL="postgresql://postgres:postgres@localhost:5432/hotel_unified_db"
+export REDIS_HOST="localhost"
+export REDIS_PORT=6379
+export JWT_SECRET="hotel-common-development-secret"
+
+# サーバー起動
+echo -e "${GREEN}サーバーを起動中...${NC}"
+echo -e "${YELLOW}Ctrl+Cで停止できます${NC}"
+npx ts-node-dev --transpile-only src/server/index-extended.ts

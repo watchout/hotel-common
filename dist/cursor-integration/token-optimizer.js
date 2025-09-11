@@ -1,11 +1,16 @@
+"use strict";
 /**
  * 🚀 トークン最適化システム (文献2準拠)
  * 言語切り替えによる30-50%削減
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HotelCommonTokenOptimizer = void 0;
+exports.createEfficientPrompt = createEfficientPrompt;
+exports.estimateTokenUsage = estimateTokenUsage;
 /**
  * トークン効率化プロンプト生成
  */
-export function createEfficientPrompt(task, context, config) {
+function createEfficientPrompt(task, context, config) {
     if (config.taskType === 'simple') {
         return `Task: ${task}. Context: ${context}. Output in ${config.outputLanguage} with Japanese comments.`;
     }
@@ -30,7 +35,7 @@ Max tokens: ${config.tokenBudget}`;
 /**
  * トークン使用量推定
  */
-export function estimateTokenUsage(text, language) {
+function estimateTokenUsage(text, language) {
     // 文献2に基づく推定値
     const multipliers = {
         english: 1.0,
@@ -43,7 +48,7 @@ export function estimateTokenUsage(text, language) {
 /**
  * hotel-common特化最適化クラス
  */
-export class HotelCommonTokenOptimizer {
+class HotelCommonTokenOptimizer {
     config;
     constructor(config = {}) {
         this.config = {
@@ -70,3 +75,4 @@ export class HotelCommonTokenOptimizer {
         };
     }
 }
+exports.HotelCommonTokenOptimizer = HotelCommonTokenOptimizer;

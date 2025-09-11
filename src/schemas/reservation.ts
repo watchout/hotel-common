@@ -1,69 +1,147 @@
 import { z } from 'zod'
 
-// 予約作成スキーマ
-export const ReservationCreateSchema = z.object({
-  guest_name: z.string().min(1, '宿泊者名は必須です').max(100, '宿泊者名は100文字以下で入力してください'),
-  guest_email: z.string().email('有効なメールアドレスを入力してください'),
-  guest_phone: z.string().regex(/^[\d\-\+\(\)\s]+$/, '有効な電話番号を入力してください').optional(),
-  room_type: z.string().min(1, '部屋タイプは必須です'),
-  check_in: z.string().datetime('有効なチェックイン日時を入力してください'),
-  check_out: z.string().datetime('有効なチェックアウト日時を入力してください'),
-  adults: z.number().int().min(1, '大人の人数は1人以上必須です').max(10, '大人の人数は10人以下で入力してください'),
-  children: z.number().int().min(0, '子供の人数は0人以上で入力してください').max(10, '子供の人数は10人以下で入力してください').optional(),
-  special_requests: z.string().max(500, '特別要望は500文字以下で入力してください').optional(),
-  origin: z.enum(['hotel-member', 'hotel-pms', 'ota', 'phone', 'walk-in'], {
-    message: '有効な予約元を選択してください'
-  }),
-  origin_reference: z.string().optional()
-}).refine(data => {
-  const checkIn = new Date(data.check_in)
-  const checkOut = new Date(data.check_out)
-  return checkOut > checkIn
-}, {
-  message: 'チェックアウト日時はチェックイン日時より後である必要があります',
-  path: ['check_out']
+/**
+ * 予約管理スキーマ定義
+ * PMS中心の予約統合管理用
+ */
+
+// 予約ステータス
+export const ReservationStatus = z.enum([
+  'pending',      // 予約待ち
+  'confirmed',    // 予約確定
+  'checked_in',   // チェックイン済み
+  'completed',    // 宿泊完了
+  'cancelled',    // キャンセル
+  'no_show'       // 無断キャンセル
+])
+
+// 予約元
+export const ReservationOrigin = z.enum([
+  'member',       // 会員サイト
+  'ota',          // OTA
+  'front',        // フロント
+  'phone',        // 電話
+  'walk_in'       // 当日来店
+])
+
+// 支払いステータス
+export const PaymentStatus = z.enum([
+  'pending',      // 支払い待ち
+  'partial',      // 一部支払い
+  'paid',         // 支払い完了
+  'refunded'      // 返金済み
+])
+
+// 部屋タイプ
+export const RoomType = z.enum([
+  'standard',     // スタンダード
+  'deluxe',       // デラックス
+  'suite',        // スイート
+  'premium',      // プレミアム
+  'executive'     // エグゼクティブ
+])
+
+// 予約データスキーマ
+export const ReservationSchema = z.object({
+  id: z.string().uuid(),
+  tenant_id: z.string().uuid(),
+  user_id: z.string().uuid(),
+  
+  // 宿泊情報
+  checkin_date: z.string().datetime(),
+  checkout_date: z.string().datetime(),
+  room_type: RoomType,
+  room_number: z.string().optional(),
+  room_grade_id: z.string().uuid().optional(),
+  guest_count: z.number().int().min(1).max(10),
+  
+  // 料金情報
+  total_amount: z.number().positive(),
+  base_rate: z.number().positive(),
+  tax_amount: z.number().min(0),
+  service_charge: z.number().min(0),
+  discount_amount: z.number().min(0),
+  
+  // ステータス
+  status: ReservationStatus,
+  payment_status: PaymentStatus,
+  origin: ReservationOrigin,
+  
+  // 追加情報
+  special_requests: z.string().optional(),
+  notes: z.string().optional(),
+  confirmation_number: z.string().optional(),
+  
+  // システム情報
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+  created_by: z.string().optional(),
+  updated_by: z.string().optional(),
+  created_by_system: z.string().default('hotel-common'),
+  updated_by_system: z.string().optional()
 })
 
-// 予約更新スキーマ
-export const ReservationUpdateSchema = z.object({
-  id: z.string().uuid('有効な予約IDを入力してください'),
-  guest_name: z.string().min(1).max(100).optional(),
-  guest_email: z.string().email().optional(),
-  guest_phone: z.string().regex(/^[\d\-\+\(\)\s]+$/).optional(),
-  room_type: z.string().min(1).optional(),
-  check_in: z.string().datetime().optional(),
-  check_out: z.string().datetime().optional(),
-  adults: z.number().int().min(1).max(10).optional(),
-  children: z.number().int().min(0).max(10).optional(),
-  special_requests: z.string().max(500).optional(),
-  status: z.enum(['confirmed', 'checked_in', 'checked_out', 'cancelled', 'no_show']).optional()
-}).refine(data => {
-  if (data.check_in && data.check_out) {
-    const checkIn = new Date(data.check_in)
-    const checkOut = new Date(data.check_out)
-    return checkOut > checkIn
-  }
-  return true
-}, {
-  message: 'チェックアウト日時はチェックイン日時より後である必要があります',
-  path: ['check_out']
+// 予約作成リクエスト
+export const CreateReservationRequestSchema = z.object({
+  tenant_id: z.string().uuid(),
+  user_id: z.string().uuid(),
+  checkin_date: z.string().datetime(),
+  checkout_date: z.string().datetime(),
+  room_type: RoomType,
+  room_grade_id: z.string().uuid().optional(),
+  guest_count: z.number().int().min(1).max(10),
+  total_amount: z.number().positive(),
+  base_rate: z.number().positive(),
+  tax_amount: z.number().min(0).default(0),
+  service_charge: z.number().min(0).default(0),
+  discount_amount: z.number().min(0).default(0),
+  origin: ReservationOrigin,
+  special_requests: z.string().optional(),
+  notes: z.string().optional(),
+  created_by: z.string().optional()
 })
 
-// 部屋空室確認スキーマ
-export const RoomAvailabilitySchema = z.object({
-  check_in: z.string().datetime('有効なチェックイン日時を入力してください'),
-  check_out: z.string().datetime('有効なチェックアウト日時を入力してください'),
-  room_type: z.string().optional()
-}).refine(data => {
-  const checkIn = new Date(data.check_in)
-  const checkOut = new Date(data.check_out)
-  return checkOut > checkIn
-}, {
-  message: 'チェックアウト日時はチェックイン日時より後である必要があります',
-  path: ['check_out']
+// 予約更新リクエスト
+export const UpdateReservationRequestSchema = z.object({
+  checkin_date: z.string().datetime().optional(),
+  checkout_date: z.string().datetime().optional(),
+  room_type: RoomType.optional(),
+  room_number: z.string().optional(),
+  room_grade_id: z.string().uuid().optional(),
+  guest_count: z.number().int().min(1).max(10).optional(),
+  total_amount: z.number().positive().optional(),
+  base_rate: z.number().positive().optional(),
+  tax_amount: z.number().min(0).optional(),
+  service_charge: z.number().min(0).optional(),
+  discount_amount: z.number().min(0).optional(),
+  status: ReservationStatus.optional(),
+  payment_status: PaymentStatus.optional(),
+  special_requests: z.string().optional(),
+  notes: z.string().optional(),
+  updated_by: z.string().optional()
 })
 
-// 型推論
-export type ReservationCreateRequest = z.infer<typeof ReservationCreateSchema>
-export type ReservationUpdateRequest = z.infer<typeof ReservationUpdateSchema>
-export type RoomAvailabilityRequest = z.infer<typeof RoomAvailabilitySchema> 
+// 予約検索パラメータ
+export const ReservationSearchParamsSchema = z.object({
+  tenant_id: z.string().uuid(),
+  status: ReservationStatus.optional(),
+  payment_status: PaymentStatus.optional(),
+  checkin_date_from: z.string().datetime().optional(),
+  checkin_date_to: z.string().datetime().optional(),
+  checkout_date_from: z.string().datetime().optional(),
+  checkout_date_to: z.string().datetime().optional(),
+  guest_name: z.string().optional(),
+  room_number: z.string().optional(),
+  room_type: RoomType.optional(),
+  origin: ReservationOrigin.optional(),
+  user_id: z.string().uuid().optional(),
+  confirmation_number: z.string().optional(),
+  limit: z.number().int().min(1).max(100).default(20),
+  offset: z.number().int().min(0).default(0)
+})
+
+// 型定義のエクスポート
+export type Reservation = z.infer<typeof ReservationSchema>
+export type CreateReservationRequest = z.infer<typeof CreateReservationRequestSchema>
+export type UpdateReservationRequest = z.infer<typeof UpdateReservationRequestSchema>
+export type ReservationSearchParams = z.infer<typeof ReservationSearchParamsSchema>

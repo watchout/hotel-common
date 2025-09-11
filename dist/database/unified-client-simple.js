@@ -1,5 +1,9 @@
-import { PrismaClient } from '../generated/prisma';
-export class UnifiedPrismaClient {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UnifiedPrismaClient = void 0;
+exports.createUnifiedClient = createUnifiedClient;
+const prisma_1 = require("./prisma");
+class UnifiedPrismaClient {
     prisma;
     tenantId;
     systemName;
@@ -7,13 +11,8 @@ export class UnifiedPrismaClient {
     constructor(config) {
         this.tenantId = config.tenantId;
         this.systemName = config.systemName;
-        this.prisma = new PrismaClient({
-            datasources: {
-                db: {
-                    url: process.env.DATABASE_URL,
-                },
-            },
-        });
+        // PrismaClientの直接インスタンス化ではなく、hotelDb.getClient()を使用
+        this.prisma = prisma_1.hotelDb.getClient();
         // インスタンス管理
         const key = `${config.systemName}_${config.tenantId}`;
         UnifiedPrismaClient.instances.set(key, this);
@@ -144,8 +143,9 @@ export class UnifiedPrismaClient {
         return this.prisma;
     }
 }
+exports.UnifiedPrismaClient = UnifiedPrismaClient;
 // 便利な関数エクスポート
-export function createUnifiedClient(config) {
+function createUnifiedClient(config) {
     return UnifiedPrismaClient.getInstance(config);
 }
-export default UnifiedPrismaClient;
+exports.default = UnifiedPrismaClient;

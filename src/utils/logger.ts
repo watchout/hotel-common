@@ -5,16 +5,31 @@ export enum LogLevel {
   ERROR = 3
 }
 
+/**
+ * ログエントリーインターフェース
+ * 
+ * すべてのログデータは以下の標準フィールドを使用します。
+ * カスタムデータは必ず `data` オブジェクト内に配置してください。
+ * エラーオブジェクトは必ず `error` フィールドに配置してください。
+ */
 export interface LogEntry {
+  // 基本フィールド（必須）
   timestamp: Date
   level: LogLevel
   message: string
+  
+  // 標準フィールド（オプション）
   module?: string
   tenantId?: string
   userId?: string
   requestId?: string
-  data?: any
-  error?: Error
+  
+  // 拡張フィールド（オプション）
+  data?: any      // すべてのカスタムデータはここに格納
+  error?: Error   // エラーオブジェクトはここに格納
+  
+  // 追加のプロパティを許可（型安全性のため）
+  [key: string]: any
 }
 
 export interface LoggerConfig {
@@ -24,6 +39,7 @@ export interface LoggerConfig {
   enableRedis: boolean
   filePath?: string
   module?: string
+  name?: string // 後方互換性のため
 }
 
 export class HotelLogger {
@@ -37,6 +53,11 @@ export class HotelLogger {
       enableFile: false,
       enableRedis: false,
       ...config
+    }
+    
+    // nameパラメータをmoduleにマッピング（後方互換性のため）
+    if (config.name && !config.module) {
+      this.config.module = config.name;
     }
   }
 
@@ -178,15 +199,57 @@ export class HotelLogger {
   /**
    * WARN レベルログ
    */
-  warn(message: string, options?: Partial<LogEntry>): Promise<void> {
-    return this.log(LogLevel.WARN, message, options)
+  warn(message: string, options?: Partial<LogEntry> | unknown): Promise<void> {
+    let normalizedOptions: Partial<LogEntry> = {};
+    
+    // オプションの正規化
+    if (options) {
+      if (options instanceof Error) {
+        // Error オブジェクトが直接渡された場合
+        normalizedOptions = { error: options };
+      } else if (typeof options === 'object') {
+        // オブジェクトが渡された場合
+        normalizedOptions = options as Partial<LogEntry>;
+      } else {
+        // その他の型の場合はエラーメッセージとして扱う
+        normalizedOptions = { data: { message: String(options) } };
+      }
+    }
+    
+    return this.log(LogLevel.WARN, message, normalizedOptions);
   }
 
   /**
    * ERROR レベルログ
+   * @param message エラーメッセージ
+   * @param options ログオプション。errorフィールドにはErrorオブジェクトを渡してください
    */
-  error(message: string, options?: Partial<LogEntry>): Promise<void> {
-    return this.log(LogLevel.ERROR, message, options)
+  error(message: string, options?: Partial<LogEntry> | unknown): Promise<void> {
+    let normalizedOptions: Partial<LogEntry> = {};
+    
+    // エラーオブジェクトの正規化
+    if (options) {
+      if (options instanceof Error) {
+        // Error オブジェクトが直接渡された場合
+        normalizedOptions = { error: options };
+      } else if (typeof options === 'object') {
+        // オブジェクトが渡された場合
+        normalizedOptions = options as Partial<LogEntry>;
+        
+        // error フィールドの正規化
+        if (normalizedOptions.error && !(normalizedOptions.error instanceof Error)) {
+          normalizedOptions = {
+            ...normalizedOptions,
+            error: new Error(String(normalizedOptions.error))
+          };
+        }
+      } else {
+        // その他の型の場合はエラーメッセージとして扱う
+        normalizedOptions = { error: new Error(String(options)) };
+      }
+    }
+    
+    return this.log(LogLevel.ERROR, message, normalizedOptions);
   }
 
   /**

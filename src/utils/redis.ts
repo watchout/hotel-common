@@ -1,4 +1,4 @@
-import Redis from 'redis'
+import * as Redis from 'redis'
 import { SessionInfo } from '../types/auth'
 
 export interface RedisConfig {
@@ -153,6 +153,21 @@ export class HotelRedisClient {
       await this.client.set(prefixedKey, serialized)
     }
   }
+  
+  /**
+   * 値を保存
+   */
+  async set(key: string, value: string, ttlSeconds?: number): Promise<void> {
+    if (!this.connected) await this.connect()
+    
+    const prefixedKey = this.prefixKey(key)
+    
+    if (ttlSeconds) {
+      await this.client.setEx(prefixedKey, ttlSeconds, value)
+    } else {
+      await this.client.set(prefixedKey, value)
+    }
+  }
 
   /**
    * キャッシュ取得
@@ -171,6 +186,16 @@ export class HotelRedisClient {
       console.error('Error parsing cache data:', error)
       return null
     }
+  }
+  
+  /**
+   * 値を取得
+   */
+  async get(key: string): Promise<string | null> {
+    if (!this.connected) await this.connect()
+    
+    const prefixedKey = this.prefixKey(key)
+    return await this.client.get(prefixedKey)
   }
 
   /**
@@ -234,6 +259,59 @@ export class HotelRedisClient {
     
     // 30日後に自動削除
     await this.client.expire(logKey, 30 * 24 * 60 * 60)
+  }
+  
+  /**
+   * ハッシュに値を設定
+   */
+  async hset(key: string, field: string, value: string): Promise<void> {
+    if (!this.connected) await this.connect()
+    
+    const prefixedKey = this.prefixKey(key)
+    await this.client.hSet(prefixedKey, field, value)
+  }
+  
+  /**
+   * ハッシュから値を取得
+   */
+  async hget(key: string, field: string): Promise<string | null> {
+    if (!this.connected) await this.connect()
+    
+    const prefixedKey = this.prefixKey(key)
+    const result = await this.client.hGet(prefixedKey, field)
+    return result as string | null
+  }
+  
+  /**
+   * ハッシュからフィールドを削除
+   */
+  async hdel(key: string, field: string): Promise<void> {
+    if (!this.connected) await this.connect()
+    
+    const prefixedKey = this.prefixKey(key)
+    await this.client.hDel(prefixedKey, field)
+  }
+  
+  /**
+   * キーを削除
+   */
+  async del(key: string): Promise<void> {
+    if (!this.connected) await this.connect()
+    
+    const prefixedKey = this.prefixKey(key)
+    await this.client.del(prefixedKey)
+  }
+  
+  /**
+   * ハッシュに複数の値を設定
+   */
+  async hsetAll(key: string, fieldValues: Record<string, string>): Promise<void> {
+    if (!this.connected) await this.connect()
+    
+    const prefixedKey = this.prefixKey(key)
+    for (const [field, value] of Object.entries(fieldValues)) {
+      await this.client.hSet(prefixedKey, field, value)
+    }
   }
 }
 

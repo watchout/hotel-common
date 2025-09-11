@@ -4,7 +4,8 @@
 import { SevenIntegrationOrchestrator } from '../seven-integration/orchestrator';
 import { RealRAGService } from './rag-service';
 import { RealGuardrailsValidator } from './guardrails-validator';
-import { TokenOptimizer } from './token-optimizer';
+// TokenOptimizerモジュールが存在しないため、コメントアウト
+// import { TokenOptimizer } from './token-optimizer';
 
 // 簡易コンテキストエクストラクター（実装例）
 class ContextExtractor {

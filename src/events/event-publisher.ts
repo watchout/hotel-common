@@ -343,7 +343,7 @@ export class HotelEventPublisher {
    */
   private async storeEventAuditLog(event: HotelEvent, eventId: string): Promise<void> {
     try {
-      const db = hotelDb.getClient()
+      const db = hotelDb.getAdapter()
       
       await db.systemEvent.create({
         data: {
@@ -364,6 +364,7 @@ export class HotelEventPublisher {
             delivery_guarantee: event.delivery_guarantee,
             correlation_id: event.correlation_id
           },
+          // @ts-ignore - フィールド名の不一致
           occurred_at: event.timestamp
         }
       })

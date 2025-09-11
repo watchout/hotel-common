@@ -1,0 +1,143 @@
+import express, { Request, Response } from 'express';
+import { z } from 'zod';
+import { CampaignService } from './services';
+import { WelcomeScreenService } from './welcome-screen-service';
+import { StandardResponseBuilder } from '../../standards/api-standards';
+import { verifyTenantAuth } from '../../auth/middleware';
+import { checkCampaignSchema, welcomeScreenMarkCompletedSchema } from './types';
+import { logger } from '../../utils/logger';
+import { getLanguageFromRequest } from './utils';
+
+const router = express.Router();
+const campaignService = new CampaignService();
+const welcomeScreenService = new WelcomeScreenService();
+
+// キャンペーン適用チェックAPI
+router.get('/campaigns/check', verifyTenantAuth, async (req: Request, res: Response) => {
+  try {
+    const validationResult = checkCampaignSchema.safeParse(req.query);
+    
+    if (!validationResult.success) {
+      return res.status(400).json(
+        StandardResponseBuilder.error('VALIDATION_ERROR', 'Invalid request parameters', validationResult.error).response
+      );
+    }
+    
+    const { productId, categoryCode, orderAmount } = validationResult.data;
+    const userId = req.user?.id;
+    
+    const applicableCampaign = await campaignService.checkCampaignApplicability(
+      productId, 
+      categoryCode, 
+      orderAmount, 
+      userId
+    );
+    
+    return res.json(StandardResponseBuilder.success({ 
+      applicable: !!applicableCampaign,
+      campaign: applicableCampaign || null
+    }));
+  } catch (error) {
+    logger.error('Failed to check campaign applicability', { error });
+    return res.status(500).json(
+      StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to check campaign applicability').response
+    );
+  }
+});
+
+// アクティブなキャンペーン一覧取得API
+router.get('/campaigns/active', verifyTenantAuth, async (req: Request, res: Response) => {
+  try {
+    const language = getLanguageFromRequest(req);
+    const activeCampaigns = await campaignService.getActiveCampaigns(language);
+    
+    return res.json(StandardResponseBuilder.success(activeCampaigns));
+  } catch (error) {
+    logger.error('Failed to get active campaigns', { error });
+    return res.status(500).json(
+      StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to get active campaigns').response
+    );
+  }
+});
+
+// カテゴリー別キャンペーン取得API
+router.get('/campaigns/by-category/:code', verifyTenantAuth, async (req: Request, res: Response) => {
+  try {
+    const { code } = req.params;
+    const language = getLanguageFromRequest(req);
+    
+    const campaigns = await campaignService.getCampaignsByCategory(code, language);
+    
+    return res.json(StandardResponseBuilder.success(campaigns));
+  } catch (error) {
+    logger.error('Failed to get campaigns by category', { error, categoryCode: req.params.code });
+    return res.status(500).json(
+      StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to get campaigns by category').response
+    );
+  }
+});
+
+// ウェルカムスクリーン設定取得API
+router.get('/welcome-screen/config', verifyTenantAuth, async (req: Request, res: Response) => {
+  try {
+    const language = getLanguageFromRequest(req);
+    const config = await welcomeScreenService.getWelcomeScreenConfig(language);
+    
+    return res.json(StandardResponseBuilder.success(config));
+  } catch (error) {
+    logger.error('Failed to get welcome screen config', { error });
+    return res.status(500).json(
+      StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to get welcome screen config').response
+    );
+  }
+});
+
+// ウェルカムスクリーン表示判定API
+router.get('/welcome-screen/should-show', verifyTenantAuth, async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    const deviceId = req.query.deviceId as string;
+    
+    if (!deviceId) {
+      return res.status(400).json(
+        StandardResponseBuilder.error('VALIDATION_ERROR', 'Device ID is required').response
+      );
+    }
+    
+    const shouldShow = await welcomeScreenService.shouldShowWelcomeScreen(userId, deviceId);
+    
+    return res.json(StandardResponseBuilder.success({ shouldShow }));
+  } catch (error) {
+    logger.error('Failed to check if welcome screen should be shown', { error });
+    return res.status(500).json(
+      StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to check if welcome screen should be shown').response
+    );
+  }
+});
+
+// ウェルカムスクリーン完了マークAPI
+router.post('/welcome-screen/mark-completed', verifyTenantAuth, async (req: Request, res: Response) => {
+  try {
+    const validationResult = welcomeScreenMarkCompletedSchema.safeParse(req.body);
+    
+    if (!validationResult.success) {
+      return res.status(400).json(
+        StandardResponseBuilder.error('VALIDATION_ERROR', 'Invalid request data', validationResult.error).response
+      );
+    }
+    
+    const { deviceId } = validationResult.data;
+    const userId = req.user?.id;
+    
+    await welcomeScreenService.markWelcomeScreenCompleted(userId, deviceId);
+    
+    return res.status(200).json(StandardResponseBuilder.success({ success: true }));
+  } catch (error) {
+    logger.error('Failed to mark welcome screen as completed', { error });
+    return res.status(500).json(
+      StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to mark welcome screen as completed').response
+    );
+  }
+});
+
+export default router;

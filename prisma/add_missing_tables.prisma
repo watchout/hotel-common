@@ -1,0 +1,178 @@
+// 不足テーブルの追加用スキーマ定義
+// 既存データを保持したまま新しいテーブルを追加
+
+// 客室管理テーブル
+model Room {
+  id            String    @id @default(cuid())
+  tenantId      String
+  roomNumber    String    // 部屋番号
+  roomType      String    // standard, deluxe, suite
+  floor         Int       // 階数
+  status        String    @default("available") // available, occupied, maintenance, cleaning
+  capacity      Int       @default(2) // 定員
+  amenities     String[]  // 設備リスト
+  notes         String?   // 備考
+  lastCleaned   DateTime? // 最終清掃日時
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  isDeleted     Boolean   @default(false)
+  deletedAt     DateTime?
+  deletedBy     String?
+
+  // リレーション
+  reservations  Reservation[]
+
+  @@unique([tenantId, roomNumber])
+  @@index([tenantId])
+  @@index([status])
+  @@index([roomType])
+  @@index([floor])
+  @@index([isDeleted])
+  @@map("rooms")
+}
+
+// 請求書テーブル
+model Invoice {
+  id              String    @id @default(cuid())
+  tenantId        String
+  invoiceNumber   String    @unique // 請求書番号
+  customerId      String?   // 顧客ID
+  customerName    String    // 顧客名
+  customerEmail   String?   // 顧客メール
+  billingAddress  Json?     // 請求先住所
+  items           Json      // 請求項目
+  subtotal        Int       // 小計
+  taxAmount       Int       // 税額
+  totalAmount     Int       // 合計金額
+  status          String    @default("draft") // draft, sent, paid, overdue, cancelled
+  dueDate         DateTime  // 支払期限
+  paidAt          DateTime? // 支払日時
+  notes           String?   // 備考
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  createdBy       String?   // 作成者
+  isDeleted       Boolean   @default(false)
+  deletedAt       DateTime?
+  deletedBy       String?
+
+  // リレーション
+  payments        Payment[]
+  transactions    Transaction[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([customerId])
+  @@index([dueDate])
+  @@index([createdAt])
+  @@index([isDeleted])
+  @@map("invoices")
+}
+
+// 決済テーブル
+model Payment {
+  id              String    @id @default(cuid())
+  tenantId        String
+  invoiceId       String?   // 関連請求書ID
+  paymentMethod   String    // credit_card, cash, bank_transfer, etc.
+  amount          Int       // 決済金額
+  currency        String    @default("JPY") // 通貨
+  status          String    @default("pending") // pending, completed, failed, cancelled
+  paymentReference String?  // 決済参照番号
+  processedAt     DateTime? // 処理日時
+  failureReason   String?   // 失敗理由
+  metadata        Json?     // 追加メタデータ
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  createdBy       String?   // 作成者
+  isDeleted       Boolean   @default(false)
+  deletedAt       DateTime?
+  deletedBy       String?
+
+  // リレーション
+  invoice         Invoice?  @relation(fields: [invoiceId], references: [id])
+  transactions    Transaction[]
+
+  @@index([tenantId])
+  @@index([invoiceId])
+  @@index([status])
+  @@index([paymentMethod])
+  @@index([createdAt])
+  @@index([isDeleted])
+  @@map("payments")
+}
+
+// 会計取引テーブル
+model Transaction {
+  id              String    @id @default(cuid())
+  tenantId        String
+  invoiceId       String?   // 関連請求書ID
+  paymentId       String?   // 関連決済ID
+  type            String    // invoice, payment, refund, adjustment
+  amount          Int       // 取引金額
+  taxAmount       Int       @default(0) // 税額
+  totalAmount     Int       // 合計金額
+  status          String    @default("completed") // pending, completed, cancelled
+  description     String?   // 取引説明
+  reference       String?   // 参照番号
+  metadata        Json?     // 追加メタデータ
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  createdBy       String?   // 作成者
+  isDeleted       Boolean   @default(false)
+  deletedAt       DateTime?
+  deletedBy       String?
+
+  // リレーション
+  invoice         Invoice?  @relation(fields: [invoiceId], references: [id])
+  payment         Payment?  @relation(fields: [paymentId], references: [id])
+
+  @@index([tenantId])
+  @@index([invoiceId])
+  @@index([paymentId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+  @@index([isDeleted])
+  @@map("transactions")
+}
+
+// 予約テーブル（PMS用）
+model Reservation {
+  id                String    @id @default(cuid())
+  tenantId          String
+  roomId            String    // 客室ID
+  guestName         String    // ゲスト名
+  guestEmail        String?   // ゲストメール
+  guestPhone        String?   // ゲスト電話番号
+  checkinDate       DateTime  // チェックイン日
+  checkoutDate      DateTime  // チェックアウト日
+  adults            Int       @default(1) // 大人数
+  children          Int       @default(0) // 子供数
+  status            String    @default("pending") // pending, confirmed, checked_in, checked_out, cancelled
+  confirmationNumber String   @unique // 確認番号
+  totalAmount       Int?      // 合計金額
+  paidAmount        Int       @default(0) // 支払済み金額
+  notes             String?   // 備考
+  specialRequests   String?   // 特別リクエスト
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  createdBy         String?   // 作成者
+  isDeleted         Boolean   @default(false)
+  deletedAt         DateTime?
+  deletedBy         String?
+
+  // リレーション
+  room              Room      @relation(fields: [roomId], references: [id])
+
+  @@index([tenantId])
+  @@index([roomId])
+  @@index([status])
+  @@index([checkinDate])
+  @@index([checkoutDate])
+  @@index([guestEmail])
+  @@index([createdAt])
+  @@index([isDeleted])
+  @@map("reservations")
+}
+
+

@@ -1,0 +1,129 @@
+PostgreSQL接続確認完了
+[32m[2025-09-08T22:52:56.062Z] INFO[0m [hotel-common]: 🎯 hotel-member階層権限管理統合初期化中...
+[32m[2025-09-08T22:52:56.063Z] INFO[0m [hotel-common]: ✅ hotel-member階層権限管理統合初期化完了
+[32m[2025-09-08T22:52:56.063Z] INFO[0m [hotel-common]: 
+🎯 hotel-member階層権限管理統合稼働中
+
+📊 対応機能:
+- 階層JWT認証統合
+- 顧客データ階層アクセス制御
+- 会員ランク・ポイント階層管理
+- グループ分析権限制御
+- FastAPI連携エンドポイント
+
+🔗 APIエンドポイント:
+- VERIFY_TOKEN: /api/hotel-member/hierarchy/auth/verify
+- CHECK_CUSTOMER_ACCESS: /api/hotel-member/hierarchy/permissions/check-customer-access
+- CHECK_MEMBERSHIP_RESTRICTIONS: /api/hotel-member/hierarchy/permissions/check-membership-restrictions
+- CHECK_ANALYTICS_ACCESS: /api/hotel-member/hierarchy/permissions/check-analytics-access
+- BATCH_CHECK: /api/hotel-member/hierarchy/permissions/batch-check
+- GET_ACCESSIBLE_TENANTS: /api/hotel-member/hierarchy/tenants/accessible
+- GET_PERMISSIONS_DETAIL: /api/hotel-member/hierarchy/user/permissions-detail
+- HEALTH_CHECK: /api/hotel-member/hierarchy/health
+
+🎯 実装戦略: 部分対応（顧客データ重点）
+⚡ パフォーマンス: 既存機能への影響最小化
+🔐 セキュリティ: 階層別データアクセス制御
+    
+hotel-member統合初期化完了
+
+🎉 hotel-common統合APIサーバー起動完了！
+
+📊 サーバー情報:
+- ポート: 3400
+- データベース: PostgreSQL (hotel_unified_db)
+- 監視対象システム: 4個
+
+🔗 利用可能エンドポイント:
+- GET  /health                    - サーバーヘルスチェック
+- GET  /api/systems/status        - システム接続状況
+- POST /api/systems/:name/test    - システム接続テスト
+- GET  /api/database/test         - データベース接続テスト
+- GET  /api/tenants              - テナント一覧
+- POST /api/auth/validate        - 認証検証
+- GET  /api/stats                - システム統計
+- GET  /api/v1/campaigns/health  - キャンペーン機能ヘルスチェック
+- GET  /api/apps/google-play     - Google Playアプリ一覧
+
+🎯 接続対象システム:
+- 🏪 hotel-saas (http://localhost:3100)
+- 🎯 hotel-member-frontend (http://localhost:3200)
+- 🎯 hotel-member-backend (http://localhost:8080)
+- 💼 hotel-pms (http://localhost:3300)
+        
+2025-09-08T22:52:56.782Z GET /health
+2025-09-08T22:52:56.881Z GET /api/v1/admin/operation-logs
+JWT検証エラー: ReferenceError: JWT_REQUIRE_X_TENANT is not defined
+    at authMiddleware (/Users/kaneko/hotel-common/dist/auth/middleware.js:187:9)
+    at Layer.handle [as handle_request] (/Users/kaneko/hotel-common/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/kaneko/hotel-common/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/kaneko/hotel-common/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/kaneko/hotel-common/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:280:10)
+    at Function.handle (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:175:3)
+    at router (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:47:12)
+prisma:query INSERT INTO "public"."system_event" ("id","tenant_id","event_type","source_system","target_system","entity_type","entity_id","action","event_data","created_at","status") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING "public"."system_event"."id", "public"."system_event"."tenant_id", "public"."system_event"."user_id", "public"."system_event"."event_type", "public"."system_event"."source_system", "public"."system_event"."target_system", "public"."system_event"."entity_type", "public"."system_event"."entity_id", "public"."system_event"."action", "public"."system_event"."event_data", "public"."system_event"."created_at", "public"."system_event"."processed_at", "public"."system_event"."status"
+2025-09-08T22:53:12.997Z GET /api/v1/admin/operation-logs
+JWT検証エラー: ReferenceError: JWT_REQUIRE_X_TENANT is not defined
+    at authMiddleware (/Users/kaneko/hotel-common/dist/auth/middleware.js:187:9)
+    at Layer.handle [as handle_request] (/Users/kaneko/hotel-common/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/kaneko/hotel-common/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/kaneko/hotel-common/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/kaneko/hotel-common/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:280:10)
+    at Function.handle (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:175:3)
+    at router (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:47:12)
+prisma:query SELECT 1
+prisma:query INSERT INTO "public"."system_event" ("id","tenant_id","event_type","source_system","target_system","entity_type","entity_id","action","event_data","created_at","status") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING "public"."system_event"."id", "public"."system_event"."tenant_id", "public"."system_event"."user_id", "public"."system_event"."event_type", "public"."system_event"."source_system", "public"."system_event"."target_system", "public"."system_event"."entity_type", "public"."system_event"."entity_id", "public"."system_event"."action", "public"."system_event"."event_data", "public"."system_event"."created_at", "public"."system_event"."processed_at", "public"."system_event"."status"
+Performing initial health check...
+🔍 Health check started (0/4 systems connected)
+📊 Health check completed (1/4 systems connected)
+2025-09-08T22:54:03.078Z GET /api/v1/admin/operation-logs
+JWT検証エラー: ReferenceError: JWT_REQUIRE_X_TENANT is not defined
+    at authMiddleware (/Users/kaneko/hotel-common/dist/auth/middleware.js:187:9)
+    at Layer.handle [as handle_request] (/Users/kaneko/hotel-common/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/kaneko/hotel-common/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/kaneko/hotel-common/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/kaneko/hotel-common/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:280:10)
+    at Function.handle (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:175:3)
+    at router (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:47:12)
+prisma:query SELECT 1
+prisma:query INSERT INTO "public"."system_event" ("id","tenant_id","event_type","source_system","target_system","entity_type","entity_id","action","event_data","created_at","status") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING "public"."system_event"."id", "public"."system_event"."tenant_id", "public"."system_event"."user_id", "public"."system_event"."event_type", "public"."system_event"."source_system", "public"."system_event"."target_system", "public"."system_event"."entity_type", "public"."system_event"."entity_id", "public"."system_event"."action", "public"."system_event"."event_data", "public"."system_event"."created_at", "public"."system_event"."processed_at", "public"."system_event"."status"
+2025-09-08T22:54:54.084Z GET /api/v1/admin/operation-logs
+JWT検証エラー: ReferenceError: JWT_REQUIRE_X_TENANT is not defined
+    at authMiddleware (/Users/kaneko/hotel-common/dist/auth/middleware.js:187:9)
+    at Layer.handle [as handle_request] (/Users/kaneko/hotel-common/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/kaneko/hotel-common/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/kaneko/hotel-common/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/kaneko/hotel-common/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:346:12)
+    at next (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:280:10)
+    at Function.handle (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:175:3)
+    at router (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:47:12)
+prisma:query SELECT 1
+prisma:query INSERT INTO "public"."system_event" ("id","tenant_id","event_type","source_system","target_system","entity_type","entity_id","action","event_data","created_at","status") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING "public"."system_event"."id", "public"."system_event"."tenant_id", "public"."system_event"."user_id", "public"."system_event"."event_type", "public"."system_event"."source_system", "public"."system_event"."target_system", "public"."system_event"."entity_type", "public"."system_event"."entity_id", "public"."system_event"."action", "public"."system_event"."event_data", "public"."system_event"."created_at", "public"."system_event"."processed_at", "public"."system_event"."status"
+🔍 Health check started (1/4 systems connected)
+2025-09-08T22:55:11.493Z GET /api/v1/admin/operation-logs
+JWT検証エラー: JsonWebTokenError: invalid signature
+    at /Users/kaneko/hotel-common/node_modules/jsonwebtoken/verify.js:171:19
+    at getSecret (/Users/kaneko/hotel-common/node_modules/jsonwebtoken/verify.js:97:14)
+    at module.exports (/Users/kaneko/hotel-common/node_modules/jsonwebtoken/verify.js:101:10)
+    at authMiddleware (/Users/kaneko/hotel-common/dist/auth/middleware.js:175:29)
+    at Layer.handle [as handle_request] (/Users/kaneko/hotel-common/node_modules/express/lib/router/layer.js:95:5)
+    at next (/Users/kaneko/hotel-common/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/Users/kaneko/hotel-common/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/Users/kaneko/hotel-common/node_modules/express/lib/router/layer.js:95:5)
+    at /Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/Users/kaneko/hotel-common/node_modules/express/lib/router/index.js:346:12)
+prisma:query SELECT 1
+prisma:query INSERT INTO "public"."system_event" ("id","tenant_id","event_type","source_system","target_system","entity_type","entity_id","action","event_data","created_at","status") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING "public"."system_event"."id", "public"."system_event"."tenant_id", "public"."system_event"."user_id", "public"."system_event"."event_type", "public"."system_event"."source_system", "public"."system_event"."target_system", "public"."system_event"."entity_type", "public"."system_event"."entity_id", "public"."system_event"."action", "public"."system_event"."event_data", "public"."system_event"."created_at", "public"."system_event"."processed_at", "public"."system_event"."status"
+🔍 Health check started (1/4 systems connected)
+🔍 Health check started (1/4 systems connected)

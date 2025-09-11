@@ -1,0 +1,44 @@
+// 既存のschema.prismaに追加するOrderモデル定義
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  tenantId  String
+  roomId    String
+  placeId   Int?
+  status    String      @default("received")
+  items     Json
+  total     Int
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  paidAt    DateTime?
+  isDeleted Boolean     @default(false)
+  deletedAt DateTime?
+  orderItems OrderItem[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([isDeleted, paidAt])
+  @@map("Order")
+}
+
+model OrderItem {
+  id          Int       @id @default(autoincrement())
+  tenantId    String
+  orderId     Int
+  menuItemId  Int
+  name        String
+  price       Int
+  quantity    Int
+  status      String    @default("pending")
+  notes       String?
+  deliveredAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  order       Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([tenantId])
+  @@index([status])
+  @@map("OrderItem")
+}

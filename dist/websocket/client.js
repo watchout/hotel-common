@@ -1,5 +1,8 @@
-import { io } from 'socket.io-client';
-export class HotelWebSocketClient {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HotelWebSocketFactory = exports.HotelWebSocketClient = void 0;
+const socket_io_client_1 = require("socket.io-client");
+class HotelWebSocketClient {
     socket = null;
     config;
     eventHandlers = new Map();
@@ -29,7 +32,7 @@ export class HotelWebSocketClient {
         if (this.config.userId) {
             auth.userId = this.config.userId;
         }
-        this.socket = io(this.config.url, {
+        this.socket = (0, socket_io_client_1.io)(this.config.url, {
             auth,
             transports: ['websocket'],
             upgrade: false,
@@ -163,10 +166,11 @@ export class HotelWebSocketClient {
         this.send('broadcast', { channel, data });
     }
 }
+exports.HotelWebSocketClient = HotelWebSocketClient;
 /**
  * システム別WebSocketクライアントファクトリー
  */
-export class HotelWebSocketFactory {
+class HotelWebSocketFactory {
     /**
      * hotel-saas用クライアント作成
      */
@@ -204,3 +208,4 @@ export class HotelWebSocketFactory {
         });
     }
 }
+exports.HotelWebSocketFactory = HotelWebSocketFactory;

@@ -1,5 +1,8 @@
-import { ERROR_CODES } from '../types/api';
-export class HotelValidator {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CommonValidationRules = exports.HotelValidator = void 0;
+const api_1 = require("../types/api");
+class HotelValidator {
     /**
      * バリデーション実行
      */
@@ -176,7 +179,7 @@ export class HotelValidator {
      */
     static toApiError(result) {
         return {
-            code: ERROR_CODES.B001, // VALIDATION_ERROR
+            code: api_1.ERROR_CODES.B001, // VALIDATION_ERROR
             message: 'Validation failed',
             details: {
                 errors: result.errors
@@ -184,8 +187,9 @@ export class HotelValidator {
         };
     }
 }
+exports.HotelValidator = HotelValidator;
 // 共通バリデーションルール
-export const CommonValidationRules = {
+exports.CommonValidationRules = {
     // テナントID
     tenantId: {
         field: 'tenant_id',

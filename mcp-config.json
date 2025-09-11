@@ -1,0 +1,36 @@
+{
+  "mcpServers": {
+    "hotel-saas-api": {
+      "command": "npx",
+      "args": [
+        "-y", 
+        "apidog-mcp-server@latest",
+        "--oas=./docs/api-specs/hotel-saas-openapi.yaml"
+      ]
+    },
+    "hotel-member-api": {
+      "command": "npx",
+      "args": [
+        "-y", 
+        "apidog-mcp-server@latest",
+        "--oas=./docs/api-specs/hotel-member-openapi.yaml"
+      ]
+    },
+    "hotel-pms-api": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "apidog-mcp-server@latest", 
+        "--oas=./docs/api-specs/hotel-pms-openapi.yaml"
+      ]
+    },
+    "hotel-common-unified-api": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "apidog-mcp-server@latest",
+        "--oas=./docs/api-specs/hotel-common-unified-openapi.yaml"
+      ]
+    }
+  }
+}

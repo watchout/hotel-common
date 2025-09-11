@@ -1,5 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.translationService = exports.DeepLTranslationService = void 0;
 /** DeepL API統合サービス */
-export class DeepLTranslationService {
+class DeepLTranslationService {
     apiKey;
     baseUrl = 'https://api.deepl.com/v2';
     constructor(apiKey) {
@@ -131,5 +134,6 @@ export class DeepLTranslationService {
         return /습니다|입니다|세요|시겠습니다/.test(text);
     }
 }
+exports.DeepLTranslationService = DeepLTranslationService;
 /** 翻訳サービス統合インスタンス */
-export const translationService = new DeepLTranslationService();
+exports.translationService = new DeepLTranslationService();

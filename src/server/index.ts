@@ -3,6 +3,7 @@
 import { HotelWebSocketServer } from './websocket-server'
 import { HotelLogger } from '../utils/logger'
 import { config } from 'dotenv'
+import { HotelIntegrationServer } from './integration-server'
 
 // 環境変数読み込み
 config()
@@ -15,6 +16,7 @@ config()
  */
 class HotelCommonServer {
   private webSocketServer: HotelWebSocketServer
+  private integrationServer: HotelIntegrationServer
   private logger: HotelLogger
 
   constructor() {
@@ -22,7 +24,9 @@ class HotelCommonServer {
     
     // WebSocketサーバー設定
     this.webSocketServer = new HotelWebSocketServer({
-      port: parseInt(process.env.WEBSOCKET_PORT || '3400'),
+      port: parseInt(process.env.WEBSOCKET_PORT || '3401'),
+      path: '/socket.io',
+      serveClient: false,
       cors: {
         origin: [
           "http://localhost:3100", // hotel-saas
@@ -38,6 +42,9 @@ class HotelCommonServer {
         db: parseInt(process.env.REDIS_DB || '0')
       }
     })
+    
+    // 統合APIサーバー設定
+    this.integrationServer = new HotelIntegrationServer()
   }
 
   /**
@@ -49,12 +56,16 @@ class HotelCommonServer {
 
       // WebSocketサーバー起動
       await this.webSocketServer.start()
+      
+      // 統合APIサーバー起動
+      await this.integrationServer.start()
 
       // 正常起動ログ
       this.logger.info(`
 🎉 hotel-common統合基盤稼働開始！
 
-📡 WebSocketサーバー: ポート${process.env.WEBSOCKET_PORT || '3400'}
+📡 WebSocketサーバー: ポート${process.env.WEBSOCKET_PORT || '3401'}
+🌐 統合APIサーバー: ポート${process.env.HOTEL_COMMON_PORT || '3400'}
 🗄️  PostgreSQL統一DB: hotel_unified_db
 ⚡ Event-driven連携: Redis Streams稼働中
 
@@ -62,6 +73,11 @@ class HotelCommonServer {
 - 🏪 hotel-saas (port:3100)
 - 🎯 hotel-member (port:3200) 
 - 💼 hotel-pms (port:3300)
+
+統合機能:
+- 🔄 キャンペーン管理API
+- 🔐 階層権限管理
+- 📊 統合監視
       `)
 
       // graceful shutdown設定
@@ -82,6 +98,9 @@ class HotelCommonServer {
     
     try {
       await this.webSocketServer.stop()
+      // 統合APIサーバーの停止
+      await (this.integrationServer as any).shutdown()
+      
       this.logger.info('hotel-common統合サーバー停止完了')
       process.exit(0)
     } catch (error) {
@@ -100,4 +119,4 @@ if (require.main === module) {
   })
 }
 
-export { HotelCommonServer } 
+export { HotelCommonServer }

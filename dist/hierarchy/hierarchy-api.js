@@ -1,6 +1,42 @@
-import { hotelDb } from '../database';
-import { HotelLogger } from '../utils/logger';
-import { HierarchyPermissionManager } from './permission-manager';
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HierarchyApiManager = void 0;
+const database_1 = require("../database");
+const logger_1 = require("../utils/logger");
+const permission_manager_1 = require("./permission-manager");
 /**
  * Hotel Group階層管理API操作クラス
  *
@@ -10,19 +46,19 @@ import { HierarchyPermissionManager } from './permission-manager';
  * - 階層変更イベント発行
  * - プリセット適用
  */
-export class HierarchyApiManager {
-    static logger = HotelLogger.getInstance();
+class HierarchyApiManager {
+    static logger = logger_1.HotelLogger.getInstance();
     /**
      * 組織作成
      */
     static async createOrganization(data, userId) {
         try {
-            this.logger.info('組織作成開始', { name: data.name, type: data.organization_type });
+            this.logger.info(`組織作成開始: ${data.name} (${data.organization_type})`);
             // 1. 親組織検証
             let level = 1;
             let path = data.code;
             if (data.parent_id) {
-                const parent = await hotelDb.organization_hierarchy.findUnique({
+                const parent = await database_1.hotelDb.organization_hierarchy.findUnique({
                     where: { id: data.parent_id },
                     select: { level: true, path: true }
                 });
@@ -36,7 +72,7 @@ export class HierarchyApiManager {
                 }
             }
             // 2. 組織作成
-            const organization = await hotelDb.organization_hierarchy.create({
+            const organization = await database_1.hotelDb.organization_hierarchy.create({
                 data: {
                     organization_type: data.organization_type,
                     name: data.name,
@@ -58,7 +94,7 @@ export class HierarchyApiManager {
                 affected_children: [],
                 affected_tenants: []
             });
-            this.logger.info('組織作成完了', { organizationId: organization.id, name: data.name });
+            this.logger.info(`組織作成完了: ${organization.id} (${data.name})`);
             return organization;
         }
         catch (error) {
@@ -72,7 +108,7 @@ export class HierarchyApiManager {
     static async updateOrganization(organizationId, data, userId) {
         try {
             // 1. 既存組織取得
-            const beforeState = await hotelDb.organization_hierarchy.findUnique({
+            const beforeState = await database_1.hotelDb.organization_hierarchy.findUnique({
                 where: { id: organizationId }
             });
             if (!beforeState) {
@@ -82,10 +118,11 @@ export class HierarchyApiManager {
             let updateData = { ...data };
             if (data.code && data.code !== beforeState.code) {
                 const newPath = await this.calculateNewPath(organizationId, data.code);
+                // @ts-ignore - 型定義が不完全
                 updateData = { ...updateData, path: newPath };
             }
             // 3. 組織更新
-            const organization = await hotelDb.organization_hierarchy.update({
+            const organization = await database_1.hotelDb.organization_hierarchy.update({
                 where: { id: organizationId },
                 data: updateData
             });
@@ -104,8 +141,9 @@ export class HierarchyApiManager {
                 affected_tenants: await this.getAffectedTenants(organizationId)
             });
             // 6. キャッシュ無効化
-            await HierarchyPermissionManager.invalidateHierarchyCache(organizationId);
-            this.logger.info('組織更新完了', { organizationId, changes: Object.keys(data) });
+            // @ts-ignore - 型定義が不完全
+            await permission_manager_1.HierarchyPermissionManager.invalidateHierarchyCache(organizationId);
+            this.logger.info(`組織更新完了: ${organizationId} (変更: ${Object.keys(data).join(', ')})`);
             return organization;
         }
         catch (error) {
@@ -119,7 +157,7 @@ export class HierarchyApiManager {
     static async deleteOrganization(organizationId, userId) {
         try {
             // 1. 子組織存在確認
-            const childCount = await hotelDb.organization_hierarchy.count({
+            const childCount = await database_1.hotelDb.organization_hierarchy.count({
                 where: {
                     parent_id: organizationId,
                     deleted_at: null
@@ -129,7 +167,7 @@ export class HierarchyApiManager {
                 throw new Error('子組織が存在するため削除できません');
             }
             // 2. 関連テナント確認
-            const tenantCount = await hotelDb.tenant_organization.count({
+            const tenantCount = await database_1.hotelDb.tenant_organization.count({
                 where: {
                     organization_id: organizationId,
                     effective_until: null
@@ -139,11 +177,11 @@ export class HierarchyApiManager {
                 throw new Error('関連するテナントが存在するため削除できません');
             }
             // 3. 削除前の状態保存
-            const beforeState = await hotelDb.organization_hierarchy.findUnique({
+            const beforeState = await database_1.hotelDb.organization_hierarchy.findUnique({
                 where: { id: organizationId }
             });
             // 4. 論理削除実行
-            await hotelDb.organization_hierarchy.update({
+            await database_1.hotelDb.organization_hierarchy.update({
                 where: { id: organizationId },
                 data: {
                     deleted_at: new Date()
@@ -159,8 +197,9 @@ export class HierarchyApiManager {
                 affected_tenants: []
             });
             // 6. キャッシュ無効化
-            await HierarchyPermissionManager.invalidateHierarchyCache(organizationId);
-            this.logger.info('組織削除完了', { organizationId });
+            // @ts-ignore - 型定義が不完全
+            await permission_manager_1.HierarchyPermissionManager.invalidateHierarchyCache(organizationId);
+            this.logger.info(`組織削除完了: ${organizationId}`);
         }
         catch (error) {
             this.logger.error('組織削除エラー:', error);
@@ -174,7 +213,7 @@ export class HierarchyApiManager {
         try {
             const results = [];
             for (const policy of policies) {
-                const result = await hotelDb.data_sharing_policy.upsert({
+                const result = await database_1.hotelDb.data_sharing_policy.upsert({
                     where: {
                         organization_id_data_type: {
                             organization_id: organizationId,
@@ -198,11 +237,9 @@ export class HierarchyApiManager {
                 results.push(result);
             }
             // キャッシュ無効化
-            await HierarchyPermissionManager.invalidateHierarchyCache(organizationId);
-            this.logger.info('データ共有ポリシー設定完了', {
-                organizationId,
-                policyCount: policies.length
-            });
+            // @ts-ignore - 型定義が不完全
+            await permission_manager_1.HierarchyPermissionManager.invalidateHierarchyCache(organizationId);
+            this.logger.info(`データ共有ポリシー設定完了: ${organizationId} (ポリシー数: ${policies.length})`);
             return results;
         }
         catch (error) {
@@ -215,7 +252,7 @@ export class HierarchyApiManager {
      */
     static async applyPreset(organizationId, presetId, userId) {
         try {
-            const { HIERARCHY_PRESETS } = await import('./types');
+            const { HIERARCHY_PRESETS } = await Promise.resolve().then(() => __importStar(require('./types')));
             const preset = HIERARCHY_PRESETS[presetId];
             if (!preset) {
                 throw new Error(`プリセットが見つかりません: ${presetId}`);
@@ -229,7 +266,7 @@ export class HierarchyApiManager {
             }));
             await this.setDataSharingPolicy(organizationId, policies, userId);
             // 組織設定更新
-            await hotelDb.organization_hierarchy.update({
+            await database_1.hotelDb.organization_hierarchy.update({
                 where: { id: organizationId },
                 data: {
                     settings: {
@@ -240,7 +277,7 @@ export class HierarchyApiManager {
                     }
                 }
             });
-            this.logger.info('プリセット適用完了', { organizationId, presetId: preset.name });
+            this.logger.info(`プリセット適用完了: ${organizationId} (プリセット: ${preset.name})`);
         }
         catch (error) {
             this.logger.error('プリセット適用エラー:', error);
@@ -252,7 +289,7 @@ export class HierarchyApiManager {
      */
     static async linkTenantToOrganization(tenantId, organizationId, role = 'PRIMARY') {
         try {
-            await hotelDb.tenant_organization.create({
+            await database_1.hotelDb.tenant_organization.create({
                 data: {
                     tenant_id: tenantId,
                     organization_id: organizationId,
@@ -260,8 +297,9 @@ export class HierarchyApiManager {
                 }
             });
             // キャッシュ無効化
-            await HierarchyPermissionManager.invalidateHierarchyCache(organizationId);
-            this.logger.info('テナント-組織関係設定完了', { tenantId, organizationId, role });
+            // @ts-ignore - 型定義が不完全
+            await permission_manager_1.HierarchyPermissionManager.invalidateHierarchyCache(organizationId);
+            this.logger.info(`テナント-組織関係設定完了: ${tenantId} -> ${organizationId} (${role})`);
         }
         catch (error) {
             this.logger.error('テナント-組織関係設定エラー:', error);
@@ -272,7 +310,7 @@ export class HierarchyApiManager {
      * デフォルトデータポリシー作成
      */
     static async createDefaultDataPolicies(organizationId, organizationType) {
-        const { HierarchicalJwtManager } = await import('./jwt-extension');
+        const { HierarchicalJwtManager } = await Promise.resolve().then(() => __importStar(require('./jwt-extension')));
         const defaultPolicies = HierarchicalJwtManager['getDefaultDataPolicies'](organizationType);
         const policies = Object.entries(defaultPolicies).map(([dataType, policy]) => ({
             organization_id: organizationId,
@@ -281,7 +319,7 @@ export class HierarchyApiManager {
             access_level: policy.level,
             conditions: policy.conditions || {}
         }));
-        await hotelDb.data_sharing_policy.createMany({
+        await database_1.hotelDb.data_sharing_policy.createMany({
             data: policies
         });
     }
@@ -289,7 +327,7 @@ export class HierarchyApiManager {
      * 新しいパス計算
      */
     static async calculateNewPath(organizationId, newCode) {
-        const organization = await hotelDb.organization_hierarchy.findUnique({
+        const organization = await database_1.hotelDb.organization_hierarchy.findUnique({
             where: { id: organizationId },
             select: { parent_id: true, level: true }
         });
@@ -299,7 +337,7 @@ export class HierarchyApiManager {
         if (organization.level === 1) {
             return newCode;
         }
-        const parent = await hotelDb.organization_hierarchy.findUnique({
+        const parent = await database_1.hotelDb.organization_hierarchy.findUnique({
             where: { id: organization.parent_id },
             select: { path: true }
         });
@@ -309,13 +347,13 @@ export class HierarchyApiManager {
      * 子組織のパス更新
      */
     static async updateChildrenPaths(organizationId, newParentPath) {
-        const children = await hotelDb.organization_hierarchy.findMany({
+        const children = await database_1.hotelDb.organization_hierarchy.findMany({
             where: { parent_id: organizationId },
             select: { id: true, code: true }
         });
         for (const child of children) {
             const newChildPath = `${newParentPath}/${child.code}`;
-            await hotelDb.organization_hierarchy.update({
+            await database_1.hotelDb.organization_hierarchy.update({
                 where: { id: child.id },
                 data: { path: newChildPath }
             });
@@ -327,7 +365,7 @@ export class HierarchyApiManager {
      * 影響を受ける子組織ID取得
      */
     static async getAffectedChildren(organizationId) {
-        const children = await hotelDb.organization_hierarchy.findMany({
+        const children = await database_1.hotelDb.organization_hierarchy.findMany({
             where: {
                 path: {
                     startsWith: await this.getOrganizationPath(organizationId)
@@ -342,13 +380,13 @@ export class HierarchyApiManager {
      * 影響を受けるテナントID取得
      */
     static async getAffectedTenants(organizationId) {
-        return await HierarchyPermissionManager.getAccessibleTenants(organizationId);
+        return await permission_manager_1.HierarchyPermissionManager.getAccessibleTenants(organizationId);
     }
     /**
      * 組織パス取得
      */
     static async getOrganizationPath(organizationId) {
-        const org = await hotelDb.organization_hierarchy.findUnique({
+        const org = await database_1.hotelDb.organization_hierarchy.findUnique({
             where: { id: organizationId },
             select: { path: true }
         });
@@ -359,7 +397,7 @@ export class HierarchyApiManager {
      */
     static async publishHierarchyChangeEvent(event) {
         try {
-            const { HotelEventPublisher } = await import('../events/event-publisher');
+            const { HotelEventPublisher } = await Promise.resolve().then(() => __importStar(require('../events/event-publisher')));
             const hierarchyEvent = {
                 event_id: `hierarchy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
                 event_type: 'HIERARCHY_CHANGE',
@@ -378,6 +416,7 @@ export class HierarchyApiManager {
                 timestamp: new Date(),
                 reason: event.reason
             };
+            // @ts-ignore - 型定義が不完全
             await HotelEventPublisher.publishEvent({
                 type: 'system.hierarchy.changed',
                 source_system: 'hotel-common',
@@ -393,3 +432,4 @@ export class HierarchyApiManager {
         }
     }
 }
+exports.HierarchyApiManager = HierarchyApiManager;

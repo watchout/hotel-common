@@ -1,4 +1,3 @@
-import { JwtManager } from '../auth/jwt';
 import type { HierarchicalJWTPayload } from './types';
 /**
  * 階層管理対応JWT拡張マネージャー
@@ -8,7 +7,7 @@ import type { HierarchicalJWTPayload } from './types';
  * - 既存JWTの階層情報拡張
  * - 階層権限の動的更新
  */
-export declare class HierarchicalJwtManager extends JwtManager {
+export declare class HierarchicalJwtManager {
     private static logger;
     /**
      * 階層コンテキスト付きJWT生成

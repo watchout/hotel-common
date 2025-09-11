@@ -49,21 +49,28 @@ export declare class StandardResponseBuilder {
     /**
      * 成功レスポンス生成
      */
-    static success<T>(data: T, meta?: any): ApiResponse<T>;
+    static success<T>(res: any, data: T, meta?: any, statusCode?: number): any;
     /**
      * ページネーション付き成功レスポンス
      */
-    static paginated<T>(items: T[], page: number, limit: number, total: number): ApiResponse<{
-        items: T[];
-        pagination: any;
-    }>;
+    static paginated<T>(res: any, items: T[], page: number, limit: number, total: number, statusCode?: number): any;
     /**
      * エラーレスポンス生成
+     * @param code エラーコード
+     * @param message エラーメッセージ
+     * @param details 詳細情報（オプション）
+     * @param statusCode HTTPステータスコード（デフォルト400）
+     * @returns レスポンスオブジェクトとステータスコード
      */
     static error(code: string, message: string, details?: any, statusCode?: number): {
         response: ApiResponse<null>;
         statusCode: number;
     };
+    /**
+     * レガシーエラーレスポンス生成（互換性のため維持）
+     * @deprecated 新しいコードでは使用しないでください。代わりに標準のerror()メソッドを使用してください。
+     */
+    static legacyError(res: any, code: string, message: string, details?: any): any;
     /**
      * バリデーションエラーレスポンス
      */

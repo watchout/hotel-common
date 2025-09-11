@@ -1,8 +1,11 @@
+"use strict";
 // Hotel Group階層権限管理 - 型定義
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HIERARCHY_PRESETS = void 0;
 /**
  * よく使用されるプリセット定義
  */
-export const HIERARCHY_PRESETS = {
+exports.HIERARCHY_PRESETS = {
     'complete-integration': {
         id: 'complete-integration',
         name: '完全統合型（星野リゾート型）',

@@ -1,63 +1,59 @@
-import { PrismaClient } from '../generated/prisma'
+import { PrismaClient } from '@prisma/client';
+import { hotelDb } from './prisma';
 
 export interface UnifiedClientConfig {
-  tenantId: string
-  systemName: 'hotel-saas' | 'hotel-member' | 'hotel-pms'
-  connectionLimit?: number
+  tenantId: string;
+  systemName: 'hotel-saas' | 'hotel-member' | 'hotel-pms';
+  connectionLimit?: number;
 }
 
 export class UnifiedPrismaClient {
-  private prisma: PrismaClient
-  private tenantId: string
-  private systemName: string
-  private static instances: Map<string, UnifiedPrismaClient> = new Map()
+  private prisma: PrismaClient;
+  private tenantId: string;
+  private systemName: string;
+  private static instances: Map<string, UnifiedPrismaClient> = new Map();
 
   constructor(config: UnifiedClientConfig) {
-    this.tenantId = config.tenantId
-    this.systemName = config.systemName
+    this.tenantId = config.tenantId;
+    this.systemName = config.systemName;
     
-    this.prisma = new PrismaClient({
-      datasources: {
-        db: {
-          url: process.env.DATABASE_URL,
-        },
-      },
-    })
+    // PrismaClientの直接インスタンス化ではなく、hotelDb.getClient()を使用
+    this.prisma = hotelDb.getClient();
 
     // インスタンス管理
-    const key = `${config.systemName}_${config.tenantId}`
-    UnifiedPrismaClient.instances.set(key, this)
+    const key = `${config.systemName}_${config.tenantId}`;
+    UnifiedPrismaClient.instances.set(key, this);
   }
 
   public static getInstance(config: UnifiedClientConfig): UnifiedPrismaClient {
-    const key = `${config.systemName}_${config.tenantId}`
-    let instance = UnifiedPrismaClient.instances.get(key)
+    const key = `${config.systemName}_${config.tenantId}`;
+    let instance = UnifiedPrismaClient.instances.get(key);
     
     if (!instance) {
-      instance = new UnifiedPrismaClient(config)
+      instance = new UnifiedPrismaClient(config);
     }
     
-    return instance
+    return instance;
   }
 
   /**
    * マルチテナント対応 - テナント設定
    */
   async setTenant(tenantId: string): Promise<void> {
-    this.tenantId = tenantId
-    console.log(`[${this.systemName}] Tenant switched to: ${tenantId}`)
+    this.tenantId = tenantId;
+    console.log(`[${this.systemName}] Tenant switched to: ${tenantId}`);
   }
 
   /**
    * マルチテナント対応 - テナント分離付き操作実行
    */
   async withTenant<T>(tenantId: string, operation: () => Promise<T>): Promise<T> {
-    const previousTenantId = this.tenantId
+    const previousTenantId = this.tenantId;
     try {
-      await this.setTenant(tenantId)
-      return await operation()
+      await this.setTenant(tenantId);
+      return await operation();
     } finally {
-      await this.setTenant(previousTenantId)
+      await this.setTenant(previousTenantId);
     }
   }
 
@@ -71,14 +67,14 @@ export class UnifiedPrismaClient {
       tenant_id: this.tenantId,
       created_at: new Date(),
       updated_at: new Date()
-    }
+    };
 
     const result = await (this.prisma as any)[model].create({
       data: enhancedData
-    })
+    });
 
-    console.log(`[${this.systemName}] Created ${model} for tenant ${this.tenantId}`)
-    return result
+    console.log(`[${this.systemName}] Created ${model} for tenant ${this.tenantId}`);
+    return result;
   }
 
   /**
@@ -89,14 +85,14 @@ export class UnifiedPrismaClient {
     const enhancedWhere = {
       ...where,
       tenant_id: this.tenantId
-    }
+    };
 
     const results = await (this.prisma as any)[model].findMany({
       where: enhancedWhere
-    })
+    });
 
-    console.log(`[${this.systemName}] Found ${results.length} ${model} records for tenant ${this.tenantId}`)
-    return results
+    console.log(`[${this.systemName}] Found ${results.length} ${model} records for tenant ${this.tenantId}`);
+    return results;
   }
 
   /**
@@ -107,20 +103,20 @@ export class UnifiedPrismaClient {
     const enhancedWhere = {
       ...where,
       tenant_id: this.tenantId
-    }
+    };
 
     const enhancedData = {
       ...data,
       updated_at: new Date()
-    }
+    };
 
     const result = await (this.prisma as any)[model].update({
       where: enhancedWhere,
       data: enhancedData
-    })
+    });
 
-    console.log(`[${this.systemName}] Updated ${model} for tenant ${this.tenantId}`)
-    return result
+    console.log(`[${this.systemName}] Updated ${model} for tenant ${this.tenantId}`);
+    return result;
   }
 
   /**
@@ -131,27 +127,27 @@ export class UnifiedPrismaClient {
     const enhancedWhere = {
       ...where,
       tenant_id: this.tenantId
-    }
+    };
 
     const result = await (this.prisma as any)[model].delete({
       where: enhancedWhere
-    })
+    });
 
-    console.log(`[${this.systemName}] Deleted ${model} for tenant ${this.tenantId}`)
-    return result
+    console.log(`[${this.systemName}] Deleted ${model} for tenant ${this.tenantId}`);
+    return result;
   }
 
   /**
    * 接続管理
    */
   async connect(): Promise<void> {
-    await this.prisma.$connect()
-    console.log(`[${this.systemName}] Unified Prisma Client connected for tenant ${this.tenantId}`)
+    await this.prisma.$connect();
+    console.log(`[${this.systemName}] Unified Prisma Client connected for tenant ${this.tenantId}`);
   }
 
   async disconnect(): Promise<void> {
-    await this.prisma.$disconnect()
-    console.log(`[${this.systemName}] Unified Prisma Client disconnected`)
+    await this.prisma.$disconnect();
+    console.log(`[${this.systemName}] Unified Prisma Client disconnected`);
   }
 
   /**
@@ -159,11 +155,11 @@ export class UnifiedPrismaClient {
    */
   async healthCheck(): Promise<boolean> {
     try {
-      await this.prisma.$queryRaw`SELECT 1`
-      return true
+      await this.prisma.$queryRaw`SELECT 1`;
+      return true;
     } catch (error) {
-      console.error(`[${this.systemName}] Health check failed:`, error)
-      return false
+      console.error(`[${this.systemName}] Health check failed:`, error);
+      return false;
     }
   }
 
@@ -171,13 +167,13 @@ export class UnifiedPrismaClient {
    * 生Prismaクライアントアクセス（高度な操作用）
    */
   getRawClient(): PrismaClient {
-    return this.prisma
+    return this.prisma;
   }
 }
 
 // 便利な関数エクスポート
 export function createUnifiedClient(config: UnifiedClientConfig): UnifiedPrismaClient {
-  return UnifiedPrismaClient.getInstance(config)
+  return UnifiedPrismaClient.getInstance(config);
 }
 
-export default UnifiedPrismaClient 
+export default UnifiedPrismaClient;

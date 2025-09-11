@@ -1,7 +1,10 @@
-import { PrismaClient } from '../generated/prisma';
-import { HotelLogger } from '../utils/logger';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UnifiedPrismaClient = void 0;
+const logger_1 = require("../utils/logger");
+const prisma_1 = require("./prisma");
 // マルチテナント対応統一Prismaクライアント
-export class UnifiedPrismaClient {
+class UnifiedPrismaClient {
     prisma;
     tenantId;
     systemName;
@@ -11,10 +14,9 @@ export class UnifiedPrismaClient {
         this.tenantId = config.tenantId;
         this.systemName = config.systemName;
         this.connectionLimit = config.connectionLimit || 20;
-        this.logger = HotelLogger.getInstance();
-        this.prisma = new PrismaClient({
-            log: ['query', 'info', 'warn', 'error']
-        });
+        this.logger = logger_1.HotelLogger.getInstance();
+        // PrismaClientの直接インスタンス化ではなく、hotelDb.getClient()を使用
+        this.prisma = prisma_1.hotelDb.getClient();
     }
     // マルチテナント対応
     async setTenant(tenantId) {
@@ -208,6 +210,7 @@ export class UnifiedPrismaClient {
                 systemName: this.systemName,
                 connectionLimit: this.connectionLimit
             });
+            // トランザクション用のPrismaクライアントに置き換え
             txClient.prisma = tx;
             return await fn(txClient);
         });
@@ -227,8 +230,9 @@ export class UnifiedPrismaClient {
     }
     // ID生成ユーティリティ
     generateId() {
-        return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
     }
 }
+exports.UnifiedPrismaClient = UnifiedPrismaClient;
 // エクスポート
-export default UnifiedPrismaClient;
+exports.default = UnifiedPrismaClient;

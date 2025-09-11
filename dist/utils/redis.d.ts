@@ -48,9 +48,17 @@ export declare class HotelRedisClient {
      */
     setCache(key: string, value: any, ttlSeconds?: number): Promise<void>;
     /**
+     * 値を保存
+     */
+    set(key: string, value: string, ttlSeconds?: number): Promise<void>;
+    /**
      * キャッシュ取得
      */
     getCache<T = any>(key: string): Promise<T | null>;
+    /**
+     * 値を取得
+     */
+    get(key: string): Promise<string | null>;
     /**
      * キャッシュ削除
      */
@@ -71,5 +79,25 @@ export declare class HotelRedisClient {
      * イベントログ保存
      */
     logEvent(event: any): Promise<void>;
+    /**
+     * ハッシュに値を設定
+     */
+    hset(key: string, field: string, value: string): Promise<void>;
+    /**
+     * ハッシュから値を取得
+     */
+    hget(key: string, field: string): Promise<string | null>;
+    /**
+     * ハッシュからフィールドを削除
+     */
+    hdel(key: string, field: string): Promise<void>;
+    /**
+     * キーを削除
+     */
+    del(key: string): Promise<void>;
+    /**
+     * ハッシュに複数の値を設定
+     */
+    hsetAll(key: string, fieldValues: Record<string, string>): Promise<void>;
 }
 export declare function getRedisClient(config?: RedisConfig): HotelRedisClient;

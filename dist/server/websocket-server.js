@@ -1,168 +1,172 @@
-import { createServer } from 'http';
-import { Server as SocketIOServer } from 'socket.io';
-import { createClient } from 'redis';
-import { HotelLogger } from '../utils/logger';
-export class HotelWebSocketServer {
-    config;
-    httpServer;
-    io;
-    redis;
+"use strict";
+/**
+ * WebSocketサーバークラス
+ *
+ * システム間リアルタイム連携のためのWebSocketサーバー
+ * - Redis Pub/Sub連携
+ * - イベント駆動型アーキテクチャサポート
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HotelWebSocketServer = void 0;
+const socket_io_1 = require("socket.io");
+const redis_1 = require("redis");
+const logger_1 = require("../utils/logger");
+const http_1 = require("http");
+class HotelWebSocketServer {
+    io = null;
+    redisClient = null;
+    options;
     logger;
-    isRunning = false;
-    constructor(config) {
-        this.config = config;
-        this.logger = HotelLogger.getInstance();
-        this.httpServer = createServer();
-        this.io = new SocketIOServer(this.httpServer, {
-            cors: config.cors
-        });
-        // Redis クライアント初期化
-        this.redis = createClient({
-            socket: {
-                host: config.redis.host,
-                port: config.redis.port
-            },
-            password: config.redis.password,
-            database: config.redis.db
-        });
-        this.setupSocketHandlers();
+    httpServer = null;
+    constructor(options) {
+        this.options = options;
+        this.logger = logger_1.HotelLogger.getInstance();
     }
+    /**
+     * サーバー起動
+     */
     async start() {
         try {
-            // Redis 接続
-            await this.redis.connect();
-            this.logger.info('Redis接続成功');
-            // Redis Pub/Sub セットアップ
-            await this.setupRedisSubscription();
-            // HTTPサーバー起動
-            this.httpServer.listen(this.config.port, () => {
-                this.logger.info(`WebSocketサーバー起動完了: http://localhost:${this.config.port}`);
-                this.isRunning = true;
+            // HTTPサーバー作成
+            this.httpServer = (0, http_1.createServer)();
+            // Socket.IOサーバー作成
+            this.io = new socket_io_1.Server(this.httpServer, {
+                cors: this.options.cors,
+                path: this.options.path,
+                serveClient: this.options.serveClient
             });
-            // Event Stream 監視開始
-            await this.startEventStreamMonitoring();
+            // HTTPサーバー起動
+            this.httpServer.listen(this.options.port, () => {
+                this.logger.info(`WebSocketサーバー起動完了 (port: ${this.options.port})`);
+            });
+            // Redis接続（オプション）
+            if (this.options.redis) {
+                await this.connectRedis();
+            }
+            // イベントハンドラ設定
+            this.setupEventHandlers();
         }
         catch (error) {
             this.logger.error('WebSocketサーバー起動エラー:', error);
             throw error;
         }
     }
-    setupSocketHandlers() {
-        this.io.on('connection', (socket) => {
-            this.logger.debug('WebSocketクライアント接続', { socketId: socket.id });
-            socket.on('join-tenant', (tenantId) => {
-                socket.join(`tenant:${tenantId}`);
-                this.logger.debug('テナントルーム参加', { socketId: socket.id, tenantId });
-            });
-            socket.on('join-organization', (organizationId) => {
-                socket.join(`organization:${organizationId}`);
-                this.logger.debug('組織ルーム参加', { socketId: socket.id, organizationId });
-            });
-            socket.on('hotel-event', async (event) => {
-                await this.handleClientEvent(socket, event);
-            });
-            socket.on('disconnect', () => {
-                this.logger.debug('WebSocketクライアント切断', { socketId: socket.id });
-            });
-        });
-    }
-    async setupRedisSubscription() {
-        // 重複サブスクライバー作成
-        const subscriber = this.redis.duplicate();
-        await subscriber.connect();
-        subscriber.subscribe('hotel-events', (message) => {
-            try {
-                const event = JSON.parse(message);
-                this.broadcastEvent(event);
-            }
-            catch (error) {
-                this.logger.error('Redis Pub/Subメッセージ処理エラー:', error);
-            }
-        });
-        this.logger.info('Redis Pub/Sub購読開始');
-    }
-    async startEventStreamMonitoring() {
-        // Event Stream 監視ループ
-        const monitorStreams = async () => {
-            try {
-                // TODO: Redis Streams の XREAD を使った継続監視
-                // この部分は簡素化のため省略
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                if (this.isRunning) {
-                    setImmediate(monitorStreams);
-                }
-            }
-            catch (error) {
-                if (error.message !== 'Command timed out') {
-                    this.logger.error('Event Stream監視エラー:', error);
-                }
-                if (this.isRunning) {
-                    setTimeout(monitorStreams, 5000); // エラー時は5秒後にリトライ
-                }
-            }
-        };
-        monitorStreams();
-    }
-    broadcastEvent(event) {
-        // テナント別ブロードキャスト
-        if (event.tenant_id) {
-            this.io.to(`tenant:${event.tenant_id}`).emit('hotel-event', event);
-        }
-        // 組織別ブロードキャスト（階層権限対応）
-        if (event.metadata?.organization_id) {
-            this.io.to(`organization:${event.metadata.organization_id}`).emit('hotel-event', event);
-        }
-        // 全体ブロードキャスト（重要イベント）
-        if (event.priority === 'HIGH' || event.critical) {
-            this.io.emit('hotel-event', event);
-        }
-        this.logger.debug('イベントブロードキャスト完了', {
-            type: event.type,
-            tenantId: event.tenant_id,
-            organizationId: event.metadata?.organization_id
-        });
-    }
-    async handleClientEvent(socket, event) {
-        try {
-            // クライアントからのイベントをRedis Streamに送信
-            await this.redis.xAdd('hotel-events-stream', '*', {
-                event: JSON.stringify(event),
-                source: 'websocket',
-                socketId: socket.id
-            });
-            this.logger.debug('クライアントイベント処理完了', { socketId: socket.id, eventType: event.type });
-        }
-        catch (error) {
-            this.logger.error('クライアントイベント処理エラー:', error);
-        }
-    }
-    async processStreamEvent(message) {
-        try {
-            const eventData = JSON.parse(message.event);
-            this.broadcastEvent(eventData);
-        }
-        catch (error) {
-            this.logger.error('Streamイベント処理エラー:', error);
-        }
-    }
+    /**
+     * サーバー停止
+     */
     async stop() {
         try {
-            this.isRunning = false;
-            // WebSocket サーバー停止
-            this.io.close();
-            this.httpServer.close();
-            // Redis 切断
-            await this.redis.disconnect();
+            if (this.redisClient) {
+                await this.redisClient.quit();
+                this.redisClient = null;
+            }
+            if (this.io) {
+                this.io.close();
+                this.io = null;
+            }
+            if (this.httpServer) {
+                await new Promise((resolve) => {
+                    this.httpServer.close(() => resolve());
+                });
+                this.httpServer = null;
+            }
             this.logger.info('WebSocketサーバー停止完了');
         }
         catch (error) {
             this.logger.error('WebSocketサーバー停止エラー:', error);
+            throw error;
         }
     }
-    isActive() {
-        return this.isRunning;
+    /**
+     * Redis接続
+     */
+    async connectRedis() {
+        try {
+            if (!this.options.redis)
+                return;
+            const { host, port, password, db } = this.options.redis;
+            this.redisClient = (0, redis_1.createClient)({
+                url: `redis://${host}:${port}`,
+                password: password,
+                database: db || 0
+            });
+            // エラーハンドリング
+            this.redisClient.on('error', (err) => {
+                this.logger.error('Redis接続エラー:', err);
+            });
+            await this.redisClient.connect();
+            this.logger.info(`Redis接続完了 (${host}:${port})`);
+        }
+        catch (error) {
+            this.logger.error('Redis接続エラー:', error);
+            throw error;
+        }
     }
-    getConnectedClients() {
-        return this.io.sockets.sockets.size;
+    /**
+     * イベントハンドラ設定
+     */
+    setupEventHandlers() {
+        if (!this.io)
+            return;
+        this.io.on('connection', (socket) => {
+            const clientInfo = {
+                id: socket.id,
+                address: socket.handshake.address,
+                userAgent: socket.handshake.headers['user-agent'] || 'unknown',
+                system: socket.handshake.query.system || 'unknown'
+            };
+            this.logger.info(`WebSocket接続: ${JSON.stringify(clientInfo)}`);
+            // 接続イベント
+            socket.on('disconnect', () => {
+                this.logger.info(`WebSocket切断: ${socket.id}`);
+            });
+            // システム間連携イベント
+            socket.on('system:event', (data) => {
+                this.logger.debug(`システムイベント受信: ${JSON.stringify(data)}`);
+                // 他のクライアントに転送
+                socket.broadcast.emit('system:event', data);
+            });
+            // テナント固有イベント
+            socket.on('tenant:event', (data) => {
+                if (data.tenantId) {
+                    this.logger.debug(`テナントイベント受信: ${JSON.stringify(data)}`);
+                    // 同じテナントIDのクライアントにのみ転送
+                    socket.to(`tenant:${data.tenantId}`).emit('tenant:event', data);
+                }
+            });
+            // テナントルーム参加
+            socket.on('join:tenant', (tenantId) => {
+                if (tenantId) {
+                    socket.join(`tenant:${tenantId}`);
+                    this.logger.debug(`テナントルーム参加: ${socket.id} -> tenant:${tenantId}`);
+                }
+            });
+        });
+    }
+    /**
+     * イベント送信
+     */
+    broadcastEvent(eventName, data) {
+        if (this.io) {
+            this.io.emit(eventName, data);
+        }
+    }
+    /**
+     * テナント固有イベント送信
+     */
+    broadcastTenantEvent(tenantId, eventName, data) {
+        if (this.io) {
+            this.io.to(`tenant:${tenantId}`).emit(eventName, data);
+        }
+    }
+    /**
+     * サーバー状態取得
+     */
+    getStatus() {
+        return {
+            active: this.io !== null,
+            connections: this.io ? this.io.engine.clientsCount : 0
+        };
     }
 }
+exports.HotelWebSocketServer = HotelWebSocketServer;

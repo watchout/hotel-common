@@ -1,22 +1,58 @@
-import { HierarchyApiManager } from './hierarchy-api';
-import { HierarchyPermissionManager } from './permission-manager';
-import { HierarchicalJwtManager } from './jwt-extension';
-import { HotelLogger } from '../utils/logger';
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HierarchyService = void 0;
+const hierarchy_api_1 = require("./hierarchy-api");
+const permission_manager_1 = require("./permission-manager");
+const jwt_extension_1 = require("./jwt-extension");
+const logger_1 = require("../utils/logger");
 /**
  * Hotel Group階層管理統合サービス
  *
  * 機能統合・高レベルAPI提供
  */
-export class HierarchyService {
-    static logger = HotelLogger.getInstance();
+class HierarchyService {
+    static logger = logger_1.HotelLogger.getInstance();
     /**
      * 組織階層の完全セットアップ
      */
     static async setupOrganizationHierarchy(setupData, userId) {
         try {
-            this.logger.info('組織階層完全セットアップ開始', { groupName: setupData.group.name });
+            this.logger.info(`組織階層完全セットアップ開始: ${setupData.group.name}`);
             // 1. グループ作成
-            const group = await HierarchyApiManager.createOrganization({
+            const group = await hierarchy_api_1.HierarchyApiManager.createOrganization({
                 organization_type: 'GROUP',
                 name: setupData.group.name,
                 code: setupData.group.code,
@@ -24,13 +60,13 @@ export class HierarchyService {
             }, userId);
             // 2. プリセット適用（指定時）
             if (setupData.preset_id) {
-                await HierarchyApiManager.applyPreset(group.id, setupData.preset_id, userId);
+                await hierarchy_api_1.HierarchyApiManager.applyPreset(group.id, setupData.preset_id, userId);
             }
             // 3. ブランド作成
             const brands = [];
             if (setupData.brands) {
                 for (const brandData of setupData.brands) {
-                    const brand = await HierarchyApiManager.createOrganization({
+                    const brand = await hierarchy_api_1.HierarchyApiManager.createOrganization({
                         organization_type: 'BRAND',
                         name: brandData.name,
                         code: brandData.code,
@@ -52,7 +88,7 @@ export class HierarchyService {
                             parentId = parentBrand.id;
                         }
                     }
-                    const hotel = await HierarchyApiManager.createOrganization({
+                    const hotel = await hierarchy_api_1.HierarchyApiManager.createOrganization({
                         organization_type: 'HOTEL',
                         name: hotelData.name,
                         code: hotelData.code,
@@ -69,10 +105,10 @@ export class HierarchyService {
                     // 親ホテル特定
                     const parentHotel = hotels.find(h => h.code === deptData.hotel_code);
                     if (!parentHotel) {
-                        this.logger.warn('親ホテルが見つかりません', { hotelCode: deptData.hotel_code });
+                        this.logger.warn(`親ホテルが見つかりません: ${deptData.hotel_code}`);
                         continue;
                     }
-                    const department = await HierarchyApiManager.createOrganization({
+                    const department = await hierarchy_api_1.HierarchyApiManager.createOrganization({
                         organization_type: 'DEPARTMENT',
                         name: deptData.name,
                         code: deptData.code,
@@ -82,12 +118,7 @@ export class HierarchyService {
                     departments.push(department);
                 }
             }
-            this.logger.info('組織階層完全セットアップ完了', {
-                groupId: group.id,
-                brandCount: brands.length,
-                hotelCount: hotels.length,
-                departmentCount: departments.length
-            });
+            this.logger.info(`組織階層完全セットアップ完了: グループID=${group.id}, ブランド数=${brands.length}, ホテル数=${hotels.length}, 部門数=${departments.length}`);
             return { group, brands, hotels, departments };
         }
         catch (error) {
@@ -108,7 +139,7 @@ export class HierarchyService {
                 created_at: new Date()
             };
             // 2. 階層JWT生成
-            const tokens = await HierarchicalJwtManager.generateHierarchicalToken({
+            const tokens = await jwt_extension_1.HierarchicalJwtManager.generateHierarchicalToken({
                 user_id: user.id,
                 tenant_id: userData.tenant_id,
                 email: userData.email,
@@ -117,10 +148,7 @@ export class HierarchyService {
                 permissions: userData.permissions || [],
                 organization_id: userData.organization_id
             });
-            this.logger.info('階層権限付きユーザー作成完了', {
-                userId: user.id,
-                organizationId: userData.organization_id
-            });
+            this.logger.info(`階層権限付きユーザー作成完了: ユーザーID=${user.id}, 組織ID=${userData.organization_id}`);
             return { user, tokens };
         }
         catch (error) {
@@ -133,7 +161,7 @@ export class HierarchyService {
      */
     static async getCompleteOrganizationTree(rootOrganizationId, includeStats = true) {
         try {
-            const organizations = await HierarchyPermissionManager.getOrganizationTree(rootOrganizationId);
+            const organizations = await permission_manager_1.HierarchyPermissionManager.getOrganizationTree(rootOrganizationId);
             if (!includeStats) {
                 return organizations;
             }
@@ -162,13 +190,13 @@ export class HierarchyService {
         try {
             const orgId = userToken.hierarchy_context.organization_id;
             // 1. 組織情報取得
-            const organizations = await HierarchyPermissionManager.getOrganizationTree(orgId, 1);
+            const organizations = await permission_manager_1.HierarchyPermissionManager.getOrganizationTree(orgId, 1);
             const organization = organizations[0];
             if (!organization) {
                 throw new Error('組織情報が見つかりません');
             }
             // 2. アクセス可能テナント取得
-            const accessibleTenants = await HierarchyPermissionManager.getAccessibleTenants(orgId);
+            const accessibleTenants = await permission_manager_1.HierarchyPermissionManager.getAccessibleTenants(orgId);
             // 3. データ権限詳細構築
             const dataPermissions = {};
             const dataTypes = ['CUSTOMER', 'RESERVATION', 'ANALYTICS', 'FINANCIAL', 'STAFF', 'INVENTORY'];
@@ -221,9 +249,9 @@ export class HierarchyService {
     static async diagnosePermissions(organizationId) {
         try {
             // 1. 現在設定取得
-            const organizations = await HierarchyPermissionManager.getOrganizationTree(organizationId, 1);
+            const organizations = await permission_manager_1.HierarchyPermissionManager.getOrganizationTree(organizationId, 1);
             const organization = organizations[0];
-            const dataPolicies = await HierarchyPermissionManager.getDataSharingPolicies(organizationId);
+            const dataPolicies = await permission_manager_1.HierarchyPermissionManager.getDataSharingPolicies(organizationId);
             const tenantCount = await this.getTenantCount(organizationId);
             const userCount = await this.getUserCount(organizationId);
             // 2. 推奨事項分析
@@ -288,7 +316,7 @@ export class HierarchyService {
      * プリセット適合度分析
      */
     static async analyzePresetMatch(organization, policies) {
-        const { HIERARCHY_PRESETS } = await import('./types');
+        const { HIERARCHY_PRESETS } = await Promise.resolve().then(() => __importStar(require('./types')));
         const suggestions = [];
         for (const [presetId, preset] of Object.entries(HIERARCHY_PRESETS)) {
             let matchCount = 0;
@@ -357,7 +385,7 @@ export class HierarchyService {
     // ヘルパーメソッド
     static async getTenantCount(organizationId) {
         try {
-            const tenants = await HierarchyPermissionManager.getAccessibleTenants(organizationId);
+            const tenants = await permission_manager_1.HierarchyPermissionManager.getAccessibleTenants(organizationId);
             return tenants.length;
         }
         catch {
@@ -370,7 +398,7 @@ export class HierarchyService {
     }
     static async hasDataPolicies(organizationId) {
         try {
-            const policies = await HierarchyPermissionManager.getDataSharingPolicies(organizationId);
+            const policies = await permission_manager_1.HierarchyPermissionManager.getDataSharingPolicies(organizationId);
             return policies.length > 0;
         }
         catch {
@@ -382,3 +410,4 @@ export class HierarchyService {
         return 0;
     }
 }
+exports.HierarchyService = HierarchyService;

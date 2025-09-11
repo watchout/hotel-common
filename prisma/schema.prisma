@@ -8,1920 +8,71 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model AdminAccessLog {
-  id        Int      @id @default(autoincrement())
-  path      String
-  method    String
-  userId    String
-  ipAddress String?
-  userAgent String?
-  createdAt DateTime @default(now())
-
-  @@index([createdAt])
-}
-
-model AiConversation {
-  id            Int             @id @default(autoincrement())
-  sessionId     String          @unique
-  roomId        String?
-  deviceId      Int?
-  startedAt     DateTime        @default(now())
-  endedAt       DateTime?
-  language      String          @default("ja")
-  DeviceRoom    DeviceRoom?     @relation(fields: [deviceId], references: [id])
-  AiCreditUsage AiCreditUsage[]
-  AiMessage     AiMessage[]
-
-  @@index([deviceId])
-  @@index([language])
-  @@index([roomId])
-}
-
-model AiCreditPlan {
-  id             Int             @id @default(autoincrement())
-  month          String          @unique
-  baseCreditsUsd Decimal
-  createdAt      DateTime        @default(now())
-  createdBy      String
-  AiCreditTopUp  AiCreditTopUp[]
-
-  @@index([month])
-}
-
-model AiCreditTopUp {
-  id           Int          @id @default(autoincrement())
-  planId       Int
-  amountUsd    Decimal
-  purchasedAt  DateTime     @default(now())
-  note         String?
-  AiCreditPlan AiCreditPlan @relation(fields: [planId], references: [id])
-
-  @@index([planId])
-  @@index([purchasedAt])
-}
-
-model AiCreditUsage {
-  id               Int             @id @default(autoincrement())
-  conversationId   Int?
-  modelId          Int
-  promptTokens     Int
-  completionTokens Int
-  costUsd          Decimal
-  category         CreditCategory  @default(CONCIERGE)
-  createdAt        DateTime        @default(now())
-  AiConversation   AiConversation? @relation(fields: [conversationId], references: [id])
-  AiModel          AiModel         @relation(fields: [modelId], references: [id])
-
-  @@index([createdAt])
-  @@index([modelId])
-}
-
-model AiKnowledgeBase {
+model DatabaseChangeLog {
   id          Int      @id @default(autoincrement())
-  title       String
-  description String?
-  fileType    String
-  filePath    String
-  language    String   @default("ja")
-  isActive    Boolean  @default(true)
-  vectorized  Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime
-
-  @@index([isActive])
-  @@index([language])
-}
-
-model AiMessage {
-  id             Int            @id @default(autoincrement())
-  conversationId Int
-  role           String
-  content        String
-  timestamp      DateTime       @default(now())
-  AiConversation AiConversation @relation(fields: [conversationId], references: [id])
-
-  @@index([conversationId])
-  @@index([timestamp])
-}
-
-model AiModel {
-  id                 Int             @id @default(autoincrement())
-  name               String          @unique
-  provider           String          @default("openai")
-  promptPriceUsd     Decimal
-  completionPriceUsd Decimal
-  autoMargin         Float           @default(10.0)
-  creditOverride     Int?
-  description        String?
-  useCase            String?
-  isActive           Boolean         @default(true)
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime
-  AiCreditUsage      AiCreditUsage[]
-
-  @@index([isActive])
-}
-
-model AiUsageLimit {
-  id                Int      @id @default(autoincrement())
-  deviceType        String?
-  maxQueriesPerHour Int
-  maxQueriesPerDay  Int
-  isActive          Boolean  @default(true)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime
-
-  @@index([deviceType])
-  @@index([isActive])
-}
-
-model BillingAdjustmentLog {
-  id             Int      @id @default(autoincrement())
-  placeId        Int
-  orderId        Int?
-  adjustmentType String
-  itemName       String
-  originalValue  String
-  adjustedValue  String
-  reason         String
-  staffName      String
-  ipAddress      String?
-  userAgent      String?
-  createdAt      DateTime @default(now())
-
-  @@index([adjustmentType])
-  @@index([createdAt])
-  @@index([orderId])
-  @@index([placeId])
-}
-
-model BillingSetting {
-  id                  Int      @id @default(autoincrement())
-  startDate           DateTime
-  baseFeeYen          Int      @default(20000)
-  includedDevices     Int      @default(20)
-  extraDeviceFeeYen   Int      @default(1000)
-  includedAiCredits   Int      @default(100)
-  extraAiCreditAmount Int      @default(100)
-  extraAiCreditFeeYen Int      @default(1000)
-  updatedAt           DateTime
-}
-
-model Category {
-  id             Int        @id @default(autoincrement())
-  tenantId       String
-  name           String
-  name_ja        String
-  description    String?
-  parentId       Int?
-  order          Int        @default(0)
-  isAvailable    Boolean    @default(true)
-  image          String?
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime
-  isDeleted      Boolean    @default(false)
-  deletedAt      DateTime?
-  Category       Category?  @relation("CategoryToCategory", fields: [parentId], references: [id])
-  other_Category Category[] @relation("CategoryToCategory")
-  MenuItem       MenuItem[]
-
-  @@index([isAvailable])
-  @@index([parentId])
-}
-
-model ComboMeta {
-  id            Int      @id @default(autoincrement())
-  structureType String
-  categoryTagId Int?
-  fixedItemId   Int?
-  requiredOpts  Json?
-  addonOpts     Json?
-  MenuItem      MenuItem @relation(fields: [id], references: [id])
-
-  @@index([categoryTagId])
-  @@index([fixedItemId])
-}
-
-model ConciergeCharacter {
-  id             Int      @id @default(1)
-  name           String
-  imageUrl       String?
-  friendly       Int      @default(70)
-  humor          Int      @default(50)
-  politeness     Int      @default(60)
-  toneTemplate   String   @default("敬語")
-  endingPhrase   String   @default("です。")
-  rawDescription String?
-  promptSummary  String?
-  updatedAt      DateTime
-}
-
-model DeviceAccessLog {
-  id         Int        @id @default(autoincrement())
-  deviceId   Int
-  accessTime DateTime   @default(now())
-  ipAddress  String
-  userAgent  String
-  status     String
-  pagePath   String?
-  sessionId  String?
-  DeviceRoom DeviceRoom @relation(fields: [deviceId], references: [id])
-
-  @@index([accessTime])
-  @@index([deviceId])
-  @@index([pagePath])
-  @@index([sessionId])
-}
-
-model DeviceRoom {
-  id               Int                @id @default(autoincrement())
-  tenantId         String
-  macAddress       String?
-  ipAddress        String?
-  deviceName       String
-  roomId           String?
-  isActive         Boolean            @default(true)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime
-  lastUsedAt       DateTime?
-  deviceType       String?
-  isDeleted        Boolean            @default(false)
-  deletedAt        DateTime?
-  placeId          Int?
-  AiConversation   AiConversation[]
-  DeviceAccessLog  DeviceAccessLog[]
-  Place            Place?             @relation(fields: [placeId], references: [id])
-  DeviceVideoCache DeviceVideoCache[]
-
-  @@index([placeId])
-  @@index([tenantId])
-  @@index([tenantId, isActive])
-}
-
-model DeviceSecret {
-  id        Int       @id @default(autoincrement())
-  roomId    String    @unique
-  secret    String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime
-  isDeleted Boolean   @default(false)
-  deletedAt DateTime?
-}
-
-model GooglePlayApp {
-  id          String     @id
-  packageName String     @unique
-  displayName String
-  description String?
-  iconUrl     String?
-  category    String
-  deepLinkUrl String
-  isApproved  Boolean    @default(false)
-  priority    Int        @default(0)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime
-  HotelApp    HotelApp[]
-
-  @@index([category])
-  @@index([isApproved])
-}
-
-model Guest {
-  id           Int        @id @default(autoincrement())
-  roomStatusId Int
-  guestNumber  Int
-  ageGroup     String
-  gender       String
-  name         String?
-  phone        String?
-  email        String?
-  notes        String?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime
-  RoomStatus   RoomStatus @relation(fields: [roomStatusId], references: [id])
-
-  @@unique([roomStatusId, guestNumber])
-  @@index([ageGroup])
-  @@index([gender])
-  @@index([roomStatusId])
-}
-
-model HotelApp {
-  id            String        @id
-  placeId       Int
-  appId         String
-  customLabel   String?
-  isEnabled     Boolean       @default(true)
-  sortOrder     Int           @default(0)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime
-  GooglePlayApp GooglePlayApp @relation(fields: [appId], references: [id])
-  Place         Place         @relation(fields: [placeId], references: [id])
-
-  @@unique([placeId, appId])
-  @@index([isEnabled])
-  @@index([placeId])
-}
-
-model InfoArticle {
-  id              Int               @id @default(autoincrement())
-  slug            String            @unique
-  title           String
-  content         String
-  customCss       String?
-  customJs        String?
-  coverImg        String?
-  category        String
-  tags            Json?
-  lang            String            @default("ja")
-  startAt         DateTime?
-  endAt           DateTime?
-  featured        Boolean           @default(false)
-  order           Int               @default(0)
-  viewCount       Int               @default(0)
-  authorId        String
-  authorRole      String
-  status          String            @default("draft")
-  approvedBy      String?
-  approvedAt      DateTime?
-  isLocked        Boolean           @default(false)
-  lockedBy        String?
-  version         Int               @default(1)
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime
-  isDeleted       Boolean           @default(false)
-  deletedAt       DateTime?
-  InfoMediaFile   InfoMediaFile[]
-  InfoRevision    InfoRevision[]
-  InfoTranslation InfoTranslation[]
-
-  @@index([authorRole])
-  @@index([category])
-  @@index([featured])
-  @@index([lang, startAt])
-  @@index([status])
-}
-
-model InfoMediaFile {
-  id          Int         @id @default(autoincrement())
-  articleId   Int
-  fileName    String
-  filePath    String
-  fileSize    Int
-  mimeType    String
-  fileType    String
-  order       Int         @default(0)
-  alt         String?
-  createdAt   DateTime    @default(now())
-  InfoArticle InfoArticle @relation(fields: [articleId], references: [id])
-
-  @@index([articleId])
-  @@index([fileType])
-}
-
-model InfoRevision {
-  id          Int         @id @default(autoincrement())
-  articleId   Int
-  version     Int
-  title       String
-  content     String
-  customCss   String?
-  customJs    String?
-  changeLog   String?
-  createdBy   String
-  createdAt   DateTime    @default(now())
-  InfoArticle InfoArticle @relation(fields: [articleId], references: [id])
-
-  @@index([articleId, version])
-}
-
-model InfoSearchLog {
-  id          Int      @id @default(autoincrement())
-  query       String
-  lang        String
-  resultCount Int
-  topScore    Float?
-  ipAddress   String?
-  userAgent   String?
-  createdAt   DateTime @default(now())
-
-  @@index([createdAt])
-  @@index([query])
-}
-
-model InfoTranslation {
-  id          Int         @id @default(autoincrement())
-  articleId   Int
-  lang        String
-  title       String
-  content     String
-  status      String      @default("auto")
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime
-  InfoArticle InfoArticle @relation(fields: [articleId], references: [id])
-
-  @@unique([articleId, lang])
-  @@index([lang])
-}
-
-model Layout {
-  id                    Int              @id @default(autoincrement())
-  name                  String
-  slug                  String           @unique
-  description           String?
-  type                  String           @default("page")
-  category              String?
-  status                String           @default("draft")
-  data                  Json
-  settings              Json?
-  previewUrl            String?
-  publishedUrl          String?
-  version               Int              @default(1)
-  isTemplate            Boolean          @default(false)
-  templateId            Int?
-  isPublicPage          Boolean          @default(false)
-  publicPageActivatedAt DateTime?
-  publicPageActivatedBy String?
-  previousPublicPageId  Int?
-  displayStartAt        DateTime?
-  displayEndAt          DateTime?
-  isScheduled           Boolean          @default(false)
-  priority              Int              @default(0)
-  seasonTag             String?
-  isActive              Boolean          @default(false)
-  activatedAt           DateTime?
-  deactivatedAt         DateTime?
-  authorId              String
-  createdAt             DateTime         @default(now())
-  updatedAt             DateTime
-  publishedAt           DateTime?
-  isDeleted             Boolean          @default(false)
-  deletedAt             DateTime?
-  Layout                Layout?          @relation("LayoutToLayout", fields: [templateId], references: [id])
-  other_Layout          Layout[]         @relation("LayoutToLayout")
-  LayoutAppBlock        LayoutAppBlock[]
-  LayoutAsset           LayoutAsset[]
-  LayoutRevision        LayoutRevision[]
-  LayoutSetting         LayoutSetting[]
-
-  @@index([authorId])
-  @@index([category])
-  @@index([category, isPublicPage])
-  @@index([isActive, priority])
-  @@index([isPublicPage])
-  @@index([isScheduled, displayStartAt, displayEndAt])
-  @@index([isTemplate])
-  @@index([seasonTag])
-  @@index([slug])
-  @@index([status])
-  @@index([type])
-}
-
-model LayoutAppBlock {
-  id        String   @id
-  layoutId  Int
-  blockId   String
-  appConfig Json
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  Layout    Layout   @relation(fields: [layoutId], references: [id])
-
-  @@unique([layoutId, blockId])
-  @@index([layoutId])
-}
-
-model LayoutAsset {
-  id        Int      @id @default(autoincrement())
-  layoutId  Int?
-  fileName  String
-  filePath  String
-  fileSize  Int
-  mimeType  String
-  fileType  String
-  alt       String?
-  title     String?
-  order     Int      @default(0)
-  isPublic  Boolean  @default(false)
-  createdBy String
-  createdAt DateTime @default(now())
-  Layout    Layout?  @relation(fields: [layoutId], references: [id])
-
-  @@index([fileType])
-  @@index([isPublic])
-  @@index([layoutId])
-}
-
-model LayoutRevision {
-  id        Int      @id @default(autoincrement())
-  layoutId  Int
-  version   Int
-  name      String
-  data      Json
-  settings  Json?
-  changeLog String?
-  createdBy String
-  createdAt DateTime @default(now())
-  Layout    Layout   @relation(fields: [layoutId], references: [id])
-
-  @@unique([layoutId, version])
-  @@index([createdAt])
-  @@index([layoutId])
-}
-
-model LayoutSetting {
-  id       Int    @id @default(autoincrement())
-  layoutId Int
-  key      String
-  value    String
-  dataType String @default("string")
-  Layout   Layout @relation(fields: [layoutId], references: [id])
-
-  @@unique([layoutId, key])
-  @@index([layoutId])
-}
-
-model MemberGradeAccess {
-  id                     String    @id
-  tenant_id              String
-  room_grade_id          String
-  member_rank_id         String    @db.VarChar(50)
-  access_type            String
-  priority_booking_hours Int       @default(0)
-  max_bookings_per_month Int?
-  min_stay_override      Int?
-  is_active              Boolean   @default(true)
-  created_at             DateTime  @default(now())
-  updated_at             DateTime
-  RoomGrade              RoomGrade @relation(fields: [room_grade_id], references: [id])
-  Tenant                 Tenant    @relation(fields: [tenant_id], references: [id])
-
-  @@unique([tenant_id, room_grade_id, member_rank_id])
-}
-
-model MenuAsset {
-  id         Int      @id @default(autoincrement())
-  menuItemId Int
-  url        String
-  type       String
-  order      Int      @default(0)
-  createdAt  DateTime @default(now())
-  MenuItem   MenuItem @relation(fields: [menuItemId], references: [id])
-
-  @@index([menuItemId])
-}
-
-model MenuComboItem {
-  id                                        Int      @id @default(autoincrement())
-  parentId                                  Int
-  childId                                   Int
-  quantity                                  Int      @default(1)
-  order                                     Int      @default(0)
-  MenuItem_MenuComboItem_childIdToMenuItem  MenuItem @relation("MenuComboItem_childIdToMenuItem", fields: [childId], references: [id])
-  MenuItem_MenuComboItem_parentIdToMenuItem MenuItem @relation("MenuComboItem_parentIdToMenuItem", fields: [parentId], references: [id])
-
-  @@unique([parentId, childId])
-  @@index([childId])
-  @@index([parentId])
-}
-
-model MenuItem {
-  id                                             Int                @id @default(autoincrement())
-  tenantId                                       String
-  name                                           String
-  name_ja                                        String
-  description                                    String?
-  description_ja                                 String?
-  categoryId                                     Int?
-  imageUrl                                       String?
-  stockAvailable                                 Boolean            @default(true)
-  stockQty                                       Int?
-  isSecret                                       Boolean            @default(false)
-  secretCode                                     String?
-  isSet                                          Boolean            @default(false)
-  isFeatured                                     Boolean            @default(false)
-  showFrom                                       DateTime?
-  showTo                                         DateTime?
-  isPreview                                      Boolean            @default(false)
-  showRankingDay                                 Boolean            @default(true)
-  showRankingWeek                                Boolean            @default(true)
-  showRankingMonth                               Boolean            @default(true)
-  order                                          Int                @default(0)
-  categoryOrder                                  Int                @default(0)
-  createdAt                                      DateTime           @default(now())
-  updatedAt                                      DateTime
-  isDeleted                                      Boolean            @default(false)
-  deletedAt                                      DateTime?
-  ComboMeta                                      ComboMeta?
-  MenuAsset                                      MenuAsset[]
-  MenuComboItem_MenuComboItem_childIdToMenuItem  MenuComboItem[]    @relation("MenuComboItem_childIdToMenuItem")
-  MenuComboItem_MenuComboItem_parentIdToMenuItem MenuComboItem[]    @relation("MenuComboItem_parentIdToMenuItem")
-  Category                                       Category?          @relation(fields: [categoryId], references: [id])
-  OrderItem                                      OrderItem[]
-  MenuItemToTag                                  MenuItemToTag[]
-  CampaignItem                                   CampaignItem[]
-  CampaignUsageLog                               CampaignUsageLog[]
-  priceRules                                     PriceRule[]
-  gachaMenuItems                                 GachaMenuItem[]
-
-  @@index([categoryId, categoryOrder])
-}
-
-model OperationLog {
-  id          Int      @id @default(autoincrement())
-  placeId     Int
-  type        String
+  changeType  String
   description String
-  details     String?
-  staffName   String
+  details     Json?
+  createdBy   String?
   createdAt   DateTime @default(now())
-  Place       Place    @relation(fields: [placeId], references: [id])
 
+  @@index([changeType])
   @@index([createdAt])
-  @@index([placeId])
-  @@index([type])
 }
 
 model Order {
-  id               Int                @id @default(autoincrement())
-  tenantId         String
-  roomId           String
-  placeId          Int?
-  status           String             @default("received")
-  items            Json
-  total            Int
-  isGachaOrder     Boolean            @default(false)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime
-  paidAt           DateTime?
-  isDeleted        Boolean            @default(false)
-  deletedAt        DateTime?
-  Place            Place?             @relation(fields: [placeId], references: [id])
-  OrderItem        OrderItem[]
-  CampaignUsageLog CampaignUsageLog[]
+  id        Int         @id @default(autoincrement())
+  tenantId  String
+  roomId    String
+  placeId   Int?
+  status    String      @default("received")
+  items     Json
+  total     Int
+  createdAt DateTime    @default(now())
+  updatedAt DateTime
+  paidAt    DateTime?
+  isDeleted Boolean     @default(false)
+  deletedAt DateTime?
+  uuid      String?     @unique
+  sessionId String?
+  OrderItem OrderItem[]
 
-  @@index([placeId])
+  @@index([createdAt])
+  @@index([isDeleted, paidAt])
+  @@index([status])
   @@index([tenantId])
-  @@index([tenantId, status])
+  @@index([sessionId])
 }
 
 model OrderItem {
-  id            Int        @id @default(autoincrement())
-  tenantId      String
-  orderId       Int
-  menuItemId    Int
-  name          String
-  price         Int
-  quantity      Int
-  status        String     @default("pending")
-  notes         String?
-  isGachaResult Boolean    @default(false)
-  gachaMenuId   Int?
-  originalPrice Decimal?
-  deliveredAt   DateTime?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime
-  MenuItem      MenuItem   @relation(fields: [menuItemId], references: [id])
-  Order         Order      @relation(fields: [orderId], references: [id])
-  GachaMenu     GachaMenu? @relation(fields: [gachaMenuId], references: [id])
-
-  @@index([menuItemId])
-  @@index([orderId])
-  @@index([tenantId])
-  @@index([tenantId, status])
-  @@index([gachaMenuId])
-}
-
-model Place {
-  id               Int                @id @default(autoincrement())
-  tenantId         String
-  code             String             @unique
-  name             String
-  placeTypeId      Int
-  description      String?
-  attributes       Json?
-  floor            Int?
-  capacity         Int?
-  area             Float?
-  isActive         Boolean            @default(true)
-  order            Int                @default(0)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime
-  isDeleted        Boolean            @default(false)
-  deletedAt        DateTime?
-  DeviceRoom       DeviceRoom[]
-  HotelApp         HotelApp[]
-  OperationLog     OperationLog[]
-  Order            Order[]
-  PlaceType        PlaceType          @relation(fields: [placeTypeId], references: [id])
-  PlaceGroupMember PlaceGroupMember[]
-  Receipt          Receipt[]
-  RoomMemo         RoomMemo[]
-  RoomStatus       RoomStatus?
-
-  @@index([isActive])
-  @@index([placeTypeId])
-  @@index([tenantId, code])
-  @@index([tenantId])
-}
-
-model PlaceGroup {
-  id               Int                @id @default(autoincrement())
-  name             String
-  description      String?
-  color            String?
-  order            Int                @default(0)
-  isActive         Boolean            @default(true)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime
-  isDeleted        Boolean            @default(false)
-  deletedAt        DateTime?
-  PlaceGroupMember PlaceGroupMember[]
-
-  @@index([isActive])
-  @@index([order])
-}
-
-model PlaceGroupMember {
-  id         Int        @id @default(autoincrement())
-  placeId    Int
-  groupId    Int
-  order      Int        @default(0)
-  createdAt  DateTime   @default(now())
-  PlaceGroup PlaceGroup @relation(fields: [groupId], references: [id])
-  Place      Place      @relation(fields: [placeId], references: [id])
-
-  @@unique([placeId, groupId])
-  @@index([groupId])
-  @@index([placeId])
-}
-
-model PlaceType {
   id          Int       @id @default(autoincrement())
   tenantId    String
-  name        String    @unique
-  description String?
-  color       String?
-  icon        String?
-  order       Int       @default(0)
-  isActive    Boolean   @default(true)
+  orderId     Int
+  menuItemId  Int
+  name        String
+  price       Int
+  quantity    Int
+  status      String    @default("pending")
+  notes       String?
+  deliveredAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime
-  isDeleted   Boolean   @default(false)
-  deletedAt   DateTime?
-  Place       Place[]
-
-  @@index([isActive])
-  @@index([tenantId])
-  @@index([tenantId, order])
-}
-
-model RankingLog {
-  id         Int    @id @default(autoincrement())
-  day        String
-  menuItemId Int
-  count      Int    @default(0)
-
-  @@unique([day, menuItemId])
-  @@index([day])
-  @@index([menuItemId])
-}
-
-model Receipt {
-  id          String   @id
-  placeId     Int
-  receiptData Json
-  totalAmount Int
-  createdAt   DateTime @default(now())
-  isDeleted   Boolean  @default(false)
-  Place       Place    @relation(fields: [placeId], references: [id])
-
-  @@index([createdAt])
-  @@index([placeId])
-}
-
-model Reservation {
-  id               String    @id
-  tenant_id        String
-  customer_id      String?
-  room_id          String
-  check_in_date    DateTime
-  check_out_date   DateTime
-  guest_name       String    @db.VarChar(100)
-  guest_count      Int       @default(1)
-  status           String    @default("PENDING") @db.VarChar(50)
-  origin           String    @db.VarChar(50)
-  total_amount     Decimal?  @db.Decimal(10, 2)
-  paid_amount      Decimal?  @default(0) @db.Decimal(10, 2)
-  special_requests String?
-  internal_notes   String?
-  checked_in_at    DateTime?
-  checked_out_at   DateTime?
-  cancelled_at     DateTime?
-  created_at       DateTime  @default(now())
-  updated_at       DateTime
-  Room             Room      @relation(fields: [room_id], references: [id])
-  Tenant           Tenant    @relation(fields: [tenant_id], references: [id])
-
-  @@index([customer_id])
-  @@index([tenant_id, check_in_date, check_out_date])
-  @@index([tenant_id, status])
-}
-
-model Room {
-  id                       String        @id
-  tenant_id                String
-  room_number              String        @db.VarChar(50)
-  room_grade_id            String?
-  floor                    Int?
-  capacity                 Int           @default(2)
-  status                   String        @default("AVAILABLE") @db.VarChar(50)
-  accessibility_features   Json          @default("[]")
-  grade_override_amenities Json?
-  pricing_room_code        String?       @db.VarChar(50)
-  special_features         Json          @default("{}")
-  view_type                String?       @db.VarChar(50)
-  is_active                Boolean       @default(true)
-  maintenance_notes        String?
-  created_at               DateTime      @default(now())
-  updated_at               DateTime
-  deleted_at               DateTime?
-  Reservation              Reservation[]
-  RoomGrade                RoomGrade?    @relation(fields: [room_grade_id], references: [id])
-  Tenant                   Tenant        @relation(fields: [tenant_id], references: [id])
-
-  @@unique([tenant_id, room_number])
-  @@index([tenant_id, pricing_room_code])
-  @@index([tenant_id, room_grade_id])
-  @@index([tenant_id, room_grade_id, status])
-}
-
-model RoomGrade {
-  id                   String              @id
-  tenant_id            String
-  grade_code           String              @db.VarChar(50)
-  grade_name           String              @db.VarChar(100)
-  grade_name_en        String?             @db.VarChar(100)
-  description          String?
-  grade_level          Int
-  default_capacity     Int                 @default(2)
-  max_capacity         Int                 @default(4)
-  room_size_sqm        Decimal?            @db.Decimal(6, 2)
-  standard_amenities   Json                @default("[]")
-  premium_amenities    Json                @default("[]")
-  included_services    Json                @default("[]")
-  member_only          Boolean             @default(false)
-  min_stay_nights      Int                 @default(1)
-  advance_booking_days Int                 @default(0)
-  display_order        Int                 @default(1)
-  is_active            Boolean             @default(true)
-  is_public            Boolean             @default(true)
-  pricing_category     String?             @db.VarChar(50)
-  origin_system        String              @default("hotel-common") @db.VarChar(50)
-  synced_at            DateTime            @default(now())
-  updated_by_system    String              @default("hotel-common") @db.VarChar(50)
-  created_at           DateTime            @default(now())
-  updated_at           DateTime
-  deleted_at           DateTime?
-  MemberGradeAccess    MemberGradeAccess[]
-  Room                 Room[]
-  Tenant               Tenant              @relation(fields: [tenant_id], references: [id])
-  RoomGradeMedia       RoomGradeMedia[]
-
-  @@unique([tenant_id, grade_code])
-  @@index([tenant_id, grade_level])
-  @@index([tenant_id, is_active, is_public])
-  @@index([tenant_id, pricing_category])
-}
-
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-model RoomGradeMedia {
-  id            String    @id
-  tenant_id     String
-  room_grade_id String
-  media_type    String    @db.VarChar(20)
-  file_name     String
-  file_path     String
-  file_size     Int?
-  mime_type     String?   @db.VarChar(100)
-  display_order Int?      @default(1)
-  title         String?   @db.VarChar(200)
-  description   String?
-  is_primary    Boolean?  @default(false)
-  is_active     Boolean?  @default(true)
-  created_at    DateTime? @default(now())
-  updated_at    DateTime? @default(now())
-  deleted_at    DateTime?
-  RoomGrade     RoomGrade @relation(fields: [room_grade_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
-  @@index([room_grade_id, display_order], map: "idx_room_grade_media_order")
-  @@index([tenant_id, room_grade_id], map: "idx_room_grade_media_tenant_grade")
-  @@index([media_type, is_active], map: "idx_room_grade_media_type")
-}
-
-model RoomMemo {
-  id                Int                 @id @default(autoincrement())
-  placeId           Int
-  category          String
-  content           String
-  status            String              @default("pending")
-  staffName         String
-  assignedTo        String?
-  priority          String              @default("normal")
-  dueDate           DateTime?
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime
-  isDeleted         Boolean             @default(false)
-  deletedAt         DateTime?
-  Place             Place               @relation(fields: [placeId], references: [id])
-  RoomMemoComment   RoomMemoComment[]
-  RoomMemoStatusLog RoomMemoStatusLog[]
-
-  @@index([category])
-  @@index([createdAt])
-  @@index([placeId])
-  @@index([status])
-}
-
-model RoomMemoComment {
-  id                    Int               @id @default(autoincrement())
-  memoId                Int
-  content               String
-  staffName             String
-  commentType           String            @default("comment")
-  statusFrom            String?
-  statusTo              String?
-  parentCommentId       Int?
-  createdAt             DateTime          @default(now())
-  isDeleted             Boolean           @default(false)
-  deletedAt             DateTime?
-  RoomMemo              RoomMemo          @relation(fields: [memoId], references: [id])
-  RoomMemoComment       RoomMemoComment?  @relation("RoomMemoCommentToRoomMemoComment", fields: [parentCommentId], references: [id])
-  other_RoomMemoComment RoomMemoComment[] @relation("RoomMemoCommentToRoomMemoComment")
-
-  @@index([commentType])
-  @@index([createdAt])
-  @@index([memoId])
-  @@index([parentCommentId])
-}
-
-model RoomMemoStatusLog {
-  id         Int      @id @default(autoincrement())
-  memoId     Int
-  fromStatus String?
-  toStatus   String
-  comment    String?
-  staffName  String
-  createdAt  DateTime @default(now())
-  RoomMemo   RoomMemo @relation(fields: [memoId], references: [id])
-
-  @@index([createdAt])
-  @@index([memoId])
-}
-
-model RoomStatus {
-  id         Int       @id @default(autoincrement())
-  placeId    Int       @unique
-  status     String    @default("available")
-  checkinAt  DateTime?
-  checkoutAt DateTime?
-  guestCount Int?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime
-  Guest      Guest[]
-  Place      Place     @relation(fields: [placeId], references: [id])
-
-  @@index([placeId])
-  @@index([status])
-}
-
-model StockUpdateLog {
-  id          Int      @id @default(autoincrement())
-  menuItemId  Int
-  oldQuantity Int?
-  newQuantity Int?
-  updatedBy   String
-  reason      String?
-  createdAt   DateTime @default(now())
-
-  @@index([createdAt])
-  @@index([menuItemId])
-}
-
-model SystemSetting {
-  id        Int      @id @default(autoincrement())
-  key       String   @unique
-  value     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-}
-
-model Tag {
-  id            Int             @id @default(autoincrement())
-  tenantId      String
-  path          String          @unique
-  name_ja       String
-  name_en       String
-  aliases       Json?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime
-  MenuItemToTag MenuItemToTag[]
-
-  @@index([tenantId])
-}
-
-model SchemaVersion {
-  version     String   @id
-  description String
-  rollbackSql String?  @map("rollback_sql")
-  appliedAt   DateTime @default(now()) @map("applied_at")
-  appliedBy   String?  @map("applied_by")
-
-  @@map("schema_version")
-}
-
-model SystemEvent {
-  id           String    @id @default(cuid())
-  tenantId     String    @map("tenant_id")
-  userId       String?   @map("user_id")
-  eventType    String    @map("event_type")
-  sourceSystem String    @map("source_system")
-  targetSystem String    @map("target_system")
-  entityType   String    @map("entity_type")
-  entityId     String    @map("entity_id")
-  action       String
-  eventData    Json?     @map("event_data")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  processedAt  DateTime? @map("processed_at")
-  status       String    @default("PENDING")
-
-  @@index([tenantId])
-  @@index([eventType])
-  @@index([status])
-  @@index([createdAt])
-  @@map("system_event")
-}
-
-model Tenant {
-  id                  String              @id
-  name                String
-  domain              String?             @unique
-  planType            String              @default("economy") // 従来のプラン（下位互換性のため残す）
-  planCategory        String              @default("omotenasuai") // 従来のプラン（下位互換性のため残す）
-  planSelectedAt      DateTime?
-  planChangeable      Boolean             @default(true)
-  planLockReason      String?
-  maxDevices          Int                 @default(30)
-  status              String              @default("active")
-  contactName         String
-  contactEmail        String
-  contactPhone        String?
-  contractStartDate   DateTime            @default(now())
-  monthlyPrice        Int                 @default(29800) // 従来の料金（下位互換性のため残す）
-  agentId             String?
-  agentCommissionRate Float?
-  // プレミアム機能フラグ
-  enableSecretMenu    Boolean             @default(false) // シークレットメニュー機能
-  enableGachaMenu     Boolean             @default(false) // ガチャメニュー機能
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime
-  additional_devices  AdditionalDevices[]
-  customers           Customers[]
-  MemberGradeAccess   MemberGradeAccess[]
-  monthly_billings    MonthlyBillings[]
-  plan_change_logs    PlanChangeLogs[]
-  referrals           Referrals[]
-  Reservation         Reservation[]
-  Room                Room[]
-  RoomGrade           RoomGrade[]
-  Staff               Staff[]
-  TenantSystemPlan    TenantSystemPlan[] // 新しいシステム別プラン
-  agents              Agents?             @relation(fields: [agentId], references: [id])
-  usage_statistics    UsageStatistics[]
-  priceRules          PriceRule[]
-  gachaMenus          GachaMenu[]
-  gachaMenuItems      GachaMenuItem[]
-}
-
-model Staff {
-  id                   String              @id @default(cuid())
-  tenantId             String              @map("tenant_id")
-  staffCode            String              @map("staff_code")
-  staffNumber          String              @map("staff_number")
-  lastName             String              @map("last_name")
-  firstName            String              @map("first_name")
-  lastNameKana         String?             @map("last_name_kana")
-  firstNameKana        String?             @map("first_name_kana")
-  displayName          String              @map("display_name")
-  employeeId           String?             @unique @map("employee_id")
-  email                String?             @unique
-  emailVerifiedAt      DateTime?           @map("email_verified_at")
-  pinHash              String?             @map("pin_hash")
-  passwordHash         String?             @map("password_hash")
-  passwordChangedAt    DateTime?           @map("password_changed_at")
-  failedLoginCount     Int                 @default(0) @map("failed_login_count")
-  lockedUntil          DateTime?           @map("locked_until")
-  lastLoginAt          DateTime?           @map("last_login_at")
-  totpSecret           String?             @map("totp_secret")
-  totpEnabled          Boolean             @default(false) @map("totp_enabled")
-  backupCodes          Json?               @map("backup_codes")
-  defaultRoleId        String?             @map("default_role_id")
-  baseLevel            Int                 @default(1) @map("base_level")
-  departmentCode       String?             @map("department_code")
-  positionTitle        String?             @map("position_title")
-  hireDate             DateTime?           @map("hire_date")
-  employmentType       String              @default("full_time") @map("employment_type")
-  employmentStatus     String              @default("active") @map("employment_status")
-  terminationDate      DateTime?           @map("termination_date")
-  terminationReason    String?             @map("termination_reason")
-  phoneNumber          String?             @map("phone_number")
-  emergencyContact     Json?               @map("emergency_contact")
-  address              Json?
-  photoUrl             String?             @map("photo_url")
-  bio                  String?
-  skills               Json?
-  shiftPattern         String?             @map("shift_pattern")
-  hourlyRate           Decimal?            @map("hourly_rate") @db.Decimal(10, 2)
-  salary               Decimal?            @db.Decimal(10, 2)
-  supervisorId         String?             @map("supervisor_id")
-  accessRestrictions   Json                @default("{}") @map("access_restrictions")
-  notificationSettings Json                @default("{}") @map("notification_settings")
-  uiPreferences        Json                @default("{}") @map("ui_preferences")
-  securityClearance    String?             @map("security_clearance")
-  accessCardId         String?             @map("access_card_id")
-  isActive             Boolean             @default(true) @map("is_active")
-  isSystemUser         Boolean             @default(false) @map("is_system_user")
-  notes                String?
-  hotelCommonUserId    String?             @map("hotel_common_user_id")
-  legacyUserData       Json?               @map("legacy_user_data")
-  createdAt            DateTime            @default(now()) @map("created_at")
-  updatedAt            DateTime            @updatedAt @map("updated_at")
-  createdBy            String?             @map("created_by")
-  updatedBy            String?             @map("updated_by")
-  deletedAt            DateTime?           @map("deleted_at")
-  attendanceApprovals  Attendance[]        @relation("AttendanceApproval")
-  attendances          Attendance[]
-  auditLogs            AuditLog[]
-  handoverAcknowledged HandoverNote[]      @relation("HandoverAcknowledged")
-  handoverNotesFrom    HandoverNote[]      @relation("HandoverFrom")
-  handoverNotesTo      HandoverNote[]      @relation("HandoverTo")
-  createdByStaff       Staff?              @relation("StaffCreator", fields: [createdBy], references: [id])
-  createdStaff         Staff[]             @relation("StaffCreator")
-  supervisor           Staff?              @relation("StaffSupervisor", fields: [supervisorId], references: [id])
-  subordinates         Staff[]             @relation("StaffSupervisor")
-  tenant               Tenant              @relation(fields: [tenantId], references: [id])
-  updatedByStaff       Staff?              @relation("StaffUpdater", fields: [updatedBy], references: [id])
-  updatedStaff         Staff[]             @relation("StaffUpdater")
-  notificationsFrom    StaffNotification[] @relation("NotificationFrom")
-  notifications        StaffNotification[]
-  schedulesCreated     WorkSchedule[]      @relation("ScheduleCreator")
-  workSchedules        WorkSchedule[]
-  schedulesUpdated     WorkSchedule[]      @relation("ScheduleUpdater")
-
-  @@unique([tenantId, staffCode])
-  @@unique([tenantId, staffNumber])
-  @@unique([tenantId, employeeId])
-  @@index([tenantId])
-  @@index([email])
-  @@index([departmentCode])
-  @@index([employmentStatus])
-  @@index([isActive])
-  @@map("Staff")
-}
-
-model Attendance {
-  id                   String              @id @default(cuid())
-  tenantId             String              @map("tenant_id")
-  staffId              String              @map("staff_id")
-  staffNumber          String              @map("staff_number")
-  workDate             DateTime            @map("work_date")
-  clockInTime          DateTime            @map("clock_in_time")
-  clockOutTime         DateTime?           @map("clock_out_time")
-  breakStartTime       DateTime?           @map("break_start_time")
-  breakEndTime         DateTime?           @map("break_end_time")
-  workDurationMinutes  Int?                @map("work_duration_minutes")
-  overtimeMinutes      Int                 @default(0) @map("overtime_minutes")
-  breakDurationMinutes Int                 @default(0) @map("break_duration_minutes")
-  attendanceStatus     String              @default("present") @map("attendance_status")
-  notes                String?
-  approvedByStaffId    String?             @map("approved_by_staff_id")
-  approvedAt           DateTime?           @map("approved_at")
-  createdAt            DateTime            @default(now()) @map("created_at")
-  updatedAt            DateTime            @updatedAt @map("updated_at")
-  approvedByStaff      Staff?              @relation("AttendanceApproval", fields: [approvedByStaffId], references: [id])
-  staff                Staff               @relation(fields: [staffId], references: [id])
-  notifications        StaffNotification[] @relation("NotificationAttendance")
-
-  @@unique([staffId, workDate])
-  @@index([tenantId])
-  @@index([workDate])
-  @@index([attendanceStatus])
-  @@map("Attendance")
-}
-
-model WorkSchedule {
-  id                 String              @id @default(cuid())
-  tenantId           String              @map("tenant_id")
-  staffId            String              @map("staff_id")
-  staffNumber        String              @map("staff_number")
-  scheduleDate       DateTime            @map("schedule_date")
-  scheduledStartTime DateTime            @map("scheduled_start_time")
-  scheduledEndTime   DateTime            @map("scheduled_end_time")
-  shiftType          String              @default("full_day") @map("shift_type")
-  isWorkingDay       Boolean             @default(true) @map("is_working_day")
-  isHoliday          Boolean             @default(false) @map("is_holiday")
-  isPaidLeave        Boolean             @default(false) @map("is_paid_leave")
-  notes              String?
-  createdBy          String?             @map("created_by")
-  updatedBy          String?             @map("updated_by")
-  createdAt          DateTime            @default(now()) @map("created_at")
-  updatedAt          DateTime            @updatedAt @map("updated_at")
-  notifications      StaffNotification[] @relation("NotificationSchedule")
-  createdByStaff     Staff?              @relation("ScheduleCreator", fields: [createdBy], references: [id])
-  staff              Staff               @relation(fields: [staffId], references: [id])
-  updatedByStaff     Staff?              @relation("ScheduleUpdater", fields: [updatedBy], references: [id])
-
-  @@unique([staffId, scheduleDate])
-  @@index([tenantId])
-  @@index([scheduleDate])
-  @@index([shiftType])
-  @@map("WorkSchedule")
-}
-
-model HandoverNote {
-  id                      String              @id @default(cuid())
-  tenantId                String              @map("tenant_id")
-  fromStaffId             String              @map("from_staff_id")
-  toStaffId               String?             @map("to_staff_id")
-  toDepartment            String?             @map("to_department")
-  shiftHandoverId         String?             @map("shift_handover_id")
-  title                   String
-  content                 String
-  priority                String              @default("MEDIUM")
-  category                String
-  relatedReservationId    String?             @map("related_reservation_id")
-  relatedRoomId           String?             @map("related_room_id")
-  relatedCustomerId       String?             @map("related_customer_id")
-  photoUrls               Json                @default("[]") @map("photo_urls")
-  videoUrls               Json                @default("[]") @map("video_urls")
-  documentUrls            Json                @default("[]") @map("document_urls")
-  mediaMetadata           Json                @default("{}") @map("media_metadata")
-  status                  String              @default("PENDING")
-  acknowledgedAt          DateTime?           @map("acknowledged_at")
-  acknowledgedByStaffId   String?             @map("acknowledged_by_staff_id")
-  resolvedAt              DateTime?           @map("resolved_at")
-  resolutionNotes         String?             @map("resolution_notes")
-  requiresImmediateAction Boolean             @default(false) @map("requires_immediate_action")
-  followUpRequired        Boolean             @default(false) @map("follow_up_required")
-  followUpDeadline        DateTime?           @map("follow_up_deadline")
-  createdAt               DateTime            @default(now()) @map("created_at")
-  updatedAt               DateTime            @updatedAt @map("updated_at")
-  deletedAt               DateTime?           @map("deleted_at")
-  acknowledgedByStaff     Staff?              @relation("HandoverAcknowledged", fields: [acknowledgedByStaffId], references: [id])
-  fromStaff               Staff               @relation("HandoverFrom", fields: [fromStaffId], references: [id])
-  toStaff                 Staff?              @relation("HandoverTo", fields: [toStaffId], references: [id])
-  notifications           StaffNotification[] @relation("NotificationHandover")
-
-  @@index([tenantId])
-  @@index([fromStaffId])
-  @@index([toStaffId])
-  @@index([category])
-  @@index([priority])
-  @@index([status])
-  @@index([createdAt])
-  @@map("HandoverNote")
-}
-
-model StaffNotification {
-  id                  String        @id @default(cuid())
-  tenantId            String        @map("tenant_id")
-  staffId             String        @map("staff_id")
-  fromStaffId         String?       @map("from_staff_id")
-  type                String
-  title               String
-  message             String
-  priority            String        @default("MEDIUM")
-  relatedHandoverId   String?       @map("related_handover_id")
-  relatedAttendanceId String?       @map("related_attendance_id")
-  relatedScheduleId   String?       @map("related_schedule_id")
-  isRead              Boolean       @default(false) @map("is_read")
-  readAt              DateTime?     @map("read_at")
-  isDelivered         Boolean       @default(false) @map("is_delivered")
-  deliveredAt         DateTime?     @map("delivered_at")
-  deliveryMethods     Json          @default("[\"in_app\"]") @map("delivery_methods")
-  scheduledFor        DateTime?     @map("scheduled_for")
-  createdAt           DateTime      @default(now()) @map("created_at")
-  expiresAt           DateTime?     @map("expires_at")
-  fromStaff           Staff?        @relation("NotificationFrom", fields: [fromStaffId], references: [id])
-  relatedAttendance   Attendance?   @relation("NotificationAttendance", fields: [relatedAttendanceId], references: [id])
-  relatedHandover     HandoverNote? @relation("NotificationHandover", fields: [relatedHandoverId], references: [id])
-  relatedSchedule     WorkSchedule? @relation("NotificationSchedule", fields: [relatedScheduleId], references: [id])
-  staff               Staff         @relation(fields: [staffId], references: [id])
-
-  @@index([tenantId])
-  @@index([staffId])
-  @@index([type])
-  @@index([isRead])
-  @@index([createdAt])
-  @@map("StaffNotification")
-}
-
-model AuditLog {
-  id            String   @id @default(cuid())
-  tenantId      String   @map("tenant_id")
-  staffId       String?  @map("staff_id")
-  staffNumber   String?  @map("staff_number")
-  staffName     String?  @map("staff_name")
-  tableName     String   @map("table_name")
-  recordId      String   @map("record_id")
-  operation     String
-  oldValues     Json?    @map("old_values")
-  newValues     Json?    @map("new_values")
-  changedFields Json?    @map("changed_fields")
-  sessionId     String?  @map("session_id")
-  ipAddress     String?  @map("ip_address")
-  userAgent     String?  @map("user_agent")
-  requestId     String?  @map("request_id")
-  createdAt     DateTime @default(now()) @map("created_at")
-  staff         Staff?   @relation(fields: [staffId], references: [id])
-
-  @@index([tenantId])
-  @@index([staffId])
-  @@index([tableName])
-  @@index([operation])
-  @@index([createdAt])
-  @@map("AuditLog")
-}
-
-model ResponseTree {
-  id          String    @id @default(cuid())
-  tenantId    String    @default("test-tenant-001") // 将来的にはテナントごとに管理
-  name        String
-  description String?
-  isActive    Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  publishedAt DateTime?
-  version     Int       @default(1)
-
-  // 関連
-  nodes    ResponseNode[]
-  versions ResponseTreeVersion[]
-
-  @@index([tenantId])
-  @@index([isActive])
-}
-
-model ResponseNode {
-  id          String  @id @default(cuid())
-  treeId      String
-  type        String // 'category' or 'question'
-  title       String
-  description String?
-  icon        String?
-  order       Int     @default(0)
-  parentId    String?
-  isRoot      Boolean @default(false)
-
-  // 質問ノード固有のフィールド
-  answer Json? // テキスト、メディア、関連質問を含む
-
-  // 関連
-  tree         ResponseTree              @relation(fields: [treeId], references: [id], onDelete: Cascade)
-  parent       ResponseNode?             @relation("NodeHierarchy", fields: [parentId], references: [id])
-  children     ResponseNode[]            @relation("NodeHierarchy")
-  translations ResponseNodeTranslation[]
-
-  @@index([treeId])
-  @@index([parentId])
-  @@index([type])
-}
-
-model ResponseNodeTranslation {
-  id       String @id @default(cuid())
-  nodeId   String
-  language String
-  title    String
-  answer   Json?
-
-  // 関連
-  node ResponseNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
-
-  @@unique([nodeId, language])
-  @@index([language])
-}
-
-model ResponseTreeVersion {
-  id        String   @id @default(cuid())
-  treeId    String
-  version   Int
-  data      Json // ツリー全体のスナップショット
-  createdAt DateTime @default(now())
-  createdBy String
-  comment   String?
-
-  // 関連
-  tree ResponseTree @relation(fields: [treeId], references: [id], onDelete: Cascade)
-
-  @@unique([treeId, version])
-}
-
-// キャンペーンマスタ
-model Campaign {
-  id          Int      @id @default(autoincrement())
-  name        String // キャンペーン名
-  description String? // 説明
-  type        String // 'percentage' | 'fixed_amount'
-  value       Int // 割引値（%の場合は整数、金額の場合は円）
-  startDate   DateTime // 開始日時
-  endDate     DateTime // 終了日時
-  isActive    Boolean  @default(true) // 有効フラグ
-
-  // ビジュアル素材
-  mainImage     String // メイン画像（16:9必須）
-  mobileImage   String? // モバイル用画像
-  videoUrl      String? // 動画URL（Professionalプラン以上）
-  videoVersion  Int     @default(1) // 動画バージョン（キャッシュ制御用）
-  videoEtag     String? // 動画ETag（差分更新用）
-  videoDuration Int? // 動画長（秒）
-  videoSize     Int? // 動画サイズ（バイト）
-
-  // CTA設定
-  ctaTextJa    String // CTA日本語テキスト
-  ctaTextEn    String? // CTA英語テキスト
-  ctaType      String // 'room_service' | 'facility' | 'tourism' | 'survey' | 'menu_category' | 'menu_item' | 'external_url'
-  ctaTargetId  Int? // 遷移先ID
-  ctaTargetUrl String? // 外部URL
-
-  // 表示設定
-  displayType     String @default("normal") // 'normal' | 'welcome' | 'featured'
-  displayPriority Int    @default(1) // 表示優先度
-
-  // ウェルカム設定
-  welcomeSettings Json? // 自動再生、スキップボタン表示、セッション表示設定
-
-  // 時間帯・曜日制限
-  timeRestrictions Json? // 時間帯制限データ
-  dayRestrictions  Json? // 曜日制限データ
-
-  // 条件設定
-  minOrderAmount    Int? // 最小注文金額
-  maxUsageCount     Int? // 最大使用回数
-  currentUsageCount Int  @default(0) // 現在の使用回数
-
-  // 管理情報
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  createdBy String? // 作成者
-  isDeleted Boolean  @default(false)
-
-  // リレーション
-  items        CampaignItem[] // 対象商品
-  usageLogs    CampaignUsageLog[] // 使用履歴
-  categories   CampaignCategoryRelation[] // カテゴリ関連
-  translations CampaignTranslation[] // 多言語翻訳
-  deviceCaches DeviceVideoCache[] // デバイスキャッシュ
-
-  @@index([isActive, startDate, endDate])
-  @@index([isDeleted])
-  @@index([displayType])
-}
-
-// キャンペーン対象商品
-model CampaignItem {
-  id         Int @id @default(autoincrement())
-  campaignId Int
-  menuItemId Int
-
-  // リレーション
-  campaign Campaign @relation(fields: [campaignId], references: [id])
-  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
-
-  @@unique([campaignId, menuItemId])
-  @@index([campaignId])
-  @@index([menuItemId])
-}
-
-// キャンペーン使用履歴
-model CampaignUsageLog {
-  id         Int    @id @default(autoincrement())
-  campaignId Int
-  orderId    Int
-  menuItemId Int
-  roomId     String
-
-  originalPrice  Int // 元価格
-  discountAmount Int // 割引額
-  finalPrice     Int // 最終価格
-
-  createdAt DateTime @default(now())
-
-  // リレーション
-  campaign Campaign @relation(fields: [campaignId], references: [id])
-  order    Order    @relation(fields: [orderId], references: [id])
-  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
-
-  @@index([campaignId])
+  deleted_at  DateTime?
+  deleted_by  String?
+  is_deleted  Boolean   @default(false)
+  Order       Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([is_deleted])
   @@index([orderId])
-  @@index([createdAt])
-}
-
-// キャンペーンカテゴリ
-model CampaignCategory {
-  id          Int      @id @default(autoincrement())
-  name        String // カテゴリ名
-  code        String   @unique // システム内部コード
-  description String? // 説明
-  icon        String? // アイコン名
-  color       String? // カラーコード
-  priority    Int      @default(0) // 表示優先順位
-  isSystem    Boolean  @default(false) // システム予約カテゴリ
-  isActive    Boolean  @default(true) // 有効フラグ
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // リレーション
-  campaigns CampaignCategoryRelation[]
-}
-
-// キャンペーンとカテゴリの関連
-model CampaignCategoryRelation {
-  id         Int @id @default(autoincrement())
-  campaignId Int
-  categoryId Int
-
-  // リレーション
-  campaign Campaign         @relation(fields: [campaignId], references: [id])
-  category CampaignCategory @relation(fields: [categoryId], references: [id])
-
-  @@unique([campaignId, categoryId])
-}
-
-// キャンペーン多言語
-model CampaignTranslation {
-  id           Int     @id @default(autoincrement())
-  campaignId   Int
-  languageCode String // 言語コード（ja, en, zh-cn等）
-  title        String // タイトル
-  description  String? // 説明
-  ctaText      String // CTAテキスト
-
-  // リレーション
-  campaign Campaign @relation(fields: [campaignId], references: [id])
-
-  @@unique([campaignId, languageCode])
-}
-
-// デバイス動画キャッシュ管理
-model DeviceVideoCache {
-  id                 Int      @id @default(autoincrement())
-  deviceId           Int // デバイスID
-  roomId             String // 部屋ID
-  campaignId         Int // キャンペーンID（動画）
-  videoVersion       Int // キャッシュされた動画バージョン
-  videoEtag          String? // キャッシュされた動画ETag
-  lastUpdated        DateTime @default(now()) // 最終更新日時
-  nextUpdateSchedule DateTime // 次回更新予定日時
-  updateGroup        Int // 更新グループ（0-59）
-
-  // リレーション
-  device   DeviceRoom @relation(fields: [deviceId], references: [id])
-  campaign Campaign   @relation(fields: [campaignId], references: [id])
-
-  @@unique([deviceId, campaignId])
-  @@index([nextUpdateSchedule])
-  @@index([updateGroup])
-}
-
-model PriceRule {
-  id           Int       @id @default(autoincrement())
-  tenantId     String
-  menuItemId   Int
-  name         String // ルール名称（例：「通常価格」「キャンペーン価格」）
-  price        Decimal // 税抜価格
-  taxRate      Decimal // 税率
-  startDate    DateTime? // 適用開始日時
-  endDate      DateTime? // 適用終了日時
-  memberRankId String? // 会員ランク（nullの場合全会員対象）
-  campaignId   String? // キャンペーンID
-  isDefault    Boolean   @default(false) // デフォルト価格フラグ
-  priority     Int       @default(0) // 優先度（競合時に使用）
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-
-  tenant   Tenant   @relation(fields: [tenantId], references: [id])
-  menuItem MenuItem @relation(fields: [menuItemId], references: [id])
-
-  @@index([tenantId])
-  @@index([menuItemId])
-  @@index([isDefault])
-  @@index([startDate, endDate])
-  @@map("price_rules")
-}
-
-model GachaMenu {
-  id          Int       @id @default(autoincrement())
-  tenantId    String
-  name        String
-  description String?
-  price       Decimal
-  taxRate     Decimal   @default(10)
-  imageUrl    String?
-  isActive    Boolean   @default(true)
-  startDate   DateTime?
-  endDate     DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  tenant     Tenant          @relation(fields: [tenantId], references: [id])
-  items      GachaMenuItem[]
-  orderItems OrderItem[]
-
-  @@index([tenantId])
-  @@index([isActive])
-  @@map("gacha_menus")
-}
-
-model GachaMenuItem {
-  id          Int      @id @default(autoincrement())
-  tenantId    String
-  gachaMenuId Int
-  menuItemId  Int
-  weight      Int      @default(100)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  tenant    Tenant    @relation(fields: [tenantId], references: [id])
-  gachaMenu GachaMenu @relation(fields: [gachaMenuId], references: [id], onDelete: Cascade)
-  menuItem  MenuItem  @relation(fields: [menuItemId], references: [id])
-
-  @@unique([gachaMenuId, menuItemId])
-  @@index([tenantId])
-  @@index([gachaMenuId])
-  @@index([menuItemId])
-  @@map("gacha_menu_items")
-}
-
-model MenuItemToTag {
-  A        Int
-  B        Int
-  MenuItem MenuItem @relation(fields: [A], references: [id], onDelete: Cascade)
-  Tag      Tag      @relation(fields: [B], references: [id], onDelete: Cascade)
-
-  @@id([A, B], map: "_MenuItemToTag_AB_pkey")
-  @@index([B], map: "_MenuItemToTag_B_index")
-  @@map("_MenuItemToTag")
-}
-
-model AdditionalDevices {
-  id           String    @id
-  tenantId     String
-  deviceType   String
-  deviceName   String
-  location     String?
-  monthlyCost  Int
-  status       String    @default("active")
-  ipAddress    String?
-  macAddress   String?
-  setupDate    DateTime?
-  lastActiveAt DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime
-  Tenant       Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-
   @@index([status])
   @@index([tenantId])
 }
 
-model Agents {
-  id               String      @id
-  companyName      String
-  contactName      String
-  email            String      @unique
-  phone            String?
-  rank             String      @default("bronze")
-  status           String      @default("active")
-  firstYearMargin  Float       @default(0.35)
-  continuingMargin Float       @default(0.15)
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime
-  referrals        Referrals[]
-  Tenant           Tenant[]
-}
-
-model ContentLayoutAssets {
-  id              Int            @id @default(autoincrement())
-  contentLayoutId Int
-  filename        String
-  originalName    String
-  mimeType        String
-  size            Int
-  path            String
-  type            String
-  width           Int?
-  height          Int?
-  duration        Int?
-  alt             String?
-  caption         String?
-  order           Int            @default(0)
-  isPublic        Boolean        @default(true)
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime
-  content_layouts ContentLayouts @relation(fields: [contentLayoutId], references: [id], onDelete: Cascade)
-}
-
-model ContentLayoutRevisions {
-  id              Int            @id @default(autoincrement())
-  layoutId        Int
-  version         Int
-  title           String
-  elements        Json
-  styles          Json?
-  content         String?
-  changeLog       String?
-  changeType      String         @default("update")
-  createdBy       String
-  createdAt       DateTime       @default(now())
-  content_layouts ContentLayouts @relation(fields: [layoutId], references: [id], onDelete: Cascade)
-
-  @@unique([layoutId, version])
-  @@index([layoutId])
-}
-
-model ContentLayoutTranslations {
-  id               Int            @id @default(autoincrement())
-  contentLayoutId  Int
-  language         String
-  title            String
-  description      String?
-  content          String?
-  excerpt          String?
-  translatedBy     String?
-  translatedAt     DateTime       @default(now())
-  isAutoTranslated Boolean        @default(false)
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime
-  content_layouts  ContentLayouts @relation(fields: [contentLayoutId], references: [id], onDelete: Cascade)
-
-  @@unique([contentLayoutId, language])
-}
-
-model ContentLayouts {
-  id                          Int                         @id @default(autoincrement())
-  slug                        String                      @unique
-  type                        String
-  category                    String?
-  title                       String
-  description                 String?
-  elements                    Json
-  styles                      Json
-  content                     String?
-  excerpt                     String?
-  featuredImage               String?
-  attachments                 Json?
-  status                      String                      @default("draft")
-  publishAt                   DateTime?
-  expireAt                    DateTime?
-  featured                    Boolean                     @default(false)
-  priority                    Int                         @default(0)
-  language                    String                      @default("ja")
-  seo                         Json?
-  permissions                 Json?
-  isTemplate                  Boolean                     @default(false)
-  templateId                  Int?
-  viewCount                   Int                         @default(0)
-  createdBy                   String
-  updatedBy                   String
-  createdAt                   DateTime                    @default(now())
-  updatedAt                   DateTime
-  isDeleted                   Boolean                     @default(false)
-  deletedAt                   DateTime?
-  content_layout_assets       ContentLayoutAssets[]
-  content_layout_revisions    ContentLayoutRevisions[]
-  content_layout_translations ContentLayoutTranslations[]
-  content_layouts             ContentLayouts?             @relation("content_layoutsToContentLayouts", fields: [templateId], references: [id])
-  other_content_layouts       ContentLayouts[]            @relation("content_layoutsToContentLayouts")
-
-  @@index([isDeleted])
-  @@index([language])
-  @@index([status, publishAt])
-  @@index([type, category])
-}
-
-model Customers {
-  id                   String    @id
-  tenant_id            String
-  name                 String
-  email                String?
-  phone                String?
-  address              String?
-  birth_date           DateTime?
-  member_id            String?   @unique
-  rank_id              String?
-  total_points         Int       @default(0)
-  total_stays          Int       @default(0)
-  pms_updatable_fields String[]  @default(["name", "phone", "address"])
-  origin_system        String    @default("hotel-member")
-  synced_at            DateTime  @default(now())
-  updated_by_system    String    @default("hotel-member")
-  preferences          Json      @default("{}")
-  created_at           DateTime  @default(now())
-  updated_at           DateTime
-  deleted_at           DateTime?
-  Tenant               Tenant    @relation(fields: [tenant_id], references: [id])
-
-  @@unique([tenant_id, email])
-  @@unique([tenant_id, phone])
-  @@index([origin_system])
-  @@index([rank_id])
-  @@index([tenant_id])
-}
-
-model MonthlyBillings {
-  id                    String    @id
-  tenantId              String
-  billingMonth          String
-  basePlanCost          Int
-  additionalDevices     Int
-  additionalDeviceCost  Int
-  multilingualCost      Int       @default(0)
-  overageCost           Int       @default(0)
-  subtotal              Int
-  taxRate               Float     @default(0.10)
-  taxAmount             Int
-  totalAmount           Int
-  status                String    @default("pending")
-  dueDate               DateTime
-  paidAt                DateTime?
-  paymentMethod         String?
-  agentCommission       Float?
-  agentCommissionAmount Int?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime
-  Tenant                Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-
-  @@unique([tenantId, billingMonth])
-  @@index([billingMonth])
-  @@index([status])
-}
-
-model PlanChangeLogs {
-  id                   String   @id
-  tenantId             String
-  previousPlanType     String
-  previousPlanCategory String
-  previousMonthlyPrice Int
-  newPlanType          String
-  newPlanCategory      String
-  newMonthlyPrice      Int
-  changeReason         String
-  changeDescription    String?
-  effectiveDate        DateTime
-  changedBy            String
-  changedByRole        String
-  createdAt            DateTime @default(now())
-  Tenant               Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-
-  @@index([effectiveDate])
-  @@index([tenantId])
-}
-
-// 旧プラン制限モデル - 互換性のために残す
-// 新しいシステムではSystemPlanRestrictionsを使用してください
-model PlanRestrictions {
-  id                       String   @id
-  planType                 String
-  planCategory             String
-  maxDevices               Int      @default(30)
-  additionalDeviceCost     Int      @default(1200)
-  roomTerminalCost         Int      @default(1200)
-  frontDeskCost            Int      @default(5000)
-  kitchenCost              Int      @default(2000)
-  barCost                  Int      @default(2000)
-  housekeepingCost         Int      @default(2000)
-  managerCost              Int      @default(5000)
-  commonAreaCost           Int      @default(3500)
-  enableAiConcierge        Boolean  @default(false)
-  enableMultilingual       Boolean  @default(false)
-  enableLayoutEditor       Boolean  @default(false)
-  enableFacilityGuide      Boolean  @default(false)
-  enableAiBusinessSupport  Boolean  @default(false)
-  maxMonthlyOrders         Int      @default(1000)
-  maxMonthlyAiRequests     Int      @default(0)
-  maxStorageGB             Float    @default(5.0)
-  multilingualUpgradePrice Int      @default(3000)
-  createdAt                DateTime @default(now())
-  updatedAt                DateTime
-
-  @@unique([planType, planCategory])
-}
-
-// 新しいシステム別プラン制限モデル
 model SystemPlanRestrictions {
   id                       String             @id
-  systemType               String // "saas", "pms", "member"
-  businessType             String // "general", "leisure", "overseas"
-  planType                 String // "economy", "professional", "enterprise", "ultimate"
+  systemType               String
+  businessType             String
+  planType                 String
   planCategory             String
   monthlyPrice             Int
   maxDevices               Int                @default(30)
@@ -1945,145 +96,973 @@ model SystemPlanRestrictions {
   description              String?
   createdAt                DateTime           @default(now())
   updatedAt                DateTime
+  deleted_at               DateTime?
+  deleted_by               String?
+  is_deleted               Boolean            @default(false)
   TenantSystemPlan         TenantSystemPlan[]
 
-  @@unique([systemType, businessType, planType, planCategory])
+  @@unique([systemType, businessType, planType, planCategory], map: "SystemPlanRestrictions_systemType_businessType_planType_planCat")
+  @@index([is_deleted])
 }
 
-// テナントとシステムプランの関連付けモデル
-model TenantSystemPlan {
-  id           String    @id
-  tenantId     String
-  systemType   String // "saas", "pms", "member"
-  planId       String
-  startDate    DateTime  @default(now())
-  endDate      DateTime?
-  isActive     Boolean   @default(true)
-  monthlyPrice Int
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime
+model Tenant {
+  id                       String                     @id
+  name                     String
+  domain                   String?                    @unique
+  contactEmail             String?
+  createdAt                DateTime                   @default(now())
+  deleted_at               DateTime?
+  deleted_by               String?
+  features                 String[]
+  is_deleted               Boolean                    @default(false)
+  planType                 String?
+  settings                 Json?
+  status                   String                     @default("active")
+  TenantSystemPlan         TenantSystemPlan[]
+  device_rooms             device_rooms[]
+  pages                    pages[]
+  service_usage_statistics service_usage_statistics[]
+  tenant_services          tenant_services[]
 
-  Tenant     Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  SystemPlan SystemPlanRestrictions @relation(fields: [planId], references: [id])
+  @@index([is_deleted])
+}
+
+model TenantSystemPlan {
+  id                     String                 @id
+  tenantId               String
+  systemType             String
+  planId                 String
+  startDate              DateTime               @default(now())
+  endDate                DateTime?
+  isActive               Boolean                @default(true)
+  monthlyPrice           Int
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime
+  deleted_at             DateTime?
+  deleted_by             String?
+  is_deleted             Boolean                @default(false)
+  SystemPlanRestrictions SystemPlanRestrictions @relation(fields: [planId], references: [id])
+  Tenant                 Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@unique([tenantId, systemType])
-  @@index([tenantId])
-  @@index([systemType])
+  @@index([isActive])
+  @@index([is_deleted])
   @@index([planId])
+  @@index([systemType])
+  @@index([tenantId])
+}
+
+model admin {
+  id                    String      @id
+  email                 String      @unique
+  username              String      @unique
+  display_name          String
+  password_hash         String
+  admin_level           AdminLevel
+  accessible_group_ids  String[]
+  accessible_chain_ids  String[]
+  accessible_tenant_ids String[]
+  last_login_at         DateTime?
+  login_attempts        Int         @default(0)
+  locked_until          DateTime?
+  totp_secret           String?
+  totp_enabled          Boolean     @default(false)
+  created_at            DateTime    @default(now())
+  updated_at            DateTime
+  created_by            String?
+  is_active             Boolean     @default(true)
+  deleted_at            DateTime?
+  deleted_by            String?
+  is_deleted            Boolean     @default(false)
+  admin_log             admin_log[]
+
+  @@index([is_deleted])
+}
+
+model admin_log {
+  id            String    @id
+  admin_id      String
+  action        String
+  target_type   String?
+  target_id     String?
+  ip_address    String?
+  user_agent    String?
+  success       Boolean   @default(true)
+  error_message String?
+  created_at    DateTime  @default(now())
+  deleted_at    DateTime?
+  deleted_by    String?
+  is_deleted    Boolean   @default(false)
+  admin         admin     @relation(fields: [admin_id], references: [id])
+
+  @@index([action])
+  @@index([admin_id])
+  @@index([created_at])
+  @@index([is_deleted])
+}
+
+model campaign_categories {
+  id                          String                        @id
+  tenantId                    String
+  code                        String                        @unique
+  name                        String
+  description                 String?
+  createdAt                   DateTime                      @default(now())
+  updatedAt                   DateTime
+  deleted_at                  DateTime?
+  deleted_by                  String?
+  is_deleted                  Boolean                       @default(false)
+  campaign_category_relations campaign_category_relations[]
+
+  @@index([is_deleted])
+  @@index([tenantId])
+}
+
+model campaign_category_relations {
+  id                  String              @id
+  campaignId          String
+  categoryId          String
+  createdAt           DateTime            @default(now())
+  deleted_at          DateTime?
+  deleted_by          String?
+  is_deleted          Boolean             @default(false)
+  campaigns           campaigns           @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  campaign_categories campaign_categories @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, categoryId])
+  @@index([is_deleted])
+}
+
+model campaign_items {
+  id         String    @id
+  campaignId String
+  itemId     String
+  itemType   String
+  priority   Int       @default(0)
+  createdAt  DateTime  @default(now())
+  deleted_at DateTime?
+  deleted_by String?
+  is_deleted Boolean   @default(false)
+  campaigns  campaigns @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, itemId, itemType])
+  @@index([is_deleted])
+}
+
+model campaign_translations {
+  id           String    @id
+  campaignId   String
+  locale       String
+  title        String
+  description  String?
+  imageUrl     String?
+  languageCode String?
+  name         String?
+  deleted_at   DateTime?
+  deleted_by   String?
+  is_deleted   Boolean   @default(false)
+  campaigns    campaigns @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, locale])
+  @@index([is_deleted])
+  @@index([languageCode])
+}
+
+model campaign_usage_logs {
+  id         String    @id
+  campaignId String
+  userId     String?
+  deviceId   String?
+  action     String
+  createdAt  DateTime  @default(now())
+  deleted_at DateTime?
+  deleted_by String?
+  is_deleted Boolean   @default(false)
+  campaigns  campaigns @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([deviceId])
+  @@index([is_deleted])
+  @@index([userId])
+}
+
+model campaigns {
+  id                          String                        @id
+  tenantId                    String
+  code                        String                        @unique
+  status                      CampaignStatus                @default(DRAFT)
+  displayType                 CampaignDisplayType
+  startDate                   DateTime?
+  endDate                     DateTime?
+  priority                    Int                           @default(0)
+  ctaType                     CampaignCtaType               @default(NONE)
+  ctaAction                   String?
+  ctaLabel                    String?
+  discountType                String?
+  discountValue               Decimal?                      @db.Decimal(10, 2)
+  createdAt                   DateTime                      @default(now())
+  updatedAt                   DateTime
+  dayRestrictions             Json?
+  description                 String?
+  displayPriority             Int                           @default(0)
+  maxUsageCount               Int?
+  name                        String
+  timeRestrictions            Json?
+  welcomeSettings             Json?
+  deleted_at                  DateTime?
+  deleted_by                  String?
+  is_deleted                  Boolean                       @default(false)
+  campaign_category_relations campaign_category_relations[]
+  campaign_items              campaign_items[]
+  campaign_translations       campaign_translations[]
+  campaign_usage_logs         campaign_usage_logs[]
+
+  @@index([is_deleted])
+  @@index([startDate, endDate])
+  @@index([status])
+  @@index([tenantId])
+}
+
+model customers {
+  id                   String         @id
+  tenant_id            String
+  name                 String
+  email                String?
+  phone                String?
+  address              String?
+  birth_date           DateTime?
+  member_id            String?
+  rank_id              String?
+  total_points         Int            @default(0)
+  total_stays          Int            @default(0)
+  pms_updatable_fields String[]       @default(["name", "phone", "address"])
+  origin_system        String         @default("hotel-member")
+  synced_at            DateTime       @default(now())
+  updated_by_system    String         @default("hotel-member")
+  preferences          Json           @default("{}")
+  created_at           DateTime       @default(now())
+  updated_at           DateTime
+  deleted_at           DateTime?
+  is_deleted           Boolean        @default(false)
+  deleted_by           String?
+  reservations         reservations[]
+
+  @@index([email])
+  @@index([is_deleted])
+  @@index([member_id])
+  @@index([tenant_id])
+}
+
+model device_rooms {
+  id         Int       @id @default(autoincrement())
+  tenantId   String
+  roomId     String
+  roomName   String?
+  deviceId   String?
+  deviceType String?
+  placeId    String?
+  status     String?   @default("active")
+  ipAddress  String?
+  macAddress String?
+  lastUsedAt DateTime?
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime
+  is_deleted Boolean   @default(false)
+  deleted_at DateTime?
+  deleted_by String?
+  Tenant     Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([deviceId])
+  @@index([is_deleted])
+  @@index([placeId])
+  @@index([roomId])
+  @@index([status])
+  @@index([tenantId])
+}
+
+model device_video_caches {
+  id           String    @id
+  deviceId     String
+  videoIds     String[]
+  lastShownAt  DateTime  @default(now())
+  updatedAt    DateTime
+  lastViewedAt DateTime?
+  userId       String?
+  viewed       Boolean   @default(false)
+  deleted_at   DateTime?
+  deleted_by   String?
+  is_deleted   Boolean   @default(false)
+
+  @@unique([deviceId, userId])
+  @@index([is_deleted])
+}
+
+model notification_templates {
+  id         String    @id
+  tenant_id  String
+  type       String
+  code       String
+  subject    String?
+  content    String
+  variables  String[]
+  is_active  Boolean   @default(true)
+  created_at DateTime  @default(now())
+  updated_at DateTime
+  body       String
+  html       Boolean   @default(false)
+  locale     String
+  deleted_at DateTime?
+  deleted_by String?
+  is_deleted Boolean   @default(false)
+
+  @@unique([tenant_id, type, code, locale])
+  @@index([is_deleted])
+  @@index([tenant_id])
+  @@index([type])
+}
+
+model page_histories {
+  Id         String    @id
+  PageId     String
+  Html       String?
+  Css        String?
+  Content    String?
+  Template   String?
+  Version    Int
+  CreatedAt  DateTime  @default(now())
+  CreatedBy  String?
+  deleted_at DateTime?
+  deleted_by String?
+  is_deleted Boolean   @default(false)
+  pages      pages     @relation(fields: [PageId], references: [Id], onDelete: Cascade)
+
+  @@index([PageId])
+  @@index([Version])
+  @@index([is_deleted])
+}
+
+model pages {
+  Id             String           @id
+  TenantId       String
+  Slug           String
+  Title          String
+  Html           String?
+  Css            String?
+  Content        String?
+  Template       String?
+  IsPublished    Boolean          @default(false)
+  PublishedAt    DateTime?
+  Version        Int              @default(1)
+  CreatedAt      DateTime         @default(now())
+  UpdatedAt      DateTime
+  deleted_at     DateTime?
+  deleted_by     String?
+  is_deleted     Boolean          @default(false)
+  page_histories page_histories[]
+  Tenant         Tenant           @relation(fields: [TenantId], references: [id])
+
+  @@unique([TenantId, Slug])
+  @@index([IsPublished])
+  @@index([Slug])
+  @@index([TenantId])
+  @@index([is_deleted])
+}
+
+model reservations {
+  id                  String     @id
+  tenant_id           String
+  customer_id         String?
+  guest_name          String
+  guest_phone         String?
+  guest_email         String?
+  checkin_date        DateTime
+  checkout_date       DateTime
+  adult_count         Int        @default(1)
+  child_count         Int        @default(0)
+  room_type           String
+  room_number         String?
+  total_amount        Decimal    @db.Decimal(10, 2)
+  deposit_amount      Decimal    @default(0) @db.Decimal(10, 2)
+  status              String     @default("PENDING")
+  origin              String
+  ota_id              String?
+  confirmation_number String
+  special_requests    String?
+  internal_notes      String?
+  origin_system       String     @default("hotel-pms")
+  synced_at           DateTime   @default(now())
+  updated_by_system   String     @default("hotel-pms")
+  created_at          DateTime   @default(now())
+  updated_at          DateTime
+  deleted_at          DateTime?
+  is_deleted          Boolean    @default(false)
+  deleted_by          String?
+  customers           customers? @relation(fields: [customer_id], references: [id])
+
+  @@index([checkin_date])
+  @@index([checkout_date])
+  @@index([is_deleted])
+  @@index([status])
+  @@index([tenant_id])
+}
+
+model response_node_translations {
+  id             String         @id
+  nodeId         String
+  locale         String
+  content        String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime
+  answer         Json?
+  language       String?
+  title          String?
+  deleted_at     DateTime?
+  deleted_by     String?
+  is_deleted     Boolean        @default(false)
+  response_nodes response_nodes @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+
+  @@unique([nodeId, language])
+  @@unique([nodeId, locale])
+  @@index([is_deleted])
+}
+
+model response_nodes {
+  id                         String                       @id
+  treeId                     String
+  nodeType                   String
+  content                    String?
+  metadata                   Json?
+  isRoot                     Boolean                      @default(false)
+  parentId                   String?
+  position                   Int                          @default(0)
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime
+  answer                     Json?
+  description                String?
+  icon                       String?
+  order                      Int                          @default(0)
+  title                      String?
+  type                       String?
+  response_node_translations response_node_translations[]
+  response_nodes             response_nodes?              @relation("response_nodesToresponse_nodes", fields: [parentId], references: [id])
+  other_response_nodes       response_nodes[]             @relation("response_nodesToresponse_nodes")
+  response_trees             response_trees               @relation(fields: [treeId], references: [id], onDelete: Cascade)
+  response_tree_history      response_tree_history[]
+  response_tree_sessions     response_tree_sessions[]
+
+  @@index([isRoot])
+  @@index([parentId])
+  @@index([treeId])
+}
+
+model response_tree_history {
+  id                     String                 @id
+  sessionId              String
+  nodeId                 String
+  response               String?
+  metadata               Json?
+  createdAt              DateTime               @default(now())
+  action                 String?
+  timestamp              DateTime               @default(now())
+  response_nodes         response_nodes         @relation(fields: [nodeId], references: [id])
+  response_tree_sessions response_tree_sessions @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+}
+
+model response_tree_mobile_links {
+  id                     String                 @id
+  sessionId              String
+  code                   String                 @unique
+  qrCodeData             String?
+  isActive               Boolean                @default(true)
+  connectionId           String?
+  createdAt              DateTime               @default(now())
+  expiresAt              DateTime
+  connectedAt            DateTime?
+  deviceId               Int?
+  response_tree_sessions response_tree_sessions @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([code])
   @@index([isActive])
 }
 
-// データベース変更履歴ログ
-model DatabaseChangeLog {
-  id          Int      @id @default(autoincrement())
-  changeType  String
-  description String
-  details     Json?
-  createdBy   String?
-  createdAt   DateTime @default(now())
+model response_tree_sessions {
+  id                         String                       @id
+  treeId                     String
+  userId                     String?
+  deviceId                   String?
+  currentNodeId              String?
+  metadata                   Json?
+  isComplete                 Boolean                      @default(false)
+  startedAt                  DateTime                     @default(now())
+  updatedAt                  DateTime
+  completedAt                DateTime?
+  endedAt                    DateTime?
+  interfaceType              String?
+  language                   String?
+  lastActivityAt             DateTime?
+  roomId                     String?
+  sessionId                  String                       @unique
+  response_tree_history      response_tree_history[]
+  response_tree_mobile_links response_tree_mobile_links[]
+  response_nodes             response_nodes?              @relation(fields: [currentNodeId], references: [id])
+  response_trees             response_trees               @relation(fields: [treeId], references: [id], onDelete: Cascade)
 
-  @@index([changeType])
-  @@index([createdAt])
+  @@index([deviceId])
+  @@index([isComplete])
+  @@index([treeId])
+  @@index([userId])
 }
 
-model Referrals {
-  id               String   @id
-  referralCode     String   @unique
-  agentId          String?
-  tenantId         String
-  referralType     String
-  status           String   @default("pending")
-  monthlyAmount    Float
-  commissionAmount Float
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime
-  agents           Agents?  @relation(fields: [agentId], references: [id])
-  Tenant           Tenant   @relation(fields: [tenantId], references: [id])
+model response_tree_versions {
+  id             String         @id
+  treeId         String
+  version        Int
+  snapshot       Json
+  createdAt      DateTime       @default(now())
+  createdBy      String?
+  data           Json?
+  response_trees response_trees @relation(fields: [treeId], references: [id], onDelete: Cascade)
+
+  @@unique([treeId, version])
 }
 
-model UsageStatistics {
-  id                     String   @id
+model response_trees {
+  id                     String                   @id
   tenantId               String
-  month                  String
-  totalOrders            Int      @default(0)
-  totalOrderValue        Int      @default(0)
-  aiConciergeRequests    Int      @default(0)
-  aiBusinessRequests     Int      @default(0)
-  activeDevices          Int      @default(0)
-  roomDevices            Int      @default(0)
-  additionalDevices      Int      @default(0)
-  storageUsedGB          Float    @default(0.0)
-  isOrderLimitExceeded   Boolean  @default(false)
-  isAiLimitExceeded      Boolean  @default(false)
-  isDeviceLimitExceeded  Boolean  @default(false)
-  isStorageLimitExceeded Boolean  @default(false)
-  createdAt              DateTime @default(now())
+  name                   String
+  description            String?
+  isPublished            Boolean                  @default(false)
+  publishedAt            DateTime?
+  version                Int                      @default(1)
+  createdAt              DateTime                 @default(now())
   updatedAt              DateTime
-  Tenant                 Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  isActive               Boolean                  @default(true)
+  deleted_at             DateTime?
+  deleted_by             String?
+  is_deleted             Boolean                  @default(false)
+  response_nodes         response_nodes[]
+  response_tree_sessions response_tree_sessions[]
+  response_tree_versions response_tree_versions[]
 
-  @@unique([tenantId, month])
-  @@index([month])
+  @@index([isPublished])
+  @@index([is_deleted])
+  @@index([tenantId])
 }
 
-model Admin {
-  id                  String     @id @default(cuid())
-  email               String     @unique
-  username            String     @unique
-  displayName         String     @map("display_name")
-  passwordHash        String     @map("password_hash")
-  adminLevel          AdminLevel @map("admin_level")
-  accessibleGroupIds  String[]   @map("accessible_group_ids")
-  accessibleChainIds  String[]   @map("accessible_chain_ids")
-  accessibleTenantIds String[]   @map("accessible_tenant_ids")
-  lastLoginAt         DateTime?  @map("last_login_at")
-  loginAttempts       Int        @default(0) @map("login_attempts")
-  lockedUntil         DateTime?  @map("locked_until")
-  totpSecret          String?    @map("totp_secret")
-  totpEnabled         Boolean    @default(false) @map("totp_enabled")
-  createdAt           DateTime   @default(now()) @map("created_at")
-  updatedAt           DateTime   @updatedAt @map("updated_at")
-  createdBy           String?    @map("created_by")
-  isActive            Boolean    @default(true) @map("is_active")
-  adminLogs           AdminLog[]
+model room_grades {
+  id          String   @id
+  tenant_id   String
+  code        String
+  name        String
+  description String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime
 
-  @@map("admin")
+  @@unique([tenant_id, code])
+  @@index([tenant_id])
 }
 
-model AdminLog {
-  id           String   @id @default(cuid())
-  adminId      String   @map("admin_id")
-  action       String
-  targetType   String?  @map("target_type")
-  targetId     String?  @map("target_id")
-  ipAddress    String?  @map("ip_address")
-  userAgent    String?  @map("user_agent")
-  success      Boolean  @default(true)
-  errorMessage String?  @map("error_message")
-  createdAt    DateTime @default(now()) @map("created_at")
-  admin        Admin    @relation(fields: [adminId], references: [id])
-
-  @@index([adminId])
-  @@index([action])
-  @@index([createdAt])
-  @@map("admin_log")
+model schema_version {
+  version      String   @id
+  description  String
+  rollback_sql String?
+  applied_at   DateTime @default(now())
+  applied_by   String?
 }
 
-enum CreditCategory {
-  CONCIERGE
-  MARKETING_ANALYSIS
-  PAGE_AUTOGEN
+model service_plan_restrictions {
+  id                        String   @id
+  service_type              String
+  plan_type                 String
+  plan_category             String
+  max_users                 Int      @default(10)
+  max_devices               Int      @default(5)
+  max_monthly_orders        Int?
+  enable_ai_concierge       Boolean?
+  enable_multilingual       Boolean?
+  max_rooms                 Int?
+  enable_revenue_management Boolean?
+  max_monthly_ai_requests   Int?
+  enable_ai_crm             Boolean?
+  monthly_price             Int      @default(9800)
+  created_at                DateTime @default(now())
+  updated_at                DateTime @default(now())
+
+  @@unique([service_type, plan_type, plan_category], map: "service_plan_restrictions_service_type_plan_type_plan_category_")
 }
 
-enum Role {
-  super_admin
-  store_admin
-  staff
+model service_usage_statistics {
+  id                   String   @id
+  tenant_id            String
+  service_type         String
+  month                String
+  active_users_count   Int      @default(0)
+  active_devices_count Int      @default(0)
+  usage_data           Json     @default("{}")
+  created_at           DateTime @default(now())
+  updated_at           DateTime @default(now())
+  Tenant               Tenant   @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+
+  @@unique([tenant_id, service_type, month])
+}
+
+model staff {
+  id                 String    @id
+  tenant_id          String
+  email              String
+  name               String
+  role               String
+  department         String?
+  is_active          Boolean   @default(true)
+  created_at         DateTime  @default(now())
+  updated_at         DateTime
+  failed_login_count Int       @default(0)
+  last_login_at      DateTime?
+  locked_until       DateTime?
+  password_hash      String?
+  deleted_at         DateTime?
+  deleted_by         String?
+  is_deleted         Boolean   @default(false)
+
+  @@unique([tenant_id, email])
+  @@index([email])
+  @@index([is_deleted])
+  @@index([role])
+  @@index([tenant_id])
+}
+
+model system_event {
+  id            String    @id
+  tenant_id     String
+  user_id       String?
+  event_type    String
+  source_system String
+  target_system String
+  entity_type   String
+  entity_id     String
+  action        String
+  event_data    Json?
+  created_at    DateTime  @default(now())
+  processed_at  DateTime?
+  status        String    @default("PENDING")
+
+  @@index([created_at])
+  @@index([event_type])
+  @@index([status])
+  @@index([tenant_id])
+}
+
+model tenant_access_logs {
+  id            String   @id
+  tenant_id     String
+  user_id       String?
+  action        String
+  resource      String?
+  ip_address    String?
+  user_agent    String?
+  created_at    DateTime @default(now())
+  source_system String?
+
+  @@index([created_at])
+  @@index([tenant_id])
+  @@index([user_id])
+}
+
+model tenant_services {
+  id             String    @id
+  tenant_id      String
+  service_type   String
+  plan_type      String
+  is_active      Boolean   @default(true)
+  activated_at   DateTime  @default(now())
+  expires_at     DateTime?
+  service_config Json      @default("{}")
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @default(now())
+  Tenant         Tenant    @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+
+  @@unique([tenant_id, service_type])
 }
 
 enum AdminLevel {
   chainadmin
   groupadmin
   superadmin
+}
 
-  @@map("AdminLevel")
+enum CampaignCtaType {
+  NONE
+  LINK
+  BUTTON
+  COUPON
+}
+
+enum CampaignDisplayType {
+  BANNER
+  POPUP
+  NOTIFICATION
+  FEATURED
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ENDED
+  SCHEDULED
+}
+
+// Session Management Models
+model checkin_sessions {
+  id                String    @id @default(cuid())
+  tenant_id         String
+  session_number    String    @unique
+  reservation_id    String?
+  room_id           String
+  guest_info        Json
+  adults            Int       @default(1)
+  children          Int       @default(0)
+  check_in_at       DateTime
+  check_out_at      DateTime?
+  planned_check_out DateTime
+  status            String    @default("ACTIVE")
+  special_requests  String?
+  notes             String?
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+
+  @@index([tenant_id])
+  @@index([session_number])
+  @@index([room_id])
+  @@index([status])
+  @@index([check_in_at])
+}
+
+model session_billings {
+  id              String    @id @default(cuid())
+  tenant_id       String
+  session_id      String
+  billing_number  String    @unique
+  room_charges    Json
+  service_charges Json
+  taxes           Json
+  discounts       Json
+  subtotal_amount Int
+  tax_amount      Int
+  total_amount    Int
+  paid_amount     Int       @default(0)
+  status          String    @default("PENDING")
+  payment_method  String?
+  payment_date    DateTime?
+  due_date        DateTime
+  notes           String?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  @@index([tenant_id])
+  @@index([session_id])
+  @@index([billing_number])
+  @@index([status])
+  @@index([due_date])
+}
+
+// Room Management Models
+model Room {
+  id          String    @id @default(cuid())
+  tenantId    String
+  roomNumber  String
+  roomType    String
+  floor       Int?
+  status      String    @default("AVAILABLE")
+  capacity    Int       @default(2)
+  amenities   Json?
+  lastCleaned DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+  deletedBy   String?
+
+  @@unique([tenantId, roomNumber])
+  @@index([tenantId])
+  @@index([status])
+  @@index([roomType])
+  @@index([floor])
+  @@index([isDeleted])
+  @@map("rooms")
+}
+
+// Room Memo Models (Phase 1: REST, Phase 2: WS)
+model RoomMemo {
+  id                 String    @id @default(cuid())
+  tenantId           String    @map("tenant_id")
+  roomId             String    @map("room_id")
+  category           String
+  visibility         String    @default("public")
+  visibleRoles       String[]  @map("visible_roles")
+  content            String
+  status             String    @default("pending")
+  priority           String    @default("normal")
+  dueDate            DateTime? @map("due_date")
+  createdByStaffId   String    @map("created_by_staff_id")
+  assignedToStaffId  String?   @map("assigned_to_staff_id")
+  updatedByStaffId   String?   @map("updated_by_staff_id")
+  isDeleted          Boolean   @default(false) @map("is_deleted")
+  deletedAt          DateTime? @map("deleted_at")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  @@index([tenantId, roomId, status], map: "idx_room_memos_tenant_room_status")
+  @@index([assignedToStaffId, status], map: "idx_room_memos_assignee_status")
+  @@index([createdAt], map: "idx_room_memos_created_at")
+  @@map("room_memos")
+}
+
+model RoomMemoComment {
+  id               String    @id @default(cuid())
+  tenantId         String    @map("tenant_id")
+  memoId           String    @map("memo_id")
+  parentCommentId  String?   @map("parent_comment_id")
+  content          String
+  commentType      String    @default("comment") @map("comment_type")
+  statusFrom       String?   @map("status_from")
+  statusTo         String?   @map("status_to")
+  createdByStaffId String    @map("created_by_staff_id")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  @@index([tenantId, memoId, createdAt], map: "idx_memo_comments_memo_created")
+  @@map("room_memo_comments")
+}
+
+model RoomMemoStatusLog {
+  id               String    @id @default(cuid())
+  tenantId         String    @map("tenant_id")
+  memoId           String    @map("memo_id")
+  statusFrom       String    @map("status_from")
+  statusTo         String    @map("status_to")
+  comment          String?
+  changedByStaffId String    @map("changed_by_staff_id")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  @@index([tenantId, memoId, createdAt], map: "idx_memo_status_memo_created")
+  @@map("room_memo_status_logs")
+}
+
+// Phase 2 で使用
+model RoomMemoRead {
+  id       String   @id @default(cuid())
+  tenantId String   @map("tenant_id")
+  memoId   String   @map("memo_id")
+  staffId  String   @map("staff_id")
+  readAt   DateTime @default(now()) @map("read_at")
+
+  @@unique([tenantId, memoId, staffId], map: "uq_memo_read_once")
+  @@map("room_memo_reads")
+}
+
+// Transaction Management Models
+model Transaction {
+  id          String    @id @default(cuid())
+  tenantId    String
+  invoiceId   String?
+  paymentId   String?
+  type        String
+  amount      Int
+  taxAmount   Int       @default(0)
+  totalAmount Int
+  status      String    @default("PENDING")
+  description String?
+  reference   String?
+  metadata    Json?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  createdBy   String?
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+  deletedBy   String?
+
+  // Relations
+  invoice Invoice? @relation(fields: [invoiceId], references: [id])
+  // 1-1 relation via Payment.transactionId -> Transaction.id
+  payment Payment? @relation("TransactionPayment")
+
+  @@index([tenantId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+  @@index([isDeleted])
+  @@map("transactions")
+}
+
+// Payment Management Models
+// Invoice model is defined just above Payment
+model Invoice {
+  id             String    @id @default(cuid())
+  tenantId       String
+  invoiceNumber  String    @unique
+  customerId     String?
+  customerName   String
+  customerEmail  String?
+  billingAddress Json?
+  items          Json
+  subtotal       Int
+  taxAmount      Int
+  totalAmount    Int
+  status         String    @default("DRAFT") // DRAFT, SENT, PAID, OVERDUE, CANCELLED
+  dueDate        DateTime?
+  issuedAt       DateTime?
+  paidAt         DateTime?
+  notes          String?
+  metadata       Json?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  createdBy      String?
+  isDeleted      Boolean   @default(false)
+  deletedAt      DateTime?
+  deletedBy      String?
+
+  // Back-relations
+  transactions Transaction[]
+  payments     Payment[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([isDeleted])
+  @@index([invoiceNumber])
+  @@map("invoices")
+}
+
+model Payment {
+  id            String    @id @default(cuid())
+  tenantId      String
+  transactionId String?   @unique
+  invoiceId     String?
+  paymentMethod String
+  amount        Int
+  status        String    @default("PENDING")
+  reference     String?
+  metadata      Json?
+  processedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  createdBy     String?
+  isDeleted     Boolean   @default(false)
+  deletedAt     DateTime?
+  deletedBy     String?
+
+  // Relations
+  invoice     Invoice?     @relation(fields: [invoiceId], references: [id])
+  // 1-1 relation: Payment holds FK to Transaction
+  transaction Transaction? @relation("TransactionPayment", fields: [transactionId], references: [id])
+
+  @@index([tenantId])
+  @@index([paymentMethod])
+  @@index([status])
+  @@index([createdAt])
+  @@index([isDeleted])
+  @@map("payments")
 }

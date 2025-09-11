@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 既存のモデル定義はここに続く...
+
+// ==============================================
+// 📄 ページ管理（hotel-saas）
+// ==============================================
+
+model Page {
+  Id          String    @id @default(cuid())
+  TenantId    String    // テナントID
+  Slug        String    // ページの識別子（例：'top', 'info', 'menu'）
+  Title       String    // ページタイトル
+  Html        String?   @db.Text // HTML形式のコンテンツ
+  Css         String?   @db.Text // CSSスタイル
+  Content     String?   @db.Text // JSON形式でBlockNoteのコンテンツを保存
+  Template    String?   // テンプレート識別子
+  IsPublished Boolean   @default(false) // 公開状態
+  PublishedAt DateTime? // 公開日時
+  Version     Int       @default(1) // バージョン番号
+  CreatedAt   DateTime  @default(now())
+  UpdatedAt   DateTime  @updatedAt
+
+  // リレーション
+  Tenant  Tenant       @relation(fields: [TenantId], references: [id])
+  History PageHistory[]
+
+  @@unique([TenantId, Slug]) // テナントごとにユニークなslug
+  @@index([TenantId])
+  @@index([Slug])
+  @@index([IsPublished])
+  @@map("pages")
+}
+
+model PageHistory {
+  Id        String   @id @default(cuid())
+  PageId    String   // 親ページID
+  Html      String?  @db.Text // HTML形式のコンテンツ
+  Css       String?  @db.Text // CSSスタイル
+  Content   String?  @db.Text // JSON形式でBlockNoteのコンテンツを保存
+  Template  String?  // テンプレート識別子
+  Version   Int      // バージョン番号
+  CreatedAt DateTime @default(now())
+  CreatedBy String?  // 作成者
+
+  // リレーション
+  Page Page @relation(fields: [PageId], references: [Id], onDelete: Cascade)
+
+  @@index([PageId])
+  @@index([Version])
+  @@map("page_histories")
+}

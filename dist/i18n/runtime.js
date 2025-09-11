@@ -1,14 +1,51 @@
-import { TranslationConfig } from './config';
-import { EventEmitter } from 'events';
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RuntimeTranslationSystem = void 0;
+exports.createTokenWithLanguage = createTokenWithLanguage;
+const config_1 = require("./config");
+const events_1 = require("events");
 /** 実行時翻訳システム */
-export class RuntimeTranslationSystem extends EventEmitter {
+class RuntimeTranslationSystem extends events_1.EventEmitter {
     cache = new Map();
     currentLanguage;
     config;
     fallbackData;
     constructor(config) {
         super();
-        this.config = config || new TranslationConfig();
+        this.config = config || new config_1.TranslationConfig();
         this.currentLanguage = this.config.defaultLanguage;
         this.preloadDefaultLanguages();
     }
@@ -105,7 +142,7 @@ export class RuntimeTranslationSystem extends EventEmitter {
         catch (error) {
             // 開発環境ではローカルファイルから読み込み
             console.warn(`CDN fetch failed, trying local import for ${language}`);
-            return await import(`../../../i18n/locales/${language}.json`);
+            return await Promise.resolve(`${`../../../i18n/locales/${language}.json`}`).then(s => __importStar(require(s)));
         }
     }
     /** 翻訳文字列を取得 */
@@ -134,8 +171,9 @@ export class RuntimeTranslationSystem extends EventEmitter {
         });
     }
 }
+exports.RuntimeTranslationSystem = RuntimeTranslationSystem;
 /** 言語設定をJWTに統合 */
-export function createTokenWithLanguage(baseToken, language) {
+function createTokenWithLanguage(baseToken, language) {
     return {
         ...baseToken,
         language

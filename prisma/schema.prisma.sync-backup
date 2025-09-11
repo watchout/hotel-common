@@ -1,0 +1,624 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id                       String                     @id
+  name                     String
+  domain                   String?                    @unique
+  status                   String                     @default("active")
+  contactEmail             String?
+  createdAt                DateTime                   @default(now())
+  features                 String[]
+  planType                 String?
+  settings                 Json?
+  TenantSystemPlan         TenantSystemPlan[]
+  pages                    Page[]
+  service_usage_statistics service_usage_statistics[]
+  tenant_services          tenant_services[]
+
+  @@map("Tenant")
+}
+
+model Page {
+  Id          String        @id @default(cuid())
+  TenantId    String
+  Slug        String
+  Title       String
+  Html        String?
+  Css         String?
+  Content     String?
+  Template    String?
+  IsPublished Boolean       @default(false)
+  PublishedAt DateTime?
+  Version     Int           @default(1)
+  CreatedAt   DateTime      @default(now())
+  UpdatedAt   DateTime      @updatedAt
+  History     PageHistory[]
+  Tenant      Tenant        @relation(fields: [TenantId], references: [id])
+
+  @@unique([TenantId, Slug])
+  @@index([TenantId])
+  @@index([Slug])
+  @@index([IsPublished])
+  @@map("pages")
+}
+
+model PageHistory {
+  Id        String   @id @default(cuid())
+  PageId    String
+  Html      String?
+  Css       String?
+  Content   String?
+  Template  String?
+  Version   Int
+  CreatedAt DateTime @default(now())
+  CreatedBy String?
+  Page      Page     @relation(fields: [PageId], references: [Id], onDelete: Cascade)
+
+  @@index([PageId])
+  @@index([Version])
+  @@map("page_histories")
+}
+
+model Campaign {
+  id               String                     @id @default(cuid())
+  tenantId         String
+  code             String                     @unique
+  status           CampaignStatus             @default(DRAFT)
+  displayType      CampaignDisplayType
+  startDate        DateTime?
+  endDate          DateTime?
+  priority         Int                        @default(0)
+  ctaType          CampaignCtaType            @default(NONE)
+  ctaAction        String?
+  ctaLabel         String?
+  discountType     String?
+  discountValue    Decimal?                   @db.Decimal(10, 2)
+  createdAt        DateTime                   @default(now())
+  updatedAt        DateTime                   @updatedAt
+  dayRestrictions  Json?
+  description      String?
+  displayPriority  Int                        @default(0)
+  maxUsageCount    Int?
+  name             String
+  timeRestrictions Json?
+  welcomeSettings  Json?
+  categories       CampaignCategoryRelation[]
+  items            CampaignItem[]
+  translations     CampaignTranslation[]
+  usageLogs        CampaignUsageLog[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([startDate, endDate])
+  @@map("campaigns")
+}
+
+model CampaignTranslation {
+  id           String   @id @default(cuid())
+  campaignId   String
+  locale       String
+  title        String
+  description  String?
+  imageUrl     String?
+  languageCode String?
+  name         String?
+  campaign     Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, locale])
+  @@index([languageCode])
+  @@map("campaign_translations")
+}
+
+model CampaignItem {
+  id         String   @id @default(cuid())
+  campaignId String
+  itemId     String
+  itemType   String
+  priority   Int      @default(0)
+  createdAt  DateTime @default(now())
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, itemId, itemType])
+  @@map("campaign_items")
+}
+
+model CampaignCategory {
+  id          String                     @id @default(cuid())
+  tenantId    String
+  code        String                     @unique
+  name        String
+  description String?
+  createdAt   DateTime                   @default(now())
+  updatedAt   DateTime                   @updatedAt
+  campaigns   CampaignCategoryRelation[]
+
+  @@index([tenantId])
+  @@map("campaign_categories")
+}
+
+model CampaignCategoryRelation {
+  id         String           @id @default(cuid())
+  campaignId String
+  categoryId String
+  createdAt  DateTime         @default(now())
+  campaign   Campaign         @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  category   CampaignCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, categoryId])
+  @@map("campaign_category_relations")
+}
+
+model CampaignUsageLog {
+  id         String   @id @default(cuid())
+  campaignId String
+  userId     String?
+  deviceId   String?
+  action     String
+  createdAt  DateTime @default(now())
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([userId])
+  @@index([deviceId])
+  @@map("campaign_usage_logs")
+}
+
+model DeviceVideoCache {
+  id           String    @id @default(cuid())
+  deviceId     String
+  videoIds     String[]
+  lastShownAt  DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastViewedAt DateTime?
+  userId       String?
+  viewed       Boolean   @default(false)
+
+  @@unique([deviceId, userId])
+  @@map("device_video_caches")
+}
+
+model ResponseTree {
+  id          String                @id @default(cuid())
+  tenantId    String
+  name        String
+  description String?
+  isPublished Boolean               @default(false)
+  publishedAt DateTime?
+  version     Int                   @default(1)
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  isActive    Boolean               @default(true)
+  nodes       ResponseNode[]
+  sessions    ResponseTreeSession[]
+  versions    ResponseTreeVersion[]
+
+  @@index([tenantId])
+  @@index([isPublished])
+  @@map("response_trees")
+}
+
+model ResponseNode {
+  id              String                    @id @default(cuid())
+  treeId          String
+  nodeType        String
+  content         String?
+  metadata        Json?
+  isRoot          Boolean                   @default(false)
+  parentId        String?
+  position        Int                       @default(0)
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+  answer          Json?
+  description     String?
+  icon            String?
+  order           Int                       @default(0)
+  title           String?
+  type            String?
+  translations    ResponseNodeTranslation[]
+  parent          ResponseNode?             @relation("NodeToNode", fields: [parentId], references: [id])
+  children        ResponseNode[]            @relation("NodeToNode")
+  tree            ResponseTree              @relation(fields: [treeId], references: [id], onDelete: Cascade)
+  histories       ResponseTreeHistory[]     @relation("HistoryNode")
+  currentSessions ResponseTreeSession[]     @relation("CurrentNode")
+
+  @@index([treeId])
+  @@index([parentId])
+  @@index([isRoot])
+  @@map("response_nodes")
+}
+
+model ResponseNodeTranslation {
+  id        String       @id @default(cuid())
+  nodeId    String
+  locale    String
+  content   String?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  answer    Json?
+  language  String?
+  title     String?
+  node      ResponseNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+
+  @@unique([nodeId, locale])
+  @@unique([nodeId, language])
+  @@map("response_node_translations")
+}
+
+model ResponseTreeSession {
+  id             String                   @id @default(cuid())
+  treeId         String
+  userId         String?
+  deviceId       String?
+  currentNodeId  String?
+  metadata       Json?
+  isComplete     Boolean                  @default(false)
+  startedAt      DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
+  completedAt    DateTime?
+  endedAt        DateTime?
+  interfaceType  String?
+  language       String?
+  lastActivityAt DateTime?
+  roomId         String?
+  sessionId      String                   @unique
+  history        ResponseTreeHistory[]
+  mobileLinks    ResponseTreeMobileLink[]
+  currentNode    ResponseNode?            @relation("CurrentNode", fields: [currentNodeId], references: [id])
+  tree           ResponseTree             @relation(fields: [treeId], references: [id], onDelete: Cascade)
+
+  @@index([treeId])
+  @@index([userId])
+  @@index([deviceId])
+  @@index([isComplete])
+  @@map("response_tree_sessions")
+}
+
+model ResponseTreeHistory {
+  id        String              @id @default(cuid())
+  sessionId String
+  nodeId    String
+  response  String?
+  metadata  Json?
+  createdAt DateTime            @default(now())
+  action    String?
+  timestamp DateTime            @default(now())
+  node      ResponseNode        @relation("HistoryNode", fields: [nodeId], references: [id])
+  session   ResponseTreeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@map("response_tree_history")
+}
+
+model ResponseTreeVersion {
+  id        String       @id @default(cuid())
+  treeId    String
+  version   Int
+  snapshot  Json
+  createdAt DateTime     @default(now())
+  createdBy String?
+  data      Json?
+  tree      ResponseTree @relation(fields: [treeId], references: [id], onDelete: Cascade)
+
+  @@unique([treeId, version])
+  @@map("response_tree_versions")
+}
+
+model ResponseTreeMobileLink {
+  id           String              @id @default(cuid())
+  sessionId    String
+  code         String              @unique
+  qrCodeData   String?
+  isActive     Boolean             @default(true)
+  connectionId String?
+  createdAt    DateTime            @default(now())
+  expiresAt    DateTime
+  connectedAt  DateTime?
+  deviceId     Int?
+  session      ResponseTreeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([code])
+  @@index([isActive])
+  @@map("response_tree_mobile_links")
+}
+
+model Admin {
+  id                    String     @id @default(cuid())
+  email                 String     @unique
+  username              String     @unique
+  display_name          String
+  password_hash         String
+  admin_level           AdminLevel
+  accessible_group_ids  String[]
+  accessible_chain_ids  String[]
+  accessible_tenant_ids String[]
+  last_login_at         DateTime?
+  login_attempts        Int        @default(0)
+  locked_until          DateTime?
+  totp_secret           String?
+  totp_enabled          Boolean    @default(false)
+  created_at            DateTime   @default(now())
+  updated_at            DateTime   @updatedAt
+  created_by            String?
+  is_active             Boolean    @default(true)
+  logs                  AdminLog[]
+
+  @@map("admin")
+}
+
+model AdminLog {
+  id            String   @id @default(cuid())
+  admin_id      String
+  action        String
+  target_type   String?
+  target_id     String?
+  ip_address    String?
+  user_agent    String?
+  success       Boolean  @default(true)
+  error_message String?
+  created_at    DateTime @default(now())
+  admin         Admin    @relation(fields: [admin_id], references: [id])
+
+  @@index([admin_id])
+  @@index([action])
+  @@index([created_at])
+  @@map("admin_log")
+}
+
+model SchemaVersion {
+  version      String   @id
+  description  String
+  rollback_sql String?
+  applied_at   DateTime @default(now())
+  applied_by   String?
+
+  @@map("schema_version")
+}
+
+model SystemEvent {
+  id            String    @id @default(cuid())
+  tenant_id     String
+  user_id       String?
+  event_type    String
+  source_system String
+  target_system String
+  entity_type   String
+  entity_id     String
+  action        String
+  event_data    Json?
+  created_at    DateTime  @default(now())
+  processed_at  DateTime?
+  status        String    @default("PENDING")
+
+  @@index([tenant_id])
+  @@index([event_type])
+  @@index([status])
+  @@index([created_at])
+  @@map("system_event")
+}
+
+model Staff {
+  id              String    @id @default(cuid())
+  tenant_id       String
+  email           String
+  name            String
+  role            String
+  department      String?
+  password_hash   String?
+  failed_login_count Int    @default(0)
+  last_login_at   DateTime?
+  locked_until    DateTime?
+  is_active       Boolean   @default(true)
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  @@unique([tenant_id, email])
+  @@index([tenant_id])
+  @@index([role])
+  @@index([email])
+  @@map("staff")
+}
+
+model RoomGrade {
+  id          String   @id @default(cuid())
+  tenant_id   String
+  code        String
+  name        String
+  description String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@unique([tenant_id, code])
+  @@index([tenant_id])
+  @@map("room_grades")
+}
+
+model TenantAccessLog {
+  id            String   @id @default(cuid())
+  tenant_id     String
+  user_id       String?
+  action        String
+  resource      String?
+  ip_address    String?
+  user_agent    String?
+  created_at    DateTime @default(now())
+  source_system String?
+
+  @@index([tenant_id])
+  @@index([user_id])
+  @@index([created_at])
+  @@map("tenant_access_logs")
+}
+
+model NotificationTemplate {
+  id         String   @id @default(cuid())
+  tenant_id  String
+  type       String
+  code       String
+  subject    String?
+  content    String
+  variables  String[]
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  body       String
+  html       Boolean  @default(false)
+  locale     String
+
+  @@unique([tenant_id, type, code, locale])
+  @@index([tenant_id])
+  @@index([type])
+  @@map("notification_templates")
+}
+
+model DatabaseChangeLog {
+  id          Int      @id @default(autoincrement())
+  changeType  String
+  description String
+  details     Json?
+  createdBy   String?
+  createdAt   DateTime @default(now())
+
+  @@index([changeType])
+  @@index([createdAt])
+}
+
+model SystemPlanRestrictions {
+  id                       String             @id
+  systemType               String
+  businessType             String
+  planType                 String
+  planCategory             String
+  monthlyPrice             Int
+  maxDevices               Int                @default(30)
+  additionalDeviceCost     Int                @default(1200)
+  roomTerminalCost         Int                @default(1200)
+  frontDeskCost            Int                @default(5000)
+  kitchenCost              Int                @default(2000)
+  barCost                  Int                @default(2000)
+  housekeepingCost         Int                @default(2000)
+  managerCost              Int                @default(5000)
+  commonAreaCost           Int                @default(3500)
+  enableAiConcierge        Boolean            @default(false)
+  enableMultilingual       Boolean            @default(false)
+  enableLayoutEditor       Boolean            @default(false)
+  enableFacilityGuide      Boolean            @default(false)
+  enableAiBusinessSupport  Boolean            @default(false)
+  maxMonthlyOrders         Int                @default(1000)
+  maxMonthlyAiRequests     Int                @default(0)
+  maxStorageGB             Float              @default(5.0)
+  multilingualUpgradePrice Int                @default(3000)
+  description              String?
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime
+  TenantSystemPlan         TenantSystemPlan[]
+
+  @@unique([systemType, businessType, planType, planCategory], map: "SystemPlanRestrictions_systemType_businessType_planType_planCat")
+}
+
+model TenantSystemPlan {
+  id                     String                 @id
+  tenantId               String
+  systemType             String
+  planId                 String
+  startDate              DateTime               @default(now())
+  endDate                DateTime?
+  isActive               Boolean                @default(true)
+  monthlyPrice           Int
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime
+  SystemPlanRestrictions SystemPlanRestrictions @relation(fields: [planId], references: [id])
+  Tenant                 Tenant                 @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, systemType])
+  @@index([isActive])
+  @@index([planId])
+  @@index([systemType])
+  @@index([tenantId])
+}
+
+model service_plan_restrictions {
+  id                        String   @id
+  service_type              String
+  plan_type                 String
+  plan_category             String
+  max_users                 Int      @default(10)
+  max_devices               Int      @default(5)
+  max_monthly_orders        Int?
+  enable_ai_concierge       Boolean?
+  enable_multilingual       Boolean?
+  max_rooms                 Int?
+  enable_revenue_management Boolean?
+  max_monthly_ai_requests   Int?
+  enable_ai_crm             Boolean?
+  monthly_price             Int      @default(9800)
+  created_at                DateTime @default(now())
+  updated_at                DateTime @default(now())
+
+  @@unique([service_type, plan_type, plan_category], map: "service_plan_restrictions_service_type_plan_type_plan_category_")
+}
+
+model service_usage_statistics {
+  id                   String   @id
+  tenant_id            String
+  service_type         String
+  month                String
+  active_users_count   Int      @default(0)
+  active_devices_count Int      @default(0)
+  usage_data           Json     @default("{}")
+  created_at           DateTime @default(now())
+  updated_at           DateTime @default(now())
+  Tenant               Tenant   @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+
+  @@unique([tenant_id, service_type, month])
+}
+
+model tenant_services {
+  id             String    @id
+  tenant_id      String
+  service_type   String
+  plan_type      String
+  is_active      Boolean   @default(true)
+  activated_at   DateTime  @default(now())
+  expires_at     DateTime?
+  service_config Json      @default("{}")
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @default(now())
+  Tenant         Tenant    @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+
+  @@unique([tenant_id, service_type])
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ENDED
+  SCHEDULED
+}
+
+enum CampaignDisplayType {
+  BANNER
+  POPUP
+  NOTIFICATION
+  FEATURED
+}
+
+enum CampaignCtaType {
+  NONE
+  LINK
+  BUTTON
+  COUPON
+}
+
+enum AdminLevel {
+  chainadmin
+  groupadmin
+  superadmin
+}

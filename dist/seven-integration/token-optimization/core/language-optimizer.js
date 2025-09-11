@@ -1,4 +1,7 @@
-export class LanguageOptimizer {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LanguageOptimizer = void 0;
+class LanguageOptimizer {
     defaultConfig = {
         thinkingLanguage: 'english',
         outputLanguage: 'japanese',
@@ -51,3 +54,4 @@ Provide architecture and implementation in ${config.outputLanguage}.`;
         };
     }
 }
+exports.LanguageOptimizer = LanguageOptimizer;

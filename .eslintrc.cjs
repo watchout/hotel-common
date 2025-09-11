@@ -1,0 +1,69 @@
+// カスタムルールを読み込む
+const prismaAdapterRule = require('./scripts/eslint-rules/prisma-adapter-rule');
+
+module.exports = {
+  root: true,
+  env: {
+    es2022: true,
+    node: true,
+  },
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: false,
+  },
+  plugins: ['@typescript-eslint', 'import'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
+    'prettier',
+  ],
+  rules: {
+    // カスタムルール
+    'prisma-adapter': prismaAdapterRule,
+    
+    // TypeScript strictness
+    '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/explicit-function-return-type': 'warn',
+    '@typescript-eslint/no-implicit-any-catch': 'error',
+    '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+
+    // Imports
+    'import/order': [
+      'error',
+      {
+        'groups': [
+          'builtin',
+          'external',
+          'internal',
+          ['parent', 'sibling', 'index'],
+          'object',
+          'type',
+        ],
+        'newlines-between': 'always',
+        'alphabetize': { order: 'asc', caseInsensitive: true },
+      },
+    ],
+    'import/no-unresolved': 'off',
+
+    // General
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'no-return-await': 'error',
+    'no-duplicate-imports': 'error',
+  },
+  overrides: [
+    {
+      files: ['**/*.ts', '**/*.tsx'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      },
+    },
+  ],
+};
+
+
+
+

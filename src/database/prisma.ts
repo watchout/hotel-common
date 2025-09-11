@@ -1,120 +1,106 @@
-import { PrismaClient } from '../generated/prisma'
-import { HotelLogger } from '../utils/logger'
+import { PrismaClient } from '../generated/prisma';
+import { createPrismaAdapter, PrismaAdapter } from './prisma-adapter';
+import { setupSoftDeleteMiddleware } from './soft-delete-middleware';
 
+/**
+ * ホテル共通データベースクライアント
+ * シングルトンパターンを使用して、アプリケーション全体で一貫したPrismaClientインスタンスを提供します
+ */
 export class HotelDatabaseClient {
-  private static instance: HotelDatabaseClient
-  private prisma: PrismaClient
-  private logger: HotelLogger
+  private static instance: HotelDatabaseClient;
+  private prisma: PrismaClient;
+  private adapter: PrismaAdapter;
 
   private constructor() {
-    this.logger = HotelLogger.getInstance()
     this.prisma = new PrismaClient({
-      log: [
-        { emit: 'stdout', level: 'query' },
-        { emit: 'stdout', level: 'error' },
-        { emit: 'stdout', level: 'info' },
-        { emit: 'stdout', level: 'warn' },
-      ],
-    })
+      log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    });
+    
+    // ソフトデリートミドルウェアを設定（一時的に無効化）
+    // setupSoftDeleteMiddleware(this.prisma);
+    
+    this.adapter = createPrismaAdapter(this.prisma);
   }
 
+  /**
+   * シングルトンインスタンスを取得
+   */
   public static getInstance(): HotelDatabaseClient {
     if (!HotelDatabaseClient.instance) {
-      HotelDatabaseClient.instance = new HotelDatabaseClient()
+      HotelDatabaseClient.instance = new HotelDatabaseClient();
     }
-    return HotelDatabaseClient.instance
+    return HotelDatabaseClient.instance;
   }
 
+  /**
+   * Prismaクライアントインスタンスを取得
+   * 注意: 直接Prismaクライアントを使用する場合は、テーブル名がスネークケース・複数形であることに注意
+   */
   public getClient(): PrismaClient {
-    return this.prisma
+    return this.prisma;
   }
 
-  // Prismaモデルプロパティの委譲
-  public get schemaVersion() { return this.prisma.schemaVersion }
-  public get systemEvent() { return this.prisma.systemEvent }
-  public get admin() { return this.prisma.admin }
-  public get adminLog() { return this.prisma.adminLog }
-  public get tenant() { return this.prisma.tenant }
-  public get staff() { return this.prisma.staff }
-  public get customers() { return this.prisma.customers }
-  public get reservation() { return this.prisma.reservation }
-  public get room() { return this.prisma.room }
-  public get roomGrade() { return this.prisma.roomGrade }
-  public get roomGradeMedia() { return this.prisma.roomGradeMedia }
-  public get memberGradeAccess() { return this.prisma.memberGradeAccess }
-  public get attendance() { return this.prisma.attendance }
-  public get workSchedule() { return this.prisma.workSchedule }
-  public get handoverNote() { return this.prisma.handoverNote }
-  public get staffNotification() { return this.prisma.staffNotification }
-  public get auditLog() { return this.prisma.auditLog }
+  /**
+   * アダプターを使用したPrismaクライアントを取得
+   * 従来のキャメルケース・単数形のモデル名でアクセス可能
+   */
+  public getAdapter(): PrismaAdapter {
+    return this.adapter;
+  }
 
-  // トランザクション実行
+  /**
+   * トランザクションを実行
+   */
   public async transaction<T>(
-    fn: (prisma: PrismaClient) => Promise<T>
+    fn: (tx: any) => Promise<T>,
+    options?: Parameters<PrismaClient['$transaction']>[1]
   ): Promise<T> {
-    return await this.prisma.$transaction(async (tx) => {
-      return await fn(tx as PrismaClient)
-    })
+    return this.adapter.$transaction(fn, options);
   }
 
-  public async connect(): Promise<void> {
-    try {
-      await this.prisma.$connect()
-      this.logger.info('Hotel Database connected successfully')
-    } catch (error) {
-      this.logger.error('Failed to connect to Hotel Database', { error: error as Error })
-      throw error
-    }
-  }
-
-  public async disconnect(): Promise<void> {
-    try {
-      await this.prisma.$disconnect()
-      this.logger.info('Hotel Database disconnected successfully')
-    } catch (error) {
-      this.logger.error('Failed to disconnect from Hotel Database', { error: error as Error })
-      throw error
-    }
-  }
-
-  public async healthCheck(): Promise<boolean> {
-    try {
-      await this.prisma.$queryRaw`SELECT 1`
-      return true
-    } catch (error) {
-      this.logger.error('Database health check failed', { error: error as Error })
-      return false
-    }
-  }
-
-  public async getDatabaseStats(): Promise<{
-    name: string
-    size?: string
-    tables: number
-    connected: boolean
-  }> {
-    try {
-      const tables = await this.prisma.$queryRaw<{ count: bigint }[]>`
-        SELECT COUNT(*) as count 
-        FROM information_schema.tables 
-        WHERE table_schema = 'public'
-      `
-      
-      return {
-        name: 'hotel_unified_db',
-        tables: Number(tables[0]?.count || 0),
-        connected: true
-      }
-    } catch (error) {
-      this.logger.error('Failed to get database stats', { error: error as Error })
-      return {
-        name: 'hotel_unified_db',
-        tables: 0,
-        connected: false
-      }
-    }
-  }
+  /**
+   * 以下のゲッターは互換性のために残していますが、
+   * 将来的には getAdapter() を使用することを推奨します
+   */
+  public get page() { return this.adapter.page; }
+  public get pageHistory() { return this.adapter.pageHistory; }
+  public get responseNode() { return this.adapter.responseNode; }
+  public get responseTree() { return this.adapter.responseTree; }
+  public get responseTreeVersion() { return this.adapter.responseTreeVersion; }
+  public get responseTreeSession() { return this.adapter.responseTreeSession; }
+  public get responseTreeMobileLink() { return this.adapter.responseTreeMobileLink; }
+  public get responseTreeHistory() { return this.adapter.responseTreeHistory; }
+  public get responseNodeTranslation() { return this.adapter.responseNodeTranslation; }
+  public get campaign() { return this.adapter.campaign; }
+  public get campaignCategory() { return this.adapter.campaignCategory; }
+  public get campaignCategoryRelation() { return this.adapter.campaignCategoryRelation; }
+  public get campaignItem() { return this.adapter.campaignItem; }
+  public get campaignTranslation() { return this.adapter.campaignTranslation; }
+  public get campaignUsageLog() { return this.adapter.campaignUsageLog; }
+  public get deviceVideoCache() { return this.adapter.deviceVideoCache; }
+  public get notificationTemplate() { return this.adapter.notificationTemplate; }
+  public get tenantAccessLog() { return this.adapter.tenantAccessLog; }
+  public get systemEvent() { return this.adapter.systemEvent; }
+  public get deviceRoom() { return this.adapter.deviceRoom; }
+  public get order() { return this.adapter.order; }
+  public get orderItem() { return this.adapter.orderItem; }
+  public get schemaVersion() { return this.adapter.schemaVersion; }
+  public get systemPlanRestrictions() { return this.adapter.systemPlanRestrictions; }
+  public get tenantSystemPlan() { return this.adapter.tenantSystemPlan; }
 }
 
-// シングルトンのエクスポート
-export const hotelDb = HotelDatabaseClient.getInstance() 
+// エクスポートするデフォルトインスタンス
+export const hotelDb = HotelDatabaseClient.getInstance();
+
+// 便利なヘルパー関数
+export function getHotelDb(): HotelDatabaseClient {
+  return HotelDatabaseClient.getInstance();
+}
+
+// トランザクション用のヘルパー関数
+export async function withTransaction<T>(
+  fn: (tx: any) => Promise<T>,
+  options?: Parameters<PrismaClient['$transaction']>[1]
+): Promise<T> {
+  return hotelDb.transaction(fn, options);
+}

@@ -1,5 +1,4 @@
 export * from './database';
-export { UnifiedPrismaClient } from './database/unified-client';
 export * from './auth/jwt';
 export * from './auth/types';
 export * from './api/client';

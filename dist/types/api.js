@@ -1,6 +1,9 @@
+"use strict";
 // API関連型定義
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ERROR_CODES = void 0;
 // 標準エラーコード
-export const ERROR_CODES = {
+exports.ERROR_CODES = {
     // 認証エラー (E001-E004)
     E001: 'UNAUTHORIZED',
     E002: 'FORBIDDEN',

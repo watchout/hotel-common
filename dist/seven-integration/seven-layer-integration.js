@@ -1,7 +1,10 @@
+"use strict";
 // 🎊 hotel-common七重統合システム - 七層統合実装
 // 文献1-7完全統合レイヤー処理
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SevenLayerIntegrationFactory = exports.PromptPerfectionLayer = exports.RAGImplementationLayer = exports.ProcessOptimizationLayer = exports.CursorOptimizationLayer = exports.GuardrailsLayer = exports.TokenOptimizationLayer = exports.ProblemSolvingLayer = exports.BaseIntegrationLayer = void 0;
 // 基底レイヤークラス
-export class BaseIntegrationLayer {
+class BaseIntegrationLayer {
     config;
     layerName;
     constructor(config, layerName) {
@@ -19,8 +22,9 @@ export class BaseIntegrationLayer {
         };
     }
 }
+exports.BaseIntegrationLayer = BaseIntegrationLayer;
 // Layer 1: 問題解決基盤（文献1: LLM落とし穴）
-export class ProblemSolvingLayer extends BaseIntegrationLayer {
+class ProblemSolvingLayer extends BaseIntegrationLayer {
     constructor(config) {
         super(config, 'problem-solving');
     }
@@ -88,8 +92,9 @@ export class ProblemSolvingLayer extends BaseIntegrationLayer {
         };
     }
 }
+exports.ProblemSolvingLayer = ProblemSolvingLayer;
 // Layer 2: 技術効率化（文献2: トークン最適化）
-export class TokenOptimizationLayer extends BaseIntegrationLayer {
+class TokenOptimizationLayer extends BaseIntegrationLayer {
     constructor(config) {
         super(config, 'token-optimization');
     }
@@ -157,8 +162,9 @@ export class TokenOptimizationLayer extends BaseIntegrationLayer {
         };
     }
 }
+exports.TokenOptimizationLayer = TokenOptimizationLayer;
 // Layer 3: 安全性保証（文献3: ガードレール）
-export class GuardrailsLayer extends BaseIntegrationLayer {
+class GuardrailsLayer extends BaseIntegrationLayer {
     constructor(config) {
         super(config, 'guardrails');
     }
@@ -235,8 +241,9 @@ export class GuardrailsLayer extends BaseIntegrationLayer {
         };
     }
 }
+exports.GuardrailsLayer = GuardrailsLayer;
 // Layer 4: 実践最適化（文献4: Cursor最適化）
-export class CursorOptimizationLayer extends BaseIntegrationLayer {
+class CursorOptimizationLayer extends BaseIntegrationLayer {
     constructor(config) {
         super(config, 'cursor-optimization');
     }
@@ -304,8 +311,9 @@ export class CursorOptimizationLayer extends BaseIntegrationLayer {
         };
     }
 }
+exports.CursorOptimizationLayer = CursorOptimizationLayer;
 // Layer 5: 運用プロセス（文献5: 開発プロセス）
-export class ProcessOptimizationLayer extends BaseIntegrationLayer {
+class ProcessOptimizationLayer extends BaseIntegrationLayer {
     constructor(config) {
         super(config, 'process-optimization');
     }
@@ -376,8 +384,9 @@ export class ProcessOptimizationLayer extends BaseIntegrationLayer {
         };
     }
 }
+exports.ProcessOptimizationLayer = ProcessOptimizationLayer;
 // Layer 6: RAG実装最適化（文献6: RAG実装）
-export class RAGImplementationLayer extends BaseIntegrationLayer {
+class RAGImplementationLayer extends BaseIntegrationLayer {
     constructor(config) {
         super(config, 'rag-implementation');
     }
@@ -447,8 +456,9 @@ export class RAGImplementationLayer extends BaseIntegrationLayer {
         };
     }
 }
+exports.RAGImplementationLayer = RAGImplementationLayer;
 // Layer 7: プロンプト完璧化（文献7: プロンプト最適化）
-export class PromptPerfectionLayer extends BaseIntegrationLayer {
+class PromptPerfectionLayer extends BaseIntegrationLayer {
     constructor(config) {
         super(config, 'prompt-perfection');
     }
@@ -521,8 +531,9 @@ export class PromptPerfectionLayer extends BaseIntegrationLayer {
         };
     }
 }
+exports.PromptPerfectionLayer = PromptPerfectionLayer;
 // 七重統合レイヤーファクトリー
-export class SevenLayerIntegrationFactory {
+class SevenLayerIntegrationFactory {
     static createLayer(layerType, config) {
         switch (layerType) {
             case 'problem-solving':
@@ -547,3 +558,4 @@ export class SevenLayerIntegrationFactory {
         return config.integrationLayers.map(layerType => this.createLayer(layerType, config));
     }
 }
+exports.SevenLayerIntegrationFactory = SevenLayerIntegrationFactory;

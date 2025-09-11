@@ -1,5 +1,8 @@
-import { TokenOptimizationSystem } from '../index';
-export class HotelMemberAdapter {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HotelMemberAdapter = void 0;
+const index_1 = require("../index");
+class HotelMemberAdapter {
     optimizer;
     memberConfig;
     constructor(customConfig) {
@@ -19,7 +22,7 @@ export class HotelMemberAdapter {
             },
             ...customConfig
         };
-        this.optimizer = new TokenOptimizationSystem(this.memberConfig);
+        this.optimizer = new index_1.TokenOptimizationSystem(this.memberConfig);
     }
     async optimizeSecurityRequest(request, context) {
         const securityContext = this.addSecurityContext(context);
@@ -90,3 +93,4 @@ export class HotelMemberAdapter {
         };
     }
 }
+exports.HotelMemberAdapter = HotelMemberAdapter;

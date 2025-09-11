@@ -1,2 +1,3 @@
+"use strict";
 // 多言語対応型定義
-export {};
+Object.defineProperty(exports, "__esModule", { value: true });

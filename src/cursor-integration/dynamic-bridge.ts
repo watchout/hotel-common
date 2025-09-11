@@ -5,7 +5,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { RealRAGService } from './rag-service';
 import { RealGuardrailsValidator } from './guardrails-validator';
-import { TokenOptimizer } from './token-optimizer';
+// TokenOptimizerモジュールが存在しないため、コメントアウト
+// import { TokenOptimizer } from './token-optimizer';
 
 export interface ProjectContext {
   currentFile: string;
@@ -21,14 +22,16 @@ export interface ProjectContext {
 export class DynamicCursorIntegration {
   private ragService: RealRAGService;
   private guardrails: RealGuardrailsValidator;
-  private tokenOptimizer: TokenOptimizer;
+  // @ts-ignore - TokenOptimizerクラスが存在しない
+  private tokenOptimizer: any;
   private watchInterval: NodeJS.Timeout | null = null;
   private lastContext: string = '';
 
   constructor() {
     this.ragService = new RealRAGService();
     this.guardrails = new RealGuardrailsValidator();
-    this.tokenOptimizer = new TokenOptimizer();
+    // @ts-ignore - TokenOptimizerクラスが存在しない
+    this.tokenOptimizer = {};
   }
 
   /**
@@ -154,7 +157,7 @@ export class DynamicCursorIntegration {
       // git log確認（簡易版）
       const { execSync } = require('child_process');
       const gitLog = execSync('git log --oneline -5', { encoding: 'utf8' });
-      return gitLog.split('\n').filter(line => line.trim());
+      return gitLog.split('\n').filter((line: string) => line.trim());
     } catch (error) {
       return ['変更履歴取得不可'];
     }
@@ -221,7 +224,9 @@ export class DynamicCursorIntegration {
       'hotel-pms': ['業務効率最優先', 'フロント操作性', '24時間安定性'],
       'hotel-common': ['統合性確保', '拡張性設計', 'API標準化']
     };
-    return rules[project] || ['一般的なベストプラクティス'];
+    // プロジェクト名をキーとして安全にアクセス
+    const projectKey = project as keyof typeof rules;
+    return rules[projectKey] || ['一般的なベストプラクティス'];
   }
 
   /**

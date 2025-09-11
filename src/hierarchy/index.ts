@@ -300,7 +300,7 @@ export function createHierarchyRouter() {
         //   req.query.root_id,
         //   req.query.include_stats === 'true'
         // )
-        const tree = [] // Temporary placeholder
+        const tree: any[] = [] // Temporary placeholder
         res.json({ tree })
       } catch (error) {
         res.status(500).json({ error: (error as Error).message })
@@ -313,7 +313,7 @@ export function createHierarchyRouter() {
     async (req: any, res: any) => {
       try {
         // const permissions = await HierarchyService.getUserEffectivePermissions(req.user)
-        const permissions = [] // Temporary placeholder
+        const permissions: any[] = [] // Temporary placeholder
         res.json({ permissions })
       } catch (error) {
         res.status(500).json({ error: (error as Error).message })

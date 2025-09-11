@@ -41,6 +41,11 @@ erDiagram
     reservation }o--|| tenant : "belongs to"
     
     room }o--|| tenant : "belongs to"
+    room ||--o{ room_memo : "has many"
+
+    room_memo }o--|| tenant : "belongs to"
+    room_memo ||--o{ room_memo_comment : "has many"
+    room_memo ||--o{ room_memo_status_log : "has many"
     
     system_event }o--|| tenant : "belongs to"
     system_event }o--o| user : "created by"
@@ -106,28 +111,20 @@ erDiagram
         string tenant_id FK
         string customer_id FK
         string guest_name
-        string guest_phone
-        string guest_email
-        datetime checkin_date
-        datetime checkout_date
-        int adult_count
-        int child_count
-        string room_type
-        string room_number
+        datetime check_in_date
+        datetime check_out_date
+        int guest_count
+        string status
+        string origin
         decimal total_amount
-        decimal deposit_amount
-        enum status
-        enum origin
-        string ota_id
-        string confirmation_code UK
+        decimal paid_amount
         string special_requests
         string internal_notes
-        string origin_system
-        datetime synced_at
-        string updated_by_system
+        datetime checked_in_at
+        datetime checked_out_at
+        datetime cancelled_at
         datetime created_at
         datetime updated_at
-        datetime deleted_at
     }
     
     room {
@@ -140,7 +137,7 @@ erDiagram
         string[] amenities
         json attributes
         enum status
-        string maintenance_notes
+        // notes は廃止（room_memosへ移行）
         decimal base_price
         string origin_system
         datetime synced_at
@@ -148,6 +145,50 @@ erDiagram
         datetime created_at
         datetime updated_at
         datetime deleted_at
+    }
+
+    room_memo {
+        string id PK
+        string tenant_id FK
+        string room_id FK
+        enum category                 // reservation|handover|lost_item|maintenance|cleaning|guest_request|other
+        enum visibility               // public|private|role
+        string[] visible_roles        // role時のみ使用
+        string content
+        enum status                   // pending|in_progress|completed
+        enum priority                 // low|normal|high|urgent
+        datetime due_date
+        string created_by_staff_id FK
+        string assigned_to_staff_id FK
+        string updated_by_staff_id FK
+        datetime created_at
+        datetime updated_at
+        datetime deleted_at
+        boolean is_deleted
+    }
+
+    room_memo_comment {
+        string id PK
+        string tenant_id FK
+        string memo_id FK
+        string parent_comment_id
+        string content
+        enum comment_type             // comment|status_change
+        string status_from
+        string status_to
+        string created_by_staff_id FK
+        datetime created_at
+    }
+
+    room_memo_status_log {
+        string id PK
+        string tenant_id FK
+        string memo_id FK
+        string status_from
+        string status_to
+        string comment
+        string changed_by_staff_id FK
+        datetime created_at
     }
     
     system_event {
@@ -460,6 +501,34 @@ interface SaasMigrationMapping {
     'DATETIME': 'TIMESTAMP'
   }
 }
+```
+
+### 5.3 rooms.notes → room_memos 移行マッピング（共通）
+
+```typescript
+// rooms.notes の既存値を room_memos へ一括取り込み
+interface RoomNotesMigrationMapping {
+  source: 'rooms.notes'
+  target: 'room_memos'
+  transform: (room: { id: string; tenant_id: string; room_number: string; notes: string | null }) => RoomMemoCreate[]
+}
+
+type RoomMemoCreate = {
+  tenant_id: string
+  room_id: string
+  category: 'handover'        // 既定値
+  visibility: 'public'        // 既定値
+  visible_roles?: string[]
+  content: string
+  status: 'pending'
+  priority: 'normal'
+  created_by_staff_id: string // 不明な場合はシステムID
+  assigned_to_staff_id?: string
+}
+
+// 移行ポリシー
+// - 最古メモとして1件化 もしくは 行分割で系列化（選択式）
+// - created_by_staff_id 未特定時は 'system' を使用
 ```
 
 ## 6. インデックス戦略 (Index Strategy)

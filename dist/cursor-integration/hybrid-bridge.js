@@ -1,8 +1,13 @@
+"use strict";
 // 🔥 Cursor対話 × 実際のRAG/ガードレール統合システム
 // 対話便利性 + 90%トークン削減 + 完全精度を実現
-import { SevenIntegrationOrchestrator } from '../seven-integration/orchestrator';
-import { RealRAGService } from './rag-service';
-import { RealGuardrailsValidator } from './guardrails-validator';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HybridCursorIntegration = void 0;
+const orchestrator_1 = require("../seven-integration/orchestrator");
+const rag_service_1 = require("./rag-service");
+const guardrails_validator_1 = require("./guardrails-validator");
+// TokenOptimizerモジュールが存在しないため、コメントアウト
+// import { TokenOptimizer } from './token-optimizer';
 // 簡易コンテキストエクストラクター（実装例）
 class ContextExtractor {
     async extract(message) {
@@ -16,15 +21,15 @@ class ContextExtractor {
  * - 実際のガードレール適用
  * - 90%トークン削減実現
  */
-export class HybridCursorIntegration {
+class HybridCursorIntegration {
     orchestrator;
     ragService;
     guardrails;
     contextExtractor;
     constructor() {
-        this.orchestrator = new SevenIntegrationOrchestrator();
-        this.ragService = new RealRAGService();
-        this.guardrails = new RealGuardrailsValidator();
+        this.orchestrator = new orchestrator_1.SevenIntegrationOrchestrator();
+        this.ragService = new rag_service_1.RealRAGService();
+        this.guardrails = new guardrails_validator_1.RealGuardrailsValidator();
         this.contextExtractor = new ContextExtractor();
     }
     /**
@@ -243,4 +248,5 @@ export class HybridCursorIntegration {
     async compressPrompt(content) { return content; }
     async optimizeExpression(content) { return content; }
 }
-export default HybridCursorIntegration;
+exports.HybridCursorIntegration = HybridCursorIntegration;
+exports.default = HybridCursorIntegration;

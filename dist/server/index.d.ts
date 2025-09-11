@@ -7,6 +7,7 @@
  */
 declare class HotelCommonServer {
     private webSocketServer;
+    private integrationServer;
     private logger;
     constructor();
     /**

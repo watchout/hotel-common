@@ -19,6 +19,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // 静的ファイル配信（管理画面UI）
+// @ts-ignore - ESモジュールの機能を使用
 const currentDir = path.dirname(new URL(import.meta.url).pathname)
 app.use('/admin', express.static(path.join(currentDir, '.')))
 

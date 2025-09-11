@@ -12,6 +12,7 @@ Hotel Commonは以下の機能を提供する統合基盤です：
 - **Redis連携** - セッション管理とキャッシュ機能
 - **統一ログ機能** - 構造化ログとマルチ出力対応
 - **バリデーション機能** - 統一されたデータ検証
+- **客室操作ログ統合** - 詳細な客室状態変更ログ管理 *(v2.0 - 2025年1月27日追加)*
 
 ## 📦 システム構成
 
@@ -212,6 +213,32 @@ npm run dev
 npm run clean
 ```
 
+## ✅ 品質ガード（規約の強制適用）
+
+各プロジェクト（hotel-saas / hotel-member / hotel-pms / hotel-common）へコーディング規約を徹底適用するため、共通設定と自動適用スクリプトを提供しています。
+
+含まれる共通物:
+- `configs/tsconfig.base.json` … 各プロジェクトが `extends` する共通 TypeScript 設定
+- `.eslintrc.cjs` / `.prettierrc.json` … ESLint/Prettier の共通ルール
+- `.github/workflows/quality-gate.yml` … CI で `eslint` と `tsc --noEmit` を必須チェック化
+- `scripts/git-hooks/pre-commit` … 危険なDB操作検知 + ESLint + 型チェックをコミットゲートに設定
+- `scripts/setup-quality-guard.js` … 上記を各プロジェクトへ自動適用
+
+適用手順（例）:
+```
+# hotel-common から実行
+node scripts/setup-quality-guard.js             # saas/member/pms に一括適用
+node scripts/setup-quality-guard.js hotel-saas  # 個別適用
+
+# 各プロジェクトで依存をインストール
+npm install
+
+# 品質チェックの実行
+npm run quality:all
+```
+
+詳細は `docs/CODING_STANDARDS.md` を参照してください。
+
 ## 📝 型定義
 
 全ての型定義は`src/types/`配下で管理されており、TypeScript環境で完全な型安全性を提供します。
@@ -224,31 +251,68 @@ npm run clean
 - **hotel-pms**: 3300
 - **hotel-common**: 3400
 
-## 🛡️ データベース安全性ルール
+## 🗄️ データベース統合基盤
 
-データベース操作を行う際は、以下のルールに従ってください：
+hotel-commonは統一されたPostgreSQLデータベース（`hotel_unified_db`）を使用し、完全な整合性を保持しています。
 
-- **安全なコマンド**: `npm run db:safe-*` コマンドを使用する
-- **定期的なバックアップ**: `npm run db:backup` でバックアップを作成
-- **状態確認**: `npm run db:status` で現在の状態を確認
-- **詳細ルール**: [データベース安全性ルール](docs/database/DATABASE_SAFETY_RULES.md) を参照
+### 📊 現在の状態
+- **データベース**: PostgreSQL `hotel_unified_db`
+- **テーブル数**: 41個
+- **Prismaモデル数**: 41個
+- **整合性**: ✅ 100% (41/41)
+- **最終監査**: 2025-09-01
+
+### 🔧 データベース操作
 
 ```bash
-# 安全なデータベース操作
-npm run db:safe-generate  # Prismaクライアント生成
-npm run db:safe-push      # スキーマ変更を安全に適用
-npm run db:backup         # データベースのバックアップ
-npm run db:status         # データベースの状態確認
-npm run db:check          # データベース安全性チェック
+# 整合性監査
+npx ts-node scripts/database-schema-audit.ts
+
+# 不足テーブル作成
+npx ts-node scripts/create-missing-tables.ts
+
+# Prismaクライアント再生成
+npx prisma generate
+
+# テストデータ投入
+npx ts-node scripts/seed-test-data.ts
 ```
+
+### 📋 主要テーブル群
+- **システム管理** (8): Tenant, SystemPlanRestrictions, admin, etc.
+- **ユーザー・認証** (3): staff, customers, tenant_access_logs
+- **ホテル運営** (5): rooms, reservations, checkin_sessions, etc.
+- **注文・決済** (4): Order, OrderItem, transactions, payments
+- **AI・応答システム** (7): response_trees, response_nodes, etc.
+
+### 🛡️ 安全性原則
+- **Prisma優先**: すべてのDB操作はPrisma経由
+- **直接SQL禁止**: 生SQLクエリは使用しない
+- **テナント分離**: 全データにtenantId必須
+- **ソフトデリート**: 物理削除は行わない
+
+詳細: [データベースマスタードキュメント](docs/database/CURRENT_DATABASE_STATE_MASTER.md)
 
 ## 📋 TODO
 
+### 完了済み ✅
+- [x] データベース・Prisma完全統合
+- [x] 整合性監査システム構築
+- [x] セッション管理機能実装
+- [x] 注文・決済システム統合
+- [x] ソフトデリート全面実装
+- [x] テナント分離アーキテクチャ
+
+### 進行中 🔄
+- [ ] 他システム連携テスト (hotel-pms, hotel-saas, hotel-member)
+- [ ] パフォーマンス最適化
+- [ ] 監視・アラートシステム
+
+### 今後の予定 📅
 - [ ] 単体テストの実装
 - [ ] API仕様書の自動生成
 - [ ] Docker化対応
-- [ ] 性能監視機能の追加
-- [x] データベース安全性ルールの実装
+- [ ] 本格運用開始
 
 ## �� ライセンス
 

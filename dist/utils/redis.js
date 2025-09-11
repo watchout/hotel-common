@@ -1,5 +1,42 @@
-import Redis from 'redis';
-export class HotelRedisClient {
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HotelRedisClient = void 0;
+exports.getRedisClient = getRedisClient;
+const Redis = __importStar(require("redis"));
+class HotelRedisClient {
     client;
     config;
     connected = false;
@@ -129,6 +166,20 @@ export class HotelRedisClient {
         }
     }
     /**
+     * 値を保存
+     */
+    async set(key, value, ttlSeconds) {
+        if (!this.connected)
+            await this.connect();
+        const prefixedKey = this.prefixKey(key);
+        if (ttlSeconds) {
+            await this.client.setEx(prefixedKey, ttlSeconds, value);
+        }
+        else {
+            await this.client.set(prefixedKey, value);
+        }
+    }
+    /**
      * キャッシュ取得
      */
     async getCache(key) {
@@ -145,6 +196,15 @@ export class HotelRedisClient {
             console.error('Error parsing cache data:', error);
             return null;
         }
+    }
+    /**
+     * 値を取得
+     */
+    async get(key) {
+        if (!this.connected)
+            await this.connect();
+        const prefixedKey = this.prefixKey(key);
+        return await this.client.get(prefixedKey);
     }
     /**
      * キャッシュ削除
@@ -203,10 +263,59 @@ export class HotelRedisClient {
         // 30日後に自動削除
         await this.client.expire(logKey, 30 * 24 * 60 * 60);
     }
+    /**
+     * ハッシュに値を設定
+     */
+    async hset(key, field, value) {
+        if (!this.connected)
+            await this.connect();
+        const prefixedKey = this.prefixKey(key);
+        await this.client.hSet(prefixedKey, field, value);
+    }
+    /**
+     * ハッシュから値を取得
+     */
+    async hget(key, field) {
+        if (!this.connected)
+            await this.connect();
+        const prefixedKey = this.prefixKey(key);
+        const result = await this.client.hGet(prefixedKey, field);
+        return result;
+    }
+    /**
+     * ハッシュからフィールドを削除
+     */
+    async hdel(key, field) {
+        if (!this.connected)
+            await this.connect();
+        const prefixedKey = this.prefixKey(key);
+        await this.client.hDel(prefixedKey, field);
+    }
+    /**
+     * キーを削除
+     */
+    async del(key) {
+        if (!this.connected)
+            await this.connect();
+        const prefixedKey = this.prefixKey(key);
+        await this.client.del(prefixedKey);
+    }
+    /**
+     * ハッシュに複数の値を設定
+     */
+    async hsetAll(key, fieldValues) {
+        if (!this.connected)
+            await this.connect();
+        const prefixedKey = this.prefixKey(key);
+        for (const [field, value] of Object.entries(fieldValues)) {
+            await this.client.hSet(prefixedKey, field, value);
+        }
+    }
 }
+exports.HotelRedisClient = HotelRedisClient;
 // シングルトンインスタンス
 let redisInstance = null;
-export function getRedisClient(config) {
+function getRedisClient(config) {
     if (!redisInstance) {
         redisInstance = new HotelRedisClient(config);
     }

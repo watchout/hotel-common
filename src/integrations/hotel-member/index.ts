@@ -1,6 +1,6 @@
 // hotel-member階層権限管理統合 - エクスポート
 
-export { HotelMemberHierarchyAdapter } from './hierarchy-adapter'
+export { HotelMemberHierarchyAdapterStub as HotelMemberHierarchyAdapter } from './hierarchy-adapter-stub'
 export { default as hotelMemberApiRouter } from './api-endpoints'
 
 // FastAPI (Python) 向けのREST API URL定義
@@ -33,7 +33,8 @@ export async function initializeHotelMemberHierarchy(): Promise<void> {
     logger.info('🎯 hotel-member階層権限管理統合初期化中...')
     
     // ヘルスチェック実行
-    const health = await HotelMemberHierarchyAdapter.healthCheckForPython()
+    const { HotelMemberHierarchyAdapterStub } = await import('./hierarchy-adapter-stub')
+    const health = await HotelMemberHierarchyAdapterStub.healthCheckForPython()
     
     if (health.status === 'healthy') {
       logger.info('✅ hotel-member階層権限管理統合初期化完了')
@@ -79,9 +80,11 @@ export class HotelMemberHierarchyUtils {
     action: 'read_customer' | 'update_customer' | 'manage_tiers' | 'transfer_points' | 'view_analytics'
   ): Promise<boolean> {
     try {
+      const { HotelMemberHierarchyAdapterStub } = await import('./hierarchy-adapter-stub')
+      
       switch (action) {
         case 'read_customer':
-          const readResult = await HotelMemberHierarchyAdapter.checkCustomerDataAccessForPython({
+          const readResult = await HotelMemberHierarchyAdapterStub.checkCustomerDataAccessForPython({
             token,
             target_tenant_id: 'default',
             operation: 'READ'
@@ -89,7 +92,7 @@ export class HotelMemberHierarchyUtils {
           return readResult.allowed
 
         case 'update_customer':
-          const updateResult = await HotelMemberHierarchyAdapter.checkCustomerDataAccessForPython({
+          const updateResult = await HotelMemberHierarchyAdapterStub.checkCustomerDataAccessForPython({
             token,
             target_tenant_id: 'default',
             operation: 'UPDATE'
@@ -97,7 +100,7 @@ export class HotelMemberHierarchyUtils {
           return updateResult.allowed
 
         case 'manage_tiers':
-          const tierResult = await HotelMemberHierarchyAdapter.checkMembershipDataRestrictionsForPython({
+          const tierResult = await HotelMemberHierarchyAdapterStub.checkMembershipDataRestrictionsForPython({
             token,
             operation: 'update',
             data_type: 'membership_tier'
@@ -105,7 +108,7 @@ export class HotelMemberHierarchyUtils {
           return tierResult.allowed
 
         case 'transfer_points':
-          const transferResult = await HotelMemberHierarchyAdapter.checkMembershipDataRestrictionsForPython({
+          const transferResult = await HotelMemberHierarchyAdapterStub.checkMembershipDataRestrictionsForPython({
             token,
             operation: 'transfer',
             data_type: 'points_balance'
@@ -113,7 +116,7 @@ export class HotelMemberHierarchyUtils {
           return transferResult.allowed
 
         case 'view_analytics':
-          const analyticsResult = await HotelMemberHierarchyAdapter.checkGroupAnalyticsAccessForPython({
+          const analyticsResult = await HotelMemberHierarchyAdapterStub.checkGroupAnalyticsAccessForPython({
             token,
             analytics_type: 'membership_summary'
           })
@@ -132,7 +135,8 @@ export class HotelMemberHierarchyUtils {
    */
   static async getUserHierarchyLevel(token: string): Promise<number | null> {
     try {
-      const verifyResult = await HotelMemberHierarchyAdapter.verifyHierarchicalTokenForPython({ token })
+      const { HotelMemberHierarchyAdapterStub } = await import('./hierarchy-adapter-stub')
+      const verifyResult = await HotelMemberHierarchyAdapterStub.verifyHierarchicalTokenForPython({ token })
       if (verifyResult.success && verifyResult.user?.hierarchy_context) {
         return verifyResult.user.hierarchy_context.organization_level
       }
@@ -262,4 +266,4 @@ export const HOTEL_MEMBER_HIERARCHY_CONFIG = {
     accessible_tenants: 600, // 10分
     user_restrictions: 300 // 5分
   }
-} 
+}

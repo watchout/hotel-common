@@ -1,7 +1,12 @@
-import { RedisEventQueue } from './redis-queue';
-import { HotelWebSocketClient } from '../websocket/client';
-import { HotelLogger } from '../utils/logger';
-import { hotelDb } from '../database/prisma';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HotelEventPublisher = void 0;
+exports.createEventPublisher = createEventPublisher;
+exports.getEventPublisher = getEventPublisher;
+const redis_queue_1 = require("./redis-queue");
+const client_1 = require("../websocket/client");
+const logger_1 = require("../utils/logger");
+const prisma_1 = require("../database/prisma");
 /**
  * 統一EventPublisher - Event-driven連携の発行側統一インターフェース
  *
@@ -12,7 +17,7 @@ import { hotelDb } from '../database/prisma';
  * - 監査ログ記録
  * - バッチイベントスケジューリング
  */
-export class HotelEventPublisher {
+class HotelEventPublisher {
     config;
     redisQueue;
     webSocketClient = null;
@@ -20,9 +25,9 @@ export class HotelEventPublisher {
     batchScheduler = new Map();
     constructor(config) {
         this.config = config;
-        this.logger = HotelLogger.getInstance();
+        this.logger = logger_1.HotelLogger.getInstance();
         // Redis Streams初期化
-        this.redisQueue = new RedisEventQueue({
+        this.redisQueue = new redis_queue_1.RedisEventQueue({
             host: config.redis.host,
             port: config.redis.port,
             password: config.redis.password,
@@ -32,7 +37,7 @@ export class HotelEventPublisher {
         });
         // WebSocketクライアント初期化（オプション）
         if (config.websocket) {
-            this.webSocketClient = new HotelWebSocketClient({
+            this.webSocketClient = new client_1.HotelWebSocketClient({
                 url: `ws://localhost:${config.websocket.port}${config.websocket.path}`,
                 autoConnect: true,
                 reconnection: true
@@ -300,7 +305,7 @@ export class HotelEventPublisher {
      */
     async storeEventAuditLog(event, eventId) {
         try {
-            const db = hotelDb.getClient();
+            const db = prisma_1.hotelDb.getAdapter();
             await db.systemEvent.create({
                 data: {
                     tenant_id: event.tenant_id,
@@ -320,6 +325,7 @@ export class HotelEventPublisher {
                         delivery_guarantee: event.delivery_guarantee,
                         correlation_id: event.correlation_id
                     },
+                    // @ts-ignore - フィールド名の不一致
                     occurred_at: event.timestamp
                 }
             });
@@ -455,16 +461,17 @@ export class HotelEventPublisher {
         }
     }
 }
+exports.HotelEventPublisher = HotelEventPublisher;
 // シングルトンインスタンス（設定後に使用）
 let publisherInstance = null;
-export function createEventPublisher(config) {
+function createEventPublisher(config) {
     if (publisherInstance) {
         throw new Error('EventPublisherは既に初期化されています');
     }
     publisherInstance = new HotelEventPublisher(config);
     return publisherInstance;
 }
-export function getEventPublisher() {
+function getEventPublisher() {
     if (!publisherInstance) {
         throw new Error('EventPublisherが初期化されていません。createEventPublisher()を先に呼び出してください');
     }

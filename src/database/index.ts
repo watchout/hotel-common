@@ -1,19 +1,6 @@
-// Hotel Common - 統一PostgreSQL基盤
-export { HotelDatabaseClient, hotelDb } from './prisma'
-export { HotelMigrationManager, migrationManager } from './migrations'
-export type { MigrationInfo } from './migrations'
+import { PrismaClient } from '../generated/prisma';
+import { HotelDatabaseClient } from './prisma';
 
-// Prismaクライアントの型定義をエクスポート
-export type {
-  Tenant,
-  Staff,
-  customers,
-  Reservation,
-  Room,
-  SystemEvent,
-  SchemaVersion,
-  Admin,
-  AdminLog,
-  AdminLevel,
-  PrismaClient
-} from '../generated/prisma' 
+// シングルトンインスタンスをエクスポート
+export const hotelDb = HotelDatabaseClient.getInstance();
+export const prisma = hotelDb.getAdapter();

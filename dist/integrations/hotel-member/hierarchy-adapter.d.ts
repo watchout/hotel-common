@@ -1,86 +1,89 @@
-import type { HierarchicalJWTPayload } from '../../hierarchy/types';
 /**
- * hotel-member用階層権限管理アダプター
+ * hotel-member階層権限管理アダプター
  *
- * Python FastAPIからの階層権限要求を処理
+ * hotel-member FastAPIサーバーとの連携
+ * - JWT検証
+ * - 階層権限チェック
+ * - 顧客データアクセス制御
  */
+interface HierarchicalJWTPayload {
+    user_id: string;
+    tenant_id: string;
+    email?: string;
+    role: string;
+    level: number;
+    permissions: string[];
+    hierarchy_context: {
+        organization_id: string;
+        organization_level: 1 | 2 | 3 | 4;
+        organization_type: 'GROUP' | 'BRAND' | 'HOTEL' | 'DEPARTMENT';
+        organization_path: string;
+        access_scope: string[];
+        data_access_policies: Record<string, any>;
+    };
+    accessible_tenants: string[];
+}
+interface VerifyTokenResult {
+    success: boolean;
+    user?: HierarchicalJWTPayload;
+    error?: string;
+}
+interface PermissionCheckResult {
+    allowed: boolean;
+    reason?: string;
+    effective_scope?: string;
+    effective_level?: string;
+    restrictions?: Record<string, any>;
+}
 export declare class HotelMemberHierarchyAdapter {
     private static logger;
     /**
-     * 階層JWT検証エンドポイント（FastAPI向け）
+     * 階層JWTトークン検証（Python向け）
      */
-    static verifyHierarchicalTokenForPython(request: {
+    static verifyHierarchicalTokenForPython(params: {
         token: string;
-    }): Promise<{
-        success: boolean;
-        user?: HierarchicalJWTPayload;
-        error?: string;
-    }>;
+    }): Promise<VerifyTokenResult>;
     /**
-     * 顧客データアクセス権限チェック（FastAPI向け）
+     * 顧客データアクセスチェック（Python向け）
      */
-    static checkCustomerDataAccessForPython(request: {
+    static checkCustomerDataAccessForPython(params: {
         token: string;
         target_tenant_id: string;
         operation: 'READ' | 'CREATE' | 'UPDATE' | 'DELETE';
-    }): Promise<{
-        allowed: boolean;
-        reason?: string;
-        effective_scope?: string;
-        effective_level?: string;
-    }>;
+        customer_id?: string;
+    }): Promise<PermissionCheckResult>;
     /**
-     * アクセス可能テナント一覧取得（FastAPI向け）
+     * 会員制限チェック（Python向け）
      */
-    static getAccessibleTenantsForPython(request: {
+    static checkMembershipDataRestrictionsForPython(params: {
         token: string;
-        scope_level?: 'GROUP' | 'BRAND' | 'HOTEL' | 'DEPARTMENT';
-    }): Promise<{
-        success: boolean;
-        tenants?: string[];
-        error?: string;
-    }>;
+        operation: string;
+        data_type: string;
+        tier_id?: string;
+    }): Promise<PermissionCheckResult>;
     /**
-     * 会員データ階層制限チェック（FastAPI向け）
+     * グループ分析アクセスチェック（Python向け）
      */
-    static checkMembershipDataRestrictionsForPython(request: {
+    static checkGroupAnalyticsAccessForPython(params: {
         token: string;
-        operation: 'read' | 'update' | 'transfer';
-        data_type: 'membership_tier' | 'points_balance' | 'credit_limit' | 'personal_info';
-    }): Promise<{
-        allowed: boolean;
-        restrictions?: string[];
-        reason?: string;
-    }>;
+        analytics_type: string;
+        target_brand_id?: string;
+    }): Promise<PermissionCheckResult>;
     /**
-     * 会員データ制限ルール取得
+     * アクセス可能テナント取得（Python向け）
      */
-    private static getMembershipDataRestrictions;
-    /**
-     * グループ分析権限チェック（FastAPI向け）
-     */
-    static checkGroupAnalyticsAccessForPython(request: {
+    static getAccessibleTenantsForPython(params: {
         token: string;
-        analytics_type: 'membership_summary' | 'cross_brand_activity' | 'revenue_analysis' | 'customer_journey';
     }): Promise<{
-        allowed: boolean;
-        access_level?: 'FULL' | 'SUMMARY_ONLY' | 'READ_ONLY';
-        reason?: string;
+        tenants: string[];
     }>;
     /**
-     * 分析アクセスレベル取得
-     */
-    private static getAnalyticsAccessLevel;
-    /**
-     * FastAPI向けヘルスチェック
+     * ヘルスチェック（Python向け）
      */
     static healthCheckForPython(): Promise<{
-        status: 'healthy' | 'degraded' | 'unhealthy';
-        services: {
-            hierarchy_manager: boolean;
-            jwt_verification: boolean;
-            permission_cache: boolean;
-        };
-        timestamp: string;
+        status: 'healthy' | 'degraded' | 'error';
+        message?: string;
+        details?: Record<string, any>;
     }>;
 }
+export {};

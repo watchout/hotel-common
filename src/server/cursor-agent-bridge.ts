@@ -123,7 +123,7 @@ export class CursorAgentBridge {
 
     } catch (error) {
       console.error('🚨 処理エラー:', error);
-      throw new Error(`エージェント処理失敗: ${error.message}`);
+      throw new Error(`エージェント処理失敗: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 

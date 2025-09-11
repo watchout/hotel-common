@@ -1,4 +1,7 @@
-export class HotelCommonContextManager {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HotelCommonContextManager = void 0;
+class HotelCommonContextManager {
     maxTokens = 4000;
     messages = [];
     permanentConstraints = [
@@ -87,3 +90,4 @@ ${messageContent}`;
         this.messages = [];
     }
 }
+exports.HotelCommonContextManager = HotelCommonContextManager;

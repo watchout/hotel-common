@@ -3,8 +3,8 @@
 // 統一PostgreSQL基盤
 export * from './database'
 
-// 統一Prismaクライアント
-export { UnifiedPrismaClient } from './database/unified-client'
+// 統一Prismaクライアント（PMS実装時まで無効化）
+// export { UnifiedPrismaClient } from './database/unified-client'
 
 // JWT認証基盤  
 export * from './auth/jwt'

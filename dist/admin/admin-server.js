@@ -1,30 +1,40 @@
-import express from 'express';
-import cors from 'cors';
-import path from 'path';
-import adminRouter from './admin-api';
-import { HotelLogger } from '../utils/logger';
-const app = express();
-const logger = HotelLogger.getInstance();
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
+const path_1 = __importDefault(require("path"));
+const admin_api_1 = __importDefault(require("./admin-api"));
+const logger_1 = require("../utils/logger");
+const app = (0, express_1.default)();
+const logger = logger_1.HotelLogger.getInstance();
 const PORT = process.env.ADMIN_PORT || 3500;
 // ミドルウェア設定
-app.use(cors({
+app.use((0, cors_1.default)({
     origin: ['http://localhost:3500', 'http://127.0.0.1:3500'],
     credentials: true
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
 // 静的ファイル配信（管理画面UI）
-const currentDir = path.dirname(new URL(import.meta.url).pathname);
-app.use('/admin', express.static(path.join(currentDir, '.')));
+// @ts-ignore - ESモジュールの機能を使用
+const currentDir = path_1.default.dirname(new URL(import.meta.url).pathname);
+app.use('/admin', express_1.default.static(path_1.default.join(currentDir, '.')));
 // 管理画面UI（ルート）
 app.get('/', (req, res) => {
-    res.sendFile(path.join(currentDir, 'admin-dashboard.html'));
+    res.sendFile(path_1.default.join(currentDir, 'admin-dashboard.html'));
 });
 app.get('/admin', (req, res) => {
-    res.sendFile(path.join(currentDir, 'admin-dashboard.html'));
+    res.sendFile(path_1.default.join(currentDir, 'admin-dashboard.html'));
+});
+// テナントサービス管理画面
+app.get('/admin/tenant-service-management', (req, res) => {
+    res.sendFile(path_1.default.join(currentDir, 'tenant-service-management.html'));
 });
 // Admin API
-app.use('/api/admin', adminRouter);
+app.use('/api/admin', admin_api_1.default);
 // ヘルスチェック
 app.get('/health', (req, res) => {
     res.json({
@@ -57,4 +67,4 @@ app.listen(PORT, () => {
     logger.info(`📊 Admin Dashboard: http://localhost:${PORT}/admin`);
     logger.info(`🔗 API Endpoint: http://localhost:${PORT}/api/admin`);
 });
-export default app;
+exports.default = app;

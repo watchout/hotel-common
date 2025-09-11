@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ApiClientConfig, RequestConfig, HttpMethod, ERROR_CODES } from '../types/api'
 import { ApiResponse, ApiError } from '../types/common'
-import { JwtManager } from '../auth/jwt'
+// import { JwtManager } from '../auth/jwt'
 import crypto from 'crypto'
 
 export class HotelApiClient {

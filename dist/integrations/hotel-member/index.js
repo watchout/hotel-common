@@ -1,8 +1,50 @@
+"use strict";
 // hotel-member階層権限管理統合 - エクスポート
-export { HotelMemberHierarchyAdapter } from './hierarchy-adapter';
-export { default as hotelMemberApiRouter } from './api-endpoints';
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HOTEL_MEMBER_HIERARCHY_CONFIG = exports.PYTHON_MIDDLEWARE_HELPERS = exports.HotelMemberHierarchyUtils = exports.HOTEL_MEMBER_HIERARCHY_ENDPOINTS = exports.hotelMemberApiRouter = exports.HotelMemberHierarchyAdapter = void 0;
+exports.initializeHotelMemberHierarchy = initializeHotelMemberHierarchy;
+var hierarchy_adapter_stub_1 = require("./hierarchy-adapter-stub");
+Object.defineProperty(exports, "HotelMemberHierarchyAdapter", { enumerable: true, get: function () { return hierarchy_adapter_stub_1.HotelMemberHierarchyAdapterStub; } });
+var api_endpoints_1 = require("./api-endpoints");
+Object.defineProperty(exports, "hotelMemberApiRouter", { enumerable: true, get: function () { return __importDefault(api_endpoints_1).default; } });
 // FastAPI (Python) 向けのREST API URL定義
-export const HOTEL_MEMBER_HIERARCHY_ENDPOINTS = {
+exports.HOTEL_MEMBER_HIERARCHY_ENDPOINTS = {
     // 認証関連
     VERIFY_TOKEN: '/api/hotel-member/hierarchy/auth/verify',
     // 権限チェック関連
@@ -19,13 +61,14 @@ export const HOTEL_MEMBER_HIERARCHY_ENDPOINTS = {
 /**
  * hotel-member階層権限管理統合初期化
  */
-export async function initializeHotelMemberHierarchy() {
-    const { HotelLogger } = await import('../../utils/logger');
+async function initializeHotelMemberHierarchy() {
+    const { HotelLogger } = await Promise.resolve().then(() => __importStar(require('../../utils/logger')));
     const logger = HotelLogger.getInstance();
     try {
         logger.info('🎯 hotel-member階層権限管理統合初期化中...');
         // ヘルスチェック実行
-        const health = await HotelMemberHierarchyAdapter.healthCheckForPython();
+        const { HotelMemberHierarchyAdapterStub } = await Promise.resolve().then(() => __importStar(require('./hierarchy-adapter-stub')));
+        const health = await HotelMemberHierarchyAdapterStub.healthCheckForPython();
         if (health.status === 'healthy') {
             logger.info('✅ hotel-member階層権限管理統合初期化完了');
         }
@@ -43,7 +86,7 @@ export async function initializeHotelMemberHierarchy() {
 - FastAPI連携エンドポイント
 
 🔗 APIエンドポイント:
-${Object.entries(HOTEL_MEMBER_HIERARCHY_ENDPOINTS)
+${Object.entries(exports.HOTEL_MEMBER_HIERARCHY_ENDPOINTS)
             .map(([key, path]) => `- ${key}: ${path}`)
             .join('\n')}
 
@@ -60,43 +103,44 @@ ${Object.entries(HOTEL_MEMBER_HIERARCHY_ENDPOINTS)
 /**
  * hotel-member用階層権限ヘルパー関数
  */
-export class HotelMemberHierarchyUtils {
+class HotelMemberHierarchyUtils {
     /**
      * FastAPI向け簡易権限チェック
      */
     static async quickPermissionCheck(token, action) {
         try {
+            const { HotelMemberHierarchyAdapterStub } = await Promise.resolve().then(() => __importStar(require('./hierarchy-adapter-stub')));
             switch (action) {
                 case 'read_customer':
-                    const readResult = await HotelMemberHierarchyAdapter.checkCustomerDataAccessForPython({
+                    const readResult = await HotelMemberHierarchyAdapterStub.checkCustomerDataAccessForPython({
                         token,
                         target_tenant_id: 'default',
                         operation: 'READ'
                     });
                     return readResult.allowed;
                 case 'update_customer':
-                    const updateResult = await HotelMemberHierarchyAdapter.checkCustomerDataAccessForPython({
+                    const updateResult = await HotelMemberHierarchyAdapterStub.checkCustomerDataAccessForPython({
                         token,
                         target_tenant_id: 'default',
                         operation: 'UPDATE'
                     });
                     return updateResult.allowed;
                 case 'manage_tiers':
-                    const tierResult = await HotelMemberHierarchyAdapter.checkMembershipDataRestrictionsForPython({
+                    const tierResult = await HotelMemberHierarchyAdapterStub.checkMembershipDataRestrictionsForPython({
                         token,
                         operation: 'update',
                         data_type: 'membership_tier'
                     });
                     return tierResult.allowed;
                 case 'transfer_points':
-                    const transferResult = await HotelMemberHierarchyAdapter.checkMembershipDataRestrictionsForPython({
+                    const transferResult = await HotelMemberHierarchyAdapterStub.checkMembershipDataRestrictionsForPython({
                         token,
                         operation: 'transfer',
                         data_type: 'points_balance'
                     });
                     return transferResult.allowed;
                 case 'view_analytics':
-                    const analyticsResult = await HotelMemberHierarchyAdapter.checkGroupAnalyticsAccessForPython({
+                    const analyticsResult = await HotelMemberHierarchyAdapterStub.checkGroupAnalyticsAccessForPython({
                         token,
                         analytics_type: 'membership_summary'
                     });
@@ -114,7 +158,8 @@ export class HotelMemberHierarchyUtils {
      */
     static async getUserHierarchyLevel(token) {
         try {
-            const verifyResult = await HotelMemberHierarchyAdapter.verifyHierarchicalTokenForPython({ token });
+            const { HotelMemberHierarchyAdapterStub } = await Promise.resolve().then(() => __importStar(require('./hierarchy-adapter-stub')));
+            const verifyResult = await HotelMemberHierarchyAdapterStub.verifyHierarchicalTokenForPython({ token });
             if (verifyResult.success && verifyResult.user?.hierarchy_context) {
                 return verifyResult.user.hierarchy_context.organization_level;
             }
@@ -149,10 +194,11 @@ export class HotelMemberHierarchyUtils {
         }
     }
 }
+exports.HotelMemberHierarchyUtils = HotelMemberHierarchyUtils;
 /**
  * Python FastAPI向けのミドルウェアヘルパー
  */
-export const PYTHON_MIDDLEWARE_HELPERS = {
+exports.PYTHON_MIDDLEWARE_HELPERS = {
     /**
      * FastAPI Dependency用のJSONレスポンス形式
      */
@@ -188,7 +234,7 @@ export const PYTHON_MIDDLEWARE_HELPERS = {
 /**
  * hotel-member設定推奨値
  */
-export const HOTEL_MEMBER_HIERARCHY_CONFIG = {
+exports.HOTEL_MEMBER_HIERARCHY_CONFIG = {
     /**
      * 階層レベル別機能制限設定
      */

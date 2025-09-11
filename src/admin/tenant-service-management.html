@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テナントサービス管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .header .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .card h3 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, #2980b9, #1f5f99);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            margin-right: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #7f8c8d, #6c7b7d);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c0392b, #a33025);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e1e8ed;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-active {
+            background: #27ae60;
+        }
+        
+        .status-inactive {
+            background: #e74c3c;
+        }
+        
+        .error-message {
+            background: #ffeaa7;
+            color: #d63031;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #d63031;
+        }
+        
+        .success-message {
+            background: #d5edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #155724;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            color: #2c3e50;
+        }
+        
+        .close-button {
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .modal-footer {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 テナントサービス管理</h1>
+            <p class="subtitle">各テナントのサービス利用状況とプラン設定を管理します</p>
+        </div>
+
+        <!-- テナント選択 -->
+        <div class="card">
+            <h3>テナント選択</h3>
+            <div class="form-group">
+                <label for="tenantSelect">テナント</label>
+                <select id="tenantSelect">
+                    <option value="">テナントを選択してください</option>
+                </select>
+            </div>
+            <button id="loadTenantServices" class="btn">サービス情報を読み込む</button>
+        </div>
+
+        <!-- サービス一覧 -->
+        <div id="servicesCard" class="card" style="display: none;">
+            <h3>サービス利用状況</h3>
+            <div id="servicesData"></div>
+            <div style="margin-top: 20px;">
+                <button id="addServiceBtn" class="btn">新しいサービスを追加</button>
+            </div>
+        </div>
+
+        <!-- サービス追加モーダル -->
+        <div id="addServiceModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>サービス追加</h2>
+                    <span class="close-button">&times;</span>
+                </div>
+                <div id="addServiceError" class="error-message" style="display: none;"></div>
+                <div id="addServiceSuccess" class="success-message" style="display: none;"></div>
+                <form id="addServiceForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="serviceType">サービスタイプ</label>
+                            <select id="serviceType" required>
+                                <option value="">選択してください</option>
+                                <option value="hotel-saas">AIコンシェルジュ (hotel-saas)</option>
+                                <option value="hotel-pms">AIマネジメント (hotel-pms)</option>
+                                <option value="hotel-member">AICRM (hotel-member)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="businessType">業態</label>
+                            <select id="businessType" required>
+                                <option value="">選択してください</option>
+                                <option value="general">一般ホテル向け</option>
+                                <option value="leisure">レジャー向け</option>
+                                <option value="overseas">海外向け</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="planType">プラン</label>
+                            <select id="planType" required>
+                                <option value="">選択してください</option>
+                                <option value="economy">エコノミー</option>
+                                <option value="professional">プロフェッショナル</option>
+                                <option value="enterprise">エンタープライズ</option>
+                                <option value="ultimate">アルティメット</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="isActive">ステータス</label>
+                            <select id="isActive" required>
+                                <option value="true">有効</option>
+                                <option value="false">無効</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary cancel-btn">キャンセル</button>
+                        <button type="submit" class="btn">追加</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- サービス編集モーダル -->
+        <div id="editServiceModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>サービス編集</h2>
+                    <span class="close-button">&times;</span>
+                </div>
+                <div id="editServiceError" class="error-message" style="display: none;"></div>
+                <div id="editServiceSuccess" class="success-message" style="display: none;"></div>
+                <form id="editServiceForm">
+                    <input type="hidden" id="editServiceId">
+                    <div class="form-group">
+                        <label for="editServiceType">サービスタイプ</label>
+                        <input type="text" id="editServiceType" readonly>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editPlanType">プラン</label>
+                            <select id="editPlanType" required>
+                                <option value="economy">エコノミー</option>
+                                <option value="professional">プロフェッショナル</option>
+                                <option value="enterprise">エンタープライズ</option>
+                                <option value="ultimate">アルティメット</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editIsActive">ステータス</label>
+                            <select id="editIsActive" required>
+                                <option value="true">有効</option>
+                                <option value="false">無効</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary cancel-btn">キャンセル</button>
+                        <button type="submit" class="btn">更新</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // グローバル変数
+        let authToken = null;
+        let currentTenantId = null;
+        const API_BASE = 'http://localhost:3400/api/admin';
+
+        // DOM要素
+        const tenantSelect = document.getElementById('tenantSelect');
+        const loadTenantServicesBtn = document.getElementById('loadTenantServices');
+        const servicesCard = document.getElementById('servicesCard');
+        const servicesData = document.getElementById('servicesData');
+        const addServiceBtn = document.getElementById('addServiceBtn');
+        const addServiceModal = document.getElementById('addServiceModal');
+        const editServiceModal = document.getElementById('editServiceModal');
+        const addServiceForm = document.getElementById('addServiceForm');
+        const editServiceForm = document.getElementById('editServiceForm');
+
+        // 初期化
+        document.addEventListener('DOMContentLoaded', async () => {
+            // ログイン状態を確認（親ウィンドウから取得）
+            if (window.parent && window.parent.authToken) {
+                authToken = window.parent.authToken;
+                await loadTenants();
+            } else {
+                alert('ログインが必要です。管理画面からアクセスしてください。');
+            }
+        });
+
+        // テナント一覧を読み込む
+        async function loadTenants() {
+            try {
+                const response = await fetch(`${API_BASE}/tenants`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const tenants = data.tenants || [];
+                    tenantSelect.innerHTML = '<option value="">テナントを選択してください</option>';
+                    
+                    tenants.forEach(tenant => {
+                        const option = document.createElement('option');
+                        option.value = tenant.id;
+                        option.textContent = `${tenant.name} (${tenant.id})`;
+                        tenantSelect.appendChild(option);
+                    });
+                } else {
+                    alert('テナント一覧の取得に失敗しました: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Load tenants error:', error);
+                alert('テナント一覧の取得中にエラーが発生しました');
+            }
+        }
+
+        // テナントのサービス情報を読み込む
+        loadTenantServicesBtn.addEventListener('click', async () => {
+            const tenantId = tenantSelect.value;
+            
+            if (!tenantId) {
+                alert('テナントを選択してください');
+                return;
+            }
+            
+            currentTenantId = tenantId;
+            await loadTenantServices(tenantId);
+        });
+
+        // テナントのサービス情報を読み込む
+        async function loadTenantServices(tenantId) {
+            try {
+                const response = await fetch(`${API_BASE}/tenant-services/${tenantId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const services = data.services || [];
+                    displayServices(services);
+                    servicesCard.style.display = 'block';
+                } else {
+                    alert('サービス情報の取得に失敗しました: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Load tenant services error:', error);
+                alert('サービス情報の取得中にエラーが発生しました');
+            }
+        }
+
+        // サービス情報を表示
+        function displayServices(services) {
+            if (services.length === 0) {
+                servicesData.innerHTML = '<p>このテナントには登録されているサービスがありません。</p>';
+                return;
+            }
+            
+            const html = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>サービスタイプ</th>
+                            <th>プラン</th>
+                            <th>ステータス</th>
+                            <th>開始日</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${services.map(service => `
+                            <tr>
+                                <td>${getServiceTypeName(service.service_type)}</td>
+                                <td>${getPlanTypeName(service.plan_type)}</td>
+                                <td>
+                                    <span class="status-indicator ${service.is_active ? 'status-active' : 'status-inactive'}"></span>
+                                    ${service.is_active ? '有効' : '無効'}
+                                </td>
+                                <td>${formatDate(service.activated_at)}</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-secondary edit-service-btn" data-id="${service.id}">編集</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            servicesData.innerHTML = html;
+            
+            // 編集ボタンにイベントリスナーを追加
+            document.querySelectorAll('.edit-service-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const serviceId = button.getAttribute('data-id');
+                    openEditServiceModal(serviceId, services);
+                });
+            });
+        }
+
+        // サービスタイプ名を取得
+        function getServiceTypeName(serviceType) {
+            const types = {
+                'hotel-saas': 'AIコンシェルジュ',
+                'hotel-pms': 'AIマネジメント',
+                'hotel-member': 'AICRM'
+            };
+            return types[serviceType] || serviceType;
+        }
+
+        // プランタイプ名を取得
+        function getPlanTypeName(planType) {
+            const types = {
+                'economy': 'エコノミー',
+                'professional': 'プロフェッショナル',
+                'enterprise': 'エンタープライズ',
+                'ultimate': 'アルティメット'
+            };
+            return types[planType] || planType;
+        }
+
+        // 日付をフォーマット
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ja-JP');
+        }
+
+        // サービス追加モーダルを開く
+        addServiceBtn.addEventListener('click', () => {
+            document.getElementById('addServiceError').style.display = 'none';
+            document.getElementById('addServiceSuccess').style.display = 'none';
+            addServiceForm.reset();
+            addServiceModal.style.display = 'block';
+        });
+
+        // サービス編集モーダルを開く
+        function openEditServiceModal(serviceId, services) {
+            const service = services.find(s => s.id === serviceId);
+            if (!service) return;
+            
+            document.getElementById('editServiceError').style.display = 'none';
+            document.getElementById('editServiceSuccess').style.display = 'none';
+            
+            document.getElementById('editServiceId').value = service.id;
+            document.getElementById('editServiceType').value = getServiceTypeName(service.service_type);
+            document.getElementById('editPlanType').value = service.plan_type;
+            document.getElementById('editIsActive').value = service.is_active.toString();
+            
+            editServiceModal.style.display = 'block';
+        }
+
+        // モーダルを閉じる
+        document.querySelectorAll('.close-button, .cancel-btn').forEach(element => {
+            element.addEventListener('click', () => {
+                addServiceModal.style.display = 'none';
+                editServiceModal.style.display = 'none';
+            });
+        });
+
+        // サービス追加フォーム送信
+        addServiceForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const serviceType = document.getElementById('serviceType').value;
+            const businessType = document.getElementById('businessType').value;
+            const planType = document.getElementById('planType').value;
+            const isActive = document.getElementById('isActive').value === 'true';
+            
+            try {
+                const response = await fetch(`${API_BASE}/tenant-services/${currentTenantId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        serviceType,
+                        businessType,
+                        planType,
+                        isActive
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('addServiceSuccess').textContent = 'サービスが正常に追加されました';
+                    document.getElementById('addServiceSuccess').style.display = 'block';
+                    
+                    // 3秒後にモーダルを閉じて再読み込み
+                    setTimeout(() => {
+                        addServiceModal.style.display = 'none';
+                        loadTenantServices(currentTenantId);
+                    }, 3000);
+                } else {
+                    document.getElementById('addServiceError').textContent = data.error || 'サービスの追加に失敗しました';
+                    document.getElementById('addServiceError').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Add service error:', error);
+                document.getElementById('addServiceError').textContent = 'サービスの追加中にエラーが発生しました';
+                document.getElementById('addServiceError').style.display = 'block';
+            }
+        });
+
+        // サービス編集フォーム送信
+        editServiceForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const serviceId = document.getElementById('editServiceId').value;
+            const planType = document.getElementById('editPlanType').value;
+            const isActive = document.getElementById('editIsActive').value === 'true';
+            
+            try {
+                const response = await fetch(`${API_BASE}/tenant-services/${currentTenantId}/${serviceId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        planType,
+                        isActive
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('editServiceSuccess').textContent = 'サービスが正常に更新されました';
+                    document.getElementById('editServiceSuccess').style.display = 'block';
+                    
+                    // 3秒後にモーダルを閉じて再読み込み
+                    setTimeout(() => {
+                        editServiceModal.style.display = 'none';
+                        loadTenantServices(currentTenantId);
+                    }, 3000);
+                } else {
+                    document.getElementById('editServiceError').textContent = data.error || 'サービスの更新に失敗しました';
+                    document.getElementById('editServiceError').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Edit service error:', error);
+                document.getElementById('editServiceError').textContent = 'サービスの更新中にエラーが発生しました';
+                document.getElementById('editServiceError').style.display = 'block';
+            }
+        });
+
+        // ウィンドウ外クリックでモーダルを閉じる
+        window.addEventListener('click', (e) => {
+            if (e.target === addServiceModal) {
+                addServiceModal.style.display = 'none';
+            }
+            if (e.target === editServiceModal) {
+                editServiceModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

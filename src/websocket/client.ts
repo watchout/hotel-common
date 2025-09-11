@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client'
 import { WebSocketMessage, SystemEvent } from '../types/common'
-import { JwtManager } from '../auth/jwt'
+import { verifyToken } from '../auth/jwt'
 
 export interface WebSocketConfig {
   url: string

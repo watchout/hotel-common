@@ -1,11 +1,16 @@
 #!/usr/bin/env node
+"use strict";
 // 🚨緊急対応：最小版hotel-commonサーバー
 // 依存関係なし、Sunoの階層権限統合ブロック解除専用
-import express from 'express';
-import { createServer } from 'http';
-const app = express();
-const server = createServer(app);
-app.use(express.json());
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const http_1 = require("http");
+const app = (0, express_1.default)();
+const server = (0, http_1.createServer)(app);
+app.use(express_1.default.json());
 // CORS対応
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -25,6 +30,36 @@ app.get('/health', (req, res) => {
         timestamp: new Date().toISOString(),
         service: 'hotel-common',
         mode: 'minimal-emergency'
+    });
+});
+// キャンペーンAPI
+app.get('/api/campaigns/active', (req, res) => {
+    res.json({
+        success: true,
+        campaigns: [
+            {
+                id: 'camp_001',
+                name: '夏季特別キャンペーン',
+                code: 'SUMMER2025',
+                description: '夏の特別割引キャンペーン',
+                startDate: '2025-07-01',
+                endDate: '2025-08-31',
+                isActive: true,
+                discountRate: 15,
+                targetCustomers: ['ALL']
+            },
+            {
+                id: 'camp_002',
+                name: '新規会員登録キャンペーン',
+                code: 'NEWMEMBER',
+                description: '新規会員登録特典',
+                startDate: '2025-01-01',
+                endDate: '2025-12-31',
+                isActive: true,
+                discountRate: 10,
+                targetCustomers: ['NEW']
+            }
+        ]
     });
 });
 // Suno向け階層権限管理API（フォールバック実装）
@@ -296,6 +331,7 @@ app.use('*', (req, res) => {
         message: `Endpoint not found: ${req.method} ${req.originalUrl}`,
         available_endpoints: [
             'GET /health',
+            'GET /api/campaigns/active',
             'POST /api/hotel-member/hierarchy/auth/verify',
             'POST /api/hotel-member/hierarchy/permissions/check-customer-access',
             'POST /api/hotel-member/hierarchy/tenants/accessible',
@@ -314,7 +350,7 @@ app.use((error, req, res, next) => {
     });
 });
 // サーバー起動
-const PORT = process.env.WEBSOCKET_PORT || process.env.PORT || 3400;
+const PORT = 3400;
 server.listen(PORT, () => {
     console.log(`
 🚨 緊急対応：hotel-common最小版サーバー起動成功！
@@ -327,6 +363,7 @@ server.listen(PORT, () => {
 
 ✅ 利用可能API（全てフォールバック実装）:
 - GET  /health                                              → ヘルスチェック
+- GET  /api/campaigns/active                               → アクティブキャンペーン取得
 - POST /api/hotel-member/hierarchy/auth/verify             → JWT検証（許可）
 - POST /api/hotel-member/hierarchy/permissions/check-customer-access → 顧客データアクセス（許可）
 - POST /api/hotel-member/hierarchy/tenants/accessible      → テナント一覧
@@ -356,4 +393,4 @@ process.on('SIGINT', () => {
         process.exit(0);
     });
 });
-export default app;
+exports.default = app;

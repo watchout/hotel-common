@@ -1,9 +1,12 @@
+"use strict";
 // Hotel Common - API設計標準とガイドライン
-import { ERROR_CODES } from '../types/api';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.API_SPECIFICATION_TEMPLATE = exports.PAGINATION_STANDARDS = exports.STANDARD_HEADERS = exports.StandardResponseBuilder = exports.ENDPOINT_NAMING_RULES = exports.API_STANDARDS = void 0;
+const api_1 = require("../types/api");
 /**
  * REST API設計標準
  */
-export const API_STANDARDS = {
+exports.API_STANDARDS = {
     // バージョニング
     VERSION_PREFIX: '/api/v1',
     // HTTP メソッド使用規則
@@ -36,7 +39,7 @@ export const API_STANDARDS = {
 /**
  * エンドポイント命名規則
  */
-export const ENDPOINT_NAMING_RULES = {
+exports.ENDPOINT_NAMING_RULES = {
     // リソース名は複数形
     RESOURCES: {
         PLURAL: true,
@@ -72,24 +75,25 @@ export const ENDPOINT_NAMING_RULES = {
 /**
  * 統一レスポンス形式生成ヘルパー
  */
-export class StandardResponseBuilder {
+class StandardResponseBuilder {
     /**
      * 成功レスポンス生成
      */
-    static success(data, meta) {
-        return {
+    static success(res, data, meta, statusCode = 200) {
+        const response = {
             success: true,
             data,
             meta,
             timestamp: new Date(),
             request_id: crypto.randomUUID()
         };
+        return res.status(statusCode).json(response);
     }
     /**
      * ページネーション付き成功レスポンス
      */
-    static paginated(items, page, limit, total) {
-        return {
+    static paginated(res, items, page, limit, total, statusCode = 200) {
+        const response = {
             success: true,
             data: {
                 items,
@@ -105,9 +109,15 @@ export class StandardResponseBuilder {
             timestamp: new Date(),
             request_id: crypto.randomUUID()
         };
+        return res.status(statusCode).json(response);
     }
     /**
      * エラーレスポンス生成
+     * @param code エラーコード
+     * @param message エラーメッセージ
+     * @param details 詳細情報（オプション）
+     * @param statusCode HTTPステータスコード（デフォルト400）
+     * @returns レスポンスオブジェクトとステータスコード
      */
     static error(code, message, details, statusCode = 400) {
         const error = {
@@ -126,52 +136,61 @@ export class StandardResponseBuilder {
         };
     }
     /**
+     * レガシーエラーレスポンス生成（互換性のため維持）
+     * @deprecated 新しいコードでは使用しないでください。代わりに標準のerror()メソッドを使用してください。
+     */
+    static legacyError(res, code, message, details) {
+        const { response, statusCode } = this.error(code, message, details);
+        return res.status(statusCode).json(response);
+    }
+    /**
      * バリデーションエラーレスポンス
      */
     static validationError(errors) {
-        return this.error(ERROR_CODES.B001, // VALIDATION_ERROR
+        return this.error(api_1.ERROR_CODES.B001, // VALIDATION_ERROR
         'Validation failed', { errors }, 422);
     }
     /**
      * 認証エラーレスポンス
      */
     static authError(message = 'Authentication required') {
-        return this.error(ERROR_CODES.E001, // UNAUTHORIZED
+        return this.error(api_1.ERROR_CODES.E001, // UNAUTHORIZED
         message, undefined, 401);
     }
     /**
      * 権限エラーレスポンス
      */
     static forbiddenError(message = 'Insufficient permissions') {
-        return this.error(ERROR_CODES.E002, // FORBIDDEN
+        return this.error(api_1.ERROR_CODES.E002, // FORBIDDEN
         message, undefined, 403);
     }
     /**
      * リソース未存在エラーレスポンス
      */
     static notFoundError(resource) {
-        return this.error(ERROR_CODES.E004, // NOT_FOUND
+        return this.error(api_1.ERROR_CODES.E004, // NOT_FOUND
         `${resource} not found`, undefined, 404);
     }
     /**
      * データ競合エラーレスポンス
      */
     static conflictError(message) {
-        return this.error(ERROR_CODES.B003, // RESOURCE_CONFLICT
+        return this.error(api_1.ERROR_CODES.B003, // RESOURCE_CONFLICT
         message, undefined, 409);
     }
     /**
      * サーバーエラーレスポンス
      */
     static serverError(message = 'Internal server error') {
-        return this.error(ERROR_CODES.S001, // INTERNAL_SERVER_ERROR
+        return this.error(api_1.ERROR_CODES.S001, // INTERNAL_SERVER_ERROR
         message, undefined, 500);
     }
 }
+exports.StandardResponseBuilder = StandardResponseBuilder;
 /**
  * 共通リクエストヘッダー定義
  */
-export const STANDARD_HEADERS = {
+exports.STANDARD_HEADERS = {
     REQUIRED: [
         'Content-Type: application/json',
         'Authorization: Bearer {token}',
@@ -186,7 +205,7 @@ export const STANDARD_HEADERS = {
 /**
  * ページネーション標準
  */
-export const PAGINATION_STANDARDS = {
+exports.PAGINATION_STANDARDS = {
     DEFAULT_LIMIT: 20,
     MAX_LIMIT: 100,
     DEFAULT_PAGE: 1,
@@ -215,7 +234,7 @@ export const PAGINATION_STANDARDS = {
 /**
  * API仕様例（標準テンプレート）
  */
-export const API_SPECIFICATION_TEMPLATE = {
+exports.API_SPECIFICATION_TEMPLATE = {
     // 予約管理API例
     RESERVATIONS: {
         LIST: {

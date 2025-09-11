@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Prismaスキーマと型定義の整合性をチェックするスクリプト
+# pre-commitフックとして使用
+
+# 変更されたファイルをチェック
+SCHEMA_CHANGED=$(git diff --cached --name-only | grep -q "prisma/schema.prisma"; echo $?)
+TS_FILES_CHANGED=$(git diff --cached --name-only | grep -q "\.ts$"; echo $?)
+
+# スキーマが変更されたが、型定義が更新されていない場合
+if [ $SCHEMA_CHANGED -eq 0 ]; then
+  echo "🔍 Prismaスキーマが変更されています。型定義を更新します..."
+  npx prisma generate
+  
+  # 型定義が更新されたファイルをステージングに追加
+  git add node_modules/.prisma/client/index.d.ts
+  
+  echo "✅ Prisma型定義を更新しました"
+  
+  # アダプターレイヤーの更新が必要か確認
+  NEW_MODELS=$(git diff prisma/schema.prisma | grep -E "^\\+model" | sed -E 's/^\\+model ([A-Za-z0-9_]+) \{/\1/')
+  
+  if [ ! -z "$NEW_MODELS" ]; then
+    echo "⚠️ 新しいモデルが追加されています。アダプターレイヤーの更新が必要かもしれません。"
+    echo "以下のモデルを確認してください:"
+    echo "$NEW_MODELS"
+    echo "src/database/prisma-adapter.tsにゲッターを追加してください。"
+  fi
+fi
+
+# TypeScriptの型チェック
+if [ $SCHEMA_CHANGED -eq 0 ] || [ $TS_FILES_CHANGED -eq 0 ]; then
+  echo "🔍 TypeScriptの型チェックを実行します..."
+  npx tsc --noEmit
+  
+  if [ $? -ne 0 ]; then
+    echo "❌ 型エラーが見つかりました。コミットを中止します。"
+    echo "エラーを修正してから再度コミットしてください。"
+    exit 1
+  else
+    echo "✅ 型チェック成功"
+  fi
+fi
+
+exit 0
+

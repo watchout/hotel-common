@@ -1,4 +1,4 @@
-export { HotelMemberHierarchyAdapter } from './hierarchy-adapter';
+export { HotelMemberHierarchyAdapterStub as HotelMemberHierarchyAdapter } from './hierarchy-adapter-stub';
 export { default as hotelMemberApiRouter } from './api-endpoints';
 export declare const HOTEL_MEMBER_HIERARCHY_ENDPOINTS: {
     readonly VERIFY_TOKEN: "/api/hotel-member/hierarchy/auth/verify";

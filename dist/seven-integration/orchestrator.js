@@ -1,9 +1,12 @@
+"use strict";
 // 🎊 hotel-common七重統合システム - オーケストレーター
 // 文献1-7完全統合メインコントローラー
-import { EventEmitter } from 'events';
-import { SevenLayerIntegrationFactory } from './seven-layer-integration';
-import { getSevenIntegrationConfig, validateSevenIntegrationConfig, PERFORMANCE_TARGETS, AI_AGENT_CONFIGS, INTEGRATION_LAYER_CONFIGS } from './config';
-export class SevenIntegrationOrchestrator extends EventEmitter {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SevenIntegrationOrchestrator = void 0;
+const events_1 = require("events");
+const seven_layer_integration_1 = require("./seven-layer-integration");
+const config_1 = require("./config");
+class SevenIntegrationOrchestrator extends events_1.EventEmitter {
     config;
     status;
     events = [];
@@ -12,9 +15,9 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
     constructor(customConfig) {
         super();
         // 設定初期化
-        this.config = getSevenIntegrationConfig(process.env.NODE_ENV, customConfig);
+        this.config = (0, config_1.getSevenIntegrationConfig)(process.env.NODE_ENV, customConfig);
         // 設定検証
-        const validation = validateSevenIntegrationConfig(this.config);
+        const validation = (0, config_1.validateSevenIntegrationConfig)(this.config);
         if (!validation.valid) {
             throw new Error(`設定検証エラー: ${validation.errors.join(', ')}`);
         }
@@ -47,7 +50,7 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
                 const layerType = this.config.integrationLayers[i];
                 this.updateCurrentLayer(layerType);
                 try {
-                    this.emitEvent('start', layerType, `Layer ${i + 1}: ${INTEGRATION_LAYER_CONFIGS[layerType].name} 開始`);
+                    this.emitEvent('start', layerType, `Layer ${i + 1}: ${config_1.INTEGRATION_LAYER_CONFIGS[layerType].name} 開始`);
                     // レイヤー実行（前のレイヤーの結果を引き継ぎ）
                     const previousResults = i > 0 ? layerResults : context;
                     const layerResult = await layer.execute(input, previousResults);
@@ -117,7 +120,7 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
      */
     async executeForAgent(agentType, input, context) {
         // エージェント特化設定適用
-        const agentConfig = AI_AGENT_CONFIGS[agentType];
+        const agentConfig = config_1.AI_AGENT_CONFIGS[agentType];
         const enhancedContext = {
             ...context,
             agentType,
@@ -216,7 +219,7 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
     updateConfig(newConfig) {
         this.config = { ...this.config, ...newConfig };
         // 設定検証
-        const validation = validateSevenIntegrationConfig(this.config);
+        const validation = (0, config_1.validateSevenIntegrationConfig)(this.config);
         if (!validation.valid) {
             throw new Error(`設定更新エラー: ${validation.errors.join(', ')}`);
         }
@@ -244,7 +247,7 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
     }
     // プライベートメソッド
     initializeLayers() {
-        this.layers = SevenLayerIntegrationFactory.createAllLayers(this.config);
+        this.layers = seven_layer_integration_1.SevenLayerIntegrationFactory.createAllLayers(this.config);
     }
     startExecution() {
         this.status = {
@@ -325,13 +328,13 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
     generateRecommendations(layerResults, effectiveness) {
         const recommendations = [];
         // パフォーマンス基準チェック
-        if (effectiveness.developmentEfficiency.speedImprovement < PERFORMANCE_TARGETS.developmentEfficiency.speedImprovement) {
+        if (effectiveness.developmentEfficiency.speedImprovement < config_1.PERFORMANCE_TARGETS.developmentEfficiency.speedImprovement) {
             recommendations.push('開発効率が目標を下回っています。プロセス最適化の強化を検討してください。');
         }
-        if (effectiveness.costReduction.tokenSavings < PERFORMANCE_TARGETS.costReduction.tokenSavings) {
+        if (effectiveness.costReduction.tokenSavings < config_1.PERFORMANCE_TARGETS.costReduction.tokenSavings) {
             recommendations.push('トークン削減が目標を下回っています。最適化レイヤーの調整が必要です。');
         }
-        if (effectiveness.qualityImprovement.safety < PERFORMANCE_TARGETS.qualityImprovement.safety) {
+        if (effectiveness.qualityImprovement.safety < config_1.PERFORMANCE_TARGETS.qualityImprovement.safety) {
             recommendations.push('安全性スコアが目標を下回っています。ガードレールシステムの強化を推奨します。');
         }
         // レイヤー別推奨事項
@@ -399,5 +402,6 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
         return improvements;
     }
 }
+exports.SevenIntegrationOrchestrator = SevenIntegrationOrchestrator;
 // エクスポート
-export default SevenIntegrationOrchestrator;
+exports.default = SevenIntegrationOrchestrator;

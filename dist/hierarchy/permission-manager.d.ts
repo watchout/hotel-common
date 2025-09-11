@@ -21,25 +21,9 @@ export declare class HierarchyPermissionManager {
      */
     static checkHierarchyAccess(params: HierarchyPermissionCheck): Promise<HierarchyAccessResult>;
     /**
-     * 階層スコープ内チェック
-     */
-    private static checkHierarchyScope;
-    /**
      * アクセス可能テナント一覧取得（キャッシュ付き）
      */
     static getAccessibleTenants(organizationId: string, scopeLevel?: SharingScope): Promise<string[]>;
-    /**
-     * 操作権限チェック
-     */
-    private static checkOperationPermission;
-    /**
-     * 条件付きアクセスチェック
-     */
-    private static checkAccessConditions;
-    /**
-     * 階層変更時のキャッシュ無効化
-     */
-    static invalidateHierarchyCache(organizationId: string): Promise<void>;
     /**
      * 組織階層ツリー取得
      */

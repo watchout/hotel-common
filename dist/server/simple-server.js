@@ -1,12 +1,17 @@
 #!/usr/bin/env node
+"use strict";
 // 緊急対応：最低限動作するhotel-commonサーバー
 // Sunoの階層権限統合ブロック解除を最優先
-import express from 'express';
-import { createServer } from 'http';
-import { HierarchicalJwtManager } from '../hierarchy/jwt-extension';
-const app = express();
-const server = createServer(app);
-app.use(express.json());
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const http_1 = require("http");
+const jwt_extension_1 = require("../hierarchy/jwt-extension");
+const app = (0, express_1.default)();
+const server = (0, http_1.createServer)(app);
+app.use(express_1.default.json());
 // CORS対応
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -34,7 +39,7 @@ app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
         }
         // 簡易JWT検証（フォールバック）
         try {
-            const decoded = HierarchicalJwtManager.verifyHierarchicalToken(token);
+            const decoded = jwt_extension_1.HierarchicalJwtManager.verifyHierarchicalToken(token);
             if (decoded) {
                 res.json({
                     success: true,
@@ -236,4 +241,4 @@ process.on('SIGTERM', () => {
         process.exit(0);
     });
 });
-export default app;
+exports.default = app;

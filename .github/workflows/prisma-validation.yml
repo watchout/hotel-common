@@ -1,0 +1,38 @@
+name: Prisma Schema Validation
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'prisma/schema.prisma'
+      - 'src/database/**'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'prisma/schema.prisma'
+      - 'src/database/**'
+
+jobs:
+  validate-prisma:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Generate Prisma Client
+        run: npx prisma generate
+      
+      - name: Check Prisma Adapter consistency
+        run: node scripts/detect-prisma-adapter-mismatch.js
+      
+      - name: TypeScript validation
+        run: npx tsc --noEmit
+

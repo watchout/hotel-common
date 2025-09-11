@@ -1,11 +1,47 @@
-export var LogLevel;
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.logger = exports.HotelLogger = exports.LogLevel = void 0;
+var LogLevel;
 (function (LogLevel) {
     LogLevel[LogLevel["DEBUG"] = 0] = "DEBUG";
     LogLevel[LogLevel["INFO"] = 1] = "INFO";
     LogLevel[LogLevel["WARN"] = 2] = "WARN";
     LogLevel[LogLevel["ERROR"] = 3] = "ERROR";
-})(LogLevel || (LogLevel = {}));
-export class HotelLogger {
+})(LogLevel || (exports.LogLevel = LogLevel = {}));
+class HotelLogger {
     config;
     static instance = null;
     constructor(config = {}) {
@@ -16,6 +52,10 @@ export class HotelLogger {
             enableRedis: false,
             ...config
         };
+        // nameパラメータをmoduleにマッピング（後方互換性のため）
+        if (config.name && !config.module) {
+            this.config.module = config.name;
+        }
     }
     /**
      * シングルトンインスタンス取得
@@ -115,7 +155,7 @@ export class HotelLogger {
      */
     async logToRedis(entry) {
         try {
-            const { getRedisClient } = await import('./redis');
+            const { getRedisClient } = await Promise.resolve().then(() => __importStar(require('./redis')));
             const redis = getRedisClient();
             await redis.logEvent(entry);
         }
@@ -139,13 +179,54 @@ export class HotelLogger {
      * WARN レベルログ
      */
     warn(message, options) {
-        return this.log(LogLevel.WARN, message, options);
+        let normalizedOptions = {};
+        // オプションの正規化
+        if (options) {
+            if (options instanceof Error) {
+                // Error オブジェクトが直接渡された場合
+                normalizedOptions = { error: options };
+            }
+            else if (typeof options === 'object') {
+                // オブジェクトが渡された場合
+                normalizedOptions = options;
+            }
+            else {
+                // その他の型の場合はエラーメッセージとして扱う
+                normalizedOptions = { data: { message: String(options) } };
+            }
+        }
+        return this.log(LogLevel.WARN, message, normalizedOptions);
     }
     /**
      * ERROR レベルログ
+     * @param message エラーメッセージ
+     * @param options ログオプション。errorフィールドにはErrorオブジェクトを渡してください
      */
     error(message, options) {
-        return this.log(LogLevel.ERROR, message, options);
+        let normalizedOptions = {};
+        // エラーオブジェクトの正規化
+        if (options) {
+            if (options instanceof Error) {
+                // Error オブジェクトが直接渡された場合
+                normalizedOptions = { error: options };
+            }
+            else if (typeof options === 'object') {
+                // オブジェクトが渡された場合
+                normalizedOptions = options;
+                // error フィールドの正規化
+                if (normalizedOptions.error && !(normalizedOptions.error instanceof Error)) {
+                    normalizedOptions = {
+                        ...normalizedOptions,
+                        error: new Error(String(normalizedOptions.error))
+                    };
+                }
+            }
+            else {
+                // その他の型の場合はエラーメッセージとして扱う
+                normalizedOptions = { error: new Error(String(options)) };
+            }
+        }
+        return this.log(LogLevel.ERROR, message, normalizedOptions);
     }
     /**
      * 認証ログ
@@ -179,7 +260,8 @@ export class HotelLogger {
         });
     }
 }
+exports.HotelLogger = HotelLogger;
 // デフォルトロガーインスタンス
-export const logger = HotelLogger.getInstance({
+exports.logger = HotelLogger.getInstance({
     module: 'hotel-common'
 });

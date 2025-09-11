@@ -1,7 +1,26 @@
+"use strict";
 // 🎊 hotel-common七重統合システム - 設定管理
 // 文献1-7完全統合デフォルト設定
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PERFORMANCE_TARGETS = exports.INTEGRATION_LAYER_CONFIGS = exports.AI_AGENT_CONFIGS = exports.ENVIRONMENT_CONFIGS = exports.DEFAULT_SEVEN_INTEGRATION_CONFIG = void 0;
+exports.getSevenIntegrationConfig = getSevenIntegrationConfig;
+exports.validateSevenIntegrationConfig = validateSevenIntegrationConfig;
 // デフォルト設定
-export const DEFAULT_SEVEN_INTEGRATION_CONFIG = {
+exports.DEFAULT_SEVEN_INTEGRATION_CONFIG = {
     // 基本設定
     projectName: 'hotel-common',
     environment: process.env.NODE_ENV || 'development',
@@ -88,42 +107,42 @@ export const DEFAULT_SEVEN_INTEGRATION_CONFIG = {
     }
 };
 // 環境別設定
-export const ENVIRONMENT_CONFIGS = {
+exports.ENVIRONMENT_CONFIGS = {
     development: {
-        ...DEFAULT_SEVEN_INTEGRATION_CONFIG,
+        ...exports.DEFAULT_SEVEN_INTEGRATION_CONFIG,
         llmConfig: {
-            ...DEFAULT_SEVEN_INTEGRATION_CONFIG.llmConfig,
+            ...exports.DEFAULT_SEVEN_INTEGRATION_CONFIG.llmConfig,
             maxTokens: 2048,
             temperature: 0.5
         },
         guardrailsConfig: {
-            ...DEFAULT_SEVEN_INTEGRATION_CONFIG.guardrailsConfig,
+            ...exports.DEFAULT_SEVEN_INTEGRATION_CONFIG.guardrailsConfig,
             safetyLevel: 'standard'
         },
         monitoringConfig: {
-            ...DEFAULT_SEVEN_INTEGRATION_CONFIG.monitoringConfig,
+            ...exports.DEFAULT_SEVEN_INTEGRATION_CONFIG.monitoringConfig,
             realTimeAlerts: false
         }
     },
     staging: {
-        ...DEFAULT_SEVEN_INTEGRATION_CONFIG,
+        ...exports.DEFAULT_SEVEN_INTEGRATION_CONFIG,
         optimizationLevel: 'advanced'
     },
     production: {
-        ...DEFAULT_SEVEN_INTEGRATION_CONFIG,
+        ...exports.DEFAULT_SEVEN_INTEGRATION_CONFIG,
         llmConfig: {
-            ...DEFAULT_SEVEN_INTEGRATION_CONFIG.llmConfig,
+            ...exports.DEFAULT_SEVEN_INTEGRATION_CONFIG.llmConfig,
             temperature: 0.1 // より決定論的
         },
         guardrailsConfig: {
-            ...DEFAULT_SEVEN_INTEGRATION_CONFIG.guardrailsConfig,
+            ...exports.DEFAULT_SEVEN_INTEGRATION_CONFIG.guardrailsConfig,
             safetyLevel: 'strict',
             toxicityThreshold: 0.9
         }
     }
 };
 // AIエージェント別特化設定
-export const AI_AGENT_CONFIGS = {
+exports.AI_AGENT_CONFIGS = {
     Sun: {
         name: 'SunConcierge',
         description: 'hotel-saas専門 - 顧客体験最大化AIコンシェルジュ',
@@ -236,7 +255,7 @@ export const AI_AGENT_CONFIGS = {
     }
 };
 // 統合レイヤー設定
-export const INTEGRATION_LAYER_CONFIGS = {
+exports.INTEGRATION_LAYER_CONFIGS = {
     'problem-solving': {
         name: '問題解決基盤',
         description: '文献1: LLM落とし穴分析・課題特定・解決策実装',
@@ -288,7 +307,7 @@ export const INTEGRATION_LAYER_CONFIGS = {
     }
 };
 // パフォーマンス目標設定
-export const PERFORMANCE_TARGETS = {
+exports.PERFORMANCE_TARGETS = {
     // 開発効率目標（文献統合ベース）
     developmentEfficiency: {
         speedImprovement: 50, // 50倍向上
@@ -316,16 +335,16 @@ export const PERFORMANCE_TARGETS = {
     }
 };
 // 設定取得関数
-export function getSevenIntegrationConfig(environment, customConfig) {
+function getSevenIntegrationConfig(environment, customConfig) {
     const env = environment || process.env.NODE_ENV || 'development';
-    const baseConfig = ENVIRONMENT_CONFIGS[env] || ENVIRONMENT_CONFIGS.development;
+    const baseConfig = exports.ENVIRONMENT_CONFIGS[env] || exports.ENVIRONMENT_CONFIGS.development;
     return {
         ...baseConfig,
         ...customConfig
     };
 }
 // 設定検証関数
-export function validateSevenIntegrationConfig(config) {
+function validateSevenIntegrationConfig(config) {
     const errors = [];
     const warnings = [];
     // 必須設定検証
@@ -352,4 +371,4 @@ export function validateSevenIntegrationConfig(config) {
     };
 }
 // エクスポート
-export * from './types';
+__exportStar(require("./types"), exports);

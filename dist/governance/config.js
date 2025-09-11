@@ -1,7 +1,10 @@
+"use strict";
 // 段階的ガバナンス設定システム
 // 移行スケジュールと連動した監視レベル管理
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.governanceManager = exports.GovernanceManager = exports.GOVERNANCE_RULES = exports.CURRENT_GOVERNANCE_CONFIG = void 0;
 // 現在の監視設定（段階的移行中）
-export const CURRENT_GOVERNANCE_CONFIG = {
+exports.CURRENT_GOVERNANCE_CONFIG = {
     'hotel-saas': {
         systemId: 'hotel-saas',
         level: 0,
@@ -47,7 +50,7 @@ export const CURRENT_GOVERNANCE_CONFIG = {
     }
 };
 // 監視ルール定義
-export const GOVERNANCE_RULES = [
+exports.GOVERNANCE_RULES = [
     // Level 1: 基本警告ルール
     {
         id: 'api-format-warning',
@@ -133,11 +136,11 @@ export const GOVERNANCE_RULES = [
     }
 ];
 // ガバナンス管理クラス
-export class GovernanceManager {
+class GovernanceManager {
     static instance;
     config;
     constructor() {
-        this.config = { ...CURRENT_GOVERNANCE_CONFIG };
+        this.config = { ...exports.CURRENT_GOVERNANCE_CONFIG };
     }
     static getInstance() {
         if (!GovernanceManager.instance) {
@@ -166,7 +169,7 @@ export class GovernanceManager {
     // システムの監視ルール取得
     getApplicableRules(systemId) {
         const systemConfig = this.config[systemId];
-        return GOVERNANCE_RULES.filter(rule => rule.level <= systemConfig.level);
+        return exports.GOVERNANCE_RULES.filter(rule => rule.level <= systemConfig.level);
     }
     // チェックポイント自動更新
     updateCheckpoints(systemId) {
@@ -289,7 +292,7 @@ export class GovernanceManager {
     generateMigrationPlan(systemId, targetLevel) {
         const currentConfig = this.config[systemId];
         const currentRules = this.getApplicableRules(systemId);
-        const targetRules = GOVERNANCE_RULES.filter(rule => rule.level <= targetLevel);
+        const targetRules = exports.GOVERNANCE_RULES.filter(rule => rule.level <= targetLevel);
         const newRules = targetRules.filter(rule => !currentRules.includes(rule));
         return {
             systemId,
@@ -364,5 +367,6 @@ export class GovernanceManager {
         return this.config;
     }
 }
+exports.GovernanceManager = GovernanceManager;
 // エクスポート
-export const governanceManager = GovernanceManager.getInstance();
+exports.governanceManager = GovernanceManager.getInstance();

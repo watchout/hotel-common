@@ -1,5 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TranslationConfig = exports.DEFAULT_I18N_CONFIG = exports.LANGUAGE_CONFIGS = void 0;
 /** 言語設定詳細 */
-export const LANGUAGE_CONFIGS = {
+exports.LANGUAGE_CONFIGS = {
     ja: {
         code: 'ja',
         name: 'Japanese',
@@ -47,7 +50,7 @@ export const LANGUAGE_CONFIGS = {
     }
 };
 /** デフォルト多言語設定 */
-export const DEFAULT_I18N_CONFIG = {
+exports.DEFAULT_I18N_CONFIG = {
     defaultLanguage: 'ja',
     supportedLanguages: ['ja', 'en', 'zh-CN', 'zh-TW', 'ko'],
     fallbackChain: ['ja', 'en'],
@@ -56,10 +59,10 @@ export const DEFAULT_I18N_CONFIG = {
     preload: ['ja', 'en']
 };
 /** 翻訳システム設定 */
-export class TranslationConfig {
+class TranslationConfig {
     config;
     constructor(customConfig) {
-        this.config = { ...DEFAULT_I18N_CONFIG, ...customConfig };
+        this.config = { ...exports.DEFAULT_I18N_CONFIG, ...customConfig };
     }
     get defaultLanguage() {
         return this.config.defaultLanguage;
@@ -74,7 +77,7 @@ export class TranslationConfig {
         return this.config.supportedLanguages.includes(language);
     }
     getLanguageConfig(language) {
-        return LANGUAGE_CONFIGS[language];
+        return exports.LANGUAGE_CONFIGS[language];
     }
     getFallbackLanguage(language) {
         const index = this.config.fallbackChain.indexOf(language);
@@ -83,3 +86,4 @@ export class TranslationConfig {
             : this.config.defaultLanguage;
     }
 }
+exports.TranslationConfig = TranslationConfig;

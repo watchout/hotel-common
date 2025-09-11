@@ -1,9 +1,13 @@
 #!/usr/bin/env node
-import { HotelWebSocketServer } from './websocket-server';
-import { HotelLogger } from '../utils/logger';
-import { config } from 'dotenv';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HotelCommonServer = void 0;
+const websocket_server_1 = require("./websocket-server");
+const logger_1 = require("../utils/logger");
+const dotenv_1 = require("dotenv");
+const integration_server_1 = require("./integration-server");
 // 環境変数読み込み
-config();
+(0, dotenv_1.config)();
 /**
  * hotel-common統合サーバー
  * - WebSocketサーバー（Event-driven連携）
@@ -12,12 +16,15 @@ config();
  */
 class HotelCommonServer {
     webSocketServer;
+    integrationServer;
     logger;
     constructor() {
-        this.logger = HotelLogger.getInstance();
+        this.logger = logger_1.HotelLogger.getInstance();
         // WebSocketサーバー設定
-        this.webSocketServer = new HotelWebSocketServer({
-            port: parseInt(process.env.WEBSOCKET_PORT || '3400'),
+        this.webSocketServer = new websocket_server_1.HotelWebSocketServer({
+            port: parseInt(process.env.WEBSOCKET_PORT || '3401'),
+            path: '/socket.io',
+            serveClient: false,
             cors: {
                 origin: [
                     "http://localhost:3100", // hotel-saas
@@ -33,6 +40,8 @@ class HotelCommonServer {
                 db: parseInt(process.env.REDIS_DB || '0')
             }
         });
+        // 統合APIサーバー設定
+        this.integrationServer = new integration_server_1.HotelIntegrationServer();
     }
     /**
      * サーバー起動
@@ -42,11 +51,14 @@ class HotelCommonServer {
             this.logger.info('🌊 hotel-common統合サーバー起動開始...');
             // WebSocketサーバー起動
             await this.webSocketServer.start();
+            // 統合APIサーバー起動
+            await this.integrationServer.start();
             // 正常起動ログ
             this.logger.info(`
 🎉 hotel-common統合基盤稼働開始！
 
-📡 WebSocketサーバー: ポート${process.env.WEBSOCKET_PORT || '3400'}
+📡 WebSocketサーバー: ポート${process.env.WEBSOCKET_PORT || '3401'}
+🌐 統合APIサーバー: ポート${process.env.HOTEL_COMMON_PORT || '3400'}
 🗄️  PostgreSQL統一DB: hotel_unified_db
 ⚡ Event-driven連携: Redis Streams稼働中
 
@@ -54,6 +66,11 @@ class HotelCommonServer {
 - 🏪 hotel-saas (port:3100)
 - 🎯 hotel-member (port:3200) 
 - 💼 hotel-pms (port:3300)
+
+統合機能:
+- 🔄 キャンペーン管理API
+- 🔐 階層権限管理
+- 📊 統合監視
       `);
             // graceful shutdown設定
             process.on('SIGINT', () => this.shutdown());
@@ -71,6 +88,8 @@ class HotelCommonServer {
         this.logger.info('hotel-common統合サーバー停止中...');
         try {
             await this.webSocketServer.stop();
+            // 統合APIサーバーの停止
+            await this.integrationServer.shutdown();
             this.logger.info('hotel-common統合サーバー停止完了');
             process.exit(0);
         }
@@ -80,6 +99,7 @@ class HotelCommonServer {
         }
     }
 }
+exports.HotelCommonServer = HotelCommonServer;
 // サーバー起動
 if (require.main === module) {
     const server = new HotelCommonServer();
@@ -88,4 +108,3 @@ if (require.main === module) {
         process.exit(1);
     });
 }
-export { HotelCommonServer };

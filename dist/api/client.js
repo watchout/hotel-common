@@ -1,12 +1,19 @@
-import axios from 'axios';
-import { ERROR_CODES } from '../types/api';
-import crypto from 'crypto';
-export class HotelApiClient {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HotelApiClientFactory = exports.HotelApiClient = void 0;
+const axios_1 = __importDefault(require("axios"));
+const api_1 = require("../types/api");
+// import { JwtManager } from '../auth/jwt'
+const crypto_1 = __importDefault(require("crypto"));
+class HotelApiClient {
     client;
     config;
     constructor(config) {
         this.config = config;
-        this.client = axios.create({
+        this.client = axios_1.default.create({
             baseURL: config.baseURL,
             timeout: config.timeout || 30000,
             headers: {
@@ -23,7 +30,7 @@ export class HotelApiClient {
         // リクエストインターセプター
         this.client.interceptors.request.use((config) => {
             // リクエストIDを追加
-            config.headers['x-request-id'] = crypto.randomUUID();
+            config.headers['x-request-id'] = crypto_1.default.randomUUID();
             // テナントID追加
             if (this.config.tenantId) {
                 config.headers['x-tenant-id'] = this.config.tenantId;
@@ -49,13 +56,13 @@ export class HotelApiClient {
      */
     mapHttpStatusToErrorCode(status) {
         switch (status) {
-            case 401: return ERROR_CODES.E001; // UNAUTHORIZED
-            case 403: return ERROR_CODES.E002; // FORBIDDEN
-            case 400: return ERROR_CODES.B001; // VALIDATION_ERROR
-            case 409: return ERROR_CODES.B003; // RESOURCE_CONFLICT
-            case 500: return ERROR_CODES.S001; // INTERNAL_SERVER_ERROR
-            case 503: return ERROR_CODES.S002; // SERVICE_UNAVAILABLE
-            default: return ERROR_CODES.S001; // INTERNAL_SERVER_ERROR
+            case 401: return api_1.ERROR_CODES.E001; // UNAUTHORIZED
+            case 403: return api_1.ERROR_CODES.E002; // FORBIDDEN
+            case 400: return api_1.ERROR_CODES.B001; // VALIDATION_ERROR
+            case 409: return api_1.ERROR_CODES.B003; // RESOURCE_CONFLICT
+            case 500: return api_1.ERROR_CODES.S001; // INTERNAL_SERVER_ERROR
+            case 503: return api_1.ERROR_CODES.S002; // SERVICE_UNAVAILABLE
+            default: return api_1.ERROR_CODES.S001; // INTERNAL_SERVER_ERROR
         }
     }
     /**
@@ -88,7 +95,7 @@ export class HotelApiClient {
                 success: true,
                 data: response.data,
                 timestamp: new Date(),
-                request_id: response.headers['x-request-id'] || crypto.randomUUID()
+                request_id: response.headers['x-request-id'] || crypto_1.default.randomUUID()
             };
         }
         catch (error) {
@@ -96,7 +103,7 @@ export class HotelApiClient {
                 success: false,
                 error: error,
                 timestamp: new Date(),
-                request_id: crypto.randomUUID()
+                request_id: crypto_1.default.randomUUID()
             };
         }
     }
@@ -150,10 +157,11 @@ export class HotelApiClient {
         });
     }
 }
+exports.HotelApiClient = HotelApiClient;
 /**
  * システム別APIクライアントファクトリー
  */
-export class HotelApiClientFactory {
+class HotelApiClientFactory {
     /**
      * hotel-saas用クライアント作成
      */
@@ -182,3 +190,4 @@ export class HotelApiClientFactory {
         });
     }
 }
+exports.HotelApiClientFactory = HotelApiClientFactory;

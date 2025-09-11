@@ -1,9 +1,12 @@
-import { z } from 'zod';
-import { ERROR_CODES } from '../types/api';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ZodValidator = void 0;
+const zod_1 = require("zod");
+const api_1 = require("../types/api");
 /**
  * Zodスキーマバリデーション統合ヘルパー
  */
-export class ZodValidator {
+class ZodValidator {
     /**
      * Zodスキーマバリデーション実行
      */
@@ -16,7 +19,7 @@ export class ZodValidator {
             };
         }
         catch (error) {
-            if (error instanceof z.ZodError) {
+            if (error instanceof zod_1.z.ZodError) {
                 const errors = error.issues.map(err => ({
                     field: err.path.join('.'),
                     message: err.message
@@ -63,7 +66,7 @@ export class ZodValidator {
      */
     static toApiError(result) {
         return {
-            code: ERROR_CODES.B001, // VALIDATION_ERROR
+            code: api_1.ERROR_CODES.B001, // VALIDATION_ERROR
             message: 'Validation failed',
             details: {
                 errors: result.errors
@@ -79,9 +82,10 @@ export class ZodValidator {
             message: err.message
         }));
         return {
-            code: ERROR_CODES.B001, // VALIDATION_ERROR
+            code: api_1.ERROR_CODES.B001, // VALIDATION_ERROR
             message: 'Validation failed',
             details: { errors }
         };
     }
 }
+exports.ZodValidator = ZodValidator;

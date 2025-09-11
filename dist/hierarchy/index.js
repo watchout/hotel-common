@@ -1,17 +1,61 @@
+"use strict";
 // Hotel Group階層権限管理システム - 完全エクスポート
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HierarchyUtils = exports.HierarchyMiddleware = exports.HierarchyService = exports.HierarchyApiManager = exports.HierarchicalJwtManager = exports.HierarchyPermissionManager = exports.HIERARCHY_PRESETS = void 0;
+exports.initializeHierarchySystem = initializeHierarchySystem;
+exports.createHierarchyRouter = createHierarchyRouter;
 // プリセット定義
-export { HIERARCHY_PRESETS } from './types';
+var types_1 = require("./types");
+Object.defineProperty(exports, "HIERARCHY_PRESETS", { enumerable: true, get: function () { return types_1.HIERARCHY_PRESETS; } });
 // 核心クラス
-export { HierarchyPermissionManager } from './permission-manager';
-export { HierarchicalJwtManager } from './jwt-extension';
-export { HierarchyApiManager } from './hierarchy-api';
-export { HierarchyService } from './hierarchy-service';
-export { HierarchyMiddleware } from './hierarchy-middleware';
+var permission_manager_1 = require("./permission-manager");
+Object.defineProperty(exports, "HierarchyPermissionManager", { enumerable: true, get: function () { return permission_manager_1.HierarchyPermissionManager; } });
+var jwt_extension_1 = require("./jwt-extension");
+Object.defineProperty(exports, "HierarchicalJwtManager", { enumerable: true, get: function () { return jwt_extension_1.HierarchicalJwtManager; } });
+var hierarchy_api_1 = require("./hierarchy-api");
+Object.defineProperty(exports, "HierarchyApiManager", { enumerable: true, get: function () { return hierarchy_api_1.HierarchyApiManager; } });
+var hierarchy_service_1 = require("./hierarchy-service");
+Object.defineProperty(exports, "HierarchyService", { enumerable: true, get: function () { return hierarchy_service_1.HierarchyService; } });
+var hierarchy_middleware_1 = require("./hierarchy-middleware");
+Object.defineProperty(exports, "HierarchyMiddleware", { enumerable: true, get: function () { return hierarchy_middleware_1.HierarchyMiddleware; } });
 /**
  * 階層権限管理システム初期化
  */
-export async function initializeHierarchySystem() {
-    const { HotelLogger } = await import('../utils/logger');
+async function initializeHierarchySystem() {
+    const { HotelLogger } = await Promise.resolve().then(() => __importStar(require('../utils/logger')));
     const logger = HotelLogger.getInstance();
     try {
         logger.info('🏗️ Hotel Group階層権限管理システム初期化中...');
@@ -45,12 +89,12 @@ export async function initializeHierarchySystem() {
 /**
  * よく使用される階層権限チェック関数のショートカット
  */
-export class HierarchyUtils {
+class HierarchyUtils {
     /**
      * 顧客データアクセス権限チェック
      */
     static async canAccessCustomerData(userToken, targetTenantId, operation = 'READ') {
-        const { HierarchyPermissionManager } = await import('./permission-manager');
+        const { HierarchyPermissionManager } = await Promise.resolve().then(() => __importStar(require('./permission-manager')));
         const result = await HierarchyPermissionManager.checkHierarchyAccess({
             user_token: userToken,
             target_resource: {
@@ -65,7 +109,7 @@ export class HierarchyUtils {
      * 予約データアクセス権限チェック
      */
     static async canAccessReservationData(userToken, targetTenantId, operation = 'READ') {
-        const { HierarchyPermissionManager } = await import('./permission-manager');
+        const { HierarchyPermissionManager } = await Promise.resolve().then(() => __importStar(require('./permission-manager')));
         const result = await HierarchyPermissionManager.checkHierarchyAccess({
             user_token: userToken,
             target_resource: {
@@ -80,7 +124,7 @@ export class HierarchyUtils {
      * 分析データアクセス権限チェック
      */
     static async canAccessAnalyticsData(userToken, targetTenantId, operation = 'READ') {
-        const { HierarchyPermissionManager } = await import('./permission-manager');
+        const { HierarchyPermissionManager } = await Promise.resolve().then(() => __importStar(require('./permission-manager')));
         const result = await HierarchyPermissionManager.checkHierarchyAccess({
             user_token: userToken,
             target_resource: {
@@ -95,7 +139,7 @@ export class HierarchyUtils {
      * 財務データアクセス権限チェック
      */
     static async canAccessFinancialData(userToken, targetTenantId, operation = 'READ') {
-        const { HierarchyPermissionManager } = await import('./permission-manager');
+        const { HierarchyPermissionManager } = await Promise.resolve().then(() => __importStar(require('./permission-manager')));
         const result = await HierarchyPermissionManager.checkHierarchyAccess({
             user_token: userToken,
             target_resource: {
@@ -135,7 +179,7 @@ export class HierarchyUtils {
             type_check: false
         };
         try {
-            const { HierarchyPermissionManager } = await import('./permission-manager');
+            const { HierarchyPermissionManager } = await Promise.resolve().then(() => __importStar(require('./permission-manager')));
             // 1. データアクセス権限チェック
             const accessResult = await HierarchyPermissionManager.checkHierarchyAccess({
                 user_token: userToken,
@@ -196,10 +240,11 @@ export class HierarchyUtils {
         }
     }
 }
+exports.HierarchyUtils = HierarchyUtils;
 /**
  * Express.js Router用のファクトリー関数
  */
-export function createHierarchyRouter() {
+function createHierarchyRouter() {
     const express = require('express');
     const router = express.Router();
     // 認証必須

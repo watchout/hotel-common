@@ -1,0 +1,524 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==============================================
+// 基本モデル定義
+// ==============================================
+
+model Tenant {
+  id     String  @id
+  name   String
+  domain String? @unique
+  status String  @default("active") // active, inactive, suspended
+
+  // リレーション
+  pages Page[]
+
+  @@map("Tenant")
+}
+
+// ==============================================
+// 📄 ページ管理（hotel-saas）
+// ==============================================
+
+model Page {
+  Id          String    @id @default(cuid())
+  TenantId    String // テナントID
+  Slug        String // ページの識別子（例：'top', 'info', 'menu'）
+  Title       String // ページタイトル
+  Html        String?   @db.Text // HTML形式のコンテンツ
+  Css         String?   @db.Text // CSSスタイル
+  Content     String?   @db.Text // JSON形式でBlockNoteのコンテンツを保存
+  Template    String? // テンプレート識別子
+  IsPublished Boolean   @default(false) // 公開状態
+  PublishedAt DateTime? // 公開日時
+  Version     Int       @default(1) // バージョン番号
+  CreatedAt   DateTime  @default(now())
+  UpdatedAt   DateTime  @updatedAt
+
+  // リレーション
+  Tenant  Tenant        @relation(fields: [TenantId], references: [id])
+  History PageHistory[]
+
+  @@unique([TenantId, Slug]) // テナントごとにユニークなslug
+  @@index([TenantId])
+  @@index([Slug])
+  @@index([IsPublished])
+  @@map("pages")
+}
+
+model PageHistory {
+  Id        String   @id @default(cuid())
+  PageId    String // 親ページID
+  Html      String?  @db.Text // HTML形式のコンテンツ
+  Css       String?  @db.Text // CSSスタイル
+  Content   String?  @db.Text // JSON形式でBlockNoteのコンテンツを保存
+  Template  String? // テンプレート識別子
+  Version   Int // バージョン番号
+  CreatedAt DateTime @default(now())
+  CreatedBy String? // 作成者
+
+  // リレーション
+  Page Page @relation(fields: [PageId], references: [Id], onDelete: Cascade)
+
+  @@index([PageId])
+  @@index([Version])
+  @@map("page_histories")
+}
+
+// ==============================================
+// 🏆 キャンペーン管理
+// ==============================================
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ENDED
+  SCHEDULED
+}
+
+enum CampaignDisplayType {
+  BANNER
+  POPUP
+  NOTIFICATION
+  FEATURED
+}
+
+enum CampaignCtaType {
+  NONE
+  LINK
+  BUTTON
+  COUPON
+}
+
+model Campaign {
+  id          String           @id @default(cuid())
+  tenantId    String
+  code        String           @unique
+  status      CampaignStatus   @default(DRAFT)
+  displayType CampaignDisplayType
+  startDate   DateTime?
+  endDate     DateTime?
+  priority    Int              @default(0)
+  ctaType     CampaignCtaType  @default(NONE)
+  ctaAction   String?
+  ctaLabel    String?
+  discountType String?         // PERCENTAGE, FIXED, null
+  discountValue Decimal?       @db.Decimal(10, 2)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  
+  // リレーション
+  translations CampaignTranslation[]
+  items        CampaignItem[]
+  categories   CampaignCategoryRelation[]
+  usageLogs    CampaignUsageLog[]
+  
+  @@index([tenantId])
+  @@index([status])
+  @@index([startDate, endDate])
+  @@map("campaigns")
+}
+
+model CampaignTranslation {
+  id          String   @id @default(cuid())
+  campaignId  String
+  locale      String
+  title       String
+  description String?  @db.Text
+  imageUrl    String?
+  
+  // リレーション
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  
+  @@unique([campaignId, locale])
+  @@map("campaign_translations")
+}
+
+model CampaignItem {
+  id          String   @id @default(cuid())
+  campaignId  String
+  itemId      String
+  itemType    String
+  priority    Int      @default(0)
+  createdAt   DateTime @default(now())
+  
+  // リレーション
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  
+  @@unique([campaignId, itemId, itemType])
+  @@map("campaign_items")
+}
+
+model CampaignCategory {
+  id          String   @id @default(cuid())
+  tenantId    String
+  code        String   @unique
+  name        String
+  description String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // リレーション
+  campaigns   CampaignCategoryRelation[]
+  
+  @@index([tenantId])
+  @@map("campaign_categories")
+}
+
+model CampaignCategoryRelation {
+  id          String   @id @default(cuid())
+  campaignId  String
+  categoryId  String
+  createdAt   DateTime @default(now())
+  
+  // リレーション
+  campaign    Campaign        @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  category    CampaignCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  @@unique([campaignId, categoryId])
+  @@map("campaign_category_relations")
+}
+
+model CampaignUsageLog {
+  id          String   @id @default(cuid())
+  campaignId  String
+  userId      String?
+  deviceId    String?
+  action      String
+  createdAt   DateTime @default(now())
+  
+  // リレーション
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  
+  @@index([campaignId])
+  @@index([userId])
+  @@index([deviceId])
+  @@map("campaign_usage_logs")
+}
+
+model DeviceVideoCache {
+  id          String   @id @default(cuid())
+  deviceId    String   @unique
+  videoIds    String[] // 表示済みのビデオID配列
+  lastShownAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("device_video_caches")
+}
+
+// ==============================================
+// 🤖 AIコンシェルジュ（ResponseTree）
+// ==============================================
+
+model ResponseTree {
+  id          String    @id @default(cuid())
+  tenantId    String
+  name        String
+  description String?   @db.Text
+  isPublished Boolean   @default(false)
+  publishedAt DateTime?
+  version     Int       @default(1)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  // リレーション
+  nodes       ResponseNode[]
+  sessions    ResponseTreeSession[]
+  versions    ResponseTreeVersion[]
+  
+  @@index([tenantId])
+  @@index([isPublished])
+  @@map("response_trees")
+}
+
+model ResponseNode {
+  id          String    @id @default(cuid())
+  treeId      String
+  nodeType    String    // TEXT, QUESTION, ACTION, etc.
+  content     String?   @db.Text
+  metadata    Json?
+  isRoot      Boolean   @default(false)
+  parentId    String?
+  position    Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  // リレーション
+  tree        ResponseTree @relation(fields: [treeId], references: [id], onDelete: Cascade)
+  parent      ResponseNode? @relation("NodeToNode", fields: [parentId], references: [id], onDelete: SetNull)
+  children    ResponseNode[] @relation("NodeToNode")
+  translations ResponseNodeTranslation[]
+  
+  @@index([treeId])
+  @@index([parentId])
+  @@index([isRoot])
+  @@map("response_nodes")
+}
+
+model ResponseNodeTranslation {
+  id          String   @id @default(cuid())
+  nodeId      String
+  locale      String
+  content     String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // リレーション
+  node        ResponseNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+  
+  @@unique([nodeId, locale])
+  @@map("response_node_translations")
+}
+
+model ResponseTreeSession {
+  id          String    @id @default(cuid())
+  treeId      String
+  userId      String?
+  deviceId    String?
+  currentNodeId String?
+  metadata    Json?
+  isComplete  Boolean   @default(false)
+  startedAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
+  
+  // リレーション
+  tree        ResponseTree @relation(fields: [treeId], references: [id], onDelete: Cascade)
+  history     ResponseTreeHistory[]
+  mobileLinks ResponseTreeMobileLink[]
+  
+  @@index([treeId])
+  @@index([userId])
+  @@index([deviceId])
+  @@index([isComplete])
+  @@map("response_tree_sessions")
+}
+
+model ResponseTreeHistory {
+  id          String   @id @default(cuid())
+  sessionId   String
+  nodeId      String
+  response    String?  @db.Text
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  
+  // リレーション
+  session     ResponseTreeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  @@index([sessionId])
+  @@map("response_tree_history")
+}
+
+model ResponseTreeVersion {
+  id          String   @id @default(cuid())
+  treeId      String
+  version     Int
+  snapshot    Json
+  createdAt   DateTime @default(now())
+  createdBy   String?
+  
+  // リレーション
+  tree        ResponseTree @relation(fields: [treeId], references: [id], onDelete: Cascade)
+  
+  @@unique([treeId, version])
+  @@map("response_tree_versions")
+}
+
+model ResponseTreeMobileLink {
+  id          String    @id @default(cuid())
+  sessionId   String
+  code        String    @unique
+  qrCodeData  String?   @db.Text
+  isActive    Boolean   @default(true)
+  connectionId String?
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime
+  connectedAt DateTime?
+  
+  // リレーション
+  session     ResponseTreeSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  @@index([code])
+  @@index([isActive])
+  @@map("response_tree_mobile_links")
+}
+
+// ==============================================
+// 🔐 システム管理
+// ==============================================
+
+enum AdminLevel {
+  chainadmin
+  groupadmin
+  superadmin
+}
+
+model Admin {
+  id                 String     @id @default(cuid())
+  email              String     @unique
+  username           String     @unique
+  display_name       String
+  password_hash      String
+  admin_level        AdminLevel
+  accessible_group_ids String[]
+  accessible_chain_ids String[]
+  accessible_tenant_ids String[]
+  last_login_at      DateTime?
+  login_attempts     Int        @default(0)
+  locked_until       DateTime?
+  totp_secret        String?
+  totp_enabled       Boolean    @default(false)
+  created_at         DateTime   @default(now())
+  updated_at         DateTime   @updatedAt
+  created_by         String?
+  is_active          Boolean    @default(true)
+  
+  // リレーション
+  logs               AdminLog[]
+  
+  @@map("admin")
+}
+
+model AdminLog {
+  id            String   @id @default(cuid())
+  admin_id      String
+  action        String
+  target_type   String?
+  target_id     String?
+  ip_address    String?
+  user_agent    String?
+  success       Boolean  @default(true)
+  error_message String?
+  created_at    DateTime @default(now())
+  
+  // リレーション
+  admin         Admin    @relation(fields: [admin_id], references: [id])
+  
+  @@index([admin_id])
+  @@index([action])
+  @@index([created_at])
+  @@map("admin_log")
+}
+
+model SchemaVersion {
+  version      String   @id
+  description  String
+  rollback_sql String?
+  applied_at   DateTime @default(now())
+  applied_by   String?
+  
+  @@map("schema_version")
+}
+
+model SystemEvent {
+  id            String    @id @default(cuid())
+  tenant_id     String
+  user_id       String?
+  event_type    String
+  source_system String
+  target_system String
+  entity_type   String
+  entity_id     String
+  action        String
+  event_data    Json?
+  created_at    DateTime  @default(now())
+  processed_at  DateTime?
+  status        String    @default("PENDING")
+  
+  @@index([tenant_id])
+  @@index([event_type])
+  @@index([status])
+  @@index([created_at])
+  @@map("system_event")
+}
+
+// ==============================================
+// 👥 スタッフ管理
+// ==============================================
+
+model Staff {
+  id           String   @id @default(cuid())
+  tenant_id    String
+  email        String
+  name         String
+  role         String
+  department   String?
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  
+  @@unique([tenant_id, email])
+  @@index([tenant_id])
+  @@index([role])
+  @@map("staff")
+}
+
+// ==============================================
+// 🏨 部屋グレード管理
+// ==============================================
+
+model RoomGrade {
+  id          String   @id @default(cuid())
+  tenant_id   String
+  code        String
+  name        String
+  description String?  @db.Text
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  
+  @@unique([tenant_id, code])
+  @@index([tenant_id])
+  @@map("room_grades")
+}
+
+// ==============================================
+// 🔄 テナントアクセスログ
+// ==============================================
+
+model TenantAccessLog {
+  id         String   @id @default(cuid())
+  tenant_id  String
+  user_id    String?
+  action     String
+  resource   String?
+  ip_address String?
+  user_agent String?
+  created_at DateTime @default(now())
+  
+  @@index([tenant_id])
+  @@index([user_id])
+  @@index([created_at])
+  @@map("tenant_access_logs")
+}
+
+// ==============================================
+// 📨 通知テンプレート
+// ==============================================
+
+model NotificationTemplate {
+  id          String   @id @default(cuid())
+  tenant_id   String
+  type        String   // email, sms, push, etc.
+  code        String
+  subject     String?
+  content     String   @db.Text
+  variables   String[] // テンプレート変数
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  
+  @@unique([tenant_id, type, code])
+  @@index([tenant_id])
+  @@index([type])
+  @@map("notification_templates")
+}
+

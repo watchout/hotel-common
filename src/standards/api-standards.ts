@@ -87,26 +87,29 @@ export class StandardResponseBuilder {
   /**
    * 成功レスポンス生成
    */
-  static success<T>(data: T, meta?: any): ApiResponse<T> {
-    return {
+  static success<T>(res: any, data: T, meta?: any, statusCode: number = 200): any {
+    const response: ApiResponse<T> = {
       success: true,
       data,
       meta,
       timestamp: new Date(),
       request_id: crypto.randomUUID()
-    }
+    };
+    return res.status(statusCode).json(response);
   }
 
   /**
    * ページネーション付き成功レスポンス
    */
   static paginated<T>(
+    res: any,
     items: T[], 
     page: number, 
     limit: number, 
-    total: number
-  ): ApiResponse<{ items: T[], pagination: any }> {
-    return {
+    total: number,
+    statusCode: number = 200
+  ): any {
+    const response: ApiResponse<{ items: T[], pagination: any }> = {
       success: true,
       data: {
         items,
@@ -121,11 +124,17 @@ export class StandardResponseBuilder {
       },
       timestamp: new Date(),
       request_id: crypto.randomUUID()
-    }
+    };
+    return res.status(statusCode).json(response);
   }
 
   /**
    * エラーレスポンス生成
+   * @param code エラーコード
+   * @param message エラーメッセージ
+   * @param details 詳細情報（オプション）
+   * @param statusCode HTTPステータスコード（デフォルト400）
+   * @returns レスポンスオブジェクトとステータスコード
    */
   static error(
     code: string, 
@@ -148,6 +157,20 @@ export class StandardResponseBuilder {
       },
       statusCode
     }
+  }
+
+  /**
+   * レガシーエラーレスポンス生成（互換性のため維持）
+   * @deprecated 新しいコードでは使用しないでください。代わりに標準のerror()メソッドを使用してください。
+   */
+  static legacyError(
+    res: any,
+    code: string, 
+    message: string, 
+    details?: any
+  ): any {
+    const { response, statusCode } = this.error(code, message, details);
+    return res.status(statusCode).json(response);
   }
 
   /**

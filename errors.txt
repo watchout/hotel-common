@@ -1,0 +1,85 @@
+src/admin/admin-api.ts(46,66): error TS2551: Property 'password_hash' does not exist on type '{ username: string; id: string; email: string; isActive: boolean; displayName: string; passwordHash: string; adminLevel: AdminLevel; accessibleGroupIds: string[]; accessibleChainIds: string[]; ... 8 more ...; createdBy: string | null; }'. Did you mean 'passwordHash'?
+src/admin/admin-api.ts(54,15): error TS2561: Object literal may only specify known properties, but 'last_login_at' does not exist in type '(Without<AdminUpdateInput, AdminUncheckedUpdateInput> & AdminUncheckedUpdateInput) | (Without<...> & AdminUpdateInput)'. Did you mean to write 'lastLoginAt'?
+src/admin/admin-api.ts(59,61): error TS2551: Property 'admin_level' does not exist on type '{ username: string; id: string; email: string; isActive: boolean; displayName: string; passwordHash: string; adminLevel: AdminLevel; accessibleGroupIds: string[]; accessibleChainIds: string[]; ... 8 more ...; createdBy: string | null; }'. Did you mean 'adminLevel'?
+src/admin/admin-api.ts(71,28): error TS2551: Property 'display_name' does not exist on type '{ username: string; id: string; email: string; isActive: boolean; displayName: string; passwordHash: string; adminLevel: AdminLevel; accessibleGroupIds: string[]; accessibleChainIds: string[]; ... 8 more ...; createdBy: string | null; }'. Did you mean 'displayName'?
+src/admin/admin-api.ts(72,27): error TS2551: Property 'admin_level' does not exist on type '{ username: string; id: string; email: string; isActive: boolean; displayName: string; passwordHash: string; adminLevel: AdminLevel; accessibleGroupIds: string[]; accessibleChainIds: string[]; ... 8 more ...; createdBy: string | null; }'. Did you mean 'adminLevel'?
+src/api/unified-client.ts(3,10): error TS2724: '"@prisma/client"' has no exported member named 'tenant'. Did you mean 'Tenant'?
+src/api/unified-client.ts(3,28): error TS2724: '"@prisma/client"' has no exported member named 'staff'. Did you mean 'Staff'?
+src/controllers/pages/admin-page.controller.ts(26,61): error TS7006: Parameter 'page' implicitly has an 'any' type.
+src/database/prisma-adapter.ts(34,24): error TS2339: Property 'pages' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/database/prisma-adapter.ts(41,24): error TS2339: Property 'page_histories' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/database/prisma-adapter.ts(48,24): error TS2551: Property 'response_nodes' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'responseNode'?
+src/database/prisma-adapter.ts(55,24): error TS2551: Property 'response_trees' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'responseTree'?
+src/database/prisma-adapter.ts(62,24): error TS2551: Property 'response_tree_versions' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'responseTreeVersion'?
+src/database/prisma-adapter.ts(69,24): error TS2551: Property 'response_tree_sessions' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'responseTreeVersion'?
+src/database/prisma-adapter.ts(76,24): error TS2339: Property 'response_tree_mobile_links' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/database/prisma-adapter.ts(83,24): error TS2339: Property 'response_tree_history' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/database/prisma-adapter.ts(90,24): error TS2551: Property 'response_node_translations' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'responseNodeTranslation'?
+src/database/prisma-adapter.ts(97,24): error TS2551: Property 'campaigns' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'campaign'?
+src/database/prisma-adapter.ts(104,24): error TS2551: Property 'campaign_categories' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'campaignCategory'?
+src/database/prisma-adapter.ts(111,24): error TS2551: Property 'campaign_category_relations' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'campaignCategoryRelation'?
+src/database/prisma-adapter.ts(118,24): error TS2551: Property 'campaign_items' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'campaignItem'?
+src/database/prisma-adapter.ts(125,24): error TS2551: Property 'campaign_translations' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'campaignTranslation'?
+src/database/prisma-adapter.ts(132,24): error TS2551: Property 'campaign_usage_logs' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'campaignUsageLog'?
+src/database/prisma-adapter.ts(139,24): error TS2551: Property 'device_video_caches' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'deviceVideoCache'?
+src/database/prisma-adapter.ts(146,24): error TS2339: Property 'notification_templates' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/database/prisma-adapter.ts(153,24): error TS2339: Property 'tenant_access_logs' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/database/prisma-adapter.ts(160,24): error TS2551: Property 'system_event' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'systemEvent'?
+src/database/prisma-adapter.ts(167,24): error TS2551: Property 'device_rooms' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'deviceRoom'?
+src/database/prisma-adapter.ts(188,24): error TS2551: Property 'schema_version' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'schemaVersion'?
+src/integrations/app-launcher/api-endpoints.ts(29,51): error TS2345: Argument of type 'PrismaAdapter' is not assignable to parameter of type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/integrations/app-launcher/services.ts(84,9): error TS2322: Type 'undefined' is not assignable to type 'string'.
+src/integrations/app-launcher/services.ts(144,7): error TS2322: Type '{ placeId: number; appId: string; customLabel?: string; sortOrder?: number; isEnabled?: boolean; id: string; }' is not assignable to type '(Without<HotelAppCreateInput, HotelAppUncheckedCreateInput> & HotelAppUncheckedCreateInput) | (Without<...> & HotelAppCreateInput)'.
+src/integrations/app-launcher/services.ts(223,7): error TS2322: Type '{ id: string; layoutId: number; blockId: string; appConfig: Record<string, any>; }' is not assignable to type '(Without<LayoutAppBlockCreateInput, LayoutAppBlockUncheckedCreateInput> & LayoutAppBlockUncheckedCreateInput) | (Without<...> & LayoutAppBlockCreateInput)'.
+src/integrations/campaigns/client-api.ts(30,54): error TS2339: Property 'checkCampaignApplicability' does not exist on type 'CampaignService'.
+src/integrations/campaigns/client-api.ts(53,70): error TS2554: Expected 0 arguments, but got 1.
+src/integrations/campaigns/client-api.ts(70,45): error TS2339: Property 'getCampaignsByCategory' does not exist on type 'CampaignService'.
+src/integrations/campaigns/welcome-screen-service.ts(162,26): error TS7006: Parameter 'campaign' implicitly has an 'any' type.
+src/integrations/campaigns/welcome-screen-service.ts(193,45): error TS7006: Parameter 'campaign' implicitly has an 'any' type.
+src/multitenancy/unified-tenant-manager.ts(82,26): error TS2339: Property 'settings' does not exist on type '{ name: string; id: string; status: string; planType: string; createdAt: Date; updatedAt: Date; domain: string | null; planCategory: string; planSelectedAt: Date | null; ... 11 more ...; enableGachaMenu: boolean; }'.
+src/multitenancy/unified-tenant-manager.ts(83,26): error TS2339: Property 'features' does not exist on type '{ name: string; id: string; status: string; planType: string; createdAt: Date; updatedAt: Date; domain: string | null; planCategory: string; planSelectedAt: Date | null; ... 11 more ...; enableGachaMenu: boolean; }'.
+src/routes/reservation.routes.ts(29,38): error TS2339: Property 'badRequest' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(39,59): error TS2554: Expected 1 arguments, but got 2.
+src/routes/reservation.routes.ts(44,36): error TS2339: Property 'created' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(47,53): error TS2554: Expected 0-1 arguments, but got 3.
+src/routes/reservation.routes.ts(62,38): error TS2339: Property 'badRequest' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(68,38): error TS2339: Property 'notFound' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(74,53): error TS2554: Expected 0-1 arguments, but got 3.
+src/routes/reservation.routes.ts(87,38): error TS2339: Property 'badRequest' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(97,59): error TS2554: Expected 1 arguments, but got 2.
+src/routes/reservation.routes.ts(102,81): error TS2345: Argument of type '{ page: number; limit: number; total: number; has_next: boolean; }' is not assignable to parameter of type 'number'.
+src/routes/reservation.routes.ts(110,53): error TS2554: Expected 0-1 arguments, but got 3.
+src/routes/reservation.routes.ts(125,38): error TS2339: Property 'badRequest' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(135,59): error TS2554: Expected 1 arguments, but got 2.
+src/routes/reservation.routes.ts(144,38): error TS2339: Property 'notFound' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(146,53): error TS2554: Expected 0-1 arguments, but got 3.
+src/routes/reservation.routes.ts(161,38): error TS2339: Property 'badRequest' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(170,38): error TS2339: Property 'notFound' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(172,53): error TS2554: Expected 0-1 arguments, but got 3.
+src/routes/reservation.routes.ts(188,38): error TS2339: Property 'badRequest' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(192,38): error TS2339: Property 'badRequest' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(201,38): error TS2339: Property 'notFound' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(203,53): error TS2554: Expected 0-1 arguments, but got 3.
+src/routes/reservation.routes.ts(218,38): error TS2339: Property 'badRequest' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(227,38): error TS2339: Property 'notFound' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(229,53): error TS2554: Expected 0-1 arguments, but got 3.
+src/routes/reservation.routes.ts(243,38): error TS2339: Property 'badRequest' does not exist on type 'typeof StandardResponseBuilder'.
+src/routes/reservation.routes.ts(251,53): error TS2554: Expected 0-1 arguments, but got 3.
+src/schemas/reservation.ts(119,3): error TS1117: An object literal cannot have multiple properties with the same name.
+src/scripts/seed-test-data.ts(35,9): error TS2322: Type '{ id: string; name: string; domain: string; status: string; createdAt: Date; }' is not assignable to type '(Without<TenantCreateInput, TenantUncheckedCreateInput> & TenantUncheckedCreateInput) | (Without<...> & TenantCreateInput)'.
+src/scripts/seed-test-data.ts(45,9): error TS2322: Type '{ id: string; name: string; domain: string; status: string; createdAt: Date; }' is not assignable to type '(Without<TenantCreateInput, TenantUncheckedCreateInput> & TenantUncheckedCreateInput) | (Without<...> & TenantCreateInput)'.
+src/scripts/seed-test-data.ts(67,49): error TS2551: Property 'device_rooms' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'deviceRoom'?
+src/scripts/seed-test-data.ts(71,46): error TS2551: Property 'device_rooms' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'deviceRoom'?
+src/scripts/seed-test-data.ts(82,16): error TS2551: Property 'device_rooms' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'deviceRoom'?
+src/scripts/seed-test-data.ts(100,16): error TS2551: Property 'device_rooms' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'deviceRoom'?
+src/scripts/seed-test-data.ts(118,16): error TS2551: Property 'device_rooms' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'deviceRoom'?
+src/scripts/seed-test-data.ts(146,16): error TS2551: Property 'device_rooms' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'deviceRoom'?
+src/scripts/seed-test-data.ts(164,16): error TS2551: Property 'device_rooms' does not exist on type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'. Did you mean 'deviceRoom'?
+src/server/integration-server-extended.ts(38,5): error TS2322: Type 'number' is not assignable to type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/server/integration-server.ts(42,5): error TS2322: Type 'number' is not assignable to type 'PrismaClient<PrismaClientOptions, never, DefaultArgs>'.
+src/services/reservation.service.ts(405,17): error TS2339: Property 'reservation' does not exist on type 'HotelDatabaseClient'.
+src/services/reservation.service.ts(406,17): error TS2339: Property 'reservation' does not exist on type 'HotelDatabaseClient'.
+src/services/reservation.service.ts(407,17): error TS2339: Property 'reservation' does not exist on type 'HotelDatabaseClient'.
+src/services/reservation.service.ts(408,17): error TS2339: Property 'reservation' does not exist on type 'HotelDatabaseClient'.
+src/services/reservation.service.ts(409,17): error TS2339: Property 'reservation' does not exist on type 'HotelDatabaseClient'.
+src/services/reservation.service.ts(410,17): error TS2339: Property 'reservation' does not exist on type 'HotelDatabaseClient'.

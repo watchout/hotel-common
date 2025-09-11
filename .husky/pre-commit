@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Pre-commit checks..."
+
+# 1. Prismaスキーマ整合性チェック
+echo "📋 Checking Prisma schema consistency..."
+node scripts/validate-schema-consistency.js
+
+# 2. TypeScriptコンパイルチェック
+echo "🔧 Checking TypeScript compilation..."
+npx tsc --skipLibCheck --noEmit
+
+# 3. Prismaクライアント生成チェック
+echo "🔄 Checking Prisma client generation..."
+npx prisma generate --dry-run
+
+echo "✅ Pre-commit checks completed!"

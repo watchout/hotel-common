@@ -1,4 +1,4 @@
-import { PrismaClient } from '../generated/prisma';
+import { PrismaClient } from '@prisma/client';
 export interface UnifiedClientConfig {
     tenantId: string;
     systemName: 'hotel-saas' | 'hotel-member' | 'hotel-pms';

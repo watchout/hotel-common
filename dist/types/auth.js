@@ -1,2 +1,3 @@
+"use strict";
 // 認証関連型定義
-export {};
+Object.defineProperty(exports, "__esModule", { value: true });

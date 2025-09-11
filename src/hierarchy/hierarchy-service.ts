@@ -55,7 +55,7 @@ export class HierarchyService {
     departments: OrganizationHierarchy[]
   }> {
     try {
-      this.logger.info('組織階層完全セットアップ開始', { groupName: setupData.group.name })
+      this.logger.info(`組織階層完全セットアップ開始: ${setupData.group.name}`)
 
       // 1. グループ作成
       const group = await HierarchyApiManager.createOrganization({
@@ -116,7 +116,7 @@ export class HierarchyService {
           // 親ホテル特定
           const parentHotel = hotels.find(h => h.code === deptData.hotel_code)
           if (!parentHotel) {
-            this.logger.warn('親ホテルが見つかりません', { hotelCode: deptData.hotel_code })
+            this.logger.warn(`親ホテルが見つかりません: ${deptData.hotel_code}`)
             continue
           }
 
@@ -131,12 +131,7 @@ export class HierarchyService {
         }
       }
 
-      this.logger.info('組織階層完全セットアップ完了', {
-        groupId: group.id,
-        brandCount: brands.length,
-        hotelCount: hotels.length,
-        departmentCount: departments.length
-      })
+      this.logger.info(`組織階層完全セットアップ完了: グループID=${group.id}, ブランド数=${brands.length}, ホテル数=${hotels.length}, 部門数=${departments.length}`)
 
       return { group, brands, hotels, departments }
 
@@ -186,10 +181,7 @@ export class HierarchyService {
         organization_id: userData.organization_id
       })
 
-      this.logger.info('階層権限付きユーザー作成完了', {
-        userId: user.id,
-        organizationId: userData.organization_id
-      })
+      this.logger.info(`階層権限付きユーザー作成完了: ユーザーID=${user.id}, 組織ID=${userData.organization_id}`)
 
       return { user, tokens }
 

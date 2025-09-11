@@ -1,12 +1,19 @@
-import { RuntimeTranslationSystem } from './runtime';
-import { TranslationConfig } from './config';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createI18nInstance = createI18nInstance;
+exports.useI18n = useI18n;
+exports.createReactI18nHook = createReactI18nHook;
+exports.getGlobalI18nInstance = getGlobalI18nInstance;
+exports.setGlobalI18nInstance = setGlobalI18nInstance;
+const runtime_1 = require("./runtime");
+const config_1 = require("./config");
 /** i18nインスタンス作成 */
-export function createI18nInstance(options) {
-    const config = new TranslationConfig(options);
-    return new RuntimeTranslationSystem(config);
+function createI18nInstance(options) {
+    const config = new config_1.TranslationConfig(options);
+    return new runtime_1.RuntimeTranslationSystem(config);
 }
 /** Vue.js統合用コンポーザブル */
-export function useI18n() {
+function useI18n() {
     const i18n = createI18nInstance();
     return {
         t: i18n.t.bind(i18n),
@@ -18,7 +25,7 @@ export function useI18n() {
     };
 }
 /** React統合用フック */
-export function createReactI18nHook() {
+function createReactI18nHook() {
     const i18n = createI18nInstance();
     return function useReactI18n() {
         return {
@@ -31,12 +38,12 @@ export function createReactI18nHook() {
 }
 /** システム間共有インスタンス */
 let globalI18nInstance = null;
-export function getGlobalI18nInstance() {
+function getGlobalI18nInstance() {
     if (!globalI18nInstance) {
         globalI18nInstance = createI18nInstance();
     }
     return globalI18nInstance;
 }
-export function setGlobalI18nInstance(instance) {
+function setGlobalI18nInstance(instance) {
     globalI18nInstance = instance;
 }

@@ -1,104 +1,85 @@
-import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
-// JWT設定定数
-const JWT_SECRET = process.env.JWT_SECRET || 'hotel-common-secret-change-in-production';
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'hotel-refresh-secret-change-in-production';
-const ACCESS_TOKEN_EXPIRES = '8h'; // 8時間
-const REFRESH_TOKEN_EXPIRES = '30d'; // 30日
-export class JwtManager {
-    /**
-     * アクセストークンを生成
-     */
-    static generateAccessToken(payload) {
-        const jwtPayload = {
-            ...payload,
-            iat: Math.floor(Date.now() / 1000),
-            exp: Math.floor(Date.now() / 1000) + (8 * 60 * 60), // 8時間後
-            jti: crypto.randomUUID()
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
         };
-        return jwt.sign(jwtPayload, JWT_SECRET, {
-            expiresIn: ACCESS_TOKEN_EXPIRES
-        });
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.generateToken = generateToken;
+exports.verifyToken = verifyToken;
+exports.decodeToken = decodeToken;
+const jwt = __importStar(require("jsonwebtoken"));
+const DEFAULT_JWT_SECRET = 'hotel-common-development-secret';
+const DEFAULT_EXPIRES_IN = '24h';
+/**
+ * JWTトークンを生成
+ * @param payload ペイロード
+ * @param options オプション
+ * @returns 生成されたトークン
+ */
+function generateToken(payload, options) {
+    const secret = options?.secret || process.env.JWT_SECRET || DEFAULT_JWT_SECRET;
+    const expiresIn = options?.expiresIn || process.env.JWT_EXPIRES_IN || DEFAULT_EXPIRES_IN;
+    // payloadに既にexpがある場合はオプションを指定しない
+    const signOptions = payload.exp
+        ? {}
+        : { expiresIn: expiresIn };
+    return jwt.sign(payload, secret, signOptions);
+}
+/**
+ * JWTトークンを検証
+ * @param token トークン
+ * @param secret シークレットキー
+ * @returns デコードされたペイロード
+ */
+function verifyToken(token, secret) {
+    const jwtSecret = secret || process.env.JWT_SECRET || DEFAULT_JWT_SECRET;
+    try {
+        // Enforce HS256 and exp validation
+        return jwt.verify(token, jwtSecret, { algorithms: ['HS256'] });
     }
-    /**
-     * リフレッシュトークンを生成
-     */
-    static generateRefreshToken(userId, tenantId) {
-        const payload = {
-            user_id: userId,
-            tenant_id: tenantId,
-            type: 'refresh',
-            jti: crypto.randomUUID()
-        };
-        return jwt.sign(payload, JWT_REFRESH_SECRET, {
-            expiresIn: REFRESH_TOKEN_EXPIRES
-        });
+    catch (error) {
+        throw new Error('Invalid token');
     }
-    /**
-     * アクセストークンを検証
-     */
-    static verifyAccessToken(token) {
-        try {
-            const decoded = jwt.verify(token, JWT_SECRET);
-            return decoded;
-        }
-        catch (error) {
-            return null;
-        }
+}
+/**
+ * JWTトークンをデコード（検証なし）
+ * @param token トークン
+ * @returns デコードされたペイロード
+ */
+function decodeToken(token) {
+    try {
+        return jwt.decode(token);
     }
-    /**
-     * リフレッシュトークンを検証
-     */
-    static verifyRefreshToken(token) {
-        try {
-            const decoded = jwt.verify(token, JWT_REFRESH_SECRET);
-            return decoded;
-        }
-        catch (error) {
-            return null;
-        }
-    }
-    /**
-     * トークンペアを生成（アクセス＋リフレッシュ）
-     */
-    static generateTokenPair(userPayload) {
-        const accessToken = this.generateAccessToken(userPayload);
-        const refreshToken = this.generateRefreshToken(userPayload.user_id, userPayload.tenant_id);
-        return {
-            accessToken,
-            refreshToken,
-            expiresIn: 8 * 60 * 60 // 8時間（秒）
-        };
-    }
-    /**
-     * パスワードハッシュ化
-     */
-    static hashPassword(password) {
-        const salt = crypto.randomBytes(16).toString('hex');
-        const hash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
-        return `${salt}:${hash}`;
-    }
-    /**
-     * パスワード検証
-     */
-    static verifyPassword(password, hashedPassword) {
-        const [salt, hash] = hashedPassword.split(':');
-        const verifyHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
-        return hash === verifyHash;
-    }
-    /**
-     * API Key生成
-     */
-    static generateApiKey() {
-        return crypto.randomBytes(32).toString('hex');
-    }
-    /**
-     * Bearerトークンからトークン部分を抽出
-     */
-    static extractTokenFromBearer(bearerToken) {
-        if (!bearerToken || !bearerToken.startsWith('Bearer ')) {
-            return null;
-        }
-        return bearerToken.substring(7);
+    catch (error) {
+        return null;
     }
 }

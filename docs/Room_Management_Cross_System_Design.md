@@ -2,9 +2,17 @@
 **Room Management Cross-System Integration Design - Revised**
 
 **作成日**: 2025年1月22日（根本的見直し）  
+**更新日**: 2025年1月27日（操作ログ仕様追加）  
 **責任者**: 🌊 Iza（統合管理者）  
 **重要な指摘**: 各システムが主管理システムとして単独動作する必要性  
 **新設計思想**: Full CRUD権限 + リアルタイム同期 + 競合解決
+
+> **📋 更新履歴 (2025年1月27日)**  
+> **客室状態変更ログ統合仕様の追加** - hotel-common統合管理による更新  
+> 詳細仕様: [客室状態変更ログ統合仕様書](integration/specifications/room-operation-log-specification.md)
+
+> **📋 更新履歴 (2025年9月10日)**  
+> **客室メモ仕様の追加** - hotel-common統合管理による更新（カテゴリ/可視性/履歴/WSイベント）
 
 ---
 
@@ -179,6 +187,11 @@ interface ConcurrentOperationStrategy {
 ```
 
 #### **2. リアルタイム同期イベント**
+
+> **📋 更新履歴 (2025年1月27日)**  
+> **客室状態変更ログの詳細化対応** - hotel-common統合管理による更新  
+> 詳細仕様: [客室状態変更ログ統合仕様書](integration/specifications/room-operation-log-specification.md)
+
 ```typescript
 // 全システム共通の操作イベント
 interface UniversalRoomEvent {
@@ -187,11 +200,21 @@ interface UniversalRoomEvent {
   tenant_id: string
   room_id: string
   
+  // v2.0: 詳細アクション対応
+  action: 'ROOM_CLEANING_START' | 'ROOM_CLEANING_COMPLETE' | 'ROOM_MAINTENANCE_START' | 
+          'ROOM_MAINTENANCE_COMPLETE' | 'ROOM_BLOCK' | 'ROOM_UNBLOCK' | 'ROOM_OUT_OF_ORDER' |
+          'ROOM_BACK_IN_SERVICE' | 'ROOM_INSPECTION' | 'ROOM_SETUP_COMPLETE' | 
+          'ROOM_AMENITY_RESTOCK' | 'ROOM_DEEP_CLEANING' | 'UPDATE_STATUS'
+  
   operation_context: {
     operation_type: 'emergency' | 'scheduled' | 'routine' | 'customer_triggered'
+    operation_category: 'cleaning' | 'maintenance' | 'guest_service' | 'system' | 'emergency'
     business_justification: string
     expected_impact: 'low' | 'medium' | 'high' | 'critical'
     operator_id: string
+    department?: string
+    actual_duration?: number  // 実際の所要時間（分）
+    quality_check?: 'passed' | 'failed' | 'pending' | 'not_required'
   }
   
   sync_requirements: {
@@ -207,6 +230,50 @@ interface UniversalRoomEvent {
   }
 }
 ```
+
+```typescript
+// 客室メモ関連イベント（Phase 2 で配信開始）
+type RoomMemoEventType =
+  | 'MEMO_CREATED'
+  | 'MEMO_UPDATED'
+  | 'MEMO_STATUS_CHANGED'
+  | 'MEMO_COMMENT_ADDED'
+  | 'MEMO_DELETED'
+
+interface RoomMemoEvent {
+  event_type: RoomMemoEventType
+  tenant_id: string
+  room_id: string
+  memo_id: string
+  correlation_id: string
+  sequence?: number
+  timestamp: string
+  data: {
+    category: 'reservation' | 'handover' | 'lost_item' | 'maintenance' | 'cleaning' | 'guest_request' | 'other'
+    visibility: 'public' | 'private' | 'role'
+    visible_roles?: string[]
+    status?: 'pending' | 'in_progress' | 'completed'
+    priority?: 'low' | 'normal' | 'high' | 'urgent'
+    created_by_staff_id?: string
+    assigned_to_staff_id?: string
+  }
+}
+```
+
+**可視性/権限**
+- `visibility = public`：同一テナント内の権限保持者に公開
+- `visibility = private`：作成者および管理権限者のみ
+- `visibility = role`：`visible_roles` に一致する役割のみ（例: `front`, `cleaning`, `maintenance`, `manager`）
+
+#### **v2.0 客室操作ログ統合対応 (2025年1月27日追加)**
+
+**詳細な客室操作アクション**:
+- 清掃関連: `ROOM_CLEANING_START`, `ROOM_CLEANING_COMPLETE`, `ROOM_CLEANING_INSPECTION`, `ROOM_CLEANING_FAILED`
+- メンテナンス関連: `ROOM_MAINTENANCE_START`, `ROOM_MAINTENANCE_COMPLETE`, `ROOM_REPAIR_REQUEST`, `ROOM_REPAIR_COMPLETE`
+- 客室管理関連: `ROOM_BLOCK`, `ROOM_UNBLOCK`, `ROOM_OUT_OF_ORDER`, `ROOM_BACK_IN_SERVICE`
+- 業務操作関連: `ROOM_INSPECTION`, `ROOM_SETUP_COMPLETE`, `ROOM_AMENITY_RESTOCK`, `ROOM_DEEP_CLEANING`
+
+**統合ログ管理**: 全システムからの客室操作が統一的にログ記録され、リアルタイム同期される
 
 ### **🛡️ 安全削除・重要操作チェック**
 
