@@ -52,7 +52,8 @@ export class HotelMemberHierarchyAdapterStub {
     token: string;
   }): Promise<VerifyTokenResult> {
     try {
-      // 緊急対応：スタブ実装
+      // TODO: 実際の階層認証システムとの統合が必要
+      // 現在はスタブ実装
       this.logger.debug('階層JWTトークン検証（スタブ）', { 
         data: { 
           token_length: params.token.length 
@@ -98,7 +99,8 @@ export class HotelMemberHierarchyAdapterStub {
     customer_id?: string;
   }): Promise<PermissionCheckResult> {
     try {
-      // 緊急対応：スタブ実装
+      // TODO: 実際の階層認証システムとの統合が必要
+      // 現在はスタブ実装
       this.logger.debug('顧客データアクセスチェック（スタブ）', { 
         data: {
           operation: params.operation,
@@ -130,7 +132,8 @@ export class HotelMemberHierarchyAdapterStub {
     tier_id?: string;
   }): Promise<PermissionCheckResult> {
     try {
-      // 緊急対応：スタブ実装
+      // TODO: 実際の階層認証システムとの統合が必要
+      // 現在はスタブ実装
       this.logger.debug('会員制限チェック（スタブ）', { 
         data: {
           operation: params.operation,
@@ -159,7 +162,8 @@ export class HotelMemberHierarchyAdapterStub {
     target_brand_id?: string;
   }): Promise<PermissionCheckResult> {
     try {
-      // 緊急対応：スタブ実装
+      // TODO: 実際の階層認証システムとの統合が必要
+      // 現在はスタブ実装
       this.logger.debug('グループ分析アクセスチェック（スタブ）', { 
         data: {
           analytics_type: params.analytics_type
@@ -187,7 +191,8 @@ export class HotelMemberHierarchyAdapterStub {
     scope_level?: string;
   }): Promise<{ success?: boolean, tenants: string[], error?: string }> {
     try {
-      // 緊急対応：スタブ実装
+      // TODO: 実際の階層認証システムとの統合が必要
+      // 現在はスタブ実装
       return {
         success: true,
         tenants: ['default', 'tenant_1', 'tenant_2']
@@ -211,7 +216,8 @@ export class HotelMemberHierarchyAdapterStub {
     details?: Record<string, any>;
   }> {
     try {
-      // 緊急対応：スタブ実装
+      // TODO: 実際の階層認証システムとの統合が必要
+      // 現在はスタブ実装
       return {
         status: 'healthy',
         details: {

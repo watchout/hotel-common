@@ -1,0 +1,1048 @@
+{
+  "timestamp": "2025-09-11T23:30:26.478Z",
+  "duration": "18513ms",
+  "summary": {
+    "total": 115,
+    "implemented": 0,
+    "notImplemented": 115,
+    "implementationRate": "0.0%"
+  },
+  "results": [
+    {
+      "endpoint": "GET /health",
+      "method": "GET",
+      "path": "/health",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/health\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:08.117Z"
+    },
+    {
+      "endpoint": "GET /api/systems/status",
+      "method": "GET",
+      "path": "/api/systems/status",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/systems/status\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:08.296Z"
+    },
+    {
+      "endpoint": "POST /api/systems/:systemName/test",
+      "method": "POST",
+      "path": "/api/systems/:systemName/test",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/systems/:systemName/test\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:08.467Z"
+    },
+    {
+      "endpoint": "GET /api/database/test",
+      "method": "GET",
+      "path": "/api/database/test",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/database/test\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:08.626Z"
+    },
+    {
+      "endpoint": "GET /api/tenants",
+      "method": "GET",
+      "path": "/api/tenants",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/tenants\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:08.857Z"
+    },
+    {
+      "endpoint": "POST /api/auth/validate",
+      "method": "POST",
+      "path": "/api/auth/validate",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/auth/validate\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:09.047Z"
+    },
+    {
+      "endpoint": "GET /api/stats",
+      "method": "GET",
+      "path": "/api/stats",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/stats\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:09.229Z"
+    },
+    {
+      "endpoint": "POST /api/v1/auth/login",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/auth/login\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:09.407Z"
+    },
+    {
+      "endpoint": "GET /api/v1/auth/validate-token",
+      "method": "GET",
+      "path": "/api/v1/auth/validate-token",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/auth/validate-token\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:09.624Z"
+    },
+    {
+      "endpoint": "POST /api/v1/auth/refresh",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/auth/refresh\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:09.800Z"
+    },
+    {
+      "endpoint": "GET /api/v1/tenants/:id",
+      "method": "GET",
+      "path": "/api/v1/tenants/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/tenants/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:09.968Z"
+    },
+    {
+      "endpoint": "GET /api/v1/staff/:id",
+      "method": "GET",
+      "path": "/api/v1/staff/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/staff/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:10.127Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/summary",
+      "method": "GET",
+      "path": "/api/v1/admin/summary",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/summary\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:10.305Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/dashboard/stats",
+      "method": "GET",
+      "path": "/api/v1/admin/dashboard/stats",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/dashboard/stats\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:10.474Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/devices/count",
+      "method": "GET",
+      "path": "/api/v1/admin/devices/count",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/devices/count\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:10.639Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/orders/monthly-count",
+      "method": "GET",
+      "path": "/api/v1/admin/orders/monthly-count",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/orders/monthly-count\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:10.818Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/rankings",
+      "method": "GET",
+      "path": "/api/v1/admin/rankings",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/rankings\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:11.002Z"
+    },
+    {
+      "endpoint": "GET /api/v1/orders/history",
+      "method": "GET",
+      "path": "/api/v1/orders/history",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/orders/history\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:11.167Z"
+    },
+    {
+      "endpoint": "POST /api/v1/orders",
+      "method": "POST",
+      "path": "/api/v1/orders",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/orders\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:11.347Z"
+    },
+    {
+      "endpoint": "GET /api/v1/orders/active",
+      "method": "GET",
+      "path": "/api/v1/orders/active",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/orders/active\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:11.510Z"
+    },
+    {
+      "endpoint": "GET /api/v1/orders/:id",
+      "method": "GET",
+      "path": "/api/v1/orders/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/orders/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:11.729Z"
+    },
+    {
+      "endpoint": "PUT /api/v1/orders/:id/status",
+      "method": "PUT",
+      "path": "/api/v1/orders/:id/status",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PUT \"http://localhost:3400/api/v1/orders/:id/status\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:11.984Z"
+    },
+    {
+      "endpoint": "GET /api/v1/order/menu",
+      "method": "GET",
+      "path": "/api/v1/order/menu",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/order/menu\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:12.204Z"
+    },
+    {
+      "endpoint": "GET /api/v1/menus/top",
+      "method": "GET",
+      "path": "/api/v1/menus/top",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/menus/top\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:12.423Z"
+    },
+    {
+      "endpoint": "POST /api/v1/order/place",
+      "method": "POST",
+      "path": "/api/v1/order/place",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/order/place\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:12.688Z"
+    },
+    {
+      "endpoint": "POST /api/v1/devices/check-status",
+      "method": "POST",
+      "path": "/api/v1/devices/check-status",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/devices/check-status\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:12.879Z"
+    },
+    {
+      "endpoint": "GET /api/v1/devices/client-ip",
+      "method": "GET",
+      "path": "/api/v1/devices/client-ip",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/devices/client-ip\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:13.060Z"
+    },
+    {
+      "endpoint": "GET /api/v1/devices/count",
+      "method": "GET",
+      "path": "/api/v1/devices/count",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/devices/count\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:13.228Z"
+    },
+    {
+      "endpoint": "GET /api/hotel-member/integration/health",
+      "method": "GET",
+      "path": "/api/hotel-member/integration/health",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/hotel-member/integration/health\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:13.392Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/auth/verify",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/auth/verify",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/hotel-member/hierarchy/auth/verify\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:13.557Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/permissions/check-customer-access",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/permissions/check-customer-access",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/hotel-member/hierarchy/permissions/check-customer-access\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:13.730Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/tenants/accessible",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/tenants/accessible",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/hotel-member/hierarchy/tenants/accessible\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:13.908Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/permissions/check-membership-restrictions",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/permissions/check-membership-restrictions",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/hotel-member/hierarchy/permissions/check-membership-restrictions\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:14.072Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/permissions/check-analytics-access",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/permissions/check-analytics-access",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/hotel-member/hierarchy/permissions/check-analytics-access\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:14.231Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/user/permissions-detail",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/user/permissions-detail",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/hotel-member/hierarchy/user/permissions-detail\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:14.391Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/permissions/batch-check",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/permissions/batch-check",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/hotel-member/hierarchy/permissions/batch-check\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:14.566Z"
+    },
+    {
+      "endpoint": "GET /api/hotel-member/hierarchy/health",
+      "method": "GET",
+      "path": "/api/hotel-member/hierarchy/health",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/hotel-member/hierarchy/health\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:14.726Z"
+    },
+    {
+      "endpoint": "GET /api/v1/campaigns/health",
+      "method": "GET",
+      "path": "/api/v1/campaigns/health",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/campaigns/health\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:14.881Z"
+    },
+    {
+      "endpoint": "GET /api/v1/campaigns/active",
+      "method": "GET",
+      "path": "/api/v1/campaigns/active",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/campaigns/active\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:15.032Z"
+    },
+    {
+      "endpoint": "GET /api/v1/campaigns/check",
+      "method": "GET",
+      "path": "/api/v1/campaigns/check",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/campaigns/check\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:15.180Z"
+    },
+    {
+      "endpoint": "GET /api/v1/campaigns/by-category/:code",
+      "method": "GET",
+      "path": "/api/v1/campaigns/by-category/:code",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/campaigns/by-category/:code\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:15.327Z"
+    },
+    {
+      "endpoint": "GET /api/v1/welcome-screen/config",
+      "method": "GET",
+      "path": "/api/v1/welcome-screen/config",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/welcome-screen/config\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:15.474Z"
+    },
+    {
+      "endpoint": "GET /api/v1/welcome-screen/should-show",
+      "method": "GET",
+      "path": "/api/v1/welcome-screen/should-show",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/welcome-screen/should-show\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:15.620Z"
+    },
+    {
+      "endpoint": "POST /api/v1/welcome-screen/mark-completed",
+      "method": "POST",
+      "path": "/api/v1/welcome-screen/mark-completed",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/welcome-screen/mark-completed\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:15.772Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/campaigns",
+      "method": "GET",
+      "path": "/api/v1/admin/campaigns",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/campaigns\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:15.921Z"
+    },
+    {
+      "endpoint": "POST /api/v1/admin/campaigns",
+      "method": "POST",
+      "path": "/api/v1/admin/campaigns",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/admin/campaigns\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:16.066Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/campaigns/:id",
+      "method": "GET",
+      "path": "/api/v1/admin/campaigns/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/campaigns/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:16.214Z"
+    },
+    {
+      "endpoint": "PUT /api/v1/admin/campaigns/:id",
+      "method": "PUT",
+      "path": "/api/v1/admin/campaigns/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PUT \"http://localhost:3400/api/v1/admin/campaigns/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:16.362Z"
+    },
+    {
+      "endpoint": "DELETE /api/v1/admin/campaigns/:id",
+      "method": "DELETE",
+      "path": "/api/v1/admin/campaigns/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X DELETE \"http://localhost:3400/api/v1/admin/campaigns/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:16.512Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/campaigns/:id/analytics",
+      "method": "GET",
+      "path": "/api/v1/admin/campaigns/:id/analytics",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/campaigns/:id/analytics\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:16.666Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/campaigns/analytics/summary",
+      "method": "GET",
+      "path": "/api/v1/admin/campaigns/analytics/summary",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/campaigns/analytics/summary\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:16.813Z"
+    },
+    {
+      "endpoint": "POST /api/v1/reservations",
+      "method": "POST",
+      "path": "/api/v1/reservations",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/reservations\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:16.958Z"
+    },
+    {
+      "endpoint": "GET /api/v1/reservations",
+      "method": "GET",
+      "path": "/api/v1/reservations",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/reservations\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:17.106Z"
+    },
+    {
+      "endpoint": "GET /api/v1/reservations/:id",
+      "method": "GET",
+      "path": "/api/v1/reservations/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/reservations/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:17.255Z"
+    },
+    {
+      "endpoint": "PUT /api/v1/reservations/:id",
+      "method": "PUT",
+      "path": "/api/v1/reservations/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PUT \"http://localhost:3400/api/v1/reservations/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:17.404Z"
+    },
+    {
+      "endpoint": "DELETE /api/v1/reservations/:id",
+      "method": "DELETE",
+      "path": "/api/v1/reservations/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X DELETE \"http://localhost:3400/api/v1/reservations/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:17.554Z"
+    },
+    {
+      "endpoint": "POST /api/v1/reservations/:id/checkin",
+      "method": "POST",
+      "path": "/api/v1/reservations/:id/checkin",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/reservations/:id/checkin\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:17.709Z"
+    },
+    {
+      "endpoint": "POST /api/v1/reservations/:id/checkout",
+      "method": "POST",
+      "path": "/api/v1/reservations/:id/checkout",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/reservations/:id/checkout\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:17.858Z"
+    },
+    {
+      "endpoint": "GET /api/v1/reservations/stats",
+      "method": "GET",
+      "path": "/api/v1/reservations/stats",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/reservations/stats\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:18.024Z"
+    },
+    {
+      "endpoint": "POST /api/v1/rooms",
+      "method": "POST",
+      "path": "/api/v1/rooms",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/rooms\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:18.172Z"
+    },
+    {
+      "endpoint": "GET /api/v1/rooms",
+      "method": "GET",
+      "path": "/api/v1/rooms",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/rooms\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:18.316Z"
+    },
+    {
+      "endpoint": "GET /api/v1/rooms/:id",
+      "method": "GET",
+      "path": "/api/v1/rooms/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/rooms/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:18.461Z"
+    },
+    {
+      "endpoint": "PUT /api/v1/rooms/:id",
+      "method": "PUT",
+      "path": "/api/v1/rooms/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PUT \"http://localhost:3400/api/v1/rooms/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:18.609Z"
+    },
+    {
+      "endpoint": "DELETE /api/v1/rooms/:id",
+      "method": "DELETE",
+      "path": "/api/v1/rooms/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X DELETE \"http://localhost:3400/api/v1/rooms/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:18.774Z"
+    },
+    {
+      "endpoint": "PATCH /api/v1/rooms/:id/status",
+      "method": "PATCH",
+      "path": "/api/v1/rooms/:id/status",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PATCH \"http://localhost:3400/api/v1/rooms/:id/status\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:18.928Z"
+    },
+    {
+      "endpoint": "GET /api/v1/rooms/by-number/:roomNumber",
+      "method": "GET",
+      "path": "/api/v1/rooms/by-number/:roomNumber",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/rooms/by-number/:roomNumber\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:19.101Z"
+    },
+    {
+      "endpoint": "GET /api/v1/rooms/by-floor/:floorNumber",
+      "method": "GET",
+      "path": "/api/v1/rooms/by-floor/:floorNumber",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/rooms/by-floor/:floorNumber\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:19.249Z"
+    },
+    {
+      "endpoint": "POST /api/v1/rooms/search-available",
+      "method": "POST",
+      "path": "/api/v1/rooms/search-available",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/rooms/search-available\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:19.398Z"
+    },
+    {
+      "endpoint": "GET /api/v1/rooms/stats",
+      "method": "GET",
+      "path": "/api/v1/rooms/stats",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/rooms/stats\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:19.547Z"
+    },
+    {
+      "endpoint": "POST /api/v1/room-grades",
+      "method": "POST",
+      "path": "/api/v1/room-grades",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/room-grades\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:19.701Z"
+    },
+    {
+      "endpoint": "GET /api/v1/room-grades",
+      "method": "GET",
+      "path": "/api/v1/room-grades",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/room-grades\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:19.850Z"
+    },
+    {
+      "endpoint": "GET /api/v1/room-grades/:id",
+      "method": "GET",
+      "path": "/api/v1/room-grades/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/room-grades/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:20.002Z"
+    },
+    {
+      "endpoint": "PUT /api/v1/room-grades/:id",
+      "method": "PUT",
+      "path": "/api/v1/room-grades/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PUT \"http://localhost:3400/api/v1/room-grades/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:20.152Z"
+    },
+    {
+      "endpoint": "DELETE /api/v1/room-grades/:id",
+      "method": "DELETE",
+      "path": "/api/v1/room-grades/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X DELETE \"http://localhost:3400/api/v1/room-grades/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:20.299Z"
+    },
+    {
+      "endpoint": "PATCH /api/v1/room-grades/:id/pricing",
+      "method": "PATCH",
+      "path": "/api/v1/room-grades/:id/pricing",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PATCH \"http://localhost:3400/api/v1/room-grades/:id/pricing\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:20.444Z"
+    },
+    {
+      "endpoint": "GET /api/v1/room-grades/by-code/:code",
+      "method": "GET",
+      "path": "/api/v1/room-grades/by-code/:code",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/room-grades/by-code/:code\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:20.590Z"
+    },
+    {
+      "endpoint": "GET /api/v1/room-grades/active",
+      "method": "GET",
+      "path": "/api/v1/room-grades/active",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/room-grades/active\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:20.744Z"
+    },
+    {
+      "endpoint": "GET /api/v1/room-grades/stats",
+      "method": "GET",
+      "path": "/api/v1/room-grades/stats",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/room-grades/stats\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:20.894Z"
+    },
+    {
+      "endpoint": "PATCH /api/v1/room-grades/display-order",
+      "method": "PATCH",
+      "path": "/api/v1/room-grades/display-order",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PATCH \"http://localhost:3400/api/v1/room-grades/display-order\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:21.043Z"
+    },
+    {
+      "endpoint": "GET /api/apps/google-play",
+      "method": "GET",
+      "path": "/api/apps/google-play",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/apps/google-play\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:21.188Z"
+    },
+    {
+      "endpoint": "GET /api/apps/google-play/:id",
+      "method": "GET",
+      "path": "/api/apps/google-play/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/apps/google-play/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:21.335Z"
+    },
+    {
+      "endpoint": "POST /api/apps/google-play",
+      "method": "POST",
+      "path": "/api/apps/google-play",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/apps/google-play\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:21.480Z"
+    },
+    {
+      "endpoint": "PUT /api/apps/google-play/:id",
+      "method": "PUT",
+      "path": "/api/apps/google-play/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PUT \"http://localhost:3400/api/apps/google-play/:id\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:21.626Z"
+    },
+    {
+      "endpoint": "PATCH /api/apps/google-play/:id/approve",
+      "method": "PATCH",
+      "path": "/api/apps/google-play/:id/approve",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PATCH \"http://localhost:3400/api/apps/google-play/:id/approve\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:21.783Z"
+    },
+    {
+      "endpoint": "GET /api/places/:placeId/apps",
+      "method": "GET",
+      "path": "/api/places/:placeId/apps",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/places/:placeId/apps\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:21.931Z"
+    },
+    {
+      "endpoint": "POST /api/places/:placeId/apps",
+      "method": "POST",
+      "path": "/api/places/:placeId/apps",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/places/:placeId/apps\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:22.078Z"
+    },
+    {
+      "endpoint": "PUT /api/places/:placeId/apps/:appId",
+      "method": "PUT",
+      "path": "/api/places/:placeId/apps/:appId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PUT \"http://localhost:3400/api/places/:placeId/apps/:appId\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:22.223Z"
+    },
+    {
+      "endpoint": "DELETE /api/places/:placeId/apps/:appId",
+      "method": "DELETE",
+      "path": "/api/places/:placeId/apps/:appId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X DELETE \"http://localhost:3400/api/places/:placeId/apps/:appId\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:22.371Z"
+    },
+    {
+      "endpoint": "GET /api/layouts/:layoutId/blocks/:blockId/apps",
+      "method": "GET",
+      "path": "/api/layouts/:layoutId/blocks/:blockId/apps",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/layouts/:layoutId/blocks/:blockId/apps\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:22.519Z"
+    },
+    {
+      "endpoint": "PUT /api/layouts/:layoutId/blocks/:blockId/apps",
+      "method": "PUT",
+      "path": "/api/layouts/:layoutId/blocks/:blockId/apps",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PUT \"http://localhost:3400/api/layouts/:layoutId/blocks/:blockId/apps\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:22.667Z"
+    },
+    {
+      "endpoint": "GET /api/client/places/:placeId/apps",
+      "method": "GET",
+      "path": "/api/client/places/:placeId/apps",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/client/places/:placeId/apps\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:22.823Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/pages",
+      "method": "GET",
+      "path": "/api/v1/admin/pages",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/pages\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:22.971Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/pages/:slug",
+      "method": "GET",
+      "path": "/api/v1/admin/pages/:slug",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/pages/:slug\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:23.117Z"
+    },
+    {
+      "endpoint": "POST /api/v1/admin/pages/:slug",
+      "method": "POST",
+      "path": "/api/v1/admin/pages/:slug",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/admin/pages/:slug\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:23.266Z"
+    },
+    {
+      "endpoint": "POST /api/v1/admin/pages/:slug/publish",
+      "method": "POST",
+      "path": "/api/v1/admin/pages/:slug/publish",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/admin/pages/:slug/publish\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:23.414Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/pages/:slug/history",
+      "method": "GET",
+      "path": "/api/v1/admin/pages/:slug/history",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/pages/:slug/history\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:23.563Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/pages/:slug/history/:version",
+      "method": "GET",
+      "path": "/api/v1/admin/pages/:slug/history/:version",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/pages/:slug/history/:version\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:23.712Z"
+    },
+    {
+      "endpoint": "POST /api/v1/admin/pages/:slug/restore",
+      "method": "POST",
+      "path": "/api/v1/admin/pages/:slug/restore",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/admin/pages/:slug/restore\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:23.863Z"
+    },
+    {
+      "endpoint": "GET /api/v1/pages/:slug",
+      "method": "GET",
+      "path": "/api/v1/pages/:slug",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/pages/:slug\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:24.010Z"
+    },
+    {
+      "endpoint": "POST /api/v1/sessions",
+      "method": "POST",
+      "path": "/api/v1/sessions",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/sessions\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:24.159Z"
+    },
+    {
+      "endpoint": "GET /api/v1/sessions/:sessionId",
+      "method": "GET",
+      "path": "/api/v1/sessions/:sessionId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/sessions/:sessionId\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:24.308Z"
+    },
+    {
+      "endpoint": "GET /api/v1/sessions/by-number/:sessionNumber",
+      "method": "GET",
+      "path": "/api/v1/sessions/by-number/:sessionNumber",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/sessions/by-number/:sessionNumber\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:24.457Z"
+    },
+    {
+      "endpoint": "GET /api/v1/sessions/active-by-room/:roomId",
+      "method": "GET",
+      "path": "/api/v1/sessions/active-by-room/:roomId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/sessions/active-by-room/:roomId\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:24.606Z"
+    },
+    {
+      "endpoint": "PATCH /api/v1/sessions/:sessionId",
+      "method": "PATCH",
+      "path": "/api/v1/sessions/:sessionId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PATCH \"http://localhost:3400/api/v1/sessions/:sessionId\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:24.754Z"
+    },
+    {
+      "endpoint": "POST /api/v1/sessions/:sessionId/checkout",
+      "method": "POST",
+      "path": "/api/v1/sessions/:sessionId/checkout",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/sessions/:sessionId/checkout\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:24.902Z"
+    },
+    {
+      "endpoint": "POST /api/v1/session-billing",
+      "method": "POST",
+      "path": "/api/v1/session-billing",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/session-billing\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:25.049Z"
+    },
+    {
+      "endpoint": "GET /api/v1/session-billing/:billingId",
+      "method": "GET",
+      "path": "/api/v1/session-billing/:billingId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/session-billing/:billingId\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:25.198Z"
+    },
+    {
+      "endpoint": "GET /api/v1/session-billing/by-session/:sessionId",
+      "method": "GET",
+      "path": "/api/v1/session-billing/by-session/:sessionId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/session-billing/by-session/:sessionId\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:25.346Z"
+    },
+    {
+      "endpoint": "PATCH /api/v1/session-billing/:billingId",
+      "method": "PATCH",
+      "path": "/api/v1/session-billing/:billingId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PATCH \"http://localhost:3400/api/v1/session-billing/:billingId\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:25.496Z"
+    },
+    {
+      "endpoint": "POST /api/v1/session-billing/:billingId/payment",
+      "method": "POST",
+      "path": "/api/v1/session-billing/:billingId/payment",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/session-billing/:billingId/payment\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:25.644Z"
+    },
+    {
+      "endpoint": "GET /api/v1/session-billing/calculate/:sessionId",
+      "method": "GET",
+      "path": "/api/v1/session-billing/calculate/:sessionId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/session-billing/calculate/:sessionId\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:25.789Z"
+    },
+    {
+      "endpoint": "POST /api/v1/session-migration/migrate-orders",
+      "method": "POST",
+      "path": "/api/v1/session-migration/migrate-orders",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/session-migration/migrate-orders\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:25.934Z"
+    },
+    {
+      "endpoint": "GET /api/v1/session-migration/statistics",
+      "method": "GET",
+      "path": "/api/v1/session-migration/statistics",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/session-migration/statistics\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:26.080Z"
+    },
+    {
+      "endpoint": "GET /api/v1/session-migration/compatibility-check",
+      "method": "GET",
+      "path": "/api/v1/session-migration/compatibility-check",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/session-migration/compatibility-check\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:26.229Z"
+    },
+    {
+      "endpoint": "GET /api/v1/session-migration/report",
+      "method": "GET",
+      "path": "/api/v1/session-migration/report",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/session-migration/report\" -H \"Content-Type: application/json\"",
+      "timestamp": "2025-09-11T23:30:26.378Z"
+    }
+  ],
+  "authStatus": "failed"
+}

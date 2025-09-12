@@ -1,0 +1,16 @@
+GET /api/v1/campaigns/by-category/:code
+GET /api/v1/welcome-screen/config
+GET /api/v1/welcome-screen/should-show
+POST /api/v1/welcome-screen/mark-completed
+GET /api/v1/admin/campaigns
+POST /api/v1/admin/campaigns
+GET /api/v1/admin/campaigns/:id
+PUT /api/v1/admin/campaigns/:id
+DELETE /api/v1/admin/campaigns/:id
+GET /api/v1/admin/campaigns/:id/analytics
+GET /api/v1/admin/campaigns/analytics/summary
+GET /api/v1/room-grades/:id
+PATCH /api/v1/room-grades/:id/pricing
+GET /api/v1/room-grades/by-code/:code
+GET /api/v1/room-grades/active
+GET /api/v1/room-grades/stats

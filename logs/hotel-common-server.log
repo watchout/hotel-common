@@ -1,135 +1,7 @@
-(node:45852) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///Users/kaneko/hotel-common/dist/server/minimal-server.js is not specified and it doesn't parse as CommonJS.
-Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
-To eliminate this warning, add "type": "module" to /Users/kaneko/hotel-common/package.json.
-(Use `node --trace-warnings ...` to show where the warning was created)
-node:events:502
-      throw er; // Unhandled 'error' event
-      ^
-
-Error: listen EADDRINUSE: address already in use :::3400
-    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
-    at listenInCluster (node:net:1965:12)
-    at Server.listen (node:net:2067:7)
-    at file:///Users/kaneko/hotel-common/dist/server/minimal-server.js:318:8
-    at ModuleJob.run (node:internal/modules/esm/module_job:263:25)
-    at async ModuleLoader.import (node:internal/modules/esm/loader:540:24)
-    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
-Emitted 'error' event on Server instance at:
-    at emitErrorNT (node:net:1944:8)
-    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
-  code: 'EADDRINUSE',
-  errno: -48,
-  syscall: 'listen',
-  address: '::',
-  port: 3400
-}
-
-Node.js v20.19.2
-
-🚨 緊急対応：hotel-common最小版サーバー起動成功！
-
-📊 サーバー情報:
-- ポート: 3400
-- モード: 緊急フォールバック
-- 対象: Suno階層権限統合支援
-- 状態: ✅ 正常動作中
-
-✅ 利用可能API（全てフォールバック実装）:
-- GET  /health                                              → ヘルスチェック
-- GET  /api/campaigns/active                               → アクティブキャンペーン取得
-- POST /api/hotel-member/hierarchy/auth/verify             → JWT検証（許可）
-- POST /api/hotel-member/hierarchy/permissions/check-customer-access → 顧客データアクセス（許可）
-- POST /api/hotel-member/hierarchy/tenants/accessible      → テナント一覧
-- POST /api/hotel-member/hierarchy/permissions/check-membership-restrictions → 会員制限（なし）
-- POST /api/hotel-member/hierarchy/permissions/check-analytics-access → 分析権限（読み取り専用）
-- POST /api/hotel-member/hierarchy/user/permissions-detail → 権限詳細
-- POST /api/hotel-member/hierarchy/permissions/batch-check → バッチ権限チェック
-- GET  /api/hotel-member/hierarchy/health                  → 階層ヘルスチェック
-
-🎯 目的: Sunoの階層権限統合実装をブロック解除
-⚠️  注意: フォールバックモード（開発用・基本的に全て許可）
-🔄 後で完全版に置き換え予定
-  
-
-🚨 緊急対応：hotel-common最小版サーバー起動成功！
-
-📊 サーバー情報:
-- ポート: 3400
-- モード: 緊急フォールバック
-- 対象: Suno階層権限統合支援
-- 状態: ✅ 正常動作中
-
-✅ 利用可能API（全てフォールバック実装）:
-- GET  /health                                              → ヘルスチェック
-- GET  /api/campaigns/active                               → アクティブキャンペーン取得
-- POST /api/hotel-member/hierarchy/auth/verify             → JWT検証（許可）
-- POST /api/hotel-member/hierarchy/permissions/check-customer-access → 顧客データアクセス（許可）
-- POST /api/hotel-member/hierarchy/tenants/accessible      → テナント一覧
-- POST /api/hotel-member/hierarchy/permissions/check-membership-restrictions → 会員制限（なし）
-- POST /api/hotel-member/hierarchy/permissions/check-analytics-access → 分析権限（読み取り専用）
-- POST /api/hotel-member/hierarchy/user/permissions-detail → 権限詳細
-- POST /api/hotel-member/hierarchy/permissions/batch-check → バッチ権限チェック
-- GET  /api/hotel-member/hierarchy/health                  → 階層ヘルスチェック
-
-🎯 目的: Sunoの階層権限統合実装をブロック解除
-⚠️  注意: フォールバックモード（開発用・基本的に全て許可）
-🔄 後で完全版に置き換え予定
-  
-
-🚨 緊急対応：hotel-common最小版サーバー起動成功！
-
-📊 サーバー情報:
-- ポート: 3400
-- モード: 緊急フォールバック
-- 対象: Suno階層権限統合支援
-- 状態: ✅ 正常動作中
-
-✅ 利用可能API（全てフォールバック実装）:
-- GET  /health                                              → ヘルスチェック
-- GET  /api/campaigns/active                               → アクティブキャンペーン取得
-- POST /api/hotel-member/hierarchy/auth/verify             → JWT検証（許可）
-- POST /api/hotel-member/hierarchy/permissions/check-customer-access → 顧客データアクセス（許可）
-- POST /api/hotel-member/hierarchy/tenants/accessible      → テナント一覧
-- POST /api/hotel-member/hierarchy/permissions/check-membership-restrictions → 会員制限（なし）
-- POST /api/hotel-member/hierarchy/permissions/check-analytics-access → 分析権限（読み取り専用）
-- POST /api/hotel-member/hierarchy/user/permissions-detail → 権限詳細
-- POST /api/hotel-member/hierarchy/permissions/batch-check → バッチ権限チェック
-- GET  /api/hotel-member/hierarchy/health                  → 階層ヘルスチェック
-
-🎯 目的: Sunoの階層権限統合実装をブロック解除
-⚠️  注意: フォールバックモード（開発用・基本的に全て許可）
-🔄 後で完全版に置き換え予定
-  
-node:internal/modules/cjs/loader:1215
-  throw err;
-  ^
-
-Error: Cannot find module '.prisma/client/default'
-Require stack:
-- /Users/kaneko/hotel-common/node_modules/@prisma/client/default.js
-- /Users/kaneko/hotel-common/dist/server/integration-server.js
-    at Module._resolveFilename (node:internal/modules/cjs/loader:1212:15)
-    at Module._load (node:internal/modules/cjs/loader:1043:27)
-    at Module.require (node:internal/modules/cjs/loader:1298:19)
-    at require (node:internal/modules/helpers:182:18)
-    at Object.<anonymous> (/Users/kaneko/hotel-common/node_modules/@prisma/client/default.js:2:6)
-    at Module._compile (node:internal/modules/cjs/loader:1529:14)
-    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
-    at Module.load (node:internal/modules/cjs/loader:1275:32)
-    at Module._load (node:internal/modules/cjs/loader:1096:12)
-    at Module.require (node:internal/modules/cjs/loader:1298:19) {
-  code: 'MODULE_NOT_FOUND',
-  requireStack: [
-    '/Users/kaneko/hotel-common/node_modules/@prisma/client/default.js',
-    '/Users/kaneko/hotel-common/dist/server/integration-server.js'
-  ]
-}
-
-Node.js v20.19.2
 PostgreSQL接続確認完了
-[32m[2025-08-14T23:30:07.652Z] INFO[0m [hotel-common]: 🎯 hotel-member階層権限管理統合初期化中...
-[32m[2025-08-14T23:30:07.653Z] INFO[0m [hotel-common]: ✅ hotel-member階層権限管理統合初期化完了
-[32m[2025-08-14T23:30:07.653Z] INFO[0m [hotel-common]: 
+[32m[2025-09-12T00:11:47.203Z] INFO[0m [hotel-common]: 🎯 hotel-member階層権限管理統合初期化中...
+[32m[2025-09-12T00:11:47.204Z] INFO[0m [hotel-common]: ✅ hotel-member階層権限管理統合初期化完了
+[32m[2025-09-12T00:11:47.204Z] INFO[0m [hotel-common]: 
 🎯 hotel-member階層権限管理統合稼働中
 
 📊 対応機能:
@@ -179,273 +51,109 @@ hotel-member統合初期化完了
 - 🎯 hotel-member-backend (http://localhost:8080)
 - 💼 hotel-pms (http://localhost:3300)
         
-Performing periodic health check...
-Connection test failed for hotel-pms: Unexpected token 'O', "OK
-
-" is not valid JSON
-Connection test failed for hotel-member-backend: HTTP error: 504
-Connection test failed for hotel-saas: HTTP error: 404
-Performing periodic health check...
-Connection test failed for hotel-pms: Unexpected token 'O', "OK
-
-" is not valid JSON
-Connection test failed for hotel-member-backend: HTTP error: 504
-Connection test failed for hotel-saas: HTTP error: 404
-Performing periodic health check...
-Connection test failed for hotel-pms: Unexpected token 'O', "OK
-
-" is not valid JSON
-Connection test failed for hotel-member-backend: HTTP error: 504
-Connection test failed for hotel-saas: HTTP error: 404
-PostgreSQL接続確認完了
-[32m[2025-08-15T05:22:30.865Z] INFO[0m [hotel-common]: 🎯 hotel-member階層権限管理統合初期化中...
-[32m[2025-08-15T05:22:30.865Z] INFO[0m [hotel-common]: ✅ hotel-member階層権限管理統合初期化完了
-[32m[2025-08-15T05:22:30.865Z] INFO[0m [hotel-common]: 
-🎯 hotel-member階層権限管理統合稼働中
-
-📊 対応機能:
-- 階層JWT認証統合
-- 顧客データ階層アクセス制御
-- 会員ランク・ポイント階層管理
-- グループ分析権限制御
-- FastAPI連携エンドポイント
-
-🔗 APIエンドポイント:
-- VERIFY_TOKEN: /api/hotel-member/hierarchy/auth/verify
-- CHECK_CUSTOMER_ACCESS: /api/hotel-member/hierarchy/permissions/check-customer-access
-- CHECK_MEMBERSHIP_RESTRICTIONS: /api/hotel-member/hierarchy/permissions/check-membership-restrictions
-- CHECK_ANALYTICS_ACCESS: /api/hotel-member/hierarchy/permissions/check-analytics-access
-- BATCH_CHECK: /api/hotel-member/hierarchy/permissions/batch-check
-- GET_ACCESSIBLE_TENANTS: /api/hotel-member/hierarchy/tenants/accessible
-- GET_PERMISSIONS_DETAIL: /api/hotel-member/hierarchy/user/permissions-detail
-- HEALTH_CHECK: /api/hotel-member/hierarchy/health
-
-🎯 実装戦略: 部分対応（顧客データ重点）
-⚡ パフォーマンス: 既存機能への影響最小化
-🔐 セキュリティ: 階層別データアクセス制御
-    
-hotel-member統合初期化完了
-
-🎉 hotel-common統合APIサーバー起動完了！
-
-📊 サーバー情報:
-- ポート: 3400
-- データベース: PostgreSQL (hotel_unified_db)
-- 監視対象システム: 4個
-
-🔗 利用可能エンドポイント:
-- GET  /health                    - サーバーヘルスチェック
-- GET  /api/systems/status        - システム接続状況
-- POST /api/systems/:name/test    - システム接続テスト
-- GET  /api/database/test         - データベース接続テスト
-- GET  /api/tenants              - テナント一覧
-- POST /api/auth/validate        - 認証検証
-- GET  /api/stats                - システム統計
-- GET  /api/v1/campaigns/health  - キャンペーン機能ヘルスチェック
-- GET  /api/apps/google-play     - Google Playアプリ一覧
-
-🎯 接続対象システム:
-- 🏪 hotel-saas (http://localhost:3100)
-- 🎯 hotel-member-frontend (http://localhost:3200)
-- 🎯 hotel-member-backend (http://localhost:8080)
-- 💼 hotel-pms (http://localhost:3300)
-        
-PostgreSQL接続確認完了
-[32m[2025-08-15T06:13:17.695Z] INFO[0m [hotel-common]: 🎯 hotel-member階層権限管理統合初期化中...
-[32m[2025-08-15T06:13:17.695Z] INFO[0m [hotel-common]: ✅ hotel-member階層権限管理統合初期化完了
-[32m[2025-08-15T06:13:17.695Z] INFO[0m [hotel-common]: 
-🎯 hotel-member階層権限管理統合稼働中
-
-📊 対応機能:
-- 階層JWT認証統合
-- 顧客データ階層アクセス制御
-- 会員ランク・ポイント階層管理
-- グループ分析権限制御
-- FastAPI連携エンドポイント
-
-🔗 APIエンドポイント:
-- VERIFY_TOKEN: /api/hotel-member/hierarchy/auth/verify
-- CHECK_CUSTOMER_ACCESS: /api/hotel-member/hierarchy/permissions/check-customer-access
-- CHECK_MEMBERSHIP_RESTRICTIONS: /api/hotel-member/hierarchy/permissions/check-membership-restrictions
-- CHECK_ANALYTICS_ACCESS: /api/hotel-member/hierarchy/permissions/check-analytics-access
-- BATCH_CHECK: /api/hotel-member/hierarchy/permissions/batch-check
-- GET_ACCESSIBLE_TENANTS: /api/hotel-member/hierarchy/tenants/accessible
-- GET_PERMISSIONS_DETAIL: /api/hotel-member/hierarchy/user/permissions-detail
-- HEALTH_CHECK: /api/hotel-member/hierarchy/health
-
-🎯 実装戦略: 部分対応（顧客データ重点）
-⚡ パフォーマンス: 既存機能への影響最小化
-🔐 セキュリティ: 階層別データアクセス制御
-    
-hotel-member統合初期化完了
-
-🎉 hotel-common統合APIサーバー起動完了！
-
-📊 サーバー情報:
-- ポート: 3400
-- データベース: PostgreSQL (hotel_unified_db)
-- 監視対象システム: 4個
-
-🔗 利用可能エンドポイント:
-- GET  /health                    - サーバーヘルスチェック
-- GET  /api/systems/status        - システム接続状況
-- POST /api/systems/:name/test    - システム接続テスト
-- GET  /api/database/test         - データベース接続テスト
-- GET  /api/tenants              - テナント一覧
-- POST /api/auth/validate        - 認証検証
-- GET  /api/stats                - システム統計
-- GET  /api/v1/campaigns/health  - キャンペーン機能ヘルスチェック
-- GET  /api/apps/google-play     - Google Playアプリ一覧
-
-🎯 接続対象システム:
-- 🏪 hotel-saas (http://localhost:3100)
-- 🎯 hotel-member-frontend (http://localhost:3200)
-- 🎯 hotel-member-backend (http://localhost:8080)
-- 💼 hotel-pms (http://localhost:3300)
-        
-2025-08-15T06:17:17.242Z GET /health
-2025-08-15T06:17:28.999Z GET /api/v1/admin/pages
-Performing periodic health check...
-Connection test failed for hotel-pms: Unexpected token 'O', "OK
-
-" is not valid JSON
-Connection test failed for hotel-saas: HTTP error: 404
-PostgreSQL接続確認完了
-[32m[2025-08-15T06:21:32.955Z] INFO[0m [hotel-common]: 🎯 hotel-member階層権限管理統合初期化中...
-[32m[2025-08-15T06:21:32.955Z] INFO[0m [hotel-common]: ✅ hotel-member階層権限管理統合初期化完了
-[32m[2025-08-15T06:21:32.955Z] INFO[0m [hotel-common]: 
-🎯 hotel-member階層権限管理統合稼働中
-
-📊 対応機能:
-- 階層JWT認証統合
-- 顧客データ階層アクセス制御
-- 会員ランク・ポイント階層管理
-- グループ分析権限制御
-- FastAPI連携エンドポイント
-
-🔗 APIエンドポイント:
-- VERIFY_TOKEN: /api/hotel-member/hierarchy/auth/verify
-- CHECK_CUSTOMER_ACCESS: /api/hotel-member/hierarchy/permissions/check-customer-access
-- CHECK_MEMBERSHIP_RESTRICTIONS: /api/hotel-member/hierarchy/permissions/check-membership-restrictions
-- CHECK_ANALYTICS_ACCESS: /api/hotel-member/hierarchy/permissions/check-analytics-access
-- BATCH_CHECK: /api/hotel-member/hierarchy/permissions/batch-check
-- GET_ACCESSIBLE_TENANTS: /api/hotel-member/hierarchy/tenants/accessible
-- GET_PERMISSIONS_DETAIL: /api/hotel-member/hierarchy/user/permissions-detail
-- HEALTH_CHECK: /api/hotel-member/hierarchy/health
-
-🎯 実装戦略: 部分対応（顧客データ重点）
-⚡ パフォーマンス: 既存機能への影響最小化
-🔐 セキュリティ: 階層別データアクセス制御
-    
-hotel-member統合初期化完了
-node:events:502
-      throw er; // Unhandled 'error' event
-      ^
-
-Error: listen EADDRINUSE: address already in use :::3400
-    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
-    at listenInCluster (node:net:1965:12)
-    at Server.listen (node:net:2067:7)
-    at Function.listen (/Users/kaneko/hotel-common/node_modules/express/lib/application.js:635:24)
-    at HotelIntegrationServer.start (/Users/kaneko/hotel-common/dist/server/integration-server.js:409:36)
-Emitted 'error' event on Server instance at:
-    at emitErrorNT (node:net:1944:8)
-    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
-  code: 'EADDRINUSE',
-  errno: -48,
-  syscall: 'listen',
-  address: '::',
-  port: 3400
-}
-
-Node.js v20.19.2
-2025-08-15T06:21:40.120Z GET /api/v1/admin/pages
-2025-08-15T06:23:04.125Z GET /api/health
-Performing periodic health check...
-Connection test failed for hotel-pms: Unexpected token 'O', "OK
-
-" is not valid JSON
-Connection test failed for hotel-saas: HTTP error: 404
-2025-08-15T06:24:24.800Z GET /api/v1/admin/pages
-2025-08-15T06:26:17.179Z GET /api/v1/admin/pages
-2025-08-15T06:27:26.502Z GET /api/v1/admin/pages
-Performing periodic health check...
-Connection test failed for hotel-pms: fetch failed
-Connection test failed for hotel-saas: HTTP error: 404
-hotel-common統合APIサーバー停止中...
-hotel-common統合APIサーバー停止完了
-PostgreSQL接続確認完了
-[32m[2025-08-15T08:23:14.024Z] INFO[0m [hotel-common]: 🎯 hotel-member階層権限管理統合初期化中...
-[32m[2025-08-15T08:23:14.025Z] INFO[0m [hotel-common]: ✅ hotel-member階層権限管理統合初期化完了
-[32m[2025-08-15T08:23:14.025Z] INFO[0m [hotel-common]: 
-🎯 hotel-member階層権限管理統合稼働中
-
-📊 対応機能:
-- 階層JWT認証統合
-- 顧客データ階層アクセス制御
-- 会員ランク・ポイント階層管理
-- グループ分析権限制御
-- FastAPI連携エンドポイント
-
-🔗 APIエンドポイント:
-- VERIFY_TOKEN: /api/hotel-member/hierarchy/auth/verify
-- CHECK_CUSTOMER_ACCESS: /api/hotel-member/hierarchy/permissions/check-customer-access
-- CHECK_MEMBERSHIP_RESTRICTIONS: /api/hotel-member/hierarchy/permissions/check-membership-restrictions
-- CHECK_ANALYTICS_ACCESS: /api/hotel-member/hierarchy/permissions/check-analytics-access
-- BATCH_CHECK: /api/hotel-member/hierarchy/permissions/batch-check
-- GET_ACCESSIBLE_TENANTS: /api/hotel-member/hierarchy/tenants/accessible
-- GET_PERMISSIONS_DETAIL: /api/hotel-member/hierarchy/user/permissions-detail
-- HEALTH_CHECK: /api/hotel-member/hierarchy/health
-
-🎯 実装戦略: 部分対応（顧客データ重点）
-⚡ パフォーマンス: 既存機能への影響最小化
-🔐 セキュリティ: 階層別データアクセス制御
-    
-hotel-member統合初期化完了
-node:events:502
-      throw er; // Unhandled 'error' event
-      ^
-
-Error: listen EADDRINUSE: address already in use :::3400
-    at Server.setupListenHandle [as _listen2] (node:net:1908:16)
-    at listenInCluster (node:net:1965:12)
-    at Server.listen (node:net:2067:7)
-    at Function.listen (/Users/kaneko/hotel-common/node_modules/express/lib/application.js:635:24)
-    at HotelIntegrationServer.start (/Users/kaneko/hotel-common/dist/server/integration-server.js:414:36)
-Emitted 'error' event on Server instance at:
-    at emitErrorNT (node:net:1944:8)
-    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
-  code: 'EADDRINUSE',
-  errno: -48,
-  syscall: 'listen',
-  address: '::',
-  port: 3400
-}
-
-Node.js v20.19.2
-node:internal/modules/cjs/loader:1215
-  throw err;
-  ^
-
-Error: Cannot find module '../generated/prisma'
-Require stack:
-- /Users/kaneko/hotel-common/dist/server/api-health.js
-- /Users/kaneko/hotel-common/dist/server/integration-server.js
-    at Module._resolveFilename (node:internal/modules/cjs/loader:1212:15)
-    at Module._load (node:internal/modules/cjs/loader:1043:27)
-    at Module.require (node:internal/modules/cjs/loader:1298:19)
-    at require (node:internal/modules/helpers:182:18)
-    at Object.<anonymous> (/Users/kaneko/hotel-common/dist/server/api-health.js:8:18)
-    at Module._compile (node:internal/modules/cjs/loader:1529:14)
-    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
-    at Module.load (node:internal/modules/cjs/loader:1275:32)
-    at Module._load (node:internal/modules/cjs/loader:1096:12)
-    at Module.require (node:internal/modules/cjs/loader:1298:19) {
-  code: 'MODULE_NOT_FOUND',
-  requireStack: [
-    '/Users/kaneko/hotel-common/dist/server/api-health.js',
-    '/Users/kaneko/hotel-common/dist/server/integration-server.js'
-  ]
-}
-
-Node.js v20.19.2
+2025-09-12T00:11:57.773Z GET /health
+2025-09-12T00:12:05.505Z POST /api/v1/auth/login
+🔐 [AUTH] ログインリクエスト受信 - 修正版コード実行中
+prisma:query SELECT 1
+prisma:query SELECT "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted" FROM "public"."staff" WHERE ("public"."staff"."email" = $1 AND "public"."staff"."is_active" = $2 AND "public"."staff"."is_deleted" = $3) OFFSET $4
+[32m[2025-09-12T00:12:05.543Z] INFO[0m [hotel-common]: bcrypt照合開始
+[32m[2025-09-12T00:12:05.608Z] INFO[0m [hotel-common]: bcrypt照合結果
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."contactEmail", "public"."Tenant"."createdAt", "public"."Tenant"."deleted_at", "public"."Tenant"."deleted_by", "public"."Tenant"."features", "public"."Tenant"."is_deleted", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."status" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query UPDATE "public"."staff" SET "last_login_at" = $1 WHERE ("public"."staff"."id" = $2 AND 1=1) RETURNING "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted"
+[32m[2025-09-12T00:12:05.630Z] INFO[0m [hotel-common] [tenant:default]: ログイン成功
+2025-09-12T00:12:14.186Z POST /api/v1/auth/login
+🔐 [AUTH] ログインリクエスト受信 - 修正版コード実行中
+prisma:query SELECT "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted" FROM "public"."staff" WHERE ("public"."staff"."email" = $1 AND "public"."staff"."is_active" = $2 AND "public"."staff"."is_deleted" = $3) OFFSET $4
+[32m[2025-09-12T00:12:14.191Z] INFO[0m [hotel-common]: bcrypt照合開始
+[32m[2025-09-12T00:12:14.258Z] INFO[0m [hotel-common]: bcrypt照合結果
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."contactEmail", "public"."Tenant"."createdAt", "public"."Tenant"."deleted_at", "public"."Tenant"."deleted_by", "public"."Tenant"."features", "public"."Tenant"."is_deleted", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."status" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query UPDATE "public"."staff" SET "last_login_at" = $1 WHERE ("public"."staff"."id" = $2 AND 1=1) RETURNING "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted"
+[32m[2025-09-12T00:12:14.262Z] INFO[0m [hotel-common] [tenant:default]: ログイン成功
+2025-09-12T00:12:14.272Z GET /api/v1/room-grades
+[32m[2025-09-12T00:12:14.275Z] INFO[0m [hotel-common]: 客室ランク一覧取得開始
+prisma:query SELECT "public"."room_grades"."id", "public"."room_grades"."tenant_id", "public"."room_grades"."code", "public"."room_grades"."name", "public"."room_grades"."description", "public"."room_grades"."created_at", "public"."room_grades"."updated_at" FROM "public"."room_grades" WHERE "public"."room_grades"."tenant_id" = $1 ORDER BY "public"."room_grades"."created_at" ASC OFFSET $2
+[32m[2025-09-12T00:12:14.281Z] INFO[0m [hotel-common]: 客室ランク一覧取得完了
+Performing initial health check...
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 500
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 500
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 500
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 500
+2025-09-12T00:18:24.515Z POST /api/v1/auth/login
+🔐 [AUTH] ログインリクエスト受信 - 修正版コード実行中
+prisma:query SELECT "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted" FROM "public"."staff" WHERE ("public"."staff"."email" = $1 AND "public"."staff"."is_active" = $2 AND "public"."staff"."is_deleted" = $3) OFFSET $4
+[32m[2025-09-12T00:18:24.544Z] INFO[0m [hotel-common]: bcrypt照合開始
+[32m[2025-09-12T00:18:24.604Z] INFO[0m [hotel-common]: bcrypt照合結果
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."contactEmail", "public"."Tenant"."createdAt", "public"."Tenant"."deleted_at", "public"."Tenant"."deleted_by", "public"."Tenant"."features", "public"."Tenant"."is_deleted", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."status" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query UPDATE "public"."staff" SET "last_login_at" = $1 WHERE ("public"."staff"."id" = $2 AND 1=1) RETURNING "public"."staff"."id", "public"."staff"."tenant_id", "public"."staff"."email", "public"."staff"."name", "public"."staff"."role", "public"."staff"."department", "public"."staff"."is_active", "public"."staff"."created_at", "public"."staff"."updated_at", "public"."staff"."failed_login_count", "public"."staff"."last_login_at", "public"."staff"."locked_until", "public"."staff"."password_hash", "public"."staff"."deleted_at", "public"."staff"."deleted_by", "public"."staff"."is_deleted"
+[32m[2025-09-12T00:18:24.617Z] INFO[0m [hotel-common] [tenant:default]: ログイン成功
+2025-09-12T00:18:25.085Z POST /api/auth/validate
+2025-09-12T00:18:25.091Z GET /api/v1/tenants/default
+[33m[2025-09-12T00:18:25.093Z] WARN[0m [hotel-common]: JWT claims validation warnings (non-strict mode):
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."status", "public"."Tenant"."contactEmail", "public"."Tenant"."features", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."createdAt" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+2025-09-12T00:18:34.255Z POST /api/auth/validate
+2025-09-12T00:18:34.290Z POST /api/auth/validate
+2025-09-12T00:18:34.313Z GET /api/v1/tenants/default
+[33m[2025-09-12T00:18:34.315Z] WARN[0m [hotel-common]: JWT claims validation warnings (non-strict mode):
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."status", "public"."Tenant"."contactEmail", "public"."Tenant"."features", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."createdAt" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+2025-09-12T00:18:36.149Z POST /api/auth/validate
+2025-09-12T00:18:36.169Z POST /api/auth/validate
+2025-09-12T00:18:36.174Z GET /api/v1/tenants/default
+[33m[2025-09-12T00:18:36.176Z] WARN[0m [hotel-common]: JWT claims validation warnings (non-strict mode):
+prisma:query SELECT "public"."Tenant"."id", "public"."Tenant"."name", "public"."Tenant"."domain", "public"."Tenant"."status", "public"."Tenant"."contactEmail", "public"."Tenant"."features", "public"."Tenant"."planType", "public"."Tenant"."settings", "public"."Tenant"."createdAt" FROM "public"."Tenant" WHERE ("public"."Tenant"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+2025-09-12T00:18:36.311Z POST /api/auth/validate
+2025-09-12T00:18:36.315Z GET /api/v1/room-grades
+[32m[2025-09-12T00:18:36.316Z] INFO[0m [hotel-common]: 客室ランク一覧取得開始
+prisma:query SELECT "public"."room_grades"."id", "public"."room_grades"."tenant_id", "public"."room_grades"."code", "public"."room_grades"."name", "public"."room_grades"."description", "public"."room_grades"."created_at", "public"."room_grades"."updated_at" FROM "public"."room_grades" WHERE "public"."room_grades"."tenant_id" = $1 ORDER BY "public"."room_grades"."created_at" ASC OFFSET $2
+[32m[2025-09-12T00:18:36.320Z] INFO[0m [hotel-common]: 客室ランク一覧取得完了
+2025-09-12T00:19:06.187Z POST /api/auth/validate
+2025-09-12T00:19:06.189Z POST /api/auth/validate
+2025-09-12T00:19:06.190Z POST /api/auth/validate
+2025-09-12T00:19:06.204Z GET /api/v1/admin/front-desk/accounting
+[33m[2025-09-12T00:19:06.207Z] WARN[0m [hotel-common]: JWT claims validation warnings (non-strict mode):
+2025-09-12T00:19:06.215Z POST /api/auth/validate
+2025-09-12T00:19:06.217Z GET /api/v1/admin/front-desk/rooms
+[33m[2025-09-12T00:19:06.221Z] WARN[0m [hotel-common]: JWT claims validation warnings (non-strict mode):
+prisma:query SELECT 1
+2025-09-12T00:19:06.226Z GET /api/v1/admin/operation-logs
+[33m[2025-09-12T00:19:06.230Z] WARN[0m [hotel-common]: JWT claims validation warnings (non-strict mode):
+2025-09-12T00:19:06.233Z GET /api/v1/admin/orders
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."transactions"."id" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2 AND "public"."transactions"."createdAt" >= $3 AND "public"."transactions"."createdAt" <= $4) OFFSET $5) AS "sub"
+prisma:query SELECT "public"."transactions"."id", "public"."transactions"."tenantId", "public"."transactions"."invoiceId", "public"."transactions"."paymentId", "public"."transactions"."type", "public"."transactions"."amount", "public"."transactions"."taxAmount", "public"."transactions"."totalAmount", "public"."transactions"."status", "public"."transactions"."description", "public"."transactions"."reference", "public"."transactions"."metadata", "public"."transactions"."createdAt", "public"."transactions"."updatedAt", "public"."transactions"."createdBy", "public"."transactions"."isDeleted", "public"."transactions"."deletedAt", "public"."transactions"."deletedBy" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2 AND "public"."transactions"."createdAt" >= $3 AND "public"."transactions"."createdAt" <= $4) ORDER BY "public"."transactions"."createdAt" DESC LIMIT $5 OFFSET $6
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+prisma:query SELECT SUM("totalAmount") FROM (SELECT "public"."transactions"."totalAmount" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT COUNT("public"."payments"."id"), "public"."payments"."paymentMethod" FROM "public"."payments" WHERE ("public"."payments"."tenantId" = $1 AND "public"."payments"."isDeleted" = $2) GROUP BY "public"."payments"."paymentMethod" OFFSET $3
+prisma:query SELECT "public"."system_event"."id", "public"."system_event"."tenant_id", "public"."system_event"."user_id", "public"."system_event"."event_type", "public"."system_event"."source_system", "public"."system_event"."target_system", "public"."system_event"."entity_type", "public"."system_event"."entity_id", "public"."system_event"."action", "public"."system_event"."event_data", "public"."system_event"."created_at", "public"."system_event"."processed_at", "public"."system_event"."status" FROM "public"."system_event" WHERE ("public"."system_event"."tenant_id" = $1 AND "public"."system_event"."created_at" >= $2 AND "public"."system_event"."created_at" <= $3) ORDER BY "public"."system_event"."created_at" DESC LIMIT $4 OFFSET $5
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+[32m[2025-09-12T00:19:06.282Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."system_event"."id" FROM "public"."system_event" WHERE ("public"."system_event"."tenant_id" = $1 AND "public"."system_event"."created_at" >= $2 AND "public"."system_event"."created_at" <= $3) OFFSET $4) AS "sub"
+[32m[2025-09-12T00:19:06.287Z] INFO[0m [hotel-common]: 管理者操作ログ一覧取得完了
+prisma:query SELECT COUNT("public"."transactions"."id"), "public"."transactions"."status" FROM "public"."transactions" WHERE ("public"."transactions"."tenantId" = $1 AND "public"."transactions"."isDeleted" = $2) GROUP BY "public"."transactions"."status" OFFSET $3
+[32m[2025-09-12T00:19:06.299Z] INFO[0m [hotel-common]: フロントデスク会計取引一覧取得完了
+2025-09-12T00:19:07.346Z POST /api/auth/validate
+2025-09-12T00:19:07.351Z GET /api/v1/admin/front-desk/rooms
+[33m[2025-09-12T00:19:07.352Z] WARN[0m [hotel-common]: JWT claims validation warnings (non-strict mode):
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."rooms"."id" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) OFFSET $3) AS "sub"
+prisma:query SELECT "public"."rooms"."id", "public"."rooms"."tenantId", "public"."rooms"."roomNumber", "public"."rooms"."roomType", "public"."rooms"."floor", "public"."rooms"."status", "public"."rooms"."capacity", "public"."rooms"."amenities", "public"."rooms"."lastCleaned", "public"."rooms"."createdAt", "public"."rooms"."updatedAt", "public"."rooms"."isDeleted", "public"."rooms"."deletedAt", "public"."rooms"."deletedBy" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) ORDER BY "public"."rooms"."roomNumber" ASC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT("public"."rooms"."roomType"), "public"."rooms"."roomType" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."roomType" OFFSET $3
+prisma:query SELECT COUNT("public"."rooms"."status"), "public"."rooms"."status" FROM "public"."rooms" WHERE ("public"."rooms"."tenantId" = $1 AND "public"."rooms"."isDeleted" = $2) GROUP BY "public"."rooms"."status" OFFSET $3
+[32m[2025-09-12T00:19:07.363Z] INFO[0m [hotel-common]: フロントデスク客室一覧取得完了
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 500
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 500
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 500
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 500
+2025-09-12T00:27:18.124Z GET /api/v1/auth/login
+2025-09-12T00:27:18.198Z GET /api/v1/admin/room-memos
+2025-09-12T00:27:18.270Z GET /api/v1/admin/page-history
+2025-09-12T00:27:18.350Z GET /api/v1/health
+🔍 Health check started (0/4 systems connected)
+Connection test failed for hotel-saas: HTTP error: 500

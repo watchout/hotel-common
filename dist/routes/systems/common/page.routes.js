@@ -19,8 +19,8 @@ router.post('/api/v1/admin/pages/:slug', middleware_1.verifyAdminAuth, admin_pag
 router.post('/api/v1/admin/pages/:slug/publish', middleware_1.verifyAdminAuth, admin_page_controller_1.default.publishPage);
 // ページ履歴取得
 router.get('/api/v1/admin/pages/:slug/history', middleware_1.verifyAdminAuth, admin_page_controller_1.default.getPageHistory);
-// 特定バージョンの履歴取得
-router.get('/api/v1/admin/pages/:slug/history/:version', middleware_1.verifyAdminAuth, admin_page_controller_1.default.getPageHistoryVersion);
+// 特定バージョンの履歴取得（クエリパラメータ方式に変更）
+router.get('/api/v1/admin/page-history', middleware_1.verifyAdminAuth, admin_page_controller_1.default.getPageHistoryVersion);
 // バージョン復元
 router.post('/api/v1/admin/pages/:slug/restore', middleware_1.verifyAdminAuth, admin_page_controller_1.default.restorePageVersion);
 // 公開向けAPI

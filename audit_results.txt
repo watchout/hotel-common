@@ -1,0 +1,183 @@
+🔍 API実装状況完全監査開始...
+
+テスト中: GET /api/systems/status
+  ✅ 実装済み (200)
+テスト中: POST /api/systems/:systemName/test
+  ✅ 実装済み (500)
+テスト中: GET /api/database/test
+  ✅ 実装済み (200)
+テスト中: GET /api/tenants
+  ✅ 実装済み (200)
+テスト中: POST /api/auth/validate
+  ✅ 実装済み (400)
+テスト中: GET /api/stats
+  ✅ 実装済み (200)
+テスト中: POST /api/v1/auth/login
+  ✅ 実装済み (400)
+テスト中: GET /api/v1/auth/validate-token
+  ✅ 実装済み (200)
+テスト中: POST /api/v1/auth/refresh
+  ✅ 実装済み (400)
+テスト中: GET /api/v1/tenants/:id
+  ✅ 実装済み (403)
+テスト中: GET /api/v1/staff/:id
+  ✅ 実装済み (400)
+テスト中: GET /api/v1/admin/summary
+  ✅ 実装済み (200)
+テスト中: GET /api/v1/admin/dashboard/stats
+  ✅ 実装済み (200)
+テスト中: GET /api/v1/admin/devices/count
+  ✅ 実装済み (200)
+テスト中: GET /api/v1/admin/orders/monthly-count
+  ✅ 実装済み (200)
+テスト中: GET /api/v1/admin/rankings
+  ✅ 実装済み (200)
+テスト中: GET /api/v1/orders/history
+  ✅ 実装済み (500)
+テスト中: POST /api/v1/orders
+  ✅ 実装済み (400)
+テスト中: GET /api/v1/orders/active
+  ✅ 実装済み (200)
+テスト中: GET /api/v1/orders/:id
+  ✅ 実装済み (500)
+テスト中: PUT /api/v1/orders/:id/status
+  ✅ 実装済み (400)
+テスト中: GET /api/v1/order/menu
+  ✅ 実装済み (200)
+テスト中: GET /api/v1/menus/top
+  ✅ 実装済み (200)
+テスト中: POST /api/v1/order/place
+  ✅ 実装済み (400)
+テスト中: POST /api/v1/devices/check-status
+  ✅ 実装済み (400)
+テスト中: GET /api/v1/devices/client-ip
+  ✅ 実装済み (200)
+テスト中: GET /api/v1/devices/count
+  ✅ 実装済み (200)
+テスト中: GET /api/hotel-member/integration/health
+  ✅ 実装済み (200)
+テスト中: POST /api/hotel-member/hierarchy/auth/verify
+  ✅ 実装済み (400)
+テスト中: POST /api/hotel-member/hierarchy/permissions/check-customer-access
+  ✅ 実装済み (400)
+テスト中: POST /api/hotel-member/hierarchy/tenants/accessible
+  ✅ 実装済み (400)
+テスト中: POST /api/hotel-member/hierarchy/permissions/check-membership-restrictions
+  ✅ 実装済み (400)
+テスト中: POST /api/hotel-member/hierarchy/permissions/check-analytics-access
+  ✅ 実装済み (400)
+テスト中: POST /api/hotel-member/hierarchy/user/permissions-detail
+  ✅ 実装済み (400)
+テスト中: POST /api/hotel-member/hierarchy/permissions/batch-check
+  ✅ 実装済み (400)
+テスト中: GET /api/hotel-member/hierarchy/health
+  ✅ 実装済み (200)
+テスト中: GET /api/v1/campaigns/health
+  ✅ 実装済み (200)
+テスト中: GET /api/v1/campaigns/active
+  ✅ 実装済み (200)
+テスト中: GET /api/v1/campaigns/check
+  ✅ 実装済み (200)
+テスト中: GET /api/v1/campaigns/by-category/:code
+  ❌ 未実装 (404)
+テスト中: GET /api/v1/welcome-screen/config
+  ❌ 未実装 (404)
+テスト中: GET /api/v1/welcome-screen/should-show
+  ❌ 未実装 (404)
+テスト中: POST /api/v1/welcome-screen/mark-completed
+  ❌ 未実装 (404)
+テスト中: GET /api/v1/admin/campaigns
+  ❌ 未実装 (404)
+テスト中: POST /api/v1/admin/campaigns
+  ❌ 未実装 (404)
+テスト中: GET /api/v1/admin/campaigns/:id
+  ❌ 未実装 (404)
+テスト中: PUT /api/v1/admin/campaigns/:id
+  ❌ 未実装 (404)
+テスト中: DELETE /api/v1/admin/campaigns/:id
+  ❌ 未実装 (404)
+テスト中: GET /api/v1/admin/campaigns/:id/analytics
+  ❌ 未実装 (404)
+テスト中: GET /api/v1/admin/campaigns/analytics/summary
+  ❌ 未実装 (404)
+テスト中: POST /api/v1/reservations
+  ✅ 実装済み (400)
+テスト中: GET /api/v1/reservations
+  ✅ 実装済み (400)
+テスト中: GET /api/v1/reservations/:id
+  ✅ 実装済み (500)
+テスト中: PUT /api/v1/reservations/:id
+  ✅ 実装済み (500)
+テスト中: DELETE /api/v1/reservations/:id
+  ✅ 実装済み (500)
+テスト中: POST /api/v1/reservations/:id/checkin
+  ✅ 実装済み (400)
+テスト中: POST /api/v1/reservations/:id/checkout
+  ✅ 実装済み (500)
+テスト中: GET /api/v1/reservations/stats
+  ✅ 実装済み (500)
+テスト中: POST /api/v1/rooms
+  ✅ 実装済み (400)
+テスト中: GET /api/v1/rooms
+  ✅ 実装済み (400)
+テスト中: GET /api/v1/rooms/:id
+  ✅ 実装済み (500)
+テスト中: PUT /api/v1/rooms/:id
+  ✅ 実装済み (500)
+テスト中: DELETE /api/v1/rooms/:id
+  ✅ 実装済み (500)
+テスト中: PATCH /api/v1/rooms/:id/status
+  ✅ 実装済み (400)
+テスト中: GET /api/v1/rooms/by-number/:roomNumber
+  ✅ 実装済み (500)
+テスト中: GET /api/v1/rooms/by-floor/:floorNumber
+  ✅ 実装済み (500)
+テスト中: POST /api/v1/rooms/search-available
+  ✅ 実装済み (400)
+テスト中: GET /api/v1/rooms/stats
+  ✅ 実装済み (500)
+テスト中: POST /api/v1/room-grades
+  ✅ 実装済み (400)
+テスト中: GET /api/v1/room-grades
+  ✅ 実装済み (200)
+テスト中: GET /api/v1/room-grades/:id
+  ❌ 未実装 (404)
+テスト中: PUT /api/v1/room-grades/:id
+  ✅ 実装済み (500)
+テスト中: DELETE /api/v1/room-grades/:id
+  ✅ 実装済み (500)
+テスト中: PATCH /api/v1/room-grades/:id/pricing
+  ❌ 未実装 (404)
+テスト中: GET /api/v1/room-grades/by-code/:code
+  ❌ 未実装 (404)
+テスト中: GET /api/v1/room-grades/active
+  ❌ 未実装 (404)
+テスト中: GET /api/v1/room-grades/stats
+  ❌ 未実装 (404)
+
+📊 監査結果サマリー
+==================================================
+総API数: 77
+実装済み: 61 (79%)
+未実装: 16 (21%)
+エラー: 0 (0%)
+
+📄 詳細結果を /tmp/api-audit-results.json に保存しました
+
+❌ 未実装APIリスト:
+  GET /api/v1/campaigns/by-category/:code
+  GET /api/v1/welcome-screen/config
+  GET /api/v1/welcome-screen/should-show
+  POST /api/v1/welcome-screen/mark-completed
+  GET /api/v1/admin/campaigns
+  POST /api/v1/admin/campaigns
+  GET /api/v1/admin/campaigns/:id
+  PUT /api/v1/admin/campaigns/:id
+  DELETE /api/v1/admin/campaigns/:id
+  GET /api/v1/admin/campaigns/:id/analytics
+  GET /api/v1/admin/campaigns/analytics/summary
+  GET /api/v1/room-grades/:id
+  PATCH /api/v1/room-grades/:id/pricing
+  GET /api/v1/room-grades/by-code/:code
+  GET /api/v1/room-grades/active
+  GET /api/v1/room-grades/stats

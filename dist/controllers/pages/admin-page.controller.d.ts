@@ -24,7 +24,7 @@ export declare class AdminPageController {
      */
     getPageHistory(req: Request, res: Response): Promise<any>;
     /**
-     * 特定バージョンの履歴取得
+     * 特定バージョンの履歴取得（クエリパラメータ方式）
      */
     getPageHistoryVersion(req: Request, res: Response): Promise<any>;
     /**

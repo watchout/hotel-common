@@ -184,10 +184,11 @@ export class HotelApiClient {
 export class HotelApiClientFactory {
   /**
    * hotel-saas用クライアント作成
+   * 認証はhotel-commonを経由
    */
   static createSaasClient(config?: Partial<ApiClientConfig>): HotelApiClient {
     return new HotelApiClient({
-      baseURL: 'http://localhost:3100/api',
+      baseURL: 'http://localhost:3400/api',
       ...config
     })
   }

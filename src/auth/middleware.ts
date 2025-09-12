@@ -28,32 +28,6 @@ const publicPaths = [
 
 // 管理者認証ミドルウェア
 export const verifyAdminAuth = (req: Request & { user?: any }, res: Response, next: NextFunction) => {
-  // 開発環境では認証をスキップ
-  if (process.env.NODE_ENV === 'development') {
-    // @ts-ignore - 開発環境での型互換性
-    req.user = {
-      user_id: 'dev-admin-001',
-      tenant_id: 'default',
-      email: 'admin@hotel-common.dev',
-      role: 'ADMIN',
-      level: 1,
-      permissions: ['admin:all'],
-      iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + 86400,
-      jti: 'dev-token',
-      accessible_tenants: ['default'],
-      hierarchy_context: {
-        organization_id: 'dev-org',
-        organization_level: 1 as const,
-        organization_type: 'GROUP' as const,
-        organization_path: '/dev-org',
-        access_scope: ['all'],
-        data_access_policies: {}
-      }
-    };
-    return next();
-  }
-
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     return res.status(401).json({ error: 'Authorization header required' });
@@ -80,32 +54,6 @@ export const verifyAdminAuth = (req: Request & { user?: any }, res: Response, ne
 
 // テナント認証ミドルウェア
 export const verifyTenantAuth = (req: Request & { user?: any }, res: Response, next: NextFunction) => {
-  // 開発環境では認証をスキップ
-  if (process.env.NODE_ENV === 'development') {
-    // @ts-ignore - 開発環境での型互換性
-    req.user = {
-      user_id: 'dev-staff-001',
-      tenant_id: 'default',
-      email: 'staff@hotel-common.dev',
-      role: 'STAFF',
-      level: 3,
-      permissions: ['tenant:read', 'tenant:write'],
-      iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + 86400,
-      jti: 'dev-token',
-      accessible_tenants: ['default'],
-      hierarchy_context: {
-        organization_id: 'dev-org',
-        organization_level: 3 as const,
-        organization_type: 'HOTEL' as const,
-        organization_path: '/dev-org/hotel',
-        access_scope: ['tenant'],
-        data_access_policies: {}
-      }
-    };
-    return next();
-  }
-
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     return res.status(401).json({ error: 'Authorization header required' });

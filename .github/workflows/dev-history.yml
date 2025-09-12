@@ -1,0 +1,47 @@
+name: 開発履歴自動生成
+
+on:
+  schedule:
+    # 毎週月曜日 9:00 JST (00:00 UTC)
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+    inputs:
+      days:
+        description: '分析する日数'
+        required: false
+        default: '7'
+
+jobs:
+  generate-history:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # 全履歴を取得
+        
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Generate development history
+      run: |
+        DAYS=${{ github.event.inputs.days || '7' }}
+        npx ts-node scripts/generate-dev-history.ts $DAYS
+        
+    - name: Commit and push if changed
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add docs/development-history/
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "📊 Auto-generate development history"
+          git push
+        fi

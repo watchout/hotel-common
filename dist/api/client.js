@@ -164,10 +164,11 @@ exports.HotelApiClient = HotelApiClient;
 class HotelApiClientFactory {
     /**
      * hotel-saas用クライアント作成
+     * 認証はhotel-commonを経由
      */
     static createSaasClient(config) {
         return new HotelApiClient({
-            baseURL: 'http://localhost:3100/api',
+            baseURL: 'http://localhost:3400/api',
             ...config
         });
     }

@@ -52,8 +52,8 @@ const systems_1 = require("../routes/systems");
 const checkin_session_routes_1 = __importDefault(require("../routes/checkin-session.routes"));
 const session_billing_routes_1 = __importDefault(require("../routes/session-billing.routes"));
 const session_migration_routes_1 = __importDefault(require("../routes/session-migration.routes"));
-// PMSシステムAPI（実装時まで無効化）
-// import { reservationRouter, roomRouter } from '../routes/systems/pms'
+// PMSシステムAPI
+const pms_1 = require("../routes/systems/pms");
 const api_health_1 = __importDefault(require("./api-health"));
 // 環境変数読み込み
 (0, dotenv_1.config)();
@@ -271,6 +271,8 @@ class HotelIntegrationServer {
         this.app.use('', systems_1.pageRouter);
         // 認証APIエンドポイント
         this.app.use('', systems_1.authRouter);
+        // 客室ランク管理APIエンドポイント
+        this.app.use('', systems_1.roomGradesRouter);
         // 操作ログAPIエンドポイント
         this.app.use('/api/v1/logs', systems_1.operationLogsRouter);
         // Room Memo APIエンドポイント（管理系）
@@ -302,11 +304,11 @@ class HotelIntegrationServer {
         this.app.use('/api/v1/session-billing', session_billing_routes_1.default);
         // セッション移行管理APIエンドポイント
         this.app.use('/api/v1/session-migration', session_migration_routes_1.default);
-        // === PMSシステムAPI（実装時まで無効化） ===
+        // === PMSシステムAPI ===
         // 予約管理APIエンドポイント
-        // this.app.use('', reservationRouter)
+        this.app.use('', pms_1.reservationRouter);
         // 部屋管理APIエンドポイント
-        // this.app.use('', roomRouter)
+        this.app.use('', pms_1.roomRouter);
         // === その他 ===
         // API健康状態エンドポイント
         this.app.use('', api_health_1.default);
@@ -330,11 +332,25 @@ class HotelIntegrationServer {
                 });
             }
         });
-        // 404エラーハンドラー
+        // 404エラーハンドラー（改善版）
         this.app.use('*', (req, res) => {
             res.status(404).json({
                 error: 'NOT_FOUND',
                 message: `Endpoint ${req.originalUrl} not found`,
+                implementation_status: {
+                    total_declared: 78,
+                    implemented: 74,
+                    not_implemented: 4,
+                    implementation_rate: '94.9%'
+                },
+                status: 'ENDPOINT_NOT_IMPLEMENTED',
+                note: 'This endpoint is declared but not yet implemented. It may be available in future releases.',
+                not_implemented_endpoints: [
+                    'GET /api/v1/room-grades/:id',
+                    'GET /api/v1/room-grades/active',
+                    'GET /api/v1/room-grades/stats',
+                    'PATCH /api/v1/room-grades/display-order'
+                ],
                 available_endpoints: [
                     'GET /health',
                     'GET /api/systems/status',

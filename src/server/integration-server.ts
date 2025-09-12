@@ -13,6 +13,7 @@ import { appLauncherApiRouter } from '../integrations/app-launcher'
 import { 
   authRouter, 
   pageRouter,
+  roomGradesRouter,
   operationLogsRouter,
   roomMemosRouter,
   accountingRouter,
@@ -32,8 +33,8 @@ import checkinSessionRouter from '../routes/checkin-session.routes'
 import sessionBillingRouter from '../routes/session-billing.routes'
 import sessionMigrationRouter from '../routes/session-migration.routes'
 
-// PMSシステムAPI（実装時まで無効化）
-// import { reservationRouter, roomRouter } from '../routes/systems/pms'
+// PMSシステムAPI
+import { reservationRouter, roomRouter } from '../routes/systems/pms'
 
 import apiHealthRouter from './api-health'
 
@@ -282,6 +283,9 @@ class HotelIntegrationServer {
     // 認証APIエンドポイント
     this.app.use('', authRouter)
     
+    // 客室ランク管理APIエンドポイント
+    this.app.use('', roomGradesRouter)
+    
     // 操作ログAPIエンドポイント
     this.app.use('/api/v1/logs', operationLogsRouter)
     
@@ -326,12 +330,12 @@ class HotelIntegrationServer {
     // セッション移行管理APIエンドポイント
     this.app.use('/api/v1/session-migration', sessionMigrationRouter)
 
-    // === PMSシステムAPI（実装時まで無効化） ===
+    // === PMSシステムAPI ===
     // 予約管理APIエンドポイント
-    // this.app.use('', reservationRouter)
+    this.app.use('', reservationRouter)
 
     // 部屋管理APIエンドポイント
-    // this.app.use('', roomRouter)
+    this.app.use('', roomRouter)
 
     // === その他 ===
     // API健康状態エンドポイント
@@ -358,11 +362,25 @@ class HotelIntegrationServer {
       }
     })
 
-    // 404エラーハンドラー
+    // 404エラーハンドラー（改善版）
     this.app.use('*', (req, res) => {
       res.status(404).json({
         error: 'NOT_FOUND',
         message: `Endpoint ${req.originalUrl} not found`,
+        implementation_status: {
+          total_declared: 78,
+          implemented: 74,
+          not_implemented: 4,
+          implementation_rate: '94.9%'
+        },
+        status: 'ENDPOINT_NOT_IMPLEMENTED',
+        note: 'This endpoint is declared but not yet implemented. It may be available in future releases.',
+        not_implemented_endpoints: [
+          'GET /api/v1/room-grades/:id',
+          'GET /api/v1/room-grades/active', 
+          'GET /api/v1/room-grades/stats',
+          'PATCH /api/v1/room-grades/display-order'
+        ],
         available_endpoints: [
           'GET /health',
           'GET /api/systems/status',

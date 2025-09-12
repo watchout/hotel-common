@@ -173,18 +173,18 @@ class AdminPageController {
         }
     }
     /**
-     * 特定バージョンの履歴取得
+     * 特定バージョンの履歴取得（クエリパラメータ方式）
      */
     async getPageHistoryVersion(req, res) {
         try {
-            const { slug, version } = req.params;
+            const { slug, version } = req.query;
             const tenantId = req.user?.tenant_id;
             if (!tenantId) {
                 const { response, statusCode } = api_standards_1.StandardResponseBuilder.authError('テナントIDが必要です');
                 return res.status(statusCode).json(response);
             }
             if (!slug || !version) {
-                const { response, statusCode } = api_standards_1.StandardResponseBuilder.error('INVALID_PARAMS', 'スラグとバージョンが必要です', undefined, 400);
+                const { response, statusCode } = api_standards_1.StandardResponseBuilder.error('INVALID_PARAMS', 'スラグとバージョンがクエリパラメータで必要です', undefined, 400);
                 return res.status(statusCode).json(response);
             }
             const versionNumber = parseInt(version, 10);

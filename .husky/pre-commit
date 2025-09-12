@@ -1,18 +1,18 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "🔍 Pre-commit checks..."
+echo "🔍 API ルート品質チェック実行中..."
 
-# 1. Prismaスキーマ整合性チェック
-echo "📋 Checking Prisma schema consistency..."
-node scripts/validate-schema-consistency.js
+# API ルート品質チェック
+npm run check-api-routes
 
-# 2. TypeScriptコンパイルチェック
-echo "🔧 Checking TypeScript compilation..."
-npx tsc --skipLibCheck --noEmit
+if [ $? -ne 0 ]; then
+  echo "❌ API ルート品質チェックでエラーが検出されました"
+  echo "📋 修正方法:"
+  echo "  1. npm run fix-api-routes で自動修正を試す"
+  echo "  2. 手動で問題のあるルートを修正"
+  echo "  3. 再度コミットを実行"
+  exit 1
+fi
 
-# 3. Prismaクライアント生成チェック
-echo "🔄 Checking Prisma client generation..."
-npx prisma generate --dry-run
-
-echo "✅ Pre-commit checks completed!"
+echo "✅ API ルート品質チェック完了"

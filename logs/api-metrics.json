@@ -1,0 +1,42 @@
+[
+  {
+    "timestamp": "2025-09-12T00:27:15.976Z",
+    "routeQuality": {
+      "status": "ok",
+      "errors": 0,
+      "warnings": 0,
+      "info": 0
+    },
+    "serverHealth": {
+      "isRunning": true,
+      "portInUse": true,
+      "processes": 3
+    },
+    "apiEndpoints": {
+      "total": 4,
+      "available": 4,
+      "results": [
+        {
+          "endpoint": "/api/v1/auth/login",
+          "status": 401,
+          "success": true
+        },
+        {
+          "endpoint": "/api/v1/admin/room-memos",
+          "status": 401,
+          "success": true
+        },
+        {
+          "endpoint": "/api/v1/admin/page-history",
+          "status": 401,
+          "success": true
+        },
+        {
+          "endpoint": "/api/v1/health",
+          "status": 401,
+          "success": true
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,71 @@
+name: API品質チェック
+
+on:
+  pull_request:
+    paths:
+      - 'src/routes/**/*.ts'
+      - 'src/routes/**/*.js'
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'src/routes/**/*.ts'
+      - 'src/routes/**/*.js'
+
+jobs:
+  api-quality-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: API ルート品質チェック
+      run: |
+        npx ts-node scripts/check-api-routes.ts
+        
+    - name: レポートをアップロード
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: api-quality-report
+        path: docs/api-route-quality-report.md
+        
+    - name: PR コメント追加
+      if: github.event_name == 'pull_request' && failure()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          
+          try {
+            const report = fs.readFileSync('docs/api-route-quality-report.md', 'utf8');
+            const body = `## 🚨 API品質チェック結果
+            
+API ルートに問題が検出されました。修正をお願いします。
+
+<details>
+<summary>詳細レポート</summary>
+
+${report}
+
+</details>
+
+修正後、再度プッシュしてください。`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+          } catch (error) {
+            console.log('レポートファイルが見つかりません');
+          }

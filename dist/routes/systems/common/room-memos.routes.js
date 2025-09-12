@@ -44,23 +44,37 @@ const ChangeStatusSchema = zod_1.z.object({
     comment: zod_1.z.string().optional()
 });
 const CommentCreateSchema = zod_1.z.object({ content: zod_1.z.string().min(1), parent_comment_id: zod_1.z.string().optional() });
-// GET /api/v1/admin/rooms/:roomNumber/memos
-router.get('/rooms/:roomNumber/memos', middleware_1.authMiddleware, async (req, res) => {
+// GET /api/v1/admin/room-memos?room_number=101
+router.get('/room-memos', middleware_1.authMiddleware, async (req, res) => {
     try {
-        const { roomNumber } = req.params;
-        const query = ListQuery.parse(req.query);
-        const { page, limit, status, category, visibility } = query;
-        // Room取得
-        const room = await database_1.hotelDb.getAdapter().room.findFirst({
-            where: { tenantId: req.user?.tenant_id, roomNumber }
-        });
-        if (!room)
+        const query = ListQuery.extend({
+            room_number: zod_1.z.string().optional(),
+            room_id: zod_1.z.string().optional()
+        }).parse(req.query);
+        const { page, limit, status, category, visibility, room_number, room_id } = query;
+        // Room取得（room_numberまたはroom_idで検索）
+        let room = null;
+        if (room_number) {
+            room = await database_1.hotelDb.getAdapter().room.findFirst({
+                where: { tenantId: req.user?.tenant_id, roomNumber: room_number }
+            });
+        }
+        else if (room_id) {
+            room = await database_1.hotelDb.getAdapter().room.findFirst({
+                where: { tenantId: req.user?.tenant_id, id: room_id }
+            });
+        }
+        if (!room && (room_number || room_id)) {
             return api_response_standards_1.ResponseHelper.sendNotFound(res, '指定された客室が見つかりません');
+        }
         const where = {
             tenant_id: req.user?.tenant_id,
-            room_id: room.id,
             is_deleted: false
         };
+        // 客室指定がある場合のみroom_idを追加
+        if (room) {
+            where.room_id = room.id;
+        }
         if (status)
             where.status = status;
         if (category)
@@ -81,6 +95,7 @@ router.get('/rooms/:roomNumber/memos', middleware_1.authMiddleware, async (req, 
         const result = memos.map(m => ({
             id: m.id,
             room_id: m.room_id,
+            room_number: room?.roomNumber || null, // 客室番号も含める
             category: m.category,
             visibility: m.visibility,
             visible_roles: m.visible_roles,

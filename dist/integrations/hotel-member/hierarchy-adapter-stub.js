@@ -17,7 +17,8 @@ class HotelMemberHierarchyAdapterStub {
      */
     static async verifyHierarchicalTokenForPython(params) {
         try {
-            // 緊急対応：スタブ実装
+            // TODO: 実際の階層認証システムとの統合が必要
+            // 現在はスタブ実装
             this.logger.debug('階層JWTトークン検証（スタブ）', {
                 data: {
                     token_length: params.token.length
@@ -57,7 +58,8 @@ class HotelMemberHierarchyAdapterStub {
      */
     static async checkCustomerDataAccessForPython(params) {
         try {
-            // 緊急対応：スタブ実装
+            // TODO: 実際の階層認証システムとの統合が必要
+            // 現在はスタブ実装
             this.logger.debug('顧客データアクセスチェック（スタブ）', {
                 data: {
                     operation: params.operation,
@@ -83,7 +85,8 @@ class HotelMemberHierarchyAdapterStub {
      */
     static async checkMembershipDataRestrictionsForPython(params) {
         try {
-            // 緊急対応：スタブ実装
+            // TODO: 実際の階層認証システムとの統合が必要
+            // 現在はスタブ実装
             this.logger.debug('会員制限チェック（スタブ）', {
                 data: {
                     operation: params.operation,
@@ -107,7 +110,8 @@ class HotelMemberHierarchyAdapterStub {
      */
     static async checkGroupAnalyticsAccessForPython(params) {
         try {
-            // 緊急対応：スタブ実装
+            // TODO: 実際の階層認証システムとの統合が必要
+            // 現在はスタブ実装
             this.logger.debug('グループ分析アクセスチェック（スタブ）', {
                 data: {
                     analytics_type: params.analytics_type
@@ -131,7 +135,8 @@ class HotelMemberHierarchyAdapterStub {
      */
     static async getAccessibleTenantsForPython(params) {
         try {
-            // 緊急対応：スタブ実装
+            // TODO: 実際の階層認証システムとの統合が必要
+            // 現在はスタブ実装
             return {
                 success: true,
                 tenants: ['default', 'tenant_1', 'tenant_2']
@@ -151,7 +156,8 @@ class HotelMemberHierarchyAdapterStub {
      */
     static async healthCheckForPython() {
         try {
-            // 緊急対応：スタブ実装
+            // TODO: 実際の階層認証システムとの統合が必要
+            // 現在はスタブ実装
             return {
                 status: 'healthy',
                 details: {

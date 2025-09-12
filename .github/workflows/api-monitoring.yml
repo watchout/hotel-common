@@ -1,0 +1,167 @@
+name: API Monitoring & Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # 毎日午前9時（JST）に実行
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  api-monitoring:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: hotel_common_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Setup test environment
+      run: |
+        cp env.example .env
+        echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/hotel_common_test" >> .env
+        echo "JWT_SECRET=test-secret-key" >> .env
+        echo "NODE_ENV=test" >> .env
+    
+    - name: Run database migrations
+      run: |
+        npx prisma generate
+        npx prisma db push --force-reset
+    
+    - name: Build application
+      run: npm run build
+    
+    - name: Start server in background
+      run: |
+        npm start &
+        sleep 10
+        # サーバーが起動するまで待機
+        for i in {1..30}; do
+          if curl -f http://localhost:3400/health; then
+            echo "Server is ready"
+            break
+          fi
+          echo "Waiting for server... ($i/30)"
+          sleep 2
+        done
+    
+    - name: Run API monitoring
+      run: npm run api-monitor
+      continue-on-error: true
+    
+    - name: Run API specification validation
+      run: npm run api-spec-validate
+      continue-on-error: true
+    
+    - name: Upload monitoring reports
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: api-monitoring-reports
+        path: |
+          reports/api-monitoring/
+          reports/api-validation/
+        retention-days: 30
+    
+    - name: Comment PR with results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const path = require('path');
+          
+          try {
+            // 最新の監視レポートを読み込み
+            const monitoringReport = JSON.parse(
+              fs.readFileSync('reports/api-monitoring/latest.json', 'utf8')
+            );
+            
+            const validationReport = JSON.parse(
+              fs.readFileSync('reports/api-validation/latest.json', 'utf8')
+            );
+            
+            const comment = `## 🔍 API監視・検証結果
+            
+            ### 📊 API実装状況
+            - **総エンドポイント数**: ${monitoringReport.summary.total}
+            - **実装済み**: ${monitoringReport.summary.implemented}
+            - **未実装**: ${monitoringReport.summary.notImplemented}
+            - **実装率**: ${monitoringReport.summary.implementationRate}
+            
+            ### 📚 仕様書同期状況
+            - **仕様書エンドポイント**: ${validationReport.summary.docsEndpoints}
+            - **実装エンドポイント**: ${validationReport.summary.implEndpoints}
+            - **仕様書-実装一致率**: ${validationReport.summary.docsImplMatchRate}
+            
+            ### 🚨 注意が必要な項目
+            ${validationReport.analysis.missingInImplementation.length > 0 ? 
+              `- **仕様書で定義されているが未実装**: ${validationReport.analysis.missingInImplementation.length}個` : ''}
+            ${validationReport.analysis.missingInDocs.length > 0 ? 
+              `- **実装されているが仕様書にない**: ${validationReport.analysis.missingInDocs.length}個` : ''}
+            
+            詳細なレポートはArtifactsからダウンロードできます。
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+          } catch (error) {
+            console.log('レポートファイルが見つからないか、読み込みエラーが発生しました:', error.message);
+          }
+
+  api-health-check:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run API health check
+      run: npm run api-health
+      continue-on-error: true
+    
+    - name: Send Slack notification on failure
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: failure
+        text: 'API監視で問題が検出されました。詳細を確認してください。'
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

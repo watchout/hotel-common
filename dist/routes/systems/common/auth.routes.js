@@ -49,6 +49,7 @@ const logger = logger_1.HotelLogger.getInstance();
  * POST /api/v1/auth/login
  */
 router.post('/api/v1/auth/login', async (req, res) => {
+    console.log('🔐 [AUTH] ログインリクエスト受信 - 修正版コード実行中');
     try {
         const { email, password, tenantId } = req.body;
         // 入力値検証
@@ -78,9 +79,12 @@ router.post('/api/v1/auth/login', async (req, res) => {
         for (const s of candidateStaffList) {
             const hash = s.password_hash;
             if (!hash) {
+                logger.info('パスワードハッシュ未設定をスキップ', { email, staffId: s.id });
                 continue; // パスワード未設定はスキップ
             }
+            logger.info('bcrypt照合開始', { email, hashExists: !!hash });
             const ok = await bcrypt.compare(password, hash);
+            logger.info('bcrypt照合結果', { email, result: ok });
             if (ok) {
                 selectedStaffMember = s;
                 break;

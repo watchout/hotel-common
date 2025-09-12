@@ -90,7 +90,9 @@ class HierarchyPermissionManager {
      */
     static async getDataSharingPolicies(organizationId) {
         try {
-            // 緊急対応：スタブ実装
+            // TODO: 実際のデータベースからデータ共有ポリシーを取得
+            // 現在は未実装のため空配列を返す
+            this.logger.warn('データ共有ポリシー取得は未実装です', { organizationId });
             return [];
         }
         catch (error) {

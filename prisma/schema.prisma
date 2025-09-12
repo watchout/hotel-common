@@ -659,7 +659,7 @@ model room_grades {
   name        String
   description String?
   created_at  DateTime @default(now())
-  updated_at  DateTime
+  updated_at  DateTime @updatedAt
 
   @@unique([tenant_id, code])
   @@index([tenant_id])

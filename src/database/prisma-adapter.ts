@@ -217,6 +217,13 @@ export class PrismaAdapter {
   }
 
   /**
+   * room_grades -> room_grades のマッピング
+   */
+  get room_grades() {
+    return this.prisma.room_grades;
+  }
+
+  /**
    * invoice -> invoices のマッピング
    */
   get invoice() {
@@ -241,7 +248,7 @@ export class PrismaAdapter {
    * reservation -> reservations のマッピング
    */
   get reservation() {
-    return this.prisma.reservation;
+    return this.prisma.reservations;
   }
 
   /**
@@ -267,14 +274,14 @@ export class PrismaAdapter {
    * checkinSession -> checkin_sessions のマッピング
    */
   get checkinSession() {
-    return this.prisma.checkinSession;
+    return this.prisma.checkin_sessions;
   }
 
   /**
    * sessionBilling -> session_billings のマッピング
    */
   get sessionBilling() {
-    return this.prisma.sessionBilling;
+    return this.prisma.session_billings;
   }
 
 

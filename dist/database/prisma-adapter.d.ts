@@ -127,6 +127,10 @@ export declare class PrismaAdapter {
      */
     get room(): import("../generated/prisma").Prisma.RoomDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
     /**
+     * room_grades -> room_grades のマッピング
+     */
+    get room_grades(): import("../generated/prisma").Prisma.room_gradesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    /**
      * invoice -> invoices のマッピング
      */
     get invoice(): import("../generated/prisma").Prisma.InvoiceDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
@@ -141,22 +145,22 @@ export declare class PrismaAdapter {
     /**
      * reservation -> reservations のマッピング
      */
-    get reservation(): any;
+    get reservation(): import("../generated/prisma").Prisma.reservationsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
     /**
      * roomMemo -> room_memos のマッピング
      */
-    get roomMemo(): any;
-    get roomMemoComment(): any;
-    get roomMemoStatusLog(): any;
-    get roomMemoRead(): any;
+    get roomMemo(): import("../generated/prisma").Prisma.RoomMemoDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get roomMemoComment(): import("../generated/prisma").Prisma.RoomMemoCommentDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get roomMemoStatusLog(): import("../generated/prisma").Prisma.RoomMemoStatusLogDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get roomMemoRead(): import("../generated/prisma").Prisma.RoomMemoReadDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
     /**
      * checkinSession -> checkin_sessions のマッピング
      */
-    get checkinSession(): any;
+    get checkinSession(): import("../generated/prisma").Prisma.checkin_sessionsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
     /**
      * sessionBilling -> session_billings のマッピング
      */
-    get sessionBilling(): any;
+    get sessionBilling(): import("../generated/prisma").Prisma.session_billingsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
     /**
      * トランザクション実行のラッパー
      * トランザクション内でも同じマッピングを適用します

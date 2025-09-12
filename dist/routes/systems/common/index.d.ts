@@ -8,9 +8,11 @@
  * - フロントデスク会計API
  * - フロントデスクチェックインAPI
  * - 管理者操作ログAPI
+ * - 客室ランク管理API
  */
 export { default as authRouter } from './auth.routes';
 export { default as pageRouter } from './page.routes';
+export { default as roomGradesRouter } from './room-grades.routes';
 export { default as operationLogsRouter } from './operation-logs.routes';
 export { default as roomMemosRouter } from './room-memos.routes';
 export { default as accountingRouter } from './accounting.routes';

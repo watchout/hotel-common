@@ -217,11 +217,11 @@ export class AdminPageController {
   }
 
   /**
-   * 特定バージョンの履歴取得
+   * 特定バージョンの履歴取得（クエリパラメータ方式）
    */
   async getPageHistoryVersion(req: Request, res: Response) {
     try {
-      const { slug, version } = req.params;
+      const { slug, version } = req.query;
       const tenantId = req.user?.tenant_id;
 
       if (!tenantId) {
@@ -232,14 +232,14 @@ export class AdminPageController {
       if (!slug || !version) {
         const { response, statusCode } = StandardResponseBuilder.error(
           'INVALID_PARAMS',
-          'スラグとバージョンが必要です',
+          'スラグとバージョンがクエリパラメータで必要です',
           undefined,
           400
         );
         return res.status(statusCode).json(response);
       }
 
-      const versionNumber = parseInt(version, 10);
+      const versionNumber = parseInt(version as string, 10);
       if (isNaN(versionNumber)) {
         const { response, statusCode } = StandardResponseBuilder.error(
           'INVALID_PARAMS',
@@ -250,7 +250,7 @@ export class AdminPageController {
         return res.status(statusCode).json(response);
       }
 
-      const historyVersion = await pageService.getPageHistoryVersion(tenantId, slug, versionNumber);
+      const historyVersion = await pageService.getPageHistoryVersion(tenantId, slug as string, versionNumber);
 
       // JSONデータをパースして返す
       const content = historyVersion.Content ? JSON.parse(historyVersion.Content) : { blocks: [] };

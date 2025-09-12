@@ -20,8 +20,8 @@ router.post('/api/v1/admin/pages/:slug/publish', verifyAdminAuth, adminPageContr
 // ページ履歴取得
 router.get('/api/v1/admin/pages/:slug/history', verifyAdminAuth, adminPageController.getPageHistory);
 
-// 特定バージョンの履歴取得
-router.get('/api/v1/admin/pages/:slug/history/:version', verifyAdminAuth, adminPageController.getPageHistoryVersion);
+// 特定バージョンの履歴取得（クエリパラメータ方式に変更）
+router.get('/api/v1/admin/page-history', verifyAdminAuth, adminPageController.getPageHistoryVersion);
 
 // バージョン復元
 router.post('/api/v1/admin/pages/:slug/restore', verifyAdminAuth, adminPageController.restorePageVersion);

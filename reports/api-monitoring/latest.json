@@ -1,0 +1,1048 @@
+{
+  "timestamp": "2025-09-11T23:31:19.964Z",
+  "duration": "19027ms",
+  "summary": {
+    "total": 115,
+    "implemented": 57,
+    "notImplemented": 58,
+    "implementationRate": "49.6%"
+  },
+  "results": [
+    {
+      "endpoint": "GET /health",
+      "method": "GET",
+      "path": "/health",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"status\":\"healthy\",\"timestamp\":\"2025-09-11T23:31:01.156Z\",\"service\":\"hotel-common-integration\",\"version\":\"1.0.0\",\"database\":\"connected\",\"systems\":{\"hotel-saas\":{\"system\":\"hotel-saas\",\"url\":\"http://localhost:3100\",\"status\":\"DISCONNECTED\",\"lastCheck\":\"2025-09-11T23:30:40.157Z\"},\"hotel-member-frontend\":{\"system\":\"hotel-member-frontend\",\"url\":\"http://localhost:3200\",\"status\":\"DISCONNECTED\",\"lastCheck\":\"2025-09-11T23:30:40.157Z\"},\"hotel-member-backend\":{\"system\":\"hotel-member-backend\",\"url\":\"http://localhost:8080\",\"status\":\"DISCONNECTED\",\"lastCheck\":\"2025-09-11T23:30:40.157Z\"},\"hotel-pms\":{\"system\":\"hotel-pms\",\"url\":\"http://localhost:3300\",\"status\":\"DISCONNECTED\",\"lastCheck\":\"2025-09-11T23:30:40.157Z\"}}}",
+      "timestamp": "2025-09-11T23:31:01.158Z"
+    },
+    {
+      "endpoint": "GET /api/systems/status",
+      "method": "GET",
+      "path": "/api/systems/status",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"timestamp\":\"2025-09-11T23:31:01.327Z\",\"total_systems\":4,\"connected\":0,\"disconnected\":4,\"error\":0,\"systems\":[{\"system\":\"hotel-saas\",\"url\":\"http://localhost:3100\",\"status\":\"DISCONNECTED\",\"lastCheck\":\"2025-09-11T23:30:40.157Z\"},{\"system\":\"hotel-member-frontend\",\"url\":\"http://localhost:3200\",\"status\":\"DISCONNECTED\",\"lastCheck\":\"2025-09-11T23:30:40.157Z\"},{\"system\":\"hotel-member-backend\",\"url\":\"http://localhost:8080\",\"status\":\"DISCONNECTED\",\"lastCheck\":\"2025-09-11T23:30:40.157Z\"},{\"system\":\"hotel-pms\",\"url\":\"http://localhost:3300\",\"status\":\"DISCONNECTED\",\"lastCheck\":\"2025-09-11T23:30:40.157Z\"}]}",
+      "timestamp": "2025-09-11T23:31:01.330Z"
+    },
+    {
+      "endpoint": "POST /api/systems/:systemName/test",
+      "method": "POST",
+      "path": "/api/systems/:systemName/test",
+      "statusCode": 500,
+      "implemented": true,
+      "responseBody": "{\"error\":\"CONNECTION_TEST_FAILED\",\"message\":\"System :systemName not found\"}",
+      "timestamp": "2025-09-11T23:31:01.501Z"
+    },
+    {
+      "endpoint": "GET /api/database/test",
+      "method": "GET",
+      "path": "/api/database/test",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"status\":\"connected\",\"timestamp\":\"2025-09-11T23:31:01.666Z\",\"database\":\"PostgreSQL\"}",
+      "timestamp": "2025-09-11T23:31:01.668Z"
+    },
+    {
+      "endpoint": "GET /api/tenants",
+      "method": "GET",
+      "path": "/api/tenants",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"success\":true,\"count\":1,\"tenants\":[{\"id\":\"default\",\"name\":\"デフォルトホテル\",\"contactEmail\":null,\"planType\":null,\"createdAt\":\"2025-08-30T21:45:43.486Z\"}]}",
+      "timestamp": "2025-09-11T23:31:01.834Z"
+    },
+    {
+      "endpoint": "POST /api/auth/validate",
+      "method": "POST",
+      "path": "/api/auth/validate",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"error\":\"TOKEN_REQUIRED\",\"message\":\"Authentication token is required\"}",
+      "timestamp": "2025-09-11T23:31:01.994Z"
+    },
+    {
+      "endpoint": "GET /api/stats",
+      "method": "GET",
+      "path": "/api/stats",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"timestamp\":\"2025-09-11T23:31:02.151Z\",\"database_stats\":{\"tenants\":1,\"staff\":0},\"system_connections\":4}",
+      "timestamp": "2025-09-11T23:31:02.153Z"
+    },
+    {
+      "endpoint": "POST /api/v1/auth/login",
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"必須フィールドが不足しています\"},\"timestamp\":\"2025-09-11T23:31:02.309Z\",\"request_id\":\"req-1757633462309-2810zfhv4b8i\"}",
+      "timestamp": "2025-09-11T23:31:02.311Z"
+    },
+    {
+      "endpoint": "GET /api/v1/auth/validate-token",
+      "method": "GET",
+      "path": "/api/v1/auth/validate-token",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"success\":true,\"data\":{\"valid\":true,\"user\":{\"user_id\":\"00b6152e-d2b1-4783-a0d3-e09d06433778\",\"tenant_id\":\"default\",\"email\":\"admin@omotenasuai.com\",\"role\":\"admin\",\"level\":3,\"permissions\":[\"tenant:read\",\"tenant:write\"]},\"expires_at\":\"2025-09-12T07:31:01.000Z\"},\"meta\":{},\"timestamp\":\"2025-09-11T23:31:02.470Z\",\"request_id\":\"req-1757633462470-em9llled7e\"}",
+      "timestamp": "2025-09-11T23:31:02.472Z"
+    },
+    {
+      "endpoint": "POST /api/v1/auth/refresh",
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"MISSING_REFRESH_TOKEN\",\"message\":\"リフレッシュトークンが必要です\"},\"timestamp\":\"2025-09-11T23:31:02.635Z\",\"request_id\":\"req-1757633462635-5gyaybf1bq\"}",
+      "timestamp": "2025-09-11T23:31:02.637Z"
+    },
+    {
+      "endpoint": "GET /api/v1/tenants/:id",
+      "method": "GET",
+      "path": "/api/v1/tenants/:id",
+      "statusCode": 403,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"TENANT_ACCESS_DENIED\",\"message\":\"Access to this tenant is not allowed\"},\"timestamp\":\"2025-09-11T23:31:02.800Z\",\"request_id\":\"req-1757633462800-y9yxgvs7yz\"}",
+      "timestamp": "2025-09-11T23:31:02.802Z"
+    },
+    {
+      "endpoint": "GET /api/v1/staff/:id",
+      "method": "GET",
+      "path": "/api/v1/staff/:id",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"TENANT_ID_REQUIRED\",\"message\":\"テナントIDが必要です\"},\"timestamp\":\"2025-09-11T23:31:02.959Z\",\"request_id\":\"req-1757633462959-0z2t8n52tud9\"}",
+      "timestamp": "2025-09-11T23:31:02.961Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/summary",
+      "method": "GET",
+      "path": "/api/v1/admin/summary",
+      "statusCode": 403,
+      "implemented": true,
+      "responseBody": "{\"error\":\"Admin access required\"}",
+      "timestamp": "2025-09-11T23:31:03.118Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/dashboard/stats",
+      "method": "GET",
+      "path": "/api/v1/admin/dashboard/stats",
+      "statusCode": 403,
+      "implemented": true,
+      "responseBody": "{\"error\":\"Admin access required\"}",
+      "timestamp": "2025-09-11T23:31:03.274Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/devices/count",
+      "method": "GET",
+      "path": "/api/v1/admin/devices/count",
+      "statusCode": 403,
+      "implemented": true,
+      "responseBody": "{\"error\":\"Admin access required\"}",
+      "timestamp": "2025-09-11T23:31:03.428Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/orders/monthly-count",
+      "method": "GET",
+      "path": "/api/v1/admin/orders/monthly-count",
+      "statusCode": 403,
+      "implemented": true,
+      "responseBody": "{\"error\":\"Admin access required\"}",
+      "timestamp": "2025-09-11T23:31:03.587Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/rankings",
+      "method": "GET",
+      "path": "/api/v1/admin/rankings",
+      "statusCode": 403,
+      "implemented": true,
+      "responseBody": "{\"error\":\"Admin access required\"}",
+      "timestamp": "2025-09-11T23:31:03.752Z"
+    },
+    {
+      "endpoint": "GET /api/v1/orders/history",
+      "method": "GET",
+      "path": "/api/v1/orders/history",
+      "statusCode": 500,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"INTERNAL_ERROR\",\"message\":\"注文履歴取得に失敗しました\"},\"timestamp\":\"2025-09-11T23:31:03.935Z\",\"request_id\":\"req-1757633463935-sivuvjxr4ii\"}",
+      "timestamp": "2025-09-11T23:31:03.937Z"
+    },
+    {
+      "endpoint": "POST /api/v1/orders",
+      "method": "POST",
+      "path": "/api/v1/orders",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"リクエストが不正です\",\"details\":{\"roomId\":\"部屋IDは必須です\",\"items\":\"少なくとも1つのアイテムが必要です\"}},\"timestamp\":\"2025-09-11T23:31:04.090Z\",\"request_id\":\"req-1757633464090-1exdzw2vpj4\"}",
+      "timestamp": "2025-09-11T23:31:04.092Z"
+    },
+    {
+      "endpoint": "GET /api/v1/orders/active",
+      "method": "GET",
+      "path": "/api/v1/orders/active",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"success\":true,\"data\":[],\"meta\":{},\"timestamp\":\"2025-09-11T23:31:04.256Z\",\"request_id\":\"req-1757633464256-83apzr1y5z8\"}",
+      "timestamp": "2025-09-11T23:31:04.258Z"
+    },
+    {
+      "endpoint": "GET /api/v1/orders/:id",
+      "method": "GET",
+      "path": "/api/v1/orders/:id",
+      "statusCode": 500,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"ORDER_DETAIL_ERROR\",\"message\":\"\\nInvalid `hotelDb.getAdapter().order.findFirst()` invocation in\\n/Users/kaneko/hotel-common/src/routes/systems/saas/orders.routes.ts:402:52\\n\\n  399   );\\n  400 }\\n  401 \\n→ 402 const order = await hotelDb.getAdapter().order.findFirst({\\n        where: {\\n          tenantId: \\\"default\\\",\\n          isDeleted: false,\\n      +   id: {\\n      +     equals: Int | IntFieldRefInput,\\n      +     in: Int[] | ListIntFieldRefInput,\\n      +     notIn: Int[] | ListIntFieldRefInput,\\n      +     lt: Int | IntFieldRefInput,\\n      +     lte: Int | IntFieldRefInput,\\n      +     gt: Int | IntFieldRefInput,\\n      +     gte: Int | IntFieldRefInput,\\n      +     not: Int | NestedIntFilter\\n      +   }\\n        },\\n        include: {\\n          OrderItem: {\\n            select: {\\n              id: true,\\n              menuItemId: true,\\n              name: true,\\n              price: true,\\n              quantity: true,\\n              ...",
+      "timestamp": "2025-09-11T23:31:04.420Z"
+    },
+    {
+      "endpoint": "PUT /api/v1/orders/:id/status",
+      "method": "PUT",
+      "path": "/api/v1/orders/:id/status",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"INVALID_STATUS\",\"message\":\"無効なステータスです\"},\"timestamp\":\"2025-09-11T23:31:04.636Z\",\"request_id\":\"req-1757633464636-lkjb3tasfm\"}",
+      "timestamp": "2025-09-11T23:31:04.639Z"
+    },
+    {
+      "endpoint": "GET /api/v1/order/menu",
+      "method": "GET",
+      "path": "/api/v1/order/menu",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"success\":true,\"data\":{\"categories\":[\"food\",\"drink\"],\"items\":{\"food\":[{\"id\":1,\"category\":\"food\",\"name\":\"ルームサービス弁当\",\"description\":\"和洋折衷の特製弁当\",\"price\":1500,\"image_url\":\"/images/menu/bento.jpg\",\"available\":true,\"preparation_time\":20},{\"id\":3,\"category\":\"food\",\"name\":\"サンドイッチプレート\",\"description\":\"新鮮野菜のサンドイッチ\",\"price\":1200,\"image_url\":\"/images/menu/sandwich.jpg\",\"available\":true,\"preparation_time\":15}],\"drink\":[{\"id\":2,\"category\":\"drink\",\"name\":\"コーヒーセット\",\"description\":\"ドリップコーヒーとお菓子のセット\",\"price\":800,\"image_url\":\"/images/menu/coffee.jpg\",\"available\":true,\"preparation_time\":10}]},\"total_items\":3},\"meta\":{},\"timestamp\":\"2025-09-11T23:31:04.848Z\",\"request_id\":\"req-1757633464848-7k5c838zmef\"}",
+      "timestamp": "2025-09-11T23:31:04.854Z"
+    },
+    {
+      "endpoint": "GET /api/v1/menus/top",
+      "method": "GET",
+      "path": "/api/v1/menus/top",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"success\":true,\"data\":{\"top_items\":[],\"period\":\"過去30日間\",\"updatedAt\":\"2025-09-11T23:31:05.068Z\"},\"meta\":{},\"timestamp\":\"2025-09-11T23:31:05.068Z\",\"request_id\":\"req-1757633465069-9x669qt6kn\"}",
+      "timestamp": "2025-09-11T23:31:05.071Z"
+    },
+    {
+      "endpoint": "POST /api/v1/order/place",
+      "method": "POST",
+      "path": "/api/v1/order/place",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"必須フィールドが不足しています\"},\"timestamp\":\"2025-09-11T23:31:05.680Z\",\"request_id\":\"req-1757633465680-kluzrx5rm1\"}",
+      "timestamp": "2025-09-11T23:31:05.685Z"
+    },
+    {
+      "endpoint": "POST /api/v1/devices/check-status",
+      "method": "POST",
+      "path": "/api/v1/devices/check-status",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"INVALID_DEVICE_DATA\",\"message\":\"MACアドレスは必須です\",\"details\":{\"missingField\":\"macAddress\"}}}",
+      "timestamp": "2025-09-11T23:31:05.923Z"
+    },
+    {
+      "endpoint": "GET /api/v1/devices/client-ip",
+      "method": "GET",
+      "path": "/api/v1/devices/client-ip",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"ip\":\"::1\",\"headers\":{\"x-forwarded-for\":null,\"x-real-ip\":null,\"x-client-ip\":null}}",
+      "timestamp": "2025-09-11T23:31:06.178Z"
+    },
+    {
+      "endpoint": "GET /api/v1/devices/count",
+      "method": "GET",
+      "path": "/api/v1/devices/count",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"success\":true,\"count\":{\"total\":5,\"active\":5,\"inactive\":0,\"byType\":{\"kiosk\":2,\"tablet\":3},\"byStatus\":{\"active\":3,\"inactive\":1,\"maintenance\":1}}}",
+      "timestamp": "2025-09-11T23:31:06.417Z"
+    },
+    {
+      "endpoint": "GET /api/hotel-member/integration/health",
+      "method": "GET",
+      "path": "/api/hotel-member/integration/health",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"integration_status\":\"active\",\"hotel_member_hierarchy\":{\"status\":\"healthy\",\"details\":{\"endpoints_available\":7,\"cache_status\":\"active\",\"fallback_mode\":true}},\"endpoints_available\":8,\"timestamp\":\"2025-09-11T23:31:06.720Z\"}",
+      "timestamp": "2025-09-11T23:31:06.723Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/auth/verify",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/auth/verify",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"error\":\"TOKEN_REQUIRED\",\"message\":\"Token is required\"}",
+      "timestamp": "2025-09-11T23:31:06.900Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/permissions/check-customer-access",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/permissions/check-customer-access",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"error\":\"MISSING_PARAMETERS\",\"message\":\"Token and target_tenant_id are required\"}",
+      "timestamp": "2025-09-11T23:31:07.084Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/tenants/accessible",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/tenants/accessible",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"error\":\"TOKEN_REQUIRED\",\"message\":\"Token is required\"}",
+      "timestamp": "2025-09-11T23:31:07.253Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/permissions/check-membership-restrictions",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/permissions/check-membership-restrictions",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"error\":\"MISSING_PARAMETERS\",\"message\":\"Token, operation, and data_type are required\"}",
+      "timestamp": "2025-09-11T23:31:07.422Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/permissions/check-analytics-access",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/permissions/check-analytics-access",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"error\":\"MISSING_PARAMETERS\",\"message\":\"Token and analytics_type are required\"}",
+      "timestamp": "2025-09-11T23:31:07.595Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/user/permissions-detail",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/user/permissions-detail",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"error\":\"TOKEN_REQUIRED\",\"message\":\"Token is required\"}",
+      "timestamp": "2025-09-11T23:31:07.753Z"
+    },
+    {
+      "endpoint": "POST /api/hotel-member/hierarchy/permissions/batch-check",
+      "method": "POST",
+      "path": "/api/hotel-member/hierarchy/permissions/batch-check",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"error\":\"MISSING_PARAMETERS\",\"message\":\"Token and checks array are required\"}",
+      "timestamp": "2025-09-11T23:31:07.908Z"
+    },
+    {
+      "endpoint": "GET /api/hotel-member/hierarchy/health",
+      "method": "GET",
+      "path": "/api/hotel-member/hierarchy/health",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"status\":\"healthy\",\"details\":{\"endpoints_available\":7,\"cache_status\":\"active\",\"fallback_mode\":true}}",
+      "timestamp": "2025-09-11T23:31:08.068Z"
+    },
+    {
+      "endpoint": "GET /api/v1/campaigns/health",
+      "method": "GET",
+      "path": "/api/v1/campaigns/health",
+      "statusCode": 501,
+      "implemented": false,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"NOT_IMPLEMENTED\",\"message\":\"キャンペーン機能は現在開発中です\"},\"timestamp\":\"2025-09-11T23:31:08.219Z\",\"request_id\":\"a4aad34c-5406-49f2-98ab-ed6160b2a3ec\"}",
+      "timestamp": "2025-09-11T23:31:08.221Z"
+    },
+    {
+      "endpoint": "GET /api/v1/campaigns/active",
+      "method": "GET",
+      "path": "/api/v1/campaigns/active",
+      "statusCode": 501,
+      "implemented": false,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"NOT_IMPLEMENTED\",\"message\":\"キャンペーン機能は現在開発中です\"},\"timestamp\":\"2025-09-11T23:31:08.373Z\",\"request_id\":\"28697e5c-004e-430f-bbb9-6c9ac4e8cfc3\"}",
+      "timestamp": "2025-09-11T23:31:08.374Z"
+    },
+    {
+      "endpoint": "GET /api/v1/campaigns/check",
+      "method": "GET",
+      "path": "/api/v1/campaigns/check",
+      "statusCode": 501,
+      "implemented": false,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"NOT_IMPLEMENTED\",\"message\":\"キャンペーン機能は現在開発中です\"},\"timestamp\":\"2025-09-11T23:31:08.527Z\",\"request_id\":\"cb1833ba-cef9-4592-847b-2d6dc26cfae7\"}",
+      "timestamp": "2025-09-11T23:31:08.529Z"
+    },
+    {
+      "endpoint": "GET /api/v1/campaigns/by-category/:code",
+      "method": "GET",
+      "path": "/api/v1/campaigns/by-category/:code",
+      "statusCode": 404,
+      "implemented": false,
+      "responseBody": "{\"error\":\"NOT_FOUND\",\"message\":\"Endpoint /api/v1/campaigns/by-category/:code not found\",\"implementation_status\":{\"total_declared\":78,\"implemented\":74,\"not_implemented\":4,\"implementation_rate\":\"94.9%\"},\"status\":\"ENDPOINT_NOT_IMPLEMENTED\",\"note\":\"This endpoint is declared but not yet implemented. It may be available in future releases.\",\"not_implemented_endpoints\":[\"GET /api/v1/room-grades/:id\",\"GET /api/v1/room-grades/active\",\"GET /api/v1/room-grades/stats\",\"PATCH /api/v1/room-grades/display-order\"],\"available_endpoints\":[\"GET /health\",\"GET /api/systems/status\",\"POST /api/systems/:systemName/test\",\"GET /api/database/test\",\"GET /api/tenants\",\"POST /api/auth/validate\",\"GET /api/stats\",\"POST /api/v1/auth/login\",\"GET /api/v1/auth/validate-token\",\"POST /api/v1/auth/refresh\",\"GET /api/v1/tenants/:id\",\"GET /api/v1/staff/:id\",\"GET /api/v1/admin/summary\",\"GET /api/v1/admin/dashboard/stats\",\"GET /api/v1/admin/devices/count\",\"GET /api/v1/admin/orders/monthly-count\",\"GET /api/v1/admin/rankings\",\"GE...",
+      "timestamp": "2025-09-11T23:31:08.691Z"
+    },
+    {
+      "endpoint": "GET /api/v1/welcome-screen/config",
+      "method": "GET",
+      "path": "/api/v1/welcome-screen/config",
+      "statusCode": 404,
+      "implemented": false,
+      "responseBody": "{\"error\":\"NOT_FOUND\",\"message\":\"Endpoint /api/v1/welcome-screen/config not found\",\"implementation_status\":{\"total_declared\":78,\"implemented\":74,\"not_implemented\":4,\"implementation_rate\":\"94.9%\"},\"status\":\"ENDPOINT_NOT_IMPLEMENTED\",\"note\":\"This endpoint is declared but not yet implemented. It may be available in future releases.\",\"not_implemented_endpoints\":[\"GET /api/v1/room-grades/:id\",\"GET /api/v1/room-grades/active\",\"GET /api/v1/room-grades/stats\",\"PATCH /api/v1/room-grades/display-order\"],\"available_endpoints\":[\"GET /health\",\"GET /api/systems/status\",\"POST /api/systems/:systemName/test\",\"GET /api/database/test\",\"GET /api/tenants\",\"POST /api/auth/validate\",\"GET /api/stats\",\"POST /api/v1/auth/login\",\"GET /api/v1/auth/validate-token\",\"POST /api/v1/auth/refresh\",\"GET /api/v1/tenants/:id\",\"GET /api/v1/staff/:id\",\"GET /api/v1/admin/summary\",\"GET /api/v1/admin/dashboard/stats\",\"GET /api/v1/admin/devices/count\",\"GET /api/v1/admin/orders/monthly-count\",\"GET /api/v1/admin/rankings\",\"GET /api...",
+      "timestamp": "2025-09-11T23:31:08.845Z"
+    },
+    {
+      "endpoint": "GET /api/v1/welcome-screen/should-show",
+      "method": "GET",
+      "path": "/api/v1/welcome-screen/should-show",
+      "statusCode": 404,
+      "implemented": false,
+      "responseBody": "{\"error\":\"NOT_FOUND\",\"message\":\"Endpoint /api/v1/welcome-screen/should-show not found\",\"implementation_status\":{\"total_declared\":78,\"implemented\":74,\"not_implemented\":4,\"implementation_rate\":\"94.9%\"},\"status\":\"ENDPOINT_NOT_IMPLEMENTED\",\"note\":\"This endpoint is declared but not yet implemented. It may be available in future releases.\",\"not_implemented_endpoints\":[\"GET /api/v1/room-grades/:id\",\"GET /api/v1/room-grades/active\",\"GET /api/v1/room-grades/stats\",\"PATCH /api/v1/room-grades/display-order\"],\"available_endpoints\":[\"GET /health\",\"GET /api/systems/status\",\"POST /api/systems/:systemName/test\",\"GET /api/database/test\",\"GET /api/tenants\",\"POST /api/auth/validate\",\"GET /api/stats\",\"POST /api/v1/auth/login\",\"GET /api/v1/auth/validate-token\",\"POST /api/v1/auth/refresh\",\"GET /api/v1/tenants/:id\",\"GET /api/v1/staff/:id\",\"GET /api/v1/admin/summary\",\"GET /api/v1/admin/dashboard/stats\",\"GET /api/v1/admin/devices/count\",\"GET /api/v1/admin/orders/monthly-count\",\"GET /api/v1/admin/rankings\",\"GET...",
+      "timestamp": "2025-09-11T23:31:08.996Z"
+    },
+    {
+      "endpoint": "POST /api/v1/welcome-screen/mark-completed",
+      "method": "POST",
+      "path": "/api/v1/welcome-screen/mark-completed",
+      "statusCode": 404,
+      "implemented": false,
+      "responseBody": "{\"error\":\"NOT_FOUND\",\"message\":\"Endpoint /api/v1/welcome-screen/mark-completed not found\",\"implementation_status\":{\"total_declared\":78,\"implemented\":74,\"not_implemented\":4,\"implementation_rate\":\"94.9%\"},\"status\":\"ENDPOINT_NOT_IMPLEMENTED\",\"note\":\"This endpoint is declared but not yet implemented. It may be available in future releases.\",\"not_implemented_endpoints\":[\"GET /api/v1/room-grades/:id\",\"GET /api/v1/room-grades/active\",\"GET /api/v1/room-grades/stats\",\"PATCH /api/v1/room-grades/display-order\"],\"available_endpoints\":[\"GET /health\",\"GET /api/systems/status\",\"POST /api/systems/:systemName/test\",\"GET /api/database/test\",\"GET /api/tenants\",\"POST /api/auth/validate\",\"GET /api/stats\",\"POST /api/v1/auth/login\",\"GET /api/v1/auth/validate-token\",\"POST /api/v1/auth/refresh\",\"GET /api/v1/tenants/:id\",\"GET /api/v1/staff/:id\",\"GET /api/v1/admin/summary\",\"GET /api/v1/admin/dashboard/stats\",\"GET /api/v1/admin/devices/count\",\"GET /api/v1/admin/orders/monthly-count\",\"GET /api/v1/admin/rankings\",\"...",
+      "timestamp": "2025-09-11T23:31:09.146Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/campaigns",
+      "method": "GET",
+      "path": "/api/v1/admin/campaigns",
+      "statusCode": 404,
+      "implemented": false,
+      "responseBody": "{\"error\":\"NOT_FOUND\",\"message\":\"Endpoint /api/v1/admin/campaigns not found\",\"implementation_status\":{\"total_declared\":78,\"implemented\":74,\"not_implemented\":4,\"implementation_rate\":\"94.9%\"},\"status\":\"ENDPOINT_NOT_IMPLEMENTED\",\"note\":\"This endpoint is declared but not yet implemented. It may be available in future releases.\",\"not_implemented_endpoints\":[\"GET /api/v1/room-grades/:id\",\"GET /api/v1/room-grades/active\",\"GET /api/v1/room-grades/stats\",\"PATCH /api/v1/room-grades/display-order\"],\"available_endpoints\":[\"GET /health\",\"GET /api/systems/status\",\"POST /api/systems/:systemName/test\",\"GET /api/database/test\",\"GET /api/tenants\",\"POST /api/auth/validate\",\"GET /api/stats\",\"POST /api/v1/auth/login\",\"GET /api/v1/auth/validate-token\",\"POST /api/v1/auth/refresh\",\"GET /api/v1/tenants/:id\",\"GET /api/v1/staff/:id\",\"GET /api/v1/admin/summary\",\"GET /api/v1/admin/dashboard/stats\",\"GET /api/v1/admin/devices/count\",\"GET /api/v1/admin/orders/monthly-count\",\"GET /api/v1/admin/rankings\",\"GET /api/v1/or...",
+      "timestamp": "2025-09-11T23:31:09.294Z"
+    },
+    {
+      "endpoint": "POST /api/v1/admin/campaigns",
+      "method": "POST",
+      "path": "/api/v1/admin/campaigns",
+      "statusCode": 404,
+      "implemented": false,
+      "responseBody": "{\"error\":\"NOT_FOUND\",\"message\":\"Endpoint /api/v1/admin/campaigns not found\",\"implementation_status\":{\"total_declared\":78,\"implemented\":74,\"not_implemented\":4,\"implementation_rate\":\"94.9%\"},\"status\":\"ENDPOINT_NOT_IMPLEMENTED\",\"note\":\"This endpoint is declared but not yet implemented. It may be available in future releases.\",\"not_implemented_endpoints\":[\"GET /api/v1/room-grades/:id\",\"GET /api/v1/room-grades/active\",\"GET /api/v1/room-grades/stats\",\"PATCH /api/v1/room-grades/display-order\"],\"available_endpoints\":[\"GET /health\",\"GET /api/systems/status\",\"POST /api/systems/:systemName/test\",\"GET /api/database/test\",\"GET /api/tenants\",\"POST /api/auth/validate\",\"GET /api/stats\",\"POST /api/v1/auth/login\",\"GET /api/v1/auth/validate-token\",\"POST /api/v1/auth/refresh\",\"GET /api/v1/tenants/:id\",\"GET /api/v1/staff/:id\",\"GET /api/v1/admin/summary\",\"GET /api/v1/admin/dashboard/stats\",\"GET /api/v1/admin/devices/count\",\"GET /api/v1/admin/orders/monthly-count\",\"GET /api/v1/admin/rankings\",\"GET /api/v1/or...",
+      "timestamp": "2025-09-11T23:31:09.442Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/campaigns/:id",
+      "method": "GET",
+      "path": "/api/v1/admin/campaigns/:id",
+      "statusCode": 404,
+      "implemented": false,
+      "responseBody": "{\"error\":\"NOT_FOUND\",\"message\":\"Endpoint /api/v1/admin/campaigns/:id not found\",\"implementation_status\":{\"total_declared\":78,\"implemented\":74,\"not_implemented\":4,\"implementation_rate\":\"94.9%\"},\"status\":\"ENDPOINT_NOT_IMPLEMENTED\",\"note\":\"This endpoint is declared but not yet implemented. It may be available in future releases.\",\"not_implemented_endpoints\":[\"GET /api/v1/room-grades/:id\",\"GET /api/v1/room-grades/active\",\"GET /api/v1/room-grades/stats\",\"PATCH /api/v1/room-grades/display-order\"],\"available_endpoints\":[\"GET /health\",\"GET /api/systems/status\",\"POST /api/systems/:systemName/test\",\"GET /api/database/test\",\"GET /api/tenants\",\"POST /api/auth/validate\",\"GET /api/stats\",\"POST /api/v1/auth/login\",\"GET /api/v1/auth/validate-token\",\"POST /api/v1/auth/refresh\",\"GET /api/v1/tenants/:id\",\"GET /api/v1/staff/:id\",\"GET /api/v1/admin/summary\",\"GET /api/v1/admin/dashboard/stats\",\"GET /api/v1/admin/devices/count\",\"GET /api/v1/admin/orders/monthly-count\",\"GET /api/v1/admin/rankings\",\"GET /api/v...",
+      "timestamp": "2025-09-11T23:31:09.593Z"
+    },
+    {
+      "endpoint": "PUT /api/v1/admin/campaigns/:id",
+      "method": "PUT",
+      "path": "/api/v1/admin/campaigns/:id",
+      "statusCode": 404,
+      "implemented": false,
+      "responseBody": "{\"error\":\"NOT_FOUND\",\"message\":\"Endpoint /api/v1/admin/campaigns/:id not found\",\"implementation_status\":{\"total_declared\":78,\"implemented\":74,\"not_implemented\":4,\"implementation_rate\":\"94.9%\"},\"status\":\"ENDPOINT_NOT_IMPLEMENTED\",\"note\":\"This endpoint is declared but not yet implemented. It may be available in future releases.\",\"not_implemented_endpoints\":[\"GET /api/v1/room-grades/:id\",\"GET /api/v1/room-grades/active\",\"GET /api/v1/room-grades/stats\",\"PATCH /api/v1/room-grades/display-order\"],\"available_endpoints\":[\"GET /health\",\"GET /api/systems/status\",\"POST /api/systems/:systemName/test\",\"GET /api/database/test\",\"GET /api/tenants\",\"POST /api/auth/validate\",\"GET /api/stats\",\"POST /api/v1/auth/login\",\"GET /api/v1/auth/validate-token\",\"POST /api/v1/auth/refresh\",\"GET /api/v1/tenants/:id\",\"GET /api/v1/staff/:id\",\"GET /api/v1/admin/summary\",\"GET /api/v1/admin/dashboard/stats\",\"GET /api/v1/admin/devices/count\",\"GET /api/v1/admin/orders/monthly-count\",\"GET /api/v1/admin/rankings\",\"GET /api/v...",
+      "timestamp": "2025-09-11T23:31:09.745Z"
+    },
+    {
+      "endpoint": "DELETE /api/v1/admin/campaigns/:id",
+      "method": "DELETE",
+      "path": "/api/v1/admin/campaigns/:id",
+      "statusCode": 404,
+      "implemented": false,
+      "responseBody": "{\"error\":\"NOT_FOUND\",\"message\":\"Endpoint /api/v1/admin/campaigns/:id not found\",\"implementation_status\":{\"total_declared\":78,\"implemented\":74,\"not_implemented\":4,\"implementation_rate\":\"94.9%\"},\"status\":\"ENDPOINT_NOT_IMPLEMENTED\",\"note\":\"This endpoint is declared but not yet implemented. It may be available in future releases.\",\"not_implemented_endpoints\":[\"GET /api/v1/room-grades/:id\",\"GET /api/v1/room-grades/active\",\"GET /api/v1/room-grades/stats\",\"PATCH /api/v1/room-grades/display-order\"],\"available_endpoints\":[\"GET /health\",\"GET /api/systems/status\",\"POST /api/systems/:systemName/test\",\"GET /api/database/test\",\"GET /api/tenants\",\"POST /api/auth/validate\",\"GET /api/stats\",\"POST /api/v1/auth/login\",\"GET /api/v1/auth/validate-token\",\"POST /api/v1/auth/refresh\",\"GET /api/v1/tenants/:id\",\"GET /api/v1/staff/:id\",\"GET /api/v1/admin/summary\",\"GET /api/v1/admin/dashboard/stats\",\"GET /api/v1/admin/devices/count\",\"GET /api/v1/admin/orders/monthly-count\",\"GET /api/v1/admin/rankings\",\"GET /api/v...",
+      "timestamp": "2025-09-11T23:31:09.894Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/campaigns/:id/analytics",
+      "method": "GET",
+      "path": "/api/v1/admin/campaigns/:id/analytics",
+      "statusCode": 404,
+      "implemented": false,
+      "responseBody": "{\"error\":\"NOT_FOUND\",\"message\":\"Endpoint /api/v1/admin/campaigns/:id/analytics not found\",\"implementation_status\":{\"total_declared\":78,\"implemented\":74,\"not_implemented\":4,\"implementation_rate\":\"94.9%\"},\"status\":\"ENDPOINT_NOT_IMPLEMENTED\",\"note\":\"This endpoint is declared but not yet implemented. It may be available in future releases.\",\"not_implemented_endpoints\":[\"GET /api/v1/room-grades/:id\",\"GET /api/v1/room-grades/active\",\"GET /api/v1/room-grades/stats\",\"PATCH /api/v1/room-grades/display-order\"],\"available_endpoints\":[\"GET /health\",\"GET /api/systems/status\",\"POST /api/systems/:systemName/test\",\"GET /api/database/test\",\"GET /api/tenants\",\"POST /api/auth/validate\",\"GET /api/stats\",\"POST /api/v1/auth/login\",\"GET /api/v1/auth/validate-token\",\"POST /api/v1/auth/refresh\",\"GET /api/v1/tenants/:id\",\"GET /api/v1/staff/:id\",\"GET /api/v1/admin/summary\",\"GET /api/v1/admin/dashboard/stats\",\"GET /api/v1/admin/devices/count\",\"GET /api/v1/admin/orders/monthly-count\",\"GET /api/v1/admin/rankings\",\"...",
+      "timestamp": "2025-09-11T23:31:10.042Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/campaigns/analytics/summary",
+      "method": "GET",
+      "path": "/api/v1/admin/campaigns/analytics/summary",
+      "statusCode": 404,
+      "implemented": false,
+      "responseBody": "{\"error\":\"NOT_FOUND\",\"message\":\"Endpoint /api/v1/admin/campaigns/analytics/summary not found\",\"implementation_status\":{\"total_declared\":78,\"implemented\":74,\"not_implemented\":4,\"implementation_rate\":\"94.9%\"},\"status\":\"ENDPOINT_NOT_IMPLEMENTED\",\"note\":\"This endpoint is declared but not yet implemented. It may be available in future releases.\",\"not_implemented_endpoints\":[\"GET /api/v1/room-grades/:id\",\"GET /api/v1/room-grades/active\",\"GET /api/v1/room-grades/stats\",\"PATCH /api/v1/room-grades/display-order\"],\"available_endpoints\":[\"GET /health\",\"GET /api/systems/status\",\"POST /api/systems/:systemName/test\",\"GET /api/database/test\",\"GET /api/tenants\",\"POST /api/auth/validate\",\"GET /api/stats\",\"POST /api/v1/auth/login\",\"GET /api/v1/auth/validate-token\",\"POST /api/v1/auth/refresh\",\"GET /api/v1/tenants/:id\",\"GET /api/v1/staff/:id\",\"GET /api/v1/admin/summary\",\"GET /api/v1/admin/dashboard/stats\",\"GET /api/v1/admin/devices/count\",\"GET /api/v1/admin/orders/monthly-count\",\"GET /api/v1/admin/ranking...",
+      "timestamp": "2025-09-11T23:31:10.189Z"
+    },
+    {
+      "endpoint": "POST /api/v1/reservations",
+      "method": "POST",
+      "path": "/api/v1/reservations",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"バリデーションエラー\"},\"timestamp\":\"2025-09-11T23:31:10.341Z\",\"request_id\":\"a962fd78-1117-45d0-806f-893d25f01ef7\"}",
+      "timestamp": "2025-09-11T23:31:10.343Z"
+    },
+    {
+      "endpoint": "GET /api/v1/reservations",
+      "method": "GET",
+      "path": "/api/v1/reservations",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"バリデーションエラー\"},\"timestamp\":\"2025-09-11T23:31:10.488Z\",\"request_id\":\"e5ca9470-baa0-4513-916f-d2a7bdfb9456\"}",
+      "timestamp": "2025-09-11T23:31:10.489Z"
+    },
+    {
+      "endpoint": "GET /api/v1/reservations/:id",
+      "method": "GET",
+      "path": "/api/v1/reservations/:id",
+      "statusCode": 500,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"RESERVATION_GET_ERROR\",\"message\":\"Cannot read properties of undefined (reading 'findFirst')\"},\"timestamp\":\"2025-09-11T23:31:10.642Z\",\"request_id\":\"79449838-57e0-44d5-8f29-15132f7b8b21\"}",
+      "timestamp": "2025-09-11T23:31:10.644Z"
+    },
+    {
+      "endpoint": "PUT /api/v1/reservations/:id",
+      "method": "PUT",
+      "path": "/api/v1/reservations/:id",
+      "statusCode": 500,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"RESERVATION_UPDATE_ERROR\",\"message\":\"Cannot read properties of undefined (reading 'update')\"},\"timestamp\":\"2025-09-11T23:31:10.794Z\",\"request_id\":\"6a82c3ea-4d94-49ed-8102-3ad27b8f931b\"}",
+      "timestamp": "2025-09-11T23:31:10.796Z"
+    },
+    {
+      "endpoint": "DELETE /api/v1/reservations/:id",
+      "method": "DELETE",
+      "path": "/api/v1/reservations/:id",
+      "statusCode": 500,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"RESERVATION_CANCEL_ERROR\",\"message\":\"Cannot read properties of undefined (reading 'update')\"},\"timestamp\":\"2025-09-11T23:31:10.945Z\",\"request_id\":\"8bcd3b56-47e7-4b15-8502-479410aaafff\"}",
+      "timestamp": "2025-09-11T23:31:10.946Z"
+    },
+    {
+      "endpoint": "POST /api/v1/reservations/:id/checkin",
+      "method": "POST",
+      "path": "/api/v1/reservations/:id/checkin",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"ROOM_NUMBER_REQUIRED\",\"message\":\"部屋番号が必要です\"},\"timestamp\":\"2025-09-11T23:31:11.094Z\",\"request_id\":\"54056e8a-1b64-41a6-98d9-0d45738142ac\"}",
+      "timestamp": "2025-09-11T23:31:11.096Z"
+    },
+    {
+      "endpoint": "POST /api/v1/reservations/:id/checkout",
+      "method": "POST",
+      "path": "/api/v1/reservations/:id/checkout",
+      "statusCode": 500,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"CHECKOUT_ERROR\",\"message\":\"Cannot read properties of undefined (reading 'update')\"},\"timestamp\":\"2025-09-11T23:31:11.243Z\",\"request_id\":\"cf4a0dc2-9e72-42cf-a8a0-901dce70fead\"}",
+      "timestamp": "2025-09-11T23:31:11.244Z"
+    },
+    {
+      "endpoint": "GET /api/v1/reservations/stats",
+      "method": "GET",
+      "path": "/api/v1/reservations/stats",
+      "statusCode": 500,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"RESERVATION_GET_ERROR\",\"message\":\"Cannot read properties of undefined (reading 'findFirst')\"},\"timestamp\":\"2025-09-11T23:31:11.393Z\",\"request_id\":\"2c87c341-fa36-42f3-9f44-47e953b8b3b4\"}",
+      "timestamp": "2025-09-11T23:31:11.395Z"
+    },
+    {
+      "endpoint": "POST /api/v1/rooms",
+      "method": "POST",
+      "path": "/api/v1/rooms",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"バリデーションエラー\"},\"timestamp\":\"2025-09-11T23:31:11.542Z\",\"request_id\":\"86c9f188-8b8b-4351-8c25-518681296f9b\"}",
+      "timestamp": "2025-09-11T23:31:11.543Z"
+    },
+    {
+      "endpoint": "GET /api/v1/rooms",
+      "method": "GET",
+      "path": "/api/v1/rooms",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"バリデーションエラー\"},\"timestamp\":\"2025-09-11T23:31:11.694Z\",\"request_id\":\"7c82f6e1-fa56-4f87-8bcb-32d569c9fc80\"}",
+      "timestamp": "2025-09-11T23:31:11.696Z"
+    },
+    {
+      "endpoint": "GET /api/v1/rooms/:id",
+      "method": "GET",
+      "path": "/api/v1/rooms/:id",
+      "statusCode": 500,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"ROOM_GET_ERROR\",\"message\":\"\\nInvalid `hotelDb.getAdapter().room.findFirst()` invocation in\\n/Users/kaneko/hotel-common/src/services/room.service.ts:92:52\\n\\n  89   include.roomGrade = true\\n  90 }\\n  91 \\n→ 92 const room = await hotelDb.getAdapter().room.findFirst({\\n       where: {\\n         id: \\\":id\\\",\\n         tenant_id: \\\"default\\\",\\n         ~~~~~~~~~\\n     ?   AND?: RoomWhereInput | RoomWhereInput[],\\n     ?   OR?: RoomWhereInput[],\\n     ?   NOT?: RoomWhereInput | RoomWhereInput[],\\n     ?   tenantId?: StringFilter | String,\\n     ?   roomNumber?: StringFilter | String,\\n     ?   roomType?: StringFilter | String,\\n     ?   floor?: IntNullableFilter | Int | Null,\\n     ?   status?: StringFilter | String,\\n     ?   capacity?: IntFilter | Int,\\n     ?   amenities?: JsonNullableFilter,\\n     ?   lastCleaned?: DateTimeNullableFilter | DateTime | Null,\\n     ?   createdAt?: DateTimeFilter | DateTime,\\n     ?   updatedAt?: DateTimeFilter | DateTime,\\...",
+      "timestamp": "2025-09-11T23:31:11.856Z"
+    },
+    {
+      "endpoint": "PUT /api/v1/rooms/:id",
+      "method": "PUT",
+      "path": "/api/v1/rooms/:id",
+      "statusCode": 500,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"ROOM_UPDATE_ERROR\",\"message\":\"\\nInvalid `hotelDb.getAdapter().room.update()` invocation in\\n/Users/kaneko/hotel-common/src/services/room.service.ts:275:52\\n\\n  272   updated_by_system: 'hotel-common'\\n  273 }\\n  274 \\n→ 275 const room = await hotelDb.getAdapter().room.update({\\n        where: {\\n          id: \\\":id\\\",\\n          tenant_id: \\\"default\\\"\\n        },\\n        data: {\\n          updated_by: \\\"00b6152e-d2b1-4783-a0d3-e09d06433778\\\",\\n          ~~~~~~~~~~\\n          updated_at: new Date(\\\"2025-09-11T23:31:12.004Z\\\"),\\n          updated_by_system: \\\"hotel-common\\\",\\n      ?   id?: String | StringFieldUpdateOperationsInput,\\n      ?   tenantId?: String | StringFieldUpdateOperationsInput,\\n      ?   roomNumber?: String | StringFieldUpdateOperationsInput,\\n      ?   roomType?: String | StringFieldUpdateOperationsInput,\\n      ?   floor?: Int | NullableIntFieldUpdateOperationsInput | Null,\\n      ?   status?: String | StringFieldUpdateOperationsIn...",
+      "timestamp": "2025-09-11T23:31:12.010Z"
+    },
+    {
+      "endpoint": "DELETE /api/v1/rooms/:id",
+      "method": "DELETE",
+      "path": "/api/v1/rooms/:id",
+      "statusCode": 500,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"ROOM_DELETE_ERROR\",\"message\":\"\\nInvalid `hotelDb.getAdapter().room.update()` invocation in\\n/Users/kaneko/hotel-common/src/services/room.service.ts:369:52\\n\\n  366   } \\n  367 })\\n  368 \\n→ 369 const room = await hotelDb.getAdapter().room.update({\\n        where: {\\n          id: \\\":id\\\",\\n          tenant_id: \\\"default\\\"\\n        },\\n        data: {\\n          is_active: false,\\n          ~~~~~~~~~\\n          status: \\\"out_of_order\\\",\\n          updated_at: new Date(\\\"2025-09-11T23:31:12.158Z\\\"),\\n          updated_by: \\\"00b6152e-d2b1-4783-a0d3-e09d06433778\\\",\\n          updated_by_system: \\\"hotel-common\\\",\\n      ?   id?: String | StringFieldUpdateOperationsInput,\\n      ?   tenantId?: String | StringFieldUpdateOperationsInput,\\n      ?   roomNumber?: String | StringFieldUpdateOperationsInput,\\n      ?   roomType?: String | StringFieldUpdateOperationsInput,\\n      ?   floor?: Int | NullableIntFieldUpdateOperationsInput | Null,\\n      ?   capacity?: I...",
+      "timestamp": "2025-09-11T23:31:12.162Z"
+    },
+    {
+      "endpoint": "PATCH /api/v1/rooms/:id/status",
+      "method": "PATCH",
+      "path": "/api/v1/rooms/:id/status",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"バリデーションエラー\"},\"timestamp\":\"2025-09-11T23:31:12.309Z\",\"request_id\":\"c58b46c5-1223-4fb6-9d98-6efdc8fd1326\"}",
+      "timestamp": "2025-09-11T23:31:12.311Z"
+    },
+    {
+      "endpoint": "GET /api/v1/rooms/by-number/:roomNumber",
+      "method": "GET",
+      "path": "/api/v1/rooms/by-number/:roomNumber",
+      "statusCode": 500,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"ROOM_GET_ERROR\",\"message\":\"\\nInvalid `hotelDb.getAdapter().room.findFirst()` invocation in\\n/Users/kaneko/hotel-common/src/services/room.service.ts:112:52\\n\\n  109  */\\n  110 static async getRoomByNumber(roomNumber: string, tenantId: string): Promise<Room | null> {\\n  111   try {\\n→ 112     const room = await hotelDb.getAdapter().room.findFirst({\\n            where: {\\n              room_number: \\\":roomNumber\\\",\\n              ~~~~~~~~~~~\\n              tenant_id: \\\"default\\\",\\n          ?   AND?: RoomWhereInput | RoomWhereInput[],\\n          ?   OR?: RoomWhereInput[],\\n          ?   NOT?: RoomWhereInput | RoomWhereInput[],\\n          ?   id?: StringFilter | String,\\n          ?   tenantId?: StringFilter | String,\\n          ?   roomNumber?: StringFilter | String,\\n          ?   roomType?: StringFilter | String,\\n          ?   floor?: IntNullableFilter | Int | Null,\\n          ?   status?: StringFilter | String,\\n          ?   capacity?: IntFilter | In...",
+      "timestamp": "2025-09-11T23:31:12.459Z"
+    },
+    {
+      "endpoint": "GET /api/v1/rooms/by-floor/:floorNumber",
+      "method": "GET",
+      "path": "/api/v1/rooms/by-floor/:floorNumber",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"INVALID_FLOOR_NUMBER\",\"message\":\"無効なフロア番号です\"},\"timestamp\":\"2025-09-11T23:31:12.607Z\",\"request_id\":\"e5fa189a-d51d-4b34-b810-0c0547d8a428\"}",
+      "timestamp": "2025-09-11T23:31:12.609Z"
+    },
+    {
+      "endpoint": "POST /api/v1/rooms/search-available",
+      "method": "POST",
+      "path": "/api/v1/rooms/search-available",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"バリデーションエラー\"},\"timestamp\":\"2025-09-11T23:31:12.760Z\",\"request_id\":\"f415a8a1-6dc3-4cc2-9dd2-a4091a9ceeb5\"}",
+      "timestamp": "2025-09-11T23:31:12.762Z"
+    },
+    {
+      "endpoint": "GET /api/v1/rooms/stats",
+      "method": "GET",
+      "path": "/api/v1/rooms/stats",
+      "statusCode": 500,
+      "implemented": true,
+      "responseBody": "{\"success\":false,\"error\":{\"code\":\"ROOM_GET_ERROR\",\"message\":\"\\nInvalid `hotelDb.getAdapter().room.findFirst()` invocation in\\n/Users/kaneko/hotel-common/src/services/room.service.ts:92:52\\n\\n  89   include.roomGrade = true\\n  90 }\\n  91 \\n→ 92 const room = await hotelDb.getAdapter().room.findFirst({\\n       where: {\\n         id: \\\"stats\\\",\\n         tenant_id: \\\"default\\\",\\n         ~~~~~~~~~\\n     ?   AND?: RoomWhereInput | RoomWhereInput[],\\n     ?   OR?: RoomWhereInput[],\\n     ?   NOT?: RoomWhereInput | RoomWhereInput[],\\n     ?   tenantId?: StringFilter | String,\\n     ?   roomNumber?: StringFilter | String,\\n     ?   roomType?: StringFilter | String,\\n     ?   floor?: IntNullableFilter | Int | Null,\\n     ?   status?: StringFilter | String,\\n     ?   capacity?: IntFilter | Int,\\n     ?   amenities?: JsonNullableFilter,\\n     ?   lastCleaned?: DateTimeNullableFilter | DateTime | Null,\\n     ?   createdAt?: DateTimeFilter | DateTime,\\n     ?   updatedAt?: DateTimeFilter | DateTime...",
+      "timestamp": "2025-09-11T23:31:12.916Z"
+    },
+    {
+      "endpoint": "POST /api/v1/room-grades",
+      "method": "POST",
+      "path": "/api/v1/room-grades",
+      "statusCode": 400,
+      "implemented": true,
+      "responseBody": "{\"response\":{\"success\":false,\"error\":{\"code\":\"VALIDATION_ERROR\",\"message\":\"バリデーションエラー\",\"details\":[{\"code\":\"invalid_type\",\"expected\":\"string\",\"received\":\"undefined\",\"path\":[\"name\"],\"message\":\"Required\"}]},\"timestamp\":\"2025-09-11T23:31:13.064Z\",\"request_id\":\"req-1757633473064-9qkz64jquta\"},\"status\":400}",
+      "timestamp": "2025-09-11T23:31:13.066Z"
+    },
+    {
+      "endpoint": "GET /api/v1/room-grades",
+      "method": "GET",
+      "path": "/api/v1/room-grades",
+      "statusCode": 200,
+      "implemented": true,
+      "responseBody": "{\"success\":true,\"data\":[{\"id\":\"40f18db9-70f7-450d-beb3-3a9eb7168ee0\",\"tenant_id\":\"default\",\"code\":\"standard\",\"name\":\"スタンダード\",\"description\":\"基本的な設備を備えた客室\",\"created_at\":\"2025-09-03T08:33:48.856Z\",\"updated_at\":\"2025-09-03T08:33:48.854Z\"},{\"id\":\"a27be12e-d7f4-4999-bffa-3a340a851807\",\"tenant_id\":\"default\",\"code\":\"deluxe\",\"name\":\"デラックス\",\"description\":\"広めの客室と充実した設備\",\"created_at\":\"2025-09-03T08:33:48.866Z\",\"updated_at\":\"2025-09-03T08:33:48.865Z\"},{\"id\":\"0f532a15-451b-4d56-9f06-b329bb841bbf\",\"tenant_id\":\"default\",\"code\":\"suite\",\"name\":\"スイート\",\"description\":\"贅沢な空間とプレミアム設備\",\"created_at\":\"2025-09-03T08:33:48.867Z\",\"updated_at\":\"2025-09-03T08:33:48.866Z\"},{\"id\":\"bffacee3-4bda-4c66-a0c4-bbe02fd30cd8\",\"tenant_id\":\"default\",\"code\":\"presidential\",\"name\":\"プレジデンシャル\",\"description\":\"最高級の客室とサービス\",\"created_at\":\"2025-09-03T08:33:48.868Z\",\"updated_at\":\"2025-09-03T08:33:48.867Z\"},{\"id\":\"fcaff7f0-51bb-44ba-84d9-05992edba2a4\",\"tenant_id\":\"default\",\"code\":\"GRADE_1757590397574\",\"name\":\"プレミアム\",\"description\":\"高級客室ランク\"...",
+      "timestamp": "2025-09-11T23:31:13.219Z"
+    },
+    {
+      "endpoint": "GET /api/v1/room-grades/:id",
+      "method": "GET",
+      "path": "/api/v1/room-grades/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/room-grades/:id\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:13.368Z"
+    },
+    {
+      "endpoint": "PUT /api/v1/room-grades/:id",
+      "method": "PUT",
+      "path": "/api/v1/room-grades/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PUT \"http://localhost:3400/api/v1/room-grades/:id\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:13.516Z"
+    },
+    {
+      "endpoint": "DELETE /api/v1/room-grades/:id",
+      "method": "DELETE",
+      "path": "/api/v1/room-grades/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X DELETE \"http://localhost:3400/api/v1/room-grades/:id\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:13.662Z"
+    },
+    {
+      "endpoint": "PATCH /api/v1/room-grades/:id/pricing",
+      "method": "PATCH",
+      "path": "/api/v1/room-grades/:id/pricing",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PATCH \"http://localhost:3400/api/v1/room-grades/:id/pricing\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:13.811Z"
+    },
+    {
+      "endpoint": "GET /api/v1/room-grades/by-code/:code",
+      "method": "GET",
+      "path": "/api/v1/room-grades/by-code/:code",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/room-grades/by-code/:code\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:13.960Z"
+    },
+    {
+      "endpoint": "GET /api/v1/room-grades/active",
+      "method": "GET",
+      "path": "/api/v1/room-grades/active",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/room-grades/active\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:14.109Z"
+    },
+    {
+      "endpoint": "GET /api/v1/room-grades/stats",
+      "method": "GET",
+      "path": "/api/v1/room-grades/stats",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/room-grades/stats\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:14.257Z"
+    },
+    {
+      "endpoint": "PATCH /api/v1/room-grades/display-order",
+      "method": "PATCH",
+      "path": "/api/v1/room-grades/display-order",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PATCH \"http://localhost:3400/api/v1/room-grades/display-order\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:14.405Z"
+    },
+    {
+      "endpoint": "GET /api/apps/google-play",
+      "method": "GET",
+      "path": "/api/apps/google-play",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/apps/google-play\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:14.550Z"
+    },
+    {
+      "endpoint": "GET /api/apps/google-play/:id",
+      "method": "GET",
+      "path": "/api/apps/google-play/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/apps/google-play/:id\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:14.696Z"
+    },
+    {
+      "endpoint": "POST /api/apps/google-play",
+      "method": "POST",
+      "path": "/api/apps/google-play",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/apps/google-play\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:14.849Z"
+    },
+    {
+      "endpoint": "PUT /api/apps/google-play/:id",
+      "method": "PUT",
+      "path": "/api/apps/google-play/:id",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PUT \"http://localhost:3400/api/apps/google-play/:id\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:15.000Z"
+    },
+    {
+      "endpoint": "PATCH /api/apps/google-play/:id/approve",
+      "method": "PATCH",
+      "path": "/api/apps/google-play/:id/approve",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PATCH \"http://localhost:3400/api/apps/google-play/:id/approve\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:15.153Z"
+    },
+    {
+      "endpoint": "GET /api/places/:placeId/apps",
+      "method": "GET",
+      "path": "/api/places/:placeId/apps",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/places/:placeId/apps\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:15.307Z"
+    },
+    {
+      "endpoint": "POST /api/places/:placeId/apps",
+      "method": "POST",
+      "path": "/api/places/:placeId/apps",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/places/:placeId/apps\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:15.480Z"
+    },
+    {
+      "endpoint": "PUT /api/places/:placeId/apps/:appId",
+      "method": "PUT",
+      "path": "/api/places/:placeId/apps/:appId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PUT \"http://localhost:3400/api/places/:placeId/apps/:appId\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:15.630Z"
+    },
+    {
+      "endpoint": "DELETE /api/places/:placeId/apps/:appId",
+      "method": "DELETE",
+      "path": "/api/places/:placeId/apps/:appId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X DELETE \"http://localhost:3400/api/places/:placeId/apps/:appId\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:15.781Z"
+    },
+    {
+      "endpoint": "GET /api/layouts/:layoutId/blocks/:blockId/apps",
+      "method": "GET",
+      "path": "/api/layouts/:layoutId/blocks/:blockId/apps",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/layouts/:layoutId/blocks/:blockId/apps\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:15.935Z"
+    },
+    {
+      "endpoint": "PUT /api/layouts/:layoutId/blocks/:blockId/apps",
+      "method": "PUT",
+      "path": "/api/layouts/:layoutId/blocks/:blockId/apps",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PUT \"http://localhost:3400/api/layouts/:layoutId/blocks/:blockId/apps\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:16.088Z"
+    },
+    {
+      "endpoint": "GET /api/client/places/:placeId/apps",
+      "method": "GET",
+      "path": "/api/client/places/:placeId/apps",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/client/places/:placeId/apps\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:16.246Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/pages",
+      "method": "GET",
+      "path": "/api/v1/admin/pages",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/pages\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:16.406Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/pages/:slug",
+      "method": "GET",
+      "path": "/api/v1/admin/pages/:slug",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/pages/:slug\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:16.579Z"
+    },
+    {
+      "endpoint": "POST /api/v1/admin/pages/:slug",
+      "method": "POST",
+      "path": "/api/v1/admin/pages/:slug",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/admin/pages/:slug\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:16.731Z"
+    },
+    {
+      "endpoint": "POST /api/v1/admin/pages/:slug/publish",
+      "method": "POST",
+      "path": "/api/v1/admin/pages/:slug/publish",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/admin/pages/:slug/publish\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:16.887Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/pages/:slug/history",
+      "method": "GET",
+      "path": "/api/v1/admin/pages/:slug/history",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/pages/:slug/history\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:17.042Z"
+    },
+    {
+      "endpoint": "GET /api/v1/admin/pages/:slug/history/:version",
+      "method": "GET",
+      "path": "/api/v1/admin/pages/:slug/history/:version",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/admin/pages/:slug/history/:version\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:17.197Z"
+    },
+    {
+      "endpoint": "POST /api/v1/admin/pages/:slug/restore",
+      "method": "POST",
+      "path": "/api/v1/admin/pages/:slug/restore",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/admin/pages/:slug/restore\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:17.346Z"
+    },
+    {
+      "endpoint": "GET /api/v1/pages/:slug",
+      "method": "GET",
+      "path": "/api/v1/pages/:slug",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/pages/:slug\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:17.494Z"
+    },
+    {
+      "endpoint": "POST /api/v1/sessions",
+      "method": "POST",
+      "path": "/api/v1/sessions",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/sessions\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:17.642Z"
+    },
+    {
+      "endpoint": "GET /api/v1/sessions/:sessionId",
+      "method": "GET",
+      "path": "/api/v1/sessions/:sessionId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/sessions/:sessionId\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:17.790Z"
+    },
+    {
+      "endpoint": "GET /api/v1/sessions/by-number/:sessionNumber",
+      "method": "GET",
+      "path": "/api/v1/sessions/by-number/:sessionNumber",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/sessions/by-number/:sessionNumber\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:17.944Z"
+    },
+    {
+      "endpoint": "GET /api/v1/sessions/active-by-room/:roomId",
+      "method": "GET",
+      "path": "/api/v1/sessions/active-by-room/:roomId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/sessions/active-by-room/:roomId\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:18.094Z"
+    },
+    {
+      "endpoint": "PATCH /api/v1/sessions/:sessionId",
+      "method": "PATCH",
+      "path": "/api/v1/sessions/:sessionId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PATCH \"http://localhost:3400/api/v1/sessions/:sessionId\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:18.242Z"
+    },
+    {
+      "endpoint": "POST /api/v1/sessions/:sessionId/checkout",
+      "method": "POST",
+      "path": "/api/v1/sessions/:sessionId/checkout",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/sessions/:sessionId/checkout\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:18.389Z"
+    },
+    {
+      "endpoint": "POST /api/v1/session-billing",
+      "method": "POST",
+      "path": "/api/v1/session-billing",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/session-billing\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:18.536Z"
+    },
+    {
+      "endpoint": "GET /api/v1/session-billing/:billingId",
+      "method": "GET",
+      "path": "/api/v1/session-billing/:billingId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/session-billing/:billingId\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:18.682Z"
+    },
+    {
+      "endpoint": "GET /api/v1/session-billing/by-session/:sessionId",
+      "method": "GET",
+      "path": "/api/v1/session-billing/by-session/:sessionId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/session-billing/by-session/:sessionId\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:18.827Z"
+    },
+    {
+      "endpoint": "PATCH /api/v1/session-billing/:billingId",
+      "method": "PATCH",
+      "path": "/api/v1/session-billing/:billingId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X PATCH \"http://localhost:3400/api/v1/session-billing/:billingId\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:18.980Z"
+    },
+    {
+      "endpoint": "POST /api/v1/session-billing/:billingId/payment",
+      "method": "POST",
+      "path": "/api/v1/session-billing/:billingId/payment",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/session-billing/:billingId/payment\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:19.130Z"
+    },
+    {
+      "endpoint": "GET /api/v1/session-billing/calculate/:sessionId",
+      "method": "GET",
+      "path": "/api/v1/session-billing/calculate/:sessionId",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/session-billing/calculate/:sessionId\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:19.277Z"
+    },
+    {
+      "endpoint": "POST /api/v1/session-migration/migrate-orders",
+      "method": "POST",
+      "path": "/api/v1/session-migration/migrate-orders",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X POST \"http://localhost:3400/api/v1/session-migration/migrate-orders\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:19.425Z"
+    },
+    {
+      "endpoint": "GET /api/v1/session-migration/statistics",
+      "method": "GET",
+      "path": "/api/v1/session-migration/statistics",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/session-migration/statistics\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:19.572Z"
+    },
+    {
+      "endpoint": "GET /api/v1/session-migration/compatibility-check",
+      "method": "GET",
+      "path": "/api/v1/session-migration/compatibility-check",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/session-migration/compatibility-check\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:19.718Z"
+    },
+    {
+      "endpoint": "GET /api/v1/session-migration/report",
+      "method": "GET",
+      "path": "/api/v1/session-migration/report",
+      "statusCode": 0,
+      "implemented": false,
+      "error": "Command failed: curl -s -w \"%{http_code}\" -o /tmp/api_response.json -X GET \"http://localhost:3400/api/v1/session-migration/report\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMDBiNjE1MmUtZDJiMS00NzgzLWEwZDMtZTA5ZDA2NDMzNzc4IiwidGVuYW50X2lkIjoiZGVmYXVsdCIsImVtYWlsIjoiYWRtaW5Ab21vdGVuYXN1YWkuY29tIiwicm9sZSI6ImFkbWluIiwibGV2ZWwiOjMsInBlcm1pc3Npb25zIjpbInRlbmFudDpyZWFkIiwidGVuYW50OndyaXRlIl0sImlhdCI6MTc1NzYzMzQ2MSwiZXhwIjoxNzU3NjYyMjYxLCJqdGkiOiJqd3QtMTc1NzYzMzQ2MTA4OSIsImFjY2Vzc2libGVfdGVuYW50cyI6WyJkZWZhdWx0Il0sImhpZXJhcmNoeV9jb250ZXh0Ijp7Im9yZ2FuaXphdGlvbl9pZCI6ImRlZmF1bHQiLCJvcmdhbml6YXRpb25fbGV2ZWwiOjMsIm9yZ2FuaXphdGlvbl90eXBlIjoiSE9URUwiLCJvcmdhbml6YXRpb25fcGF0aCI6Ii9kZWZhdWx0IiwiYWNjZXNzX3Njb3BlIjpbInRlbmFudCJdLCJkYXRhX2FjY2Vzc19wb2xpY2llcyI6e319LCJ0eXBlIjoiYWNjZXNzIn0.NqKJt2927RTUYgpJYxa377kpLj64HRqNa3oMWqWwMRg\"",
+      "timestamp": "2025-09-11T23:31:19.863Z"
+    }
+  ],
+  "authStatus": "success"
+}

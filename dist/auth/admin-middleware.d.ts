@@ -2,4 +2,4 @@ import { Request, Response, NextFunction } from 'express';
 /**
  * 管理者認証ミドルウェア
  */
-export declare const adminAuthMiddleware: (req: Request, res: Response, next: NextFunction) => void | Response<any, Record<string, any>>;
+export declare const adminAuthMiddleware: (req: Request, res: Response, next: NextFunction) => Response<any, Record<string, any>> | undefined;

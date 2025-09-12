@@ -378,11 +378,13 @@ type RoomMemoVisibility = 'public' | 'private' | 'role'
 type VisibleRole = 'front' | 'cleaning' | 'maintenance' | 'manager' | string
 ```
 
-#### メモ一覧取得（客室別）
+#### メモ一覧取得
 ```http
-GET /api/v1/admin/rooms/{roomNumber}/memos
+GET /api/v1/admin/room-memos
 Authorization: Bearer {accessToken}
 Query Parameters:
+  - room_number: string (客室番号で絞り込み)
+  - room_id: string (客室IDで絞り込み)
   - status: 'pending' | 'in_progress' | 'completed'
   - category: RoomMemoCategory
   - visibility: RoomMemoVisibility
@@ -398,6 +400,7 @@ Query Parameters:
     "memos": [
       {
         "id": "memo-001",
+        "room_id": "room-123",
         "room_number": "101",
         "category": "handover",
         "visibility": "public",
