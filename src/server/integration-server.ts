@@ -21,6 +21,7 @@ import {
   frontDeskAccountingRouter,
   frontDeskCheckinRouter,
   adminOperationLogsRouter,
+  adminStaffRouter,
   adminDashboardRouter, 
   ordersRouter, 
   deviceStatusRouter, 
@@ -302,6 +303,9 @@ class HotelIntegrationServer {
     
     // 管理者操作ログAPIエンドポイント
     this.app.use('/api/v1/admin', adminOperationLogsRouter)
+    
+    // スタッフ管理APIエンドポイント（管理者用）
+    this.app.use('/api/v1/admin', adminStaffRouter)
 
     // === SaaSシステムAPI ===
     // 管理画面統計APIエンドポイント

@@ -9,6 +9,7 @@
  * - フロントデスクチェックインAPI
  * - 管理者操作ログAPI
  * - 客室ランク管理API
+ * - スタッフ管理API（管理者用）
  */
 
 export { default as authRouter } from './auth.routes'
@@ -21,3 +22,4 @@ export { default as frontDeskRoomsRouter } from './front-desk-rooms.routes'
 export { default as frontDeskAccountingRouter } from './front-desk-accounting.routes'
 export { default as frontDeskCheckinRouter } from './front-desk-checkin.routes'
 export { default as adminOperationLogsRouter } from './admin-operation-logs.routes'
+export { default as adminStaffRouter } from './admin-staff.routes'
