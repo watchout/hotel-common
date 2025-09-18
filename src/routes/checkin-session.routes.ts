@@ -63,7 +63,7 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
     const reservation = await hotelDb.getAdapter().reservation.findFirst({
       where: {
         id: validatedData.reservationId,
-        tenantId: tenantId
+        tenant_id: tenantId
       }
     });
 
@@ -85,19 +85,19 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
     // セッション作成
     const session = await hotelDb.getAdapter().checkinSession.create({
       data: {
-        tenantId,
-        sessionNumber,
-        reservationId: validatedData.reservationId,
-        roomId: validatedData.roomId,
-        guestInfo: validatedData.guestInfo,
+        tenant_id: tenantId,
+        session_number: sessionNumber,
+        reservation_id: validatedData.reservationId,
+        room_id: validatedData.roomId,
+        guest_info: validatedData.guestInfo,
         adults: validatedData.adults,
         children: validatedData.children,
-        checkInAt: validatedData.checkInAt,
-        plannedCheckOut: validatedData.plannedCheckOut,
+        check_in_at: validatedData.checkInAt,
+        planned_check_out: validatedData.plannedCheckOut,
         status: 'ACTIVE',
         notes: validatedData.notes,
-        specialRequests: validatedData.specialRequests,
-        updatedAt: new Date()
+        special_requests: validatedData.specialRequests,
+        updated_at: new Date()
       }
     });
 
@@ -106,7 +106,7 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       where: { id: validatedData.reservationId },
       data: { 
         status: 'CHECKED_IN',
-        updatedAt: new Date()
+        updated_at: new Date()
       }
     });
 
@@ -125,7 +125,7 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
 
     logger.info('チェックインセッション作成完了', {
       sessionId: session.id,
-      sessionNumber: session.sessionNumber,
+      sessionNumber: session.session_number,
       tenantId,
       roomId: validatedData.roomId
     });
@@ -164,7 +164,7 @@ router.get('/:sessionId', authMiddleware, async (req: Request, res: Response) =>
     const session = await hotelDb.getAdapter().checkinSession.findFirst({
       where: {
         id: sessionId,
-        tenantId
+        tenant_id: tenantId
       },
       include: {
         reservation: true,
