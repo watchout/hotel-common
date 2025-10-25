@@ -132,11 +132,64 @@ export class PrismaAdapter {
     return this.prisma.order;
   }
 
+  // Detector互換: orders (snake_case plural)
+  get orders() {
+    // @ts-ignore - generated client naming
+    return (this.prisma as any).orders || this.prisma.order;
+  }
+
   /**
    * orderItem -> orderItem のマッピング
    */
   get orderItem() {
     return this.prisma.orderItem;
+  }
+
+  // Detector互換: order_items (snake_case plural)
+  get order_items() {
+    // @ts-ignore
+    return (this.prisma as any).order_items || this.prisma.orderItem;
+  }
+
+  // Permissions / Roles family (detector expects snake_case plural)
+  get permissions() {
+    // @ts-ignore
+    return (this.prisma as any).permissions;
+  }
+
+  get role_permissions() {
+    // @ts-ignore
+    return (this.prisma as any).role_permissions;
+  }
+
+  get role_templates() {
+    // @ts-ignore
+    return (this.prisma as any).role_templates;
+  }
+
+  get roles() {
+    // @ts-ignore
+    return (this.prisma as any).roles;
+  }
+
+  get security_logs() {
+    // @ts-ignore
+    return (this.prisma as any).security_logs;
+  }
+
+  get staff_invitations() {
+    // @ts-ignore
+    return (this.prisma as any).staff_invitations;
+  }
+
+  get staff_tenant_memberships() {
+    // @ts-ignore
+    return (this.prisma as any).staff_tenant_memberships;
+  }
+
+  get unified_media() {
+    // @ts-ignore
+    return (this.prisma as any).unified_media;
   }
 
   /**
@@ -407,8 +460,51 @@ class TransactionAdapter {
     return this.tx.order;
   }
 
+  // Detector互換: orders
+  get orders() {
+    return this.tx.orders || this.tx.order;
+  }
+
   get orderItem() {
     return this.tx.orderItem;
+  }
+
+  // Detector互換: order_items
+  get order_items() {
+    return this.tx.order_items || this.tx.orderItem;
+  }
+
+  // Permissions / Roles family
+  get permissions() {
+    return this.tx.permissions;
+  }
+
+  get role_permissions() {
+    return this.tx.role_permissions;
+  }
+
+  get role_templates() {
+    return this.tx.role_templates;
+  }
+
+  get roles() {
+    return this.tx.roles;
+  }
+
+  get security_logs() {
+    return this.tx.security_logs;
+  }
+
+  get staff_invitations() {
+    return this.tx.staff_invitations;
+  }
+
+  get staff_tenant_memberships() {
+    return this.tx.staff_tenant_memberships;
+  }
+
+  get unified_media() {
+    return this.tx.unified_media;
   }
 
   get schemaVersion() {
