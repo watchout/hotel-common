@@ -1,32 +1,33 @@
 #!/usr/bin/env node
 
-import express from 'express'
-import { config } from 'dotenv'
 import { PrismaClient } from '@prisma/client'
-import { hotelDb } from '../database/prisma'
 import cors from 'cors'
+import { config } from 'dotenv'
+import express from 'express'
+import { sessionAuthMiddleware } from '../auth/session-auth.middleware'
+import { hotelDb } from '../database/prisma'
+import { appLauncherApiRouter } from '../integrations/app-launcher'
+import campaignsApiRouter from '../integrations/campaigns/api-endpoints'
 import { initializeHotelMemberHierarchy } from '../integrations/hotel-member'
 import hotelMemberApiRouter from '../integrations/hotel-member/api-endpoints'
-import campaignsApiRouter from '../integrations/campaigns/api-endpoints'
-import { appLauncherApiRouter } from '../integrations/app-launcher'
 // システム別APIルーター
-import { 
-  authRouter, 
-  pageRouter,
-  roomGradesRouter,
-  operationLogsRouter,
-  roomMemosRouter,
+import {
   accountingRouter,
-  frontDeskRoomsRouter,
-  frontDeskAccountingRouter,
-  frontDeskCheckinRouter,
+  adminDashboardRouter,
   adminOperationLogsRouter,
   adminStaffRouter,
-  adminDashboardRouter, 
-  ordersRouter, 
-  deviceStatusRouter, 
+  authRouter,
   deviceRouter,
-  responseTreeRouter
+  deviceStatusRouter,
+  frontDeskAccountingRouter,
+  frontDeskCheckinRouter,
+  frontDeskRoomsRouter,
+  operationLogsRouter,
+  ordersRouter,
+  pageRouter,
+  responseTreeRouter,
+  roomGradesRouter,
+  roomMemosRouter
 } from '../routes/systems'
 
 // セッション管理APIルーター
@@ -68,7 +69,7 @@ class HotelIntegrationServer {
     this.app = express()
     this.prisma = hotelDb.getClient() // 統合サーバー用のPrismaクライアント
     this.port = parseInt(process.env.HOTEL_COMMON_PORT || '3400')
-    
+
     this.setupMiddleware()
     this.setupRoutes()
     this.initializeSystemConnections()
@@ -78,12 +79,15 @@ class HotelIntegrationServer {
    * ミドルウェア設定
    */
   private setupMiddleware(): void {
+    // プロキシ信頼設定（本番環境でのSecure Cookie用）
+    this.app.set('trust proxy', 1);
+
     // CORS設定
     this.app.use(cors({
       origin: [
         'http://localhost:3100', // hotel-saas
         'http://localhost:3200', // hotel-member frontend
-        'http://localhost:8080', // hotel-member backend  
+        'http://localhost:8080', // hotel-member backend
         'http://localhost:3300', // hotel-pms
         'http://localhost:3301'  // hotel-pms electron
       ],
@@ -91,6 +95,34 @@ class HotelIntegrationServer {
       allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true
     }))
+
+    // === Phase G1: グローバル早期401捕捉 ===
+    this.app.use((req, res, next) => {
+      const origJson = res.json.bind(res);
+      res.json = (body: any) => {
+        const code = res.statusCode;
+        if (code === 401 && process.env.DEBUG_GLOBAL_401 === '1') {
+          console.error('[GLOBAL-401]', {
+            path: req.originalUrl,
+            hasAuthHeader: !!req.headers.authorization,
+            cookieHead: (req.headers.cookie || '').slice(0, 120)
+          });
+          console.error('[GLOBAL-401] stack note: 旧authMiddlewareがどこかで発火中（次段で特定）');
+        }
+        return origJson(body);
+      };
+      next();
+    });
+    // === END Phase G1 ===
+
+    // === 決定打の切り分け：デバッグヘッダ付与 ===
+    this.app.use((req, res, next) => {
+      if (process.env.DEBUG_RESPONSE_HEADER === '1') {
+        res.set('X-HC-Debug', 'hotel-common');
+      }
+      next();
+    });
+    // === END 決定打 ===
 
     // JSON解析
     this.app.use(express.json({ limit: '10mb' }))
@@ -136,7 +168,7 @@ class HotelIntegrationServer {
     this.app.get('/api/monitoring/dashboard', (req, res) => {
       const systemStatus = Array.from(this.systemConnections.values())
       const now = new Date()
-      
+
       res.json({
         timestamp: now.toISOString(),
         overall_health: systemStatus.filter(s => s.status === 'CONNECTED').length === systemStatus.length ? 'HEALTHY' : 'DEGRADED',
@@ -225,7 +257,7 @@ class HotelIntegrationServer {
     // 統合認証エンドポイント（基本版）
     this.app.post('/api/auth/validate', (req, res) => {
       const { token, system } = req.body
-      
+
       if (!token) {
         return res.status(400).json({
           error: 'TOKEN_REQUIRED',
@@ -254,7 +286,7 @@ class HotelIntegrationServer {
           // 緊急対応: Staffテーブルの型定義問題により一時的に0に設定
           staff: 0
         }
-        
+
         res.json({
           timestamp: new Date().toISOString(),
           database_stats: stats,
@@ -268,44 +300,72 @@ class HotelIntegrationServer {
       }
     })
 
+    // === 【最優先】認証API（認証チェック不要） ===
+    this.app.use('/api/v1/auth', authRouter)
+
+    // === 【最上段】Cookie認証保護ルート（必ず無印ルーターより前に配置） ===
+    // 操作ログAPIエンドポイント（Cookie+Redis認証）
+    this.app.use('/api/v1/logs', sessionAuthMiddleware, operationLogsRouter)
+
+    // フロントデスク客室管理APIエンドポイント（Cookie+Redis認証）
+    this.app.use('/api/v1/admin/front-desk', sessionAuthMiddleware, frontDeskRoomsRouter)
+
+    // スタッフ管理APIエンドポイント（Cookie+Redis認証）
+    this.app.use('/api/v1/admin/staff', sessionAuthMiddleware, adminStaffRouter)
+    // === END Cookie認証保護ルート ===
+
     // hotel-member統合APIエンドポイント
     this.app.use('/api/hotel-member', hotelMemberApiRouter)
 
-    // キャンペーン統合APIエンドポイント
-    this.app.use('/api/v1', campaignsApiRouter)
+    // === 共通システムAPI（明示的プレフィックス化） ===
+    // ページ管理APIエンドポイント
+    this.app.use('/api/v1/pages', pageRouter)
+
+    // 客室ランク管理APIエンドポイント
+    this.app.use('/api/v1/room-grades', roomGradesRouter)
 
     // Google Playアプリ選択機能APIエンドポイント
     this.app.use('/api', appLauncherApiRouter)
-    
-    // === 共通システムAPI ===
-    // ページ管理APIエンドポイント
-    this.app.use('', pageRouter)
-    
-    // 認証APIエンドポイント
-    this.app.use('', authRouter)
-    
-    // 客室ランク管理APIエンドポイント
-    this.app.use('', roomGradesRouter)
-    
-    // 操作ログAPIエンドポイント
-    this.app.use('/api/v1/logs', operationLogsRouter)
-    
+
+    // キャンペーン統合APIエンドポイント（広域パス・最後に配置）
+    this.app.use('/api/v1', campaignsApiRouter)
+
     // Room Memo APIエンドポイント（管理系）
-    this.app.use('/api/v1/admin', roomMemosRouter)
-    
+    this.app.use('/api/v1/admin/memos', roomMemosRouter)
+
     // 会計APIエンドポイント
     this.app.use('/api/v1/accounting', accountingRouter)
-    
-    // フロントデスク管理APIエンドポイント
-    this.app.use('/api/v1/admin/front-desk', frontDeskRoomsRouter)
-    this.app.use('/api/v1/admin/front-desk', frontDeskAccountingRouter)
-    this.app.use('/api/v1/admin/front-desk', frontDeskCheckinRouter)
-    
+
+    // フロントデスク管理APIエンドポイント（その他）
+    this.app.use('/api/v1/admin/front-desk/accounting', frontDeskAccountingRouter)
+    this.app.use('/api/v1/admin/front-desk/checkin', frontDeskCheckinRouter)
+
     // 管理者操作ログAPIエンドポイント
-    this.app.use('/api/v1/admin', adminOperationLogsRouter)
-    
-    // スタッフ管理APIエンドポイント（管理者用）
-    this.app.use('/api/v1/admin', adminStaffRouter)
+    this.app.use('/api/v1/admin/operation-logs', adminOperationLogsRouter)
+
+    // === ROUTE-DUMP for debugging (PR1) ===
+    const routeList = (this.app as any)._router?.stack?.flatMap((layer: any) => {
+      if (layer.route) {
+        const r = layer.route
+        return r.stack.map((s: any) => `${Object.keys(r.methods)[0].toUpperCase()} ${r.path}  mid:${s.name}`)
+      }
+      if (layer.name === 'router' && layer.handle?.stack) {
+        const base = layer.regexp?.toString() || ''
+        return layer.handle.stack.map((s: any) => {
+          const method = s.route ? Object.keys(s.route.methods)[0].toUpperCase() : 'N/A'
+          const path = s.route ? s.route.path : '(no-route)'
+          const middlewares = s.route?.stack?.map((m: any) => m.name).join(',') || 'none'
+          return `ROUTER ${base} => ${method} ${path} mid:[${middlewares}]`
+        })
+      }
+      return []
+    }) || []
+    if (process.env.DEBUG_ROUTE_DUMP === '1') {
+      console.log('[ROUTE-DUMP] Total routes:', routeList.length)
+      console.log('[ROUTE-DUMP] /operations routes:')
+      routeList.filter((r: string) => r.includes('/operations')).forEach((r: string) => console.log('  ', r))
+    }
+    // === END ROUTE-DUMP ===
 
     // === SaaSシステムAPI ===
     // 管理画面統計APIエンドポイント
@@ -327,10 +387,10 @@ class HotelIntegrationServer {
     // === セッション管理API ===
     // チェックインセッション管理APIエンドポイント
     this.app.use('/api/v1/sessions', checkinSessionRouter)
-    
+
     // セッション請求管理APIエンドポイント
     this.app.use('/api/v1/session-billing', sessionBillingRouter)
-    
+
     // セッション移行管理APIエンドポイント
     this.app.use('/api/v1/session-migration', sessionMigrationRouter)
 
@@ -350,7 +410,7 @@ class HotelIntegrationServer {
       try {
         const { HotelMemberHierarchyAdapter } = await import('../integrations/hotel-member/hierarchy-adapter')
         const health = await HotelMemberHierarchyAdapter.healthCheckForPython()
-        
+
         res.json({
           integration_status: 'active',
           hotel_member_hierarchy: health,
@@ -381,7 +441,7 @@ class HotelIntegrationServer {
         note: 'This endpoint is declared but not yet implemented. It may be available in future releases.',
         not_implemented_endpoints: [
           'GET /api/v1/room-grades/:id',
-          'GET /api/v1/room-grades/active', 
+          'GET /api/v1/room-grades/active',
           'GET /api/v1/room-grades/stats',
           'PATCH /api/v1/room-grades/display-order'
         ],
@@ -393,21 +453,21 @@ class HotelIntegrationServer {
           'GET /api/tenants',
           'POST /api/auth/validate',
           'GET /api/stats',
-          
+
           // 認証API
           'POST /api/v1/auth/login',
           'GET /api/v1/auth/validate-token',
           'POST /api/v1/auth/refresh',
           'GET /api/v1/tenants/:id',
           'GET /api/v1/staff/:id',
-          
+
           // 管理画面統計API
           'GET /api/v1/admin/summary',
           'GET /api/v1/admin/dashboard/stats',
           'GET /api/v1/admin/devices/count',
           'GET /api/v1/admin/orders/monthly-count',
           'GET /api/v1/admin/rankings',
-          
+
           // 注文・メニューAPI
           'GET /api/v1/orders/history',
           'POST /api/v1/orders',
@@ -417,12 +477,12 @@ class HotelIntegrationServer {
           'GET /api/v1/order/menu',
           'GET /api/v1/menus/top',
           'POST /api/v1/order/place',
-          
+
           // デバイス関連API
           'POST /api/v1/devices/check-status',
           'GET /api/v1/devices/client-ip',
           'GET /api/v1/devices/count',
-          
+
           'GET /api/hotel-member/integration/health',
           'POST /api/hotel-member/hierarchy/auth/verify',
           'POST /api/hotel-member/hierarchy/permissions/check-customer-access',
@@ -497,7 +557,7 @@ class HotelIntegrationServer {
           'GET /api/v1/admin/pages/:slug/history/:version',
           'POST /api/v1/admin/pages/:slug/restore',
           'GET /api/v1/pages/:slug',
-          
+
           // セッション管理API
           'POST /api/v1/sessions',
           'GET /api/v1/sessions/:sessionId',
@@ -505,7 +565,7 @@ class HotelIntegrationServer {
           'GET /api/v1/sessions/active-by-room/:roomId',
           'PATCH /api/v1/sessions/:sessionId',
           'POST /api/v1/sessions/:sessionId/checkout',
-          
+
           // セッション請求管理API
           'POST /api/v1/session-billing',
           'GET /api/v1/session-billing/:billingId',
@@ -513,7 +573,7 @@ class HotelIntegrationServer {
           'PATCH /api/v1/session-billing/:billingId',
           'POST /api/v1/session-billing/:billingId/payment',
           'GET /api/v1/session-billing/calculate/:sessionId',
-          
+
           // セッション移行管理API
           'POST /api/v1/session-migration/migrate-orders',
           'GET /api/v1/session-migration/statistics',
@@ -569,15 +629,15 @@ class HotelIntegrationServer {
       const timeout = setTimeout(() => controller.abort(), 5000)
 
       const startTime = Date.now()
-      
+
       // システム別のヘルスチェックエンドポイント
       const healthEndpoints = {
         'hotel-saas': '/api/health',          // Nuxt.jsアプリ用
         'hotel-member-frontend': '/health',   // 標準
-        'hotel-member-backend': '/health',    // 標準  
+        'hotel-member-backend': '/health',    // 標準
         'hotel-pms': '/health'               // 標準
       }
-      
+
       const endpoint = healthEndpoints[systemName as keyof typeof healthEndpoints] || '/health'
       const response = await fetch(`${system.url}${endpoint}`, {
         signal: controller.signal,
@@ -586,7 +646,7 @@ class HotelIntegrationServer {
           'Content-Type': 'application/json'
         }
       })
-      
+
       const responseTime = Date.now() - startTime
       clearTimeout(timeout)
 
@@ -596,7 +656,7 @@ class HotelIntegrationServer {
 
       let data: any = {}
       const contentType = response.headers.get('content-type')
-      
+
       // JSONレスポンスのみ解析
       if (contentType && contentType.includes('application/json')) {
         data = await response.json()
@@ -615,18 +675,18 @@ class HotelIntegrationServer {
 
       this.systemConnections.set(systemName, updatedStatus)
       return updatedStatus
-      
+
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-      
+
       const updatedStatus: SystemConnectionStatus = {
         ...system,
         status: 'ERROR',
         lastCheck: new Date()
       }
-      
+
       this.systemConnections.set(systemName, updatedStatus)
-      
+
       // エラーレベルを下げる（定期チェックのため）
       if (!errorMessage.includes('fetch failed')) {
         console.warn(`Connection test failed for ${systemName}: ${errorMessage}`)
@@ -657,9 +717,9 @@ class HotelIntegrationServer {
   private async performHealthCheck(): Promise<void> {
     const connectedCount = Array.from(this.systemConnections.values())
       .filter(s => s.status === 'CONNECTED').length
-    
+
     console.log(`🔍 Health check started (${connectedCount}/${this.systemConnections.size} systems connected)`)
-    
+
     const promises = Array.from(this.systemConnections.keys()).map(async (systemName) => {
       try {
         await this.testSystemConnection(systemName)
@@ -667,12 +727,12 @@ class HotelIntegrationServer {
         // エラーは testSystemConnection 内で処理済み
       }
     })
-    
+
     await Promise.all(promises)
-    
+
     const newConnectedCount = Array.from(this.systemConnections.values())
       .filter(s => s.status === 'CONNECTED').length
-    
+
     if (newConnectedCount !== connectedCount) {
       console.log(`📊 Health check completed (${newConnectedCount}/${this.systemConnections.size} systems connected)`)
     }
@@ -742,7 +802,7 @@ class HotelIntegrationServer {
    */
   private async shutdown(): Promise<void> {
     console.log('hotel-common統合APIサーバー停止中...')
-    
+
     try {
       if (this.server) {
         this.server.close()
@@ -766,7 +826,7 @@ class HotelIntegrationServer {
       console.error('Server app is not initialized');
       return;
     }
-    
+
     this.app.use(path, router);
     console.log(`Router added to path: ${path}`);
   }

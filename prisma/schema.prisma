@@ -20,54 +20,6 @@ model DatabaseChangeLog {
   @@index([createdAt])
 }
 
-model Order {
-  id        Int         @id @default(autoincrement())
-  tenantId  String
-  roomId    String
-  placeId   Int?
-  status    String      @default("received")
-  items     Json
-  total     Int
-  createdAt DateTime    @default(now())
-  updatedAt DateTime
-  paidAt    DateTime?
-  isDeleted Boolean     @default(false)
-  deletedAt DateTime?
-  uuid      String?     @unique
-  sessionId String?
-  OrderItem OrderItem[]
-
-  @@index([createdAt])
-  @@index([isDeleted, paidAt])
-  @@index([status])
-  @@index([tenantId])
-  @@index([sessionId])
-}
-
-model OrderItem {
-  id          Int       @id @default(autoincrement())
-  tenantId    String
-  orderId     Int
-  menuItemId  Int
-  name        String
-  price       Int
-  quantity    Int
-  status      String    @default("pending")
-  notes       String?
-  deliveredAt DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime
-  deleted_at  DateTime?
-  deleted_by  String?
-  is_deleted  Boolean   @default(false)
-  Order       Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
-
-  @@index([is_deleted])
-  @@index([orderId])
-  @@index([status])
-  @@index([tenantId])
-}
-
 model SystemPlanRestrictions {
   id                       String             @id
   systemType               String
@@ -109,19 +61,26 @@ model Tenant {
   id                       String                     @id
   name                     String
   domain                   String?                    @unique
+  planType                 String?
+  status                   String                     @default("active")
   contactEmail             String?
   createdAt                DateTime                   @default(now())
   deleted_at               DateTime?
   deleted_by               String?
   features                 String[]
   is_deleted               Boolean                    @default(false)
-  planType                 String?
   settings                 Json?
-  status                   String                     @default("active")
   TenantSystemPlan         TenantSystemPlan[]
+  ai_operation_logs        ai_operation_logs[]
+  auth_logs                auth_logs[]
+  billing_logs             billing_logs[]
   device_rooms             device_rooms[]
+  device_usage_logs        device_usage_logs[]
   pages                    pages[]
+  security_logs            security_logs[]
   service_usage_statistics service_usage_statistics[]
+  staff_invitations        staff_invitations[]
+  staff_tenant_memberships staff_tenant_memberships[]
   tenant_services          tenant_services[]
 
   @@index([is_deleted])
@@ -153,52 +112,65 @@ model TenantSystemPlan {
 }
 
 model admin {
-  id                    String      @id
-  email                 String      @unique
-  username              String      @unique
-  display_name          String
-  password_hash         String
-  admin_level           AdminLevel
-  accessible_group_ids  String[]
-  accessible_chain_ids  String[]
-  accessible_tenant_ids String[]
-  last_login_at         DateTime?
-  login_attempts        Int         @default(0)
-  locked_until          DateTime?
-  totp_secret           String?
-  totp_enabled          Boolean     @default(false)
-  created_at            DateTime    @default(now())
-  updated_at            DateTime
-  created_by            String?
-  is_active             Boolean     @default(true)
-  deleted_at            DateTime?
-  deleted_by            String?
-  is_deleted            Boolean     @default(false)
-  admin_log             admin_log[]
+  id                                     String      @id
+  email                                  String      @unique
+  username                               String      @unique
+  display_name                           String
+  password_hash                          String
+  admin_level                            AdminLevel
+  accessible_group_ids                   String[]
+  accessible_chain_ids                   String[]
+  accessible_tenant_ids                  String[]
+  last_login_at                          DateTime?
+  login_attempts                         Int         @default(0)
+  locked_until                           DateTime?
+  totp_secret                            String?
+  totp_enabled                           Boolean     @default(false)
+  created_at                             DateTime    @default(now())
+  updated_at                             DateTime
+  created_by                             String?
+  is_active                              Boolean     @default(true)
+  deleted_at                             DateTime?
+  deleted_by                             String?
+  is_deleted                             Boolean     @default(false)
+  admin_log                              admin_log[]
+  admin_log_admin_log_approved_byToadmin admin_log[] @relation("admin_log_approved_byToadmin")
 
   @@index([is_deleted])
 }
 
 model admin_log {
-  id            String    @id
-  admin_id      String
-  action        String
-  target_type   String?
-  target_id     String?
-  ip_address    String?
-  user_agent    String?
-  success       Boolean   @default(true)
-  error_message String?
-  created_at    DateTime  @default(now())
-  deleted_at    DateTime?
-  deleted_by    String?
-  is_deleted    Boolean   @default(false)
-  admin         admin     @relation(fields: [admin_id], references: [id])
+  id                                 String    @id
+  admin_id                           String
+  action                             String
+  target_type                        String?
+  target_id                          String?
+  ip_address                         String?
+  user_agent                         String?
+  success                            Boolean   @default(true)
+  error_message                      String?
+  created_at                         DateTime  @default(now())
+  deleted_at                         DateTime?
+  deleted_by                         String?
+  is_deleted                         Boolean   @default(false)
+  operation_category                 String?
+  risk_level                         String?   @default("LOW")
+  business_context                   Json?
+  session_id                         String?
+  approval_required                  Boolean?  @default(false)
+  approved_by                        String?
+  reason                             String?
+  admin                              admin     @relation(fields: [admin_id], references: [id])
+  admin_admin_log_approved_byToadmin admin?    @relation("admin_log_approved_byToadmin", fields: [approved_by], references: [id])
 
   @@index([action])
   @@index([admin_id])
   @@index([created_at])
   @@index([is_deleted])
+  @@index([approved_by, created_at])
+  @@index([operation_category, created_at])
+  @@index([risk_level, created_at])
+  @@index([session_id])
 }
 
 model campaign_categories {
@@ -343,8 +315,8 @@ model customers {
   created_at           DateTime       @default(now())
   updated_at           DateTime
   deleted_at           DateTime?
-  is_deleted           Boolean        @default(false)
   deleted_by           String?
+  is_deleted           Boolean        @default(false)
   reservations         reservations[]
 
   @@index([email])
@@ -354,24 +326,25 @@ model customers {
 }
 
 model device_rooms {
-  id         Int       @id @default(autoincrement())
-  tenantId   String
-  roomId     String
-  roomName   String?
-  deviceId   String?
-  deviceType String?
-  placeId    String?
-  status     String?   @default("active")
-  ipAddress  String?
-  macAddress String?
-  lastUsedAt DateTime?
-  isActive   Boolean   @default(true)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime
-  is_deleted Boolean   @default(false)
-  deleted_at DateTime?
-  deleted_by String?
-  Tenant     Tenant    @relation(fields: [tenantId], references: [id])
+  id                 Int                  @id @default(autoincrement())
+  tenantId           String
+  roomId             String
+  roomName           String?
+  deviceId           String?
+  deviceType         String?
+  placeId            String?
+  status             String?              @default("active")
+  ipAddress          String?
+  macAddress         String?
+  lastUsedAt         DateTime?
+  isActive           Boolean              @default(true)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime
+  is_deleted         Boolean              @default(false)
+  deleted_at         DateTime?
+  deleted_by         String?
+  device_access_logs device_access_logs[]
+  Tenant             Tenant               @relation(fields: [tenantId], references: [id])
 
   @@index([deviceId])
   @@index([is_deleted])
@@ -653,16 +626,34 @@ model response_trees {
 }
 
 model room_grades {
-  id          String   @id
-  tenant_id   String
-  code        String
-  name        String
-  description String?
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id                   String   @id
+  tenant_id            String
+  code                 String
+  name                 String
+  description          String?
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
+  grade_name_en        String?
+  grade_level          Int?
+  default_capacity     Int?
+  max_capacity         Int?
+  room_size_sqm        Decimal? @db.Decimal
+  standard_amenities   Json?
+  premium_amenities    Json?
+  included_services    Json?
+  member_only          Boolean? @default(false)
+  min_stay_nights      Int?
+  advance_booking_days Int?
+  display_order        Int?
+  is_active            Boolean? @default(true)
+  is_public            Boolean? @default(true)
+  pricing_category     String?
 
   @@unique([tenant_id, code])
   @@index([tenant_id])
+  @@index([display_order], map: "idx_room_grades_display_order")
+  @@index([is_active], map: "idx_room_grades_is_active")
+  @@index([is_public], map: "idx_room_grades_is_public")
 }
 
 model schema_version {
@@ -710,28 +701,47 @@ model service_usage_statistics {
 }
 
 model staff {
-  id                 String    @id
-  tenant_id          String
-  email              String
-  name               String
-  role               String
-  department         String?
-  is_active          Boolean   @default(true)
-  created_at         DateTime  @default(now())
-  updated_at         DateTime
-  failed_login_count Int       @default(0)
-  last_login_at      DateTime?
-  locked_until       DateTime?
-  password_hash      String?
-  deleted_at         DateTime?
-  deleted_by         String?
-  is_deleted         Boolean   @default(false)
+  id                                                              String                     @id
+  email                                                           String                     @unique
+  name                                                            String
+  is_active                                                       Boolean                    @default(true)
+  created_at                                                      DateTime                   @default(now())
+  updated_at                                                      DateTime
+  failed_login_count                                              Int                        @default(0)
+  last_login_at                                                   DateTime?
+  locked_until                                                    DateTime?
+  password_hash                                                   String?
+  deleted_at                                                      DateTime?
+  deleted_by                                                      String?
+  is_deleted                                                      Boolean                    @default(false)
+  ai_operation_logs                                               ai_operation_logs[]
+  auth_logs                                                       auth_logs[]
+  billing_logs                                                    billing_logs[]
+  comment_read_statuses                                           comment_read_statuses[]
+  memo_access_logs                                                memo_access_logs[]
+  memo_attachments_memo_attachments_created_byTostaff             memo_attachments[]         @relation("memo_attachments_created_byTostaff")
+  memo_attachments_memo_attachments_deleted_byTostaff             memo_attachments[]         @relation("memo_attachments_deleted_byTostaff")
+  memo_comments_memo_comments_author_idTostaff                    memo_comments[]            @relation("memo_comments_author_idTostaff")
+  memo_comments_memo_comments_created_byTostaff                   memo_comments[]            @relation("memo_comments_created_byTostaff")
+  memo_comments_memo_comments_deleted_byTostaff                   memo_comments[]            @relation("memo_comments_deleted_byTostaff")
+  memo_comments_memo_comments_updated_byTostaff                   memo_comments[]            @relation("memo_comments_updated_byTostaff")
+  memo_notifications_memo_notifications_created_byTostaff         memo_notifications[]       @relation("memo_notifications_created_byTostaff")
+  memo_notifications_memo_notifications_recipient_staff_idTostaff memo_notifications[]       @relation("memo_notifications_recipient_staff_idTostaff")
+  memo_read_statuses                                              memo_read_statuses[]
+  memos_memos_archived_byTostaff                                  memos[]                    @relation("memos_archived_byTostaff")
+  memos_memos_author_idTostaff                                    memos[]                    @relation("memos_author_idTostaff")
+  memos_memos_created_byTostaff                                   memos[]                    @relation("memos_created_byTostaff")
+  memos_memos_deleted_byTostaff                                   memos[]                    @relation("memos_deleted_byTostaff")
+  memos_memos_updated_byTostaff                                   memos[]                    @relation("memos_updated_byTostaff")
+  security_logs                                                   security_logs[]
+  staff_invitations                                               staff_invitations[]
+  staff_tenant_memberships                                        staff_tenant_memberships[]
 
-  @@unique([tenant_id, email])
   @@index([email])
-  @@index([is_deleted])
-  @@index([role])
-  @@index([tenant_id])
+  @@index([email], map: "Staff_email_idx")
+  @@index([email], map: "idx_staff_email_new")
+  @@index([is_active], map: "idx_staff_is_active")
+  @@index([is_deleted], map: "idx_staff_is_deleted")
 }
 
 model system_event {
@@ -787,35 +797,6 @@ model tenant_services {
   @@unique([tenant_id, service_type])
 }
 
-enum AdminLevel {
-  chainadmin
-  groupadmin
-  superadmin
-}
-
-enum CampaignCtaType {
-  NONE
-  LINK
-  BUTTON
-  COUPON
-}
-
-enum CampaignDisplayType {
-  BANNER
-  POPUP
-  NOTIFICATION
-  FEATURED
-}
-
-enum CampaignStatus {
-  DRAFT
-  ACTIVE
-  PAUSED
-  ENDED
-  SCHEDULED
-}
-
-// Session Management Models
 model checkin_sessions {
   id                String    @id @default(cuid())
   tenant_id         String
@@ -833,6 +814,7 @@ model checkin_sessions {
   notes             String?
   created_at        DateTime  @default(now())
   updated_at        DateTime  @updatedAt
+  orders            orders[]
 
   @@index([tenant_id])
   @@index([session_number])
@@ -869,7 +851,6 @@ model session_billings {
   @@index([due_date])
 }
 
-// Room Management Models
 model Room {
   id          String    @id @default(cuid())
   tenantId    String
@@ -879,6 +860,7 @@ model Room {
   status      String    @default("AVAILABLE")
   capacity    Int       @default(2)
   amenities   Json?
+  notes       String?
   lastCleaned DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -895,75 +877,71 @@ model Room {
   @@map("rooms")
 }
 
-// Room Memo Models (Phase 1: REST, Phase 2: WS)
 model RoomMemo {
-  id                 String    @id @default(cuid())
-  tenantId           String    @map("tenant_id")
-  roomId             String    @map("room_id")
-  category           String
-  visibility         String    @default("public")
-  visibleRoles       String[]  @map("visible_roles")
-  content            String
-  status             String    @default("pending")
-  priority           String    @default("normal")
-  dueDate            DateTime? @map("due_date")
-  createdByStaffId   String    @map("created_by_staff_id")
-  assignedToStaffId  String?   @map("assigned_to_staff_id")
-  updatedByStaffId   String?   @map("updated_by_staff_id")
-  isDeleted          Boolean   @default(false) @map("is_deleted")
-  deletedAt          DateTime? @map("deleted_at")
-  createdAt          DateTime  @default(now()) @map("created_at")
-  updatedAt          DateTime  @updatedAt @map("updated_at")
+  id                String    @id @default(dbgenerated("(gen_random_uuid())::text"))
+  tenantId          String    @map("tenant_id")
+  roomId            String    @map("room_id")
+  category          String
+  visibility        String    @default("public")
+  visibleRoles      String[]  @default([]) @map("visible_roles")
+  content           String
+  status            String    @default("pending")
+  priority          String    @default("normal")
+  dueDate           DateTime? @map("due_date") @db.Timestamptz(6)
+  createdByStaffId  String    @map("created_by_staff_id")
+  assignedToStaffId String?   @map("assigned_to_staff_id")
+  updatedByStaffId  String?   @map("updated_by_staff_id")
+  isDeleted         Boolean   @default(false) @map("is_deleted")
+  deletedAt         DateTime? @map("deleted_at") @db.Timestamptz(6)
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   @@index([tenantId, roomId, status], map: "idx_room_memos_tenant_room_status")
   @@index([assignedToStaffId, status], map: "idx_room_memos_assignee_status")
-  @@index([createdAt], map: "idx_room_memos_created_at")
   @@map("room_memos")
 }
 
 model RoomMemoComment {
-  id               String    @id @default(cuid())
-  tenantId         String    @map("tenant_id")
-  memoId           String    @map("memo_id")
-  parentCommentId  String?   @map("parent_comment_id")
+  id               String   @id @default(dbgenerated("(gen_random_uuid())::text"))
+  tenantId         String   @map("tenant_id")
+  memoId           String   @map("memo_id")
+  parentCommentId  String?  @map("parent_comment_id")
   content          String
-  commentType      String    @default("comment") @map("comment_type")
-  statusFrom       String?   @map("status_from")
-  statusTo         String?   @map("status_to")
-  createdByStaffId String    @map("created_by_staff_id")
-  createdAt        DateTime  @default(now()) @map("created_at")
+  commentType      String   @default("comment") @map("comment_type")
+  statusFrom       String?  @map("status_from")
+  statusTo         String?  @map("status_to")
+  createdByStaffId String   @map("created_by_staff_id")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   @@index([tenantId, memoId, createdAt], map: "idx_memo_comments_memo_created")
   @@map("room_memo_comments")
 }
 
 model RoomMemoStatusLog {
-  id               String    @id @default(cuid())
-  tenantId         String    @map("tenant_id")
-  memoId           String    @map("memo_id")
-  statusFrom       String    @map("status_from")
-  statusTo         String    @map("status_to")
+  id               String   @id @default(dbgenerated("(gen_random_uuid())::text"))
+  tenantId         String   @map("tenant_id")
+  memoId           String   @map("memo_id")
+  statusFrom       String   @map("status_from")
+  statusTo         String   @map("status_to")
   comment          String?
-  changedByStaffId String    @map("changed_by_staff_id")
-  createdAt        DateTime  @default(now()) @map("created_at")
+  changedByStaffId String   @map("changed_by_staff_id")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
 
   @@index([tenantId, memoId, createdAt], map: "idx_memo_status_memo_created")
   @@map("room_memo_status_logs")
 }
 
-// Phase 2 で使用
 model RoomMemoRead {
-  id       String   @id @default(cuid())
+  id       String   @id @default(dbgenerated("(gen_random_uuid())::text"))
   tenantId String   @map("tenant_id")
   memoId   String   @map("memo_id")
   staffId  String   @map("staff_id")
-  readAt   DateTime @default(now()) @map("read_at")
+  readAt   DateTime @default(now()) @map("read_at") @db.Timestamptz(6)
 
-  @@unique([tenantId, memoId, staffId], map: "uq_memo_read_once")
+  @@unique([tenantId, memoId, staffId])
   @@map("room_memo_reads")
 }
 
-// Transaction Management Models
 model Transaction {
   id          String    @id @default(cuid())
   tenantId    String
@@ -983,11 +961,8 @@ model Transaction {
   isDeleted   Boolean   @default(false)
   deletedAt   DateTime?
   deletedBy   String?
-
-  // Relations
-  invoice Invoice? @relation(fields: [invoiceId], references: [id])
-  // 1-1 relation via Payment.transactionId -> Transaction.id
-  payment Payment? @relation("TransactionPayment")
+  payment     Payment?  @relation("TransactionPayment")
+  invoice     Invoice?  @relation(fields: [invoiceId], references: [id])
 
   @@index([tenantId])
   @@index([type])
@@ -997,12 +972,10 @@ model Transaction {
   @@map("transactions")
 }
 
-// Payment Management Models
-// Invoice model is defined just above Payment
 model Invoice {
-  id             String    @id @default(cuid())
+  id             String        @id @default(cuid())
   tenantId       String
-  invoiceNumber  String    @unique
+  invoiceNumber  String        @unique
   customerId     String?
   customerName   String
   customerEmail  String?
@@ -1011,22 +984,20 @@ model Invoice {
   subtotal       Int
   taxAmount      Int
   totalAmount    Int
-  status         String    @default("DRAFT") // DRAFT, SENT, PAID, OVERDUE, CANCELLED
+  status         String        @default("DRAFT")
   dueDate        DateTime?
   issuedAt       DateTime?
   paidAt         DateTime?
   notes          String?
   metadata       Json?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
   createdBy      String?
-  isDeleted      Boolean   @default(false)
+  isDeleted      Boolean       @default(false)
   deletedAt      DateTime?
   deletedBy      String?
-
-  // Back-relations
-  transactions Transaction[]
-  payments     Payment[]
+  payments       Payment[]
+  transactions   Transaction[]
 
   @@index([tenantId])
   @@index([status])
@@ -1037,27 +1008,24 @@ model Invoice {
 }
 
 model Payment {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   tenantId      String
-  transactionId String?   @unique
-  invoiceId     String?
+  transactionId String?      @unique
   paymentMethod String
   amount        Int
-  status        String    @default("PENDING")
+  status        String       @default("PENDING")
   reference     String?
   metadata      Json?
   processedAt   DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   createdBy     String?
-  isDeleted     Boolean   @default(false)
+  isDeleted     Boolean      @default(false)
   deletedAt     DateTime?
   deletedBy     String?
-
-  // Relations
-  invoice     Invoice?     @relation(fields: [invoiceId], references: [id])
-  // 1-1 relation: Payment holds FK to Transaction
-  transaction Transaction? @relation("TransactionPayment", fields: [transactionId], references: [id])
+  invoiceId     String?
+  invoice       Invoice?     @relation(fields: [invoiceId], references: [id])
+  transaction   Transaction? @relation("TransactionPayment", fields: [transactionId], references: [id])
 
   @@index([tenantId])
   @@index([paymentMethod])
@@ -1065,4 +1033,637 @@ model Payment {
   @@index([createdAt])
   @@index([isDeleted])
   @@map("payments")
+}
+
+model ai_operation_logs {
+  id                 String   @id
+  tenant_id          String
+  user_id            String?
+  operation          String
+  ai_function        String
+  credit_amount      Int
+  balance_before     Int
+  balance_after      Int
+  request_details    Json?
+  response_details   Json?
+  cost_calculation   Json?
+  processing_time_ms Int?
+  success            Boolean  @default(true)
+  error_details      Json?
+  created_at         DateTime @default(now()) @db.Timestamptz(6)
+  Tenant             Tenant   @relation(fields: [tenant_id], references: [id])
+  staff              staff?   @relation(fields: [user_id], references: [id])
+
+  @@index([ai_function, created_at(sort: Desc)], map: "idx_ai_operation_logs_function_created")
+  @@index([tenant_id, created_at(sort: Desc)], map: "idx_ai_operation_logs_tenant_created")
+  @@index([user_id, created_at(sort: Desc)], map: "idx_ai_operation_logs_user_created")
+}
+
+model auth_logs {
+  id             String   @id
+  tenant_id      String
+  user_id        String?
+  action         String
+  ip_address     String?  @db.Inet
+  user_agent     String?
+  session_id     String?
+  success        Boolean
+  failure_reason String?
+  device_info    Json?
+  location_info  Json?
+  created_at     DateTime @default(now()) @db.Timestamptz(6)
+  Tenant         Tenant   @relation(fields: [tenant_id], references: [id])
+  staff          staff?   @relation(fields: [user_id], references: [id])
+
+  @@index([success, created_at(sort: Desc)], map: "idx_auth_logs_failed")
+  @@index([tenant_id, created_at(sort: Desc)], map: "idx_auth_logs_tenant_created")
+  @@index([user_id, action, created_at(sort: Desc)], map: "idx_auth_logs_user_action_created")
+}
+
+model billing_logs {
+  id                      String   @id
+  tenant_id               String
+  billing_period          String
+  operation               String
+  amount                  Decimal? @db.Decimal(10, 2)
+  currency                String?  @default("JPY")
+  calculation_details     Json?
+  payment_method          String?
+  payment_status          String?
+  external_transaction_id String?
+  invoice_number          String?
+  error_details           Json?
+  processed_by            String?
+  created_at              DateTime @default(now()) @db.Timestamptz(6)
+  staff                   staff?   @relation(fields: [processed_by], references: [id])
+  Tenant                  Tenant   @relation(fields: [tenant_id], references: [id])
+
+  @@index([external_transaction_id], map: "idx_billing_logs_external_id")
+  @@index([operation, created_at(sort: Desc)], map: "idx_billing_logs_operation_created")
+  @@index([tenant_id, billing_period], map: "idx_billing_logs_tenant_period")
+}
+
+model comment_read_statuses {
+  id            String        @id @default(dbgenerated("gen_random_uuid()"))
+  comment_id    String
+  staff_id      String
+  source_system String        @db.VarChar(10)
+  is_read       Boolean       @default(false)
+  read_at       DateTime?     @db.Timestamptz(6)
+  read_count    Int           @default(0)
+  created_at    DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at    DateTime      @default(now()) @db.Timestamptz(6)
+  memo_comments memo_comments @relation(fields: [comment_id], references: [id], onDelete: Cascade)
+  staff         staff         @relation(fields: [staff_id], references: [id], onDelete: Cascade)
+
+  @@unique([comment_id, staff_id, source_system])
+  @@index([comment_id, staff_id])
+  @@index([staff_id, comment_id])
+}
+
+model device_access_logs {
+  id            BigInt        @id @default(autoincrement())
+  tenantId      String
+  deviceId      Int?
+  macAddress    String?
+  ipAddress     String
+  userAgent     String?
+  pagePath      String
+  authMethod    String
+  authResult    String
+  failureReason String?
+  accessedAt    DateTime      @default(now())
+  responseTime  Int?
+  createdAt     DateTime      @default(now())
+  device_rooms  device_rooms? @relation(fields: [deviceId], references: [id])
+
+  @@index([accessedAt])
+  @@index([authMethod])
+  @@index([authResult])
+  @@index([createdAt])
+  @@index([deviceId])
+  @@index([ipAddress])
+  @@index([macAddress])
+  @@index([tenantId])
+}
+
+model device_usage_logs {
+  id                       String   @id
+  tenant_id                String
+  device_id                String?
+  room_id                  String?
+  event_type               String
+  connection_quality       Int?
+  session_duration_minutes Int?
+  data_transferred_mb      Decimal? @db.Decimal(10, 2)
+  error_count              Int?     @default(0)
+  device_info              Json?
+  network_info             Json?
+  performance_metrics      Json?
+  created_at               DateTime @default(now()) @db.Timestamptz(6)
+  Tenant                   Tenant   @relation(fields: [tenant_id], references: [id])
+
+  @@index([device_id, created_at(sort: Desc)], map: "idx_device_usage_logs_device_created")
+  @@index([room_id, created_at(sort: Desc)], map: "idx_device_usage_logs_room_created")
+  @@index([tenant_id, created_at(sort: Desc)], map: "idx_device_usage_logs_tenant_created")
+}
+
+model memo_access_logs {
+  id            String   @id @default(dbgenerated("gen_random_uuid()"))
+  memo_id       String
+  staff_id      String
+  source_system String   @db.VarChar(10)
+  action        String   @db.VarChar(20)
+  ip_address    String?  @db.Inet
+  user_agent    String?
+  session_id    String?  @db.VarChar(100)
+  details       Json     @default("{}")
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  memos         memos    @relation(fields: [memo_id], references: [id], onDelete: Cascade)
+  staff         staff    @relation(fields: [staff_id], references: [id], onDelete: Cascade)
+
+  @@index([action])
+  @@index([created_at(sort: Desc)])
+  @@index([memo_id])
+  @@index([memo_id, staff_id, created_at(sort: Desc)])
+  @@index([staff_id, action, created_at(sort: Desc)])
+  @@index([staff_id])
+}
+
+model memo_attachments {
+  id                                       String         @id @default(dbgenerated("gen_random_uuid()"))
+  memo_id                                  String
+  comment_id                               String?
+  original_filename                        String
+  stored_filename                          String
+  file_path                                String
+  file_size                                BigInt
+  mime_type                                String         @db.VarChar(100)
+  file_hash                                String         @db.VarChar(64)
+  is_image                                 Boolean        @default(false)
+  image_width                              Int?
+  image_height                             Int?
+  is_deleted                               Boolean        @default(false)
+  created_at                               DateTime       @default(now()) @db.Timestamptz(6)
+  deleted_at                               DateTime?      @db.Timestamptz(6)
+  created_by                               String
+  deleted_by                               String?
+  memo_comments                            memo_comments? @relation(fields: [comment_id], references: [id], onDelete: Cascade)
+  staff_memo_attachments_created_byTostaff staff          @relation("memo_attachments_created_byTostaff", fields: [created_by], references: [id])
+  staff_memo_attachments_deleted_byTostaff staff?         @relation("memo_attachments_deleted_byTostaff", fields: [deleted_by], references: [id])
+  memos                                    memos          @relation(fields: [memo_id], references: [id], onDelete: Cascade)
+
+  @@index([comment_id])
+  @@index([created_at(sort: Desc)])
+  @@index([memo_id])
+}
+
+model memo_comments {
+  id                                    String                  @id @default(dbgenerated("gen_random_uuid()"))
+  memo_id                               String
+  parent_comment_id                     String?
+  author_id                             String
+  source_system                         String                  @db.VarChar(10)
+  content                               String
+  is_edited                             Boolean                 @default(false)
+  is_deleted                            Boolean                 @default(false)
+  reply_count                           Int                     @default(0)
+  created_at                            DateTime                @default(now()) @db.Timestamptz(6)
+  updated_at                            DateTime                @default(now()) @db.Timestamptz(6)
+  deleted_at                            DateTime?               @db.Timestamptz(6)
+  created_by                            String
+  updated_by                            String?
+  deleted_by                            String?
+  comment_read_statuses                 comment_read_statuses[]
+  memo_attachments                      memo_attachments[]
+  staff_memo_comments_author_idTostaff  staff                   @relation("memo_comments_author_idTostaff", fields: [author_id], references: [id])
+  staff_memo_comments_created_byTostaff staff                   @relation("memo_comments_created_byTostaff", fields: [created_by], references: [id])
+  staff_memo_comments_deleted_byTostaff staff?                  @relation("memo_comments_deleted_byTostaff", fields: [deleted_by], references: [id])
+  memos                                 memos                   @relation(fields: [memo_id], references: [id], onDelete: Cascade)
+  memo_comments                         memo_comments?          @relation("memo_commentsTomemo_comments", fields: [parent_comment_id], references: [id], onDelete: Cascade)
+  other_memo_comments                   memo_comments[]         @relation("memo_commentsTomemo_comments")
+  staff_memo_comments_updated_byTostaff staff?                  @relation("memo_comments_updated_byTostaff", fields: [updated_by], references: [id])
+  memo_notifications                    memo_notifications[]
+
+  @@index([author_id])
+  @@index([created_at(sort: Desc)])
+  @@index([memo_id, created_at(sort: Desc)])
+  @@index([memo_id])
+  @@index([parent_comment_id])
+}
+
+model memo_notifications {
+  id                                                 String         @id @default(dbgenerated("gen_random_uuid()"))
+  recipient_staff_id                                 String
+  memo_id                                            String
+  comment_id                                         String?
+  notification_type                                  String         @db.VarChar(30)
+  title                                              String
+  message                                            String
+  is_read                                            Boolean        @default(false)
+  is_sent                                            Boolean        @default(false)
+  send_email                                         Boolean        @default(false)
+  send_push                                          Boolean        @default(false)
+  send_websocket                                     Boolean        @default(true)
+  created_at                                         DateTime       @default(now()) @db.Timestamptz(6)
+  read_at                                            DateTime?      @db.Timestamptz(6)
+  sent_at                                            DateTime?      @db.Timestamptz(6)
+  created_by                                         String
+  memo_comments                                      memo_comments? @relation(fields: [comment_id], references: [id], onDelete: Cascade)
+  staff_memo_notifications_created_byTostaff         staff          @relation("memo_notifications_created_byTostaff", fields: [created_by], references: [id])
+  memos                                              memos          @relation(fields: [memo_id], references: [id], onDelete: Cascade)
+  staff_memo_notifications_recipient_staff_idTostaff staff          @relation("memo_notifications_recipient_staff_idTostaff", fields: [recipient_staff_id], references: [id], onDelete: Cascade)
+
+  @@index([created_at(sort: Desc)])
+  @@index([is_sent])
+  @@index([memo_id])
+  @@index([recipient_staff_id])
+}
+
+model memo_read_statuses {
+  id                      String    @id @default(dbgenerated("gen_random_uuid()"))
+  memo_id                 String
+  staff_id                String
+  source_system           String    @db.VarChar(10)
+  is_read                 Boolean   @default(false)
+  read_at                 DateTime? @db.Timestamptz(6)
+  last_content_hash       String?   @db.VarChar(64)
+  last_read_version       Int       @default(1)
+  read_count              Int       @default(0)
+  total_read_time_seconds Int       @default(0)
+  created_at              DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at              DateTime  @default(now()) @db.Timestamptz(6)
+  memos                   memos     @relation(fields: [memo_id], references: [id], onDelete: Cascade)
+  staff                   staff     @relation(fields: [staff_id], references: [id], onDelete: Cascade)
+
+  @@unique([memo_id, staff_id, source_system])
+  @@index([memo_id, staff_id])
+  @@index([read_at(sort: Desc)])
+  @@index([staff_id, memo_id])
+  @@index([staff_id, source_system])
+}
+
+model memos {
+  id                             String               @id @default(dbgenerated("gen_random_uuid()"))
+  tenant_id                      String
+  title                          String
+  content                        String
+  author_id                      String
+  source_system                  String               @db.VarChar(10)
+  tags                           Json                 @default("[]")
+  priority                       String               @default("medium") @db.VarChar(10)
+  category                       String?              @db.VarChar(50)
+  is_pinned                      Boolean              @default(false)
+  is_archived                    Boolean              @default(false)
+  is_deleted                     Boolean              @default(false)
+  view_count                     Int                  @default(0)
+  comment_count                  Int                  @default(0)
+  attachment_count               Int                  @default(0)
+  created_at                     DateTime             @default(now()) @db.Timestamptz(6)
+  updated_at                     DateTime             @default(now()) @db.Timestamptz(6)
+  archived_at                    DateTime?            @db.Timestamptz(6)
+  deleted_at                     DateTime?            @db.Timestamptz(6)
+  created_by                     String
+  updated_by                     String?
+  archived_by                    String?
+  deleted_by                     String?
+  memo_access_logs               memo_access_logs[]
+  memo_attachments               memo_attachments[]
+  memo_comments                  memo_comments[]
+  memo_notifications             memo_notifications[]
+  memo_read_statuses             memo_read_statuses[]
+  staff_memos_archived_byTostaff staff?               @relation("memos_archived_byTostaff", fields: [archived_by], references: [id])
+  staff_memos_author_idTostaff   staff                @relation("memos_author_idTostaff", fields: [author_id], references: [id])
+  staff_memos_created_byTostaff  staff                @relation("memos_created_byTostaff", fields: [created_by], references: [id])
+  staff_memos_deleted_byTostaff  staff?               @relation("memos_deleted_byTostaff", fields: [deleted_by], references: [id])
+  staff_memos_updated_byTostaff  staff?               @relation("memos_updated_byTostaff", fields: [updated_by], references: [id])
+
+  @@index([author_id])
+  @@index([category])
+  @@index([created_at(sort: Desc)])
+  @@index([is_pinned])
+  @@index([priority])
+  @@index([source_system])
+  @@index([tenant_id])
+  @@index([tenant_id, priority, created_at(sort: Desc)])
+  @@index([tenant_id, source_system, created_at(sort: Desc)])
+  @@index([updated_at(sort: Desc)])
+}
+
+model menu_categories {
+  id                    Int               @id @default(autoincrement())
+  tenant_id             String
+  name_ja               String
+  name_en               String?
+  description_ja        String?
+  description_en        String?
+  parent_id             Int?
+  sort_order            Int               @default(0)
+  is_active             Boolean           @default(true)
+  created_at            DateTime          @default(now())
+  updated_at            DateTime
+  is_deleted            Boolean           @default(false)
+  deleted_at            DateTime?
+  deleted_by            String?
+  menu_categories       menu_categories?  @relation("menu_categoriesTomenu_categories", fields: [parent_id], references: [id])
+  other_menu_categories menu_categories[] @relation("menu_categoriesTomenu_categories")
+  menu_items            menu_items[]
+
+  @@index([tenant_id, is_active], map: "idx_menu_categories_is_active")
+  @@index([is_deleted], map: "idx_menu_categories_is_deleted")
+  @@index([tenant_id, parent_id], map: "idx_menu_categories_parent_id")
+  @@index([tenant_id], map: "idx_menu_categories_tenant_id")
+}
+
+model menu_items {
+  id                  Int              @id @default(autoincrement())
+  tenant_id           String
+  name_ja             String
+  name_en             String?
+  description_ja      String?
+  description_en      String?
+  price               Int
+  cost                Int              @default(0)
+  category_id         Int?
+  image_url           String?
+  is_available        Boolean          @default(true)
+  is_featured         Boolean          @default(false)
+  is_hidden           Boolean          @default(false)
+  display_order       Int              @default(0)
+  start_time          DateTime?        @db.Time(6)
+  end_time            DateTime?        @db.Time(6)
+  age_restricted      Boolean          @default(false)
+  stock_available     Boolean          @default(true)
+  stock_quantity      Int?
+  low_stock_threshold Int              @default(5)
+  tags                Json             @default("[]")
+  images              Json             @default("[]")
+  nutritional_info    Json             @default("{}")
+  allergens           Json             @default("[]")
+  created_at          DateTime         @default(now())
+  updated_at          DateTime
+  is_deleted          Boolean          @default(false)
+  deleted_at          DateTime?
+  deleted_by          String?
+  menu_categories     menu_categories? @relation(fields: [category_id], references: [id])
+
+  @@index([tenant_id, is_available], map: "idx_menu_items_available")
+  @@index([tenant_id, category_id], map: "idx_menu_items_category_id")
+  @@index([tenant_id, is_featured], map: "idx_menu_items_featured")
+  @@index([is_deleted], map: "idx_menu_items_is_deleted")
+  @@index([tenant_id], map: "idx_menu_items_tenant_id")
+}
+
+model order_items {
+  id          Int       @id @default(autoincrement())
+  tenantId    String
+  orderId     Int
+  menuItemId  Int
+  name        String
+  price       Int
+  quantity    Int
+  status      String    @default("pending")
+  notes       String?
+  deliveredAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime
+  deleted_at  DateTime?
+  deleted_by  String?
+  is_deleted  Boolean   @default(false)
+  orders      orders    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([is_deleted])
+  @@index([menuItemId])
+  @@index([orderId])
+  @@index([status])
+  @@index([tenantId])
+}
+
+model orders {
+  id               Int               @id @default(autoincrement())
+  tenantId         String
+  roomId           String
+  placeId          Int?
+  status           String            @default("received")
+  items            Json
+  total            Int
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime
+  paidAt           DateTime?
+  isDeleted        Boolean           @default(false)
+  deletedAt        DateTime?
+  sessionId        String?
+  uuid             String?           @unique
+  order_items      order_items[]
+  checkin_sessions checkin_sessions? @relation(fields: [sessionId], references: [id])
+
+  @@index([createdAt])
+  @@index([isDeleted, paidAt])
+  @@index([sessionId])
+  @@index([status])
+  @@index([tenantId])
+}
+
+model permissions {
+  id               String             @id
+  code             String             @unique
+  name             String
+  description      String?
+  category         String
+  is_active        Boolean            @default(true)
+  created_at       DateTime           @default(now())
+  updated_at       DateTime
+  role_permissions role_permissions[]
+
+  @@index([category], map: "idx_permissions_category")
+  @@index([code], map: "idx_permissions_code")
+  @@index([is_active], map: "idx_permissions_is_active")
+}
+
+model role_permissions {
+  id            String      @id
+  role_id       String
+  permission_id String
+  created_at    DateTime    @default(now())
+  created_by    String?
+  permissions   permissions @relation(fields: [permission_id], references: [id], onDelete: Cascade)
+  roles         roles       @relation(fields: [role_id], references: [id], onDelete: Cascade)
+
+  @@unique([role_id, permission_id], map: "unq_role_permissions")
+  @@index([permission_id], map: "idx_role_permissions_permission_id")
+  @@index([role_id], map: "idx_role_permissions_role_id")
+}
+
+model role_templates {
+  id               String   @id
+  business_type    String
+  name             String
+  description      String?
+  roles_definition Json
+  is_active        Boolean  @default(true)
+  is_system        Boolean  @default(false)
+  created_at       DateTime @default(now())
+  updated_at       DateTime
+  created_by       String?
+  updated_by       String?
+
+  @@unique([business_type, name], map: "unq_role_templates_business_type_name")
+  @@index([business_type], map: "idx_role_templates_business_type")
+  @@index([is_active], map: "idx_role_templates_is_active")
+  @@index([is_system], map: "idx_role_templates_is_system")
+}
+
+model roles {
+  id                       String                     @id
+  tenant_id                String
+  name                     String
+  description              String?
+  sort_order               Int                        @default(0)
+  is_active                Boolean                    @default(true)
+  is_default               Boolean                    @default(false)
+  created_at               DateTime                   @default(now())
+  updated_at               DateTime
+  created_by               String?
+  updated_by               String?
+  role_permissions         role_permissions[]
+  staff_invitations        staff_invitations[]
+  staff_tenant_memberships staff_tenant_memberships[]
+
+  @@unique([tenant_id, name], map: "unq_roles_tenant_id_name")
+  @@index([is_active], map: "idx_roles_is_active")
+  @@index([is_default], map: "idx_roles_is_default")
+  @@index([sort_order], map: "idx_roles_sort_order")
+  @@index([tenant_id], map: "idx_roles_tenant_id")
+}
+
+model security_logs {
+  id               String   @id
+  tenant_id        String
+  user_id          String?
+  event_type       String
+  severity         String
+  description      String
+  ip_address       String?  @db.Inet
+  user_agent       String?
+  request_details  Json?
+  response_details Json?
+  detection_method String?
+  action_taken     String?
+  created_at       DateTime @default(now()) @db.Timestamptz(6)
+  Tenant           Tenant   @relation(fields: [tenant_id], references: [id])
+  staff            staff?   @relation(fields: [user_id], references: [id])
+
+  @@index([event_type, created_at(sort: Desc)], map: "idx_security_logs_event_created")
+  @@index([ip_address, created_at(sort: Desc)], map: "idx_security_logs_ip_created")
+  @@index([severity, created_at(sort: Desc)], map: "idx_security_logs_severity_created")
+  @@index([tenant_id, created_at(sort: Desc)], map: "idx_security_logs_tenant_created")
+}
+
+model staff_invitations {
+  id          String    @id
+  tenant_id   String
+  email       String
+  role_id     String
+  invited_by  String
+  token       String    @unique
+  status      String    @default("pending")
+  expires_at  DateTime
+  accepted_at DateTime?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime
+  staff       staff     @relation(fields: [invited_by], references: [id])
+  roles       roles     @relation(fields: [role_id], references: [id])
+  Tenant      Tenant    @relation(fields: [tenant_id], references: [id])
+
+  @@index([email], map: "idx_staff_invitations_email")
+  @@index([expires_at], map: "idx_staff_invitations_expires_at")
+  @@index([status], map: "idx_staff_invitations_status")
+  @@index([tenant_id, email, status], map: "idx_staff_invitations_tenant_email_status")
+  @@index([tenant_id], map: "idx_staff_invitations_tenant_id")
+  @@index([token], map: "idx_staff_invitations_token")
+}
+
+model staff_tenant_memberships {
+  id                 String   @id
+  staff_id           String
+  tenant_id          String
+  is_active          Boolean  @default(true)
+  is_primary         Boolean  @default(false)
+  joined_at          DateTime @default(now())
+  created_at         DateTime @default(now())
+  updated_at         DateTime
+  role_id            String
+  custom_permissions Json     @default("[]")
+  roles              roles    @relation(fields: [role_id], references: [id])
+  staff              staff    @relation(fields: [staff_id], references: [id], onDelete: Cascade)
+  Tenant             Tenant   @relation(fields: [tenant_id], references: [id], onDelete: Cascade)
+
+  @@unique([staff_id, tenant_id], map: "uniq_staff_tenant")
+  @@index([is_active], map: "idx_memberships_is_active")
+  @@index([is_primary], map: "idx_memberships_is_primary")
+  @@index([role_id], map: "idx_memberships_role_id")
+  @@index([staff_id], map: "idx_memberships_staff_id")
+  @@index([tenant_id], map: "idx_memberships_tenant_id")
+}
+
+model unified_media {
+  id                  String    @id
+  tenant_id           String
+  original_filename   String
+  stored_filename     String
+  file_path           String
+  file_size           BigInt
+  mime_type           String
+  width               Int?
+  height              Int?
+  format              String?
+  source_system       String
+  entity_type         String
+  entity_id           String
+  title               String?
+  description         String?
+  display_order       Int       @default(1)
+  is_primary          Boolean   @default(false)
+  is_active           Boolean   @default(true)
+  is_display_in_slide Boolean   @default(true)
+  slide_order         Int       @default(0)
+  is_ai_enhanced      Boolean   @default(false)
+  enhancement_data    Json?
+  quality_score       Decimal?
+  created_at          DateTime  @default(now())
+  updated_at          DateTime
+  deleted_at          DateTime?
+
+  @@index([source_system, entity_type, is_active])
+  @@index([tenant_id, entity_type, entity_id, is_display_in_slide, slide_order])
+  @@index([tenant_id, entity_type, entity_id, is_primary])
+  @@index([tenant_id, source_system, entity_type, entity_id])
+}
+
+enum AdminLevel {
+  chainadmin
+  groupadmin
+  superadmin
+}
+
+enum CampaignCtaType {
+  NONE
+  LINK
+  BUTTON
+  COUPON
+}
+
+enum CampaignDisplayType {
+  BANNER
+  POPUP
+  NOTIFICATION
+  FEATURED
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ENDED
+  SCHEDULED
 }

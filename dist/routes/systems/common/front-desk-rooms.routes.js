@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const middleware_1 = require("../../../auth/middleware");
+const session_auth_middleware_1 = require("../../../auth/session-auth.middleware");
 const api_response_standards_1 = require("../../../standards/api-response-standards");
 const logger_1 = require("../../../utils/logger");
 const zod_1 = require("zod");
@@ -34,7 +34,7 @@ const RoomUpdateSchema = zod_1.z.object({
  * フロントデスク - 客室一覧取得
  * GET /api/v1/admin/front-desk/rooms
  */
-router.get('/rooms', middleware_1.authMiddleware, async (req, res) => {
+router.get('/rooms', session_auth_middleware_1.sessionAuthMiddleware, async (req, res) => {
     try {
         const query = RoomQuerySchema.parse(req.query);
         const { page, limit, status, room_type, floor } = query;
@@ -130,7 +130,7 @@ router.get('/rooms', middleware_1.authMiddleware, async (req, res) => {
  * フロントデスク - 客室詳細取得
  * GET /api/v1/admin/front-desk/rooms/:id
  */
-router.get('/rooms/:id', middleware_1.authMiddleware, async (req, res) => {
+router.get('/rooms/:id', session_auth_middleware_1.sessionAuthMiddleware, async (req, res) => {
     try {
         const roomId = req.params.id;
         const tenantId = req.user?.tenant_id;
@@ -182,7 +182,7 @@ router.get('/rooms/:id', middleware_1.authMiddleware, async (req, res) => {
  * フロントデスク - 客室状態更新
  * PUT /api/v1/admin/front-desk/rooms/:id
  */
-router.put('/rooms/:id', middleware_1.authMiddleware, async (req, res) => {
+router.put('/rooms/:id', session_auth_middleware_1.sessionAuthMiddleware, async (req, res) => {
     try {
         const roomId = req.params.id;
         const updateData = RoomUpdateSchema.parse(req.body);

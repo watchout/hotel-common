@@ -8,13 +8,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const middleware_1 = require("../../../auth/middleware");
-const logger_1 = require("../../../utils/logger");
-const api_response_standards_1 = require("../../../standards/api-response-standards");
-const database_1 = require("../../../database");
-const zod_1 = require("zod");
-const room_operation_broadcaster_1 = require("../../../events/room-operation-broadcaster");
 const node_cache_1 = __importDefault(require("node-cache"));
+const zod_1 = require("zod");
+const session_auth_middleware_1 = require("../../../auth/session-auth.middleware");
+const database_1 = require("../../../database");
+const room_operation_broadcaster_1 = require("../../../events/room-operation-broadcaster");
+const api_response_standards_1 = require("../../../standards/api-response-standards");
+const logger_1 = require("../../../utils/logger");
 const router = express_1.default.Router();
 const logger = logger_1.HotelLogger.getInstance();
 // v2.0: 詳細アクションホワイトリスト（段階的厳格化）
@@ -74,7 +74,12 @@ const OperationLogQuerySchema = zod_1.z.object({
  * 操作ログ一覧取得
  * GET /api/v1/logs/operations
  */
-router.get('/operations', middleware_1.authMiddleware, async (req, res) => {
+console.log('[DEBUG] Registering GET /operations with sessionAuthMiddleware:', typeof session_auth_middleware_1.sessionAuthMiddleware);
+const wrappedSessionAuth = (req, res, next) => {
+    console.log('[WRAPPER] Before calling sessionAuthMiddleware');
+    return (0, session_auth_middleware_1.sessionAuthMiddleware)(req, res, next);
+};
+router.get('/operations', wrappedSessionAuth, async (req, res) => {
     try {
         const query = OperationLogQuerySchema.parse(req.query);
         const { page, limit, action, target_type, user_id, start_date, end_date, system } = query;
@@ -179,7 +184,7 @@ router.get('/operations', middleware_1.authMiddleware, async (req, res) => {
  * 操作ログ詳細取得
  * GET /api/v1/logs/operations/:id
  */
-router.get('/operations/:id', middleware_1.authMiddleware, async (req, res) => {
+router.get('/operations/:id', session_auth_middleware_1.sessionAuthMiddleware, async (req, res) => {
     try {
         const { id } = req.params;
         const log = await database_1.hotelDb.getAdapter().systemEvent.findFirst({
@@ -222,7 +227,7 @@ router.get('/operations/:id', middleware_1.authMiddleware, async (req, res) => {
  * 操作ログ記録
  * POST /api/v1/logs/operations
  */
-router.post('/operations', middleware_1.authMiddleware, async (req, res) => {
+router.post('/operations', session_auth_middleware_1.sessionAuthMiddleware, async (req, res) => {
     try {
         const logData = OperationLogSchema.parse(req.body);
         // 互換性: type があれば優先して action として扱う
@@ -328,7 +333,7 @@ router.post('/operations', middleware_1.authMiddleware, async (req, res) => {
  * 操作ログ検索
  * POST /api/v1/logs/operations/search
  */
-router.post('/operations/search', middleware_1.authMiddleware, async (req, res) => {
+router.post('/operations/search', session_auth_middleware_1.sessionAuthMiddleware, async (req, res) => {
     try {
         const SearchSchema = zod_1.z.object({
             query: zod_1.z.string().min(1),
@@ -405,7 +410,7 @@ router.post('/operations/search', middleware_1.authMiddleware, async (req, res) 
  * 操作ログエクスポート
  * GET /api/v1/logs/operations/export
  */
-router.get('/operations/export', middleware_1.authMiddleware, async (req, res) => {
+router.get('/operations/export', session_auth_middleware_1.sessionAuthMiddleware, async (req, res) => {
     try {
         const ExportQuerySchema = zod_1.z.object({
             format: zod_1.z.enum(['csv', 'json']).default('csv'),

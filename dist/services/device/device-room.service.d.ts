@@ -7,11 +7,11 @@ export declare class DeviceRoomService {
      * テナントに紐づくすべてのデバイスを取得
      */
     getAllDevicesByTenant(tenantId: string): Promise<{
+        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
-        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
@@ -29,11 +29,11 @@ export declare class DeviceRoomService {
      * 特定の部屋に紐づくデバイスを取得
      */
     getDevicesByRoom(tenantId: string, roomId: string): Promise<{
+        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
-        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
@@ -51,11 +51,11 @@ export declare class DeviceRoomService {
      * デバイスIDで特定のデバイスを取得
      */
     getDeviceByDeviceId(deviceId: string): Promise<{
+        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
-        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
@@ -83,11 +83,11 @@ export declare class DeviceRoomService {
         ipAddress?: string;
         macAddress?: string;
     }): Promise<{
+        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
-        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
@@ -115,11 +115,11 @@ export declare class DeviceRoomService {
         macAddress?: string;
         isActive?: boolean;
     }): Promise<{
+        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
-        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
@@ -137,11 +137,11 @@ export declare class DeviceRoomService {
      * デバイスの最終使用日時を更新
      */
     updateDeviceLastUsed(id: number): Promise<{
+        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
-        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
@@ -159,11 +159,11 @@ export declare class DeviceRoomService {
      * デバイスを非アクティブ化（論理削除）
      */
     deactivateDevice(id: number): Promise<{
+        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
-        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
@@ -181,11 +181,11 @@ export declare class DeviceRoomService {
      * デバイスを物理削除
      */
     deleteDevice(id: number): Promise<{
+        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
-        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
@@ -203,11 +203,11 @@ export declare class DeviceRoomService {
      * プレイスIDに紐づくデバイスを取得
      */
     getDevicesByPlace(tenantId: string, placeId: string): Promise<{
+        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
-        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
@@ -225,11 +225,11 @@ export declare class DeviceRoomService {
      * デバイスタイプでフィルタリングして取得
      */
     getDevicesByType(tenantId: string, deviceType: string): Promise<{
+        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
-        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
@@ -247,11 +247,11 @@ export declare class DeviceRoomService {
      * ステータスでフィルタリングして取得
      */
     getDevicesByStatus(tenantId: string, status: string): Promise<{
+        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
-        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
@@ -285,11 +285,11 @@ export declare class DeviceRoomService {
         results: ({
             success: boolean;
             device: {
+                id: number;
                 tenantId: string;
                 is_deleted: boolean;
                 isActive: boolean;
                 status: string | null;
-                id: number;
                 deleted_at: Date | null;
                 deleted_by: string | null;
                 createdAt: Date;

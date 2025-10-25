@@ -3,15 +3,14 @@
  * 全システム共通の操作ログ管理
  */
 
-import express from 'express'
-import { Request, Response } from 'express'
-import { authMiddleware } from '../../../auth/middleware'
-import { HotelLogger } from '../../../utils/logger'
-import { ResponseHelper, StandardErrorCode, StandardResponseBuilder } from '../../../standards/api-response-standards'
-import { hotelDb } from '../../../database'
-import { z } from 'zod'
-import { broadcastRoomOperation } from '../../../events/room-operation-broadcaster'
+import express, { Request, Response } from 'express'
 import NodeCache from 'node-cache'
+import { z } from 'zod'
+import { sessionAuthMiddleware } from '../../../auth/session-auth.middleware'
+import { hotelDb } from '../../../database'
+import { broadcastRoomOperation } from '../../../events/room-operation-broadcaster'
+import { ResponseHelper, StandardResponseBuilder } from '../../../standards/api-response-standards'
+import { HotelLogger } from '../../../utils/logger'
 
 const router = express.Router()
 const logger = HotelLogger.getInstance()
@@ -80,7 +79,12 @@ const OperationLogQuerySchema = z.object({
  * 操作ログ一覧取得
  * GET /api/v1/logs/operations
  */
-router.get('/operations', authMiddleware, async (req: Request, res: Response) => {
+console.log('[DEBUG] Registering GET /operations with sessionAuthMiddleware:', typeof sessionAuthMiddleware);
+const wrappedSessionAuth = (req: Request, res: Response, next: any) => {
+  console.log('[WRAPPER] Before calling sessionAuthMiddleware');
+  return sessionAuthMiddleware(req, res, next);
+};
+router.get('/operations', wrappedSessionAuth, async (req: Request, res: Response) => {
   try {
     const query = OperationLogQuerySchema.parse(req.query)
     const { page, limit, action, target_type, user_id, start_date, end_date, system } = query
@@ -94,7 +98,7 @@ router.get('/operations', authMiddleware, async (req: Request, res: Response) =>
     if (target_type) where.target_type = target_type
     if (user_id) where.user_id = user_id
     if (system) where.source_system = system
-    
+
     if (start_date || end_date) {
       where.created_at = {}
       if (start_date) where.created_at.gte = new Date(start_date)
@@ -127,7 +131,7 @@ router.get('/operations', authMiddleware, async (req: Request, res: Response) =>
 
     // レスポンス構築
     const pagination = StandardResponseBuilder.createPagination(page, limit, totalCount)
-    
+
     // アクションの日本語ラベル変換
     const toActionLabel = (action?: string) => {
       switch ((action || '').toUpperCase()) {
@@ -176,12 +180,12 @@ router.get('/operations', authMiddleware, async (req: Request, res: Response) =>
 
   } catch (error) {
     logger.error('操作ログ一覧取得エラー', error as Error)
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, 'クエリパラメータが正しくありません', error.errors)
       return
     }
-    
+
     ResponseHelper.sendInternalError(res, '操作ログの取得に失敗しました')
   }
 })
@@ -190,7 +194,7 @@ router.get('/operations', authMiddleware, async (req: Request, res: Response) =>
  * 操作ログ詳細取得
  * GET /api/v1/logs/operations/:id
  */
-router.get('/operations/:id', authMiddleware, async (req: Request, res: Response) => {
+router.get('/operations/:id', sessionAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const { id } = req.params
 
@@ -238,7 +242,7 @@ router.get('/operations/:id', authMiddleware, async (req: Request, res: Response
  * 操作ログ記録
  * POST /api/v1/logs/operations
  */
-router.post('/operations', authMiddleware, async (req: Request, res: Response) => {
+router.post('/operations', sessionAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const logData = OperationLogSchema.parse(req.body)
 
@@ -339,12 +343,12 @@ router.post('/operations', authMiddleware, async (req: Request, res: Response) =
 
   } catch (error) {
     logger.error('操作ログ記録エラー', error as Error)
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, '操作ログデータが正しくありません', error.errors)
       return
     }
-    
+
     ResponseHelper.sendInternalError(res, '操作ログの記録に失敗しました')
   }
 })
@@ -353,7 +357,7 @@ router.post('/operations', authMiddleware, async (req: Request, res: Response) =
  * 操作ログ検索
  * POST /api/v1/logs/operations/search
  */
-router.post('/operations/search', authMiddleware, async (req: Request, res: Response) => {
+router.post('/operations/search', sessionAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const SearchSchema = z.object({
       query: z.string().min(1),
@@ -409,7 +413,7 @@ router.post('/operations/search', authMiddleware, async (req: Request, res: Resp
     ])
 
     const pagination = StandardResponseBuilder.createPagination(page, limit, totalCount)
-    
+
     ResponseHelper.sendSuccess(res, {
       logs,
       search_summary: {
@@ -428,12 +432,12 @@ router.post('/operations/search', authMiddleware, async (req: Request, res: Resp
 
   } catch (error) {
     logger.error('操作ログ検索エラー', error as Error)
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, '検索条件が正しくありません', error.errors)
       return
     }
-    
+
     ResponseHelper.sendInternalError(res, '操作ログの検索に失敗しました')
   }
 })
@@ -442,7 +446,7 @@ router.post('/operations/search', authMiddleware, async (req: Request, res: Resp
  * 操作ログエクスポート
  * GET /api/v1/logs/operations/export
  */
-router.get('/operations/export', authMiddleware, async (req: Request, res: Response) => {
+router.get('/operations/export', sessionAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const ExportQuerySchema = z.object({
       format: z.enum(['csv', 'json']).default('csv'),
@@ -479,7 +483,7 @@ router.get('/operations/export', authMiddleware, async (req: Request, res: Respo
     if (format === 'csv') {
       // CSV形式でエクスポート
       const csvHeader = 'ID,User ID,Action,Target Type,Target ID,System,Created At,Status\n'
-      const csvData = logs.map(log => 
+      const csvData = logs.map(log =>
         `${log.id},${log.user_id || ''},${log.action},${log.entity_type},${log.entity_id},${log.source_system},${log.created_at.toISOString()},${log.status}`
       ).join('\n')
 
@@ -509,12 +513,12 @@ router.get('/operations/export', authMiddleware, async (req: Request, res: Respo
 
   } catch (error) {
     logger.error('操作ログエクスポートエラー', error as Error)
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, 'エクスポート条件が正しくありません', error.errors)
       return
     }
-    
+
     ResponseHelper.sendInternalError(res, '操作ログのエクスポートに失敗しました')
   }
 })

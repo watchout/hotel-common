@@ -141,6 +141,46 @@ class HotelRedisClient {
         await this.client.del(key);
     }
     /**
+     * セッションIDでセッション取得（Cookie認証用）
+     * SSOT準拠: hotel:session:{sessionId}
+     */
+    async getSessionById(sessionId) {
+        if (!this.connected)
+            await this.connect();
+        const key = this.prefixKey(`session:${sessionId}`);
+        const data = await this.client.get(key);
+        if (!data)
+            return null;
+        try {
+            const sessionInfo = JSON.parse(data);
+            // 日付フィールドをDateオブジェクトに変換
+            sessionInfo.expires_at = new Date(sessionInfo.expires_at);
+            sessionInfo.created_at = new Date(sessionInfo.created_at);
+            sessionInfo.last_activity = new Date(sessionInfo.last_activity);
+            // 期限切れチェック
+            if (sessionInfo.expires_at < new Date()) {
+                // 期限切れセッションは削除
+                await this.client.del(key);
+                return null;
+            }
+            return sessionInfo;
+        }
+        catch (error) {
+            console.error('Error parsing session data:', error);
+            return null;
+        }
+    }
+    /**
+     * セッションIDでセッション保存（Cookie認証用）
+     * SSOT準拠: hotel:session:{sessionId}
+     */
+    async saveSessionById(sessionId, sessionInfo, ttlSeconds = 3600) {
+        if (!this.connected)
+            await this.connect();
+        const key = this.prefixKey(`session:${sessionId}`);
+        await this.client.setEx(key, ttlSeconds, JSON.stringify(sessionInfo));
+    }
+    /**
      * セッション更新（最終アクティビティ時間）
      */
     async updateSessionActivity(tenantId, userId) {

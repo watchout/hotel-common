@@ -36,19 +36,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const jwt_1 = require("../../../auth/jwt");
-const logger_1 = require("../../../utils/logger");
-const response_builder_1 = require("../../../utils/response-builder");
-const database_1 = require("../../../database");
 const bcrypt = __importStar(require("bcrypt"));
+const express_1 = __importDefault(require("express"));
+const uuid_1 = require("uuid");
+const jwt_1 = require("../../../auth/jwt");
+const database_1 = require("../../../database");
+const logger_1 = require("../../../utils/logger");
+const redis_1 = require("../../../utils/redis");
+const response_builder_1 = require("../../../utils/response-builder");
 const router = express_1.default.Router();
 const logger = logger_1.HotelLogger.getInstance();
 /**
  * ログイン処理
  * POST /api/v1/auth/login
  */
-router.post('/api/v1/auth/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     console.log('🔐 [AUTH] ログインリクエスト受信 - 修正版コード実行中');
     try {
         const { email, password, tenantId } = req.body;
@@ -96,6 +98,15 @@ router.post('/api/v1/auth/login', async (req, res) => {
         }
         // 複数テナントに所属している場合の処理
         const availableTenants = await Promise.all(staffMembers.map(async (staffMember) => {
+            // tenant_idが空または不正な場合はスキップ
+            if (!staffMember.tenant_id || staffMember.tenant_id.trim() === '') {
+                return {
+                    tenantId: staffMember.tenant_id || '',
+                    staffId: staffMember.id,
+                    staffRole: staffMember.role,
+                    tenant: null
+                };
+            }
             const tenant = await database_1.hotelDb.getAdapter().tenant.findUnique({
                 where: { id: staffMember.tenant_id }
             });
@@ -151,24 +162,84 @@ router.post('/api/v1/auth/login', async (req, res) => {
             data: { last_login_at: new Date() }
         });
         logger.info('ログイン成功', { userId: selectedStaffMember.id, tenantId: selectedTenantId, email });
-        return response_builder_1.StandardResponseBuilder.success(res, {
-            accessToken,
-            refreshToken,
-            user: {
-                id: selectedStaffMember.id,
-                email: selectedStaffMember.email,
-                name: selectedStaffMember.name,
-                role: selectedStaffMember.role,
-                tenantId: selectedTenantId
-            },
-            tenant: selectedTenant,
-            availableTenants: availableTenants.map(t => ({
-                id: t.tenantId,
-                name: t.tenant?.name || 'Unknown',
-                domain: t.tenant?.domain || 'unknown.domain',
-                staffRole: t.staffRole
-            }))
+        // === PR2: Cookie+Redisセッション発行 ===
+        const sessionId = (0, uuid_1.v4)();
+        const redis = (0, redis_1.getRedisClient)();
+        const sessionTTL = 3600; // 1時間（暫定）
+        // Redisにセッション保存
+        await redis.saveSessionById(sessionId, {
+            user_id: selectedStaffMember.id,
+            tenant_id: selectedTenantId,
+            email: selectedStaffMember.email,
+            role: selectedStaffMember.role,
+            permissions: selectedStaffMember.role === 'SUPER_ADMIN' ? ['*'] : ['tenant:read', 'tenant:write'],
+            accessible_tenants: accessibleTenants,
+            created_at: new Date(),
+            last_activity: new Date(),
+            expires_at: new Date(Date.now() + sessionTTL * 1000)
+        }, sessionTTL);
+        // Cookie設定
+        const isProduction = process.env.NODE_ENV === 'production';
+        const cookieOptions = {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: 'strict',
+            path: '/',
+            maxAge: sessionTTL
+        };
+        // 正式Cookie名
+        res.cookie('hotel_session', sessionId, cookieOptions);
+        // 互換Cookie名（暫定）
+        res.cookie('hotel-session-id', sessionId, cookieOptions);
+        logger.info('セッションCookie発行', {
+            sessionId: sessionId.substring(0, 8) + '...',
+            userId: selectedStaffMember.id
         });
+        // === END PR2 ===
+        // AUTH_LOGIN_MODE による返却内容の切り替え
+        const loginMode = (process.env.AUTH_LOGIN_MODE || 'dual').toLowerCase();
+        if (loginMode === 'session') {
+            // session モード: JWT不要
+            return response_builder_1.StandardResponseBuilder.success(res, {
+                sessionId, // デバッグ用（本番では削除推奨）
+                user: {
+                    id: selectedStaffMember.id,
+                    email: selectedStaffMember.email,
+                    name: selectedStaffMember.name,
+                    role: selectedStaffMember.role,
+                    tenantId: selectedTenantId
+                },
+                tenant: selectedTenant,
+                availableTenants: availableTenants.map(t => ({
+                    id: t.tenantId,
+                    name: t.tenant?.name || 'Unknown',
+                    domain: t.tenant?.domain || 'unknown.domain',
+                    staffRole: t.staffRole
+                }))
+            });
+        }
+        else {
+            // dual モード（デフォルト）: JWT互換維持
+            return response_builder_1.StandardResponseBuilder.success(res, {
+                accessToken, // deprecated - 将来削除予定
+                refreshToken, // deprecated - 将来削除予定
+                sessionId, // デバッグ用（本番では削除推奨）
+                user: {
+                    id: selectedStaffMember.id,
+                    email: selectedStaffMember.email,
+                    name: selectedStaffMember.name,
+                    role: selectedStaffMember.role,
+                    tenantId: selectedTenantId
+                },
+                tenant: selectedTenant,
+                availableTenants: availableTenants.map(t => ({
+                    id: t.tenantId,
+                    name: t.tenant?.name || 'Unknown',
+                    domain: t.tenant?.domain || 'unknown.domain',
+                    staffRole: t.staffRole
+                }))
+            });
+        }
     }
     catch (error) {
         logger.error('ログインエラー:', error);
@@ -179,55 +250,121 @@ router.post('/api/v1/auth/login', async (req, res) => {
  * ログアウト処理
  * POST /api/v1/auth/logout
  */
-router.post('/api/v1/auth/logout', async (req, res) => {
+router.post('/logout', async (req, res) => {
     try {
+        // === PR2: Cookie+Redisセッション破棄 ===
+        const cookies = req.headers.cookie;
+        let sessionId = null;
+        if (cookies) {
+            const cookieMap = {};
+            cookies.split(';').forEach(cookie => {
+                const [key, value] = cookie.trim().split('=');
+                if (key && value) {
+                    cookieMap[key] = value;
+                }
+            });
+            // 正式Cookie優先、互換Cookieも確認
+            sessionId = cookieMap['hotel_session'] || cookieMap['hotel-session-id'] || null;
+        }
+        // Redisからセッション削除
+        if (sessionId) {
+            const redis = (0, redis_1.getRedisClient)();
+            try {
+                await redis.delete(`session:${sessionId}`);
+                logger.info('セッション削除成功', { sessionId: sessionId.substring(0, 8) + '...' });
+            }
+            catch (redisError) {
+                logger.warn('Redis削除エラー（継続）', redisError);
+            }
+        }
+        // Cookie破棄
+        const isProduction = process.env.NODE_ENV === 'production';
+        const clearCookieOptions = {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: 'strict',
+            path: '/',
+            maxAge: 0
+        };
+        res.cookie('hotel_session', '', clearCookieOptions);
+        res.cookie('hotel-session-id', '', clearCookieOptions);
+        // === END PR2 ===
+        // 旧JWT互換処理（削除予定）
         const authHeader = req.headers.authorization;
-        // トークンがない場合は早期リターン
-        if (!authHeader) {
-            return response_builder_1.StandardResponseBuilder.success(res, {
-                message: 'ログアウト成功（トークンなし）',
-                clearTokens: true // クライアント側でトークンを削除するフラグ
-            });
+        if (authHeader) {
+            const token = authHeader.replace('Bearer ', '');
+            try {
+                // トークンを検証
+                const decoded = (0, jwt_1.verifyToken)(token);
+                // ログアウト記録（JWT用）
+                logger.info('ログアウト成功（JWT）', {
+                    userId: decoded.user_id,
+                    tenantId: decoded.tenant_id,
+                    email: decoded.email
+                });
+            }
+            catch (verifyError) {
+                logger.warn('トークン検証失敗（ログアウト時）', verifyError);
+            }
         }
-        const token = authHeader.replace('Bearer ', '');
-        try {
-            // トークンを検証
-            const decoded = (0, jwt_1.verifyToken)(token);
-            // ログアウト記録
-            logger.info('ログアウト成功', {
-                userId: decoded.user_id,
-                tenantId: decoded.tenant_id,
-                email: decoded.email
-            });
-            // ログアウト成功レスポンス
-            return response_builder_1.StandardResponseBuilder.success(res, {
-                message: 'ログアウト成功',
-                clearTokens: true // クライアント側でトークンを削除するフラグ
-            });
-        }
-        catch (verifyError) {
-            // トークンが無効でも成功レスポンスを返す
-            return response_builder_1.StandardResponseBuilder.success(res, {
-                message: 'ログアウト成功（無効なトークン）',
-                clearTokens: true // クライアント側でトークンを削除するフラグ
-            });
-        }
+        // 204 No Content（推奨）
+        return res.status(204).send();
     }
     catch (error) {
         logger.error('ログアウトエラー:', error);
-        // エラーが発生してもユーザー側では正常にログアウトできたと表示するため、
-        // 成功レスポンスを返す
+        return res.status(500).json(response_builder_1.StandardResponseBuilder.error('LOGOUT_ERROR', error instanceof Error ? error.message : 'ログアウトに失敗しました').response);
+    }
+});
+/**
+ * セッション確認API（PR2追加）
+ * GET /api/v1/auth/session
+ */
+router.get('/session', async (req, res) => {
+    try {
+        const cookies = req.headers.cookie;
+        let sessionId = null;
+        if (cookies) {
+            const cookieMap = {};
+            cookies.split(';').forEach(cookie => {
+                const [key, value] = cookie.trim().split('=');
+                if (key && value) {
+                    cookieMap[key] = value;
+                }
+            });
+            sessionId = cookieMap['hotel_session'] || cookieMap['hotel-session-id'] || null;
+        }
+        if (!sessionId) {
+            return res.status(401).json(response_builder_1.StandardResponseBuilder.error('UNAUTHORIZED', 'セッションが見つかりません').response);
+        }
+        const redis = (0, redis_1.getRedisClient)();
+        const sessionInfo = await redis.getSessionById(sessionId);
+        if (!sessionInfo) {
+            return res.status(401).json(response_builder_1.StandardResponseBuilder.error('SESSION_EXPIRED', 'セッションが無効または期限切れです').response);
+        }
         return response_builder_1.StandardResponseBuilder.success(res, {
-            message: 'ログアウト成功',
-            clearTokens: true // クライアント側でトークンを削除するフラグ
+            user: {
+                id: sessionInfo.user_id,
+                email: sessionInfo.email,
+                role: sessionInfo.role,
+                tenantId: sessionInfo.tenant_id
+            },
+            session: {
+                id: sessionId.substring(0, 8) + '...',
+                createdAt: sessionInfo.created_at,
+                expiresAt: sessionInfo.expires_at
+            }
         });
+    }
+    catch (error) {
+        logger.error('セッション確認エラー:', error);
+        return res.status(500).json(response_builder_1.StandardResponseBuilder.error('SESSION_CHECK_ERROR', error instanceof Error ? error.message : 'セッション確認に失敗しました').response);
     }
 });
 /**
  * テナント切り替え
  * POST /api/v1/auth/switch-tenant
  */
-router.post('/api/v1/auth/switch-tenant', async (req, res) => {
+router.post('/switch-tenant', async (req, res) => {
     try {
         const { tenantId } = req.body;
         const authHeader = req.headers.authorization;
@@ -328,7 +465,7 @@ router.post('/api/v1/auth/switch-tenant', async (req, res) => {
  * トークン検証
  * GET /api/v1/auth/validate-token
  */
-router.get('/api/v1/auth/validate-token', async (req, res) => {
+router.get('/validate-token', async (req, res) => {
     try {
         const authHeader = req.headers.authorization;
         if (!authHeader) {
@@ -367,7 +504,7 @@ router.get('/api/v1/auth/validate-token', async (req, res) => {
  * トークンリフレッシュ
  * POST /api/v1/auth/refresh
  */
-router.post('/api/v1/auth/refresh', async (req, res) => {
+router.post('/refresh', async (req, res) => {
     try {
         const { refreshToken } = req.body;
         if (!refreshToken) {

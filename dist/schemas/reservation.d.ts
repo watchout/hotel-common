@@ -35,8 +35,8 @@ export declare const ReservationSchema: z.ZodObject<{
     created_by_system: z.ZodDefault<z.ZodString>;
     updated_by_system: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    status: "confirmed" | "checked_in" | "cancelled" | "no_show" | "pending" | "completed";
     id: string;
+    status: "pending" | "confirmed" | "checked_in" | "cancelled" | "no_show" | "completed";
     tenant_id: string;
     user_id: string;
     checkin_date: string;
@@ -62,8 +62,8 @@ export declare const ReservationSchema: z.ZodObject<{
     updated_by?: string | undefined;
     updated_by_system?: string | undefined;
 }, {
-    status: "confirmed" | "checked_in" | "cancelled" | "no_show" | "pending" | "completed";
     id: string;
+    status: "pending" | "confirmed" | "checked_in" | "cancelled" | "no_show" | "completed";
     tenant_id: string;
     user_id: string;
     checkin_date: string;
@@ -159,7 +159,7 @@ export declare const UpdateReservationRequestSchema: z.ZodObject<{
     notes: z.ZodOptional<z.ZodString>;
     updated_by: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    status?: "confirmed" | "checked_in" | "cancelled" | "no_show" | "pending" | "completed" | undefined;
+    status?: "pending" | "confirmed" | "checked_in" | "cancelled" | "no_show" | "completed" | undefined;
     checkin_date?: string | undefined;
     checkout_date?: string | undefined;
     room_type?: "standard" | "premium" | "deluxe" | "suite" | "executive" | undefined;
@@ -176,7 +176,7 @@ export declare const UpdateReservationRequestSchema: z.ZodObject<{
     notes?: string | undefined;
     updated_by?: string | undefined;
 }, {
-    status?: "confirmed" | "checked_in" | "cancelled" | "no_show" | "pending" | "completed" | undefined;
+    status?: "pending" | "confirmed" | "checked_in" | "cancelled" | "no_show" | "completed" | undefined;
     checkin_date?: string | undefined;
     checkout_date?: string | undefined;
     room_type?: "standard" | "premium" | "deluxe" | "suite" | "executive" | undefined;
@@ -213,7 +213,7 @@ export declare const ReservationSearchParamsSchema: z.ZodObject<{
     tenant_id: string;
     limit: number;
     offset: number;
-    status?: "confirmed" | "checked_in" | "cancelled" | "no_show" | "pending" | "completed" | undefined;
+    status?: "pending" | "confirmed" | "checked_in" | "cancelled" | "no_show" | "completed" | undefined;
     user_id?: string | undefined;
     room_type?: "standard" | "premium" | "deluxe" | "suite" | "executive" | undefined;
     room_number?: string | undefined;
@@ -227,7 +227,7 @@ export declare const ReservationSearchParamsSchema: z.ZodObject<{
     guest_name?: string | undefined;
 }, {
     tenant_id: string;
-    status?: "confirmed" | "checked_in" | "cancelled" | "no_show" | "pending" | "completed" | undefined;
+    status?: "pending" | "confirmed" | "checked_in" | "cancelled" | "no_show" | "completed" | undefined;
     user_id?: string | undefined;
     room_type?: "standard" | "premium" | "deluxe" | "suite" | "executive" | undefined;
     room_number?: string | undefined;
