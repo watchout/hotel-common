@@ -43,7 +43,7 @@ router.post('/login', async (req: Request, res: Response) => {
     }
     // 特定のテナントが指定されている場合は、そのテナントのスタッフに限定
     const candidateStaffList = tenantId
-      ? staffMembers.filter(s => s.tenant_id === tenantId)
+      ? staffMembers.filter(s => (s as any)?.tenant_id === tenantId)
       : staffMembers;
 
     if (tenantId && candidateStaffList.length === 0) {
@@ -89,19 +89,19 @@ router.post('/login', async (req: Request, res: Response) => {
           };
         }
         const tenant = await hotelDb.getAdapter().tenant.findUnique({
-          where: { id: staffMember.tenant_id }
+          where: { id: (staffMember as any)?.tenant_id }
         });
         return {
-          tenantId: staffMember.tenant_id,
+          tenantId: (staffMember as any)?.tenant_id,
           staffId: staffMember.id,
-          staffRole: staffMember.role,
+          staffRole: (staffMember as any)?.role ?? 'staff',
           tenant: tenant
         };
       })
     );
 
     // 選択されたテナントの情報を取得
-    const selectedTenantId = selectedStaffMember.tenant_id;
+    const selectedTenantId = (selectedStaffMember as any)?.tenant_id ?? '';
     const selectedTenant = availableTenants.find(t => t.tenantId === selectedTenantId)?.tenant;
 
     // tenant_idが空または不正な場合は、デフォルトテナント情報を使用（PR2: Cookie発行を優先）
@@ -122,9 +122,9 @@ router.post('/login', async (req: Request, res: Response) => {
       user_id: selectedStaffMember.id,
       tenant_id: selectedTenantId,
       email: selectedStaffMember.email,
-      role: selectedStaffMember.role as 'STAFF' | 'ADMIN' | 'SUPER_ADMIN' | 'MANAGER' | 'OWNER' | 'SYSTEM',
-      level: 3, // デフォルトレベル
-      permissions: selectedStaffMember.role === 'SUPER_ADMIN' ? ['*'] : ['tenant:read', 'tenant:write'],
+      role: ((selectedStaffMember as any)?.role ?? 'STAFF') as 'STAFF' | 'ADMIN' | 'SUPER_ADMIN' | 'MANAGER' | 'OWNER' | 'SYSTEM',
+      level: 3,
+      permissions: ((selectedStaffMember as any)?.role ?? 'STAFF') === 'SUPER_ADMIN' ? ['*'] : ['tenant:read', 'tenant:write'],
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + (8 * 60 * 60), // 8時間
       jti: `jwt-${Date.now()}`,
@@ -165,7 +165,7 @@ router.post('/login', async (req: Request, res: Response) => {
       user_id: selectedStaffMember.id,
       tenant_id: selectedTenantId,
       email: selectedStaffMember.email,
-      role: selectedStaffMember.role,
+      role: (selectedStaffMember as any)?.role ?? 'STAFF',
       permissions: selectedStaffMember.role === 'SUPER_ADMIN' ? ['*'] : ['tenant:read', 'tenant:write'],
       accessible_tenants: accessibleTenants,
       created_at: new Date(),
@@ -227,7 +227,7 @@ router.post('/login', async (req: Request, res: Response) => {
           id: selectedStaffMember.id,
           email: selectedStaffMember.email,
           name: selectedStaffMember.name,
-          role: selectedStaffMember.role,
+      role: (selectedStaffMember as any)?.role ?? 'STAFF',
           tenantId: selectedTenantId
         },
         tenant: selectedTenant,
