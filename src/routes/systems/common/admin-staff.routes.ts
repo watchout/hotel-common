@@ -5,7 +5,7 @@
 
 import express, { Request, Response } from 'express';
 import { z } from 'zod';
-import { authMiddleware } from '../../../auth/middleware';
+import { sessionAuthMiddleware } from '../../../auth/session-auth.middleware';
 import { requireStaffManagementPermission, requireStaffAdminPermission } from '../../../middleware/admin-permission';
 import { hotelDb } from '../../../database';
 import { StandardResponseBuilder } from '../../../utils/response-builder';
@@ -86,7 +86,7 @@ const StaffBulkDeleteSchema = z.object({
  * スタッフ一覧取得（管理者用）
  * GET /admin/staff
  */
-router.get('/staff', authMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
+router.get('/staff', sessionAuthMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     // UTF-8エンコーディング対応
     if (req.query.search && typeof req.query.search === 'string') {
@@ -236,7 +236,7 @@ router.get('/staff', authMiddleware, requireStaffManagementPermission, async (re
  * スタッフ一括更新（管理者用）
  * PATCH /admin/staff/bulk
  */
-router.patch('/staff/bulk', authMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
+router.patch('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const data = StaffBulkUpdateSchema.parse(req.body);
     const { staffIds, updates } = data;
@@ -359,7 +359,7 @@ router.patch('/staff/bulk', authMiddleware, requireStaffAdminPermission, async (
  * スタッフ一括削除（管理者用）
  * DELETE /admin/staff/bulk
  */
-router.delete('/staff/bulk', authMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
+router.delete('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const data = StaffBulkDeleteSchema.parse(req.body);
     const { staffIds, soft } = data;
@@ -497,7 +497,7 @@ router.delete('/staff/bulk', authMiddleware, requireStaffAdminPermission, async 
  * スタッフ詳細取得（管理者用）
  * GET /admin/staff/:id
  */
-router.get('/staff/:id', authMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
+router.get('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -553,7 +553,7 @@ router.get('/staff/:id', authMiddleware, requireStaffManagementPermission, async
  * スタッフ作成（管理者用）
  * POST /admin/staff
  */
-router.post('/staff', authMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
+router.post('/staff', sessionAuthMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const data = StaffCreateSchema.parse(req.body);
 
@@ -674,7 +674,7 @@ router.post('/staff', authMiddleware, requireStaffAdminPermission, async (req: R
  * スタッフ更新（管理者用）
  * PATCH /admin/staff/:id
  */
-router.patch('/staff/:id', authMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
+router.patch('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const { id } = req.params;
     const data = StaffUpdateSchema.parse(req.body);
@@ -814,7 +814,7 @@ router.patch('/staff/:id', authMiddleware, requireStaffManagementPermission, asy
  * スタッフ削除（管理者用）
  * DELETE /admin/staff/:id
  */
-router.delete('/staff/:id', authMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
+router.delete('/staff/:id', sessionAuthMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const { id } = req.params;
     const { soft = 'true' } = req.query;

@@ -51,8 +51,8 @@ export declare class HotelDatabaseClient {
     get tenantAccessLog(): import("../generated/prisma").Prisma.tenant_access_logsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
     get systemEvent(): import("../generated/prisma").Prisma.system_eventDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
     get deviceRoom(): import("../generated/prisma").Prisma.device_roomsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get order(): import("../generated/prisma").Prisma.OrderDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get orderItem(): import("../generated/prisma").Prisma.OrderItemDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get order(): any;
+    get orderItem(): any;
     get schemaVersion(): import("../generated/prisma").Prisma.schema_versionDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
     get systemPlanRestrictions(): import("../generated/prisma").Prisma.SystemPlanRestrictionsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
     get tenantSystemPlan(): import("../generated/prisma").Prisma.TenantSystemPlanDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;

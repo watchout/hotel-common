@@ -86,10 +86,10 @@ export class HotelRedisClient {
    */
   async saveSession(sessionInfo: SessionInfo): Promise<void> {
     if (!this.connected) await this.connect()
-    
+
     const key = this.prefixKey(`session:${sessionInfo.tenant_id}:${sessionInfo.user_id}`)
     const ttl = Math.floor((sessionInfo.expires_at.getTime() - Date.now()) / 1000)
-    
+
     await this.client.setEx(key, ttl, JSON.stringify(sessionInfo))
   }
 
@@ -98,12 +98,12 @@ export class HotelRedisClient {
    */
   async getSession(tenantId: string, userId: string): Promise<SessionInfo | null> {
     if (!this.connected) await this.connect()
-    
+
     const key = this.prefixKey(`session:${tenantId}:${userId}`)
     const data = await this.client.get(key)
-    
+
     if (!data) return null
-    
+
     try {
       const sessionInfo = JSON.parse(data) as SessionInfo
       // 日付フィールドをDateオブジェクトに変換
@@ -122,9 +122,64 @@ export class HotelRedisClient {
    */
   async deleteSession(tenantId: string, userId: string): Promise<void> {
     if (!this.connected) await this.connect()
-    
+
     const key = this.prefixKey(`session:${tenantId}:${userId}`)
     await this.client.del(key)
+  }
+
+  /**
+   * セッションIDでセッション取得（Cookie認証用）
+   * SSOT準拠: hotel:session:{sessionId}
+   */
+  async getSessionById(sessionId: string): Promise<SessionInfo | null> {
+    if (!this.connected) await this.connect()
+
+    const key = this.prefixKey(`session:${sessionId}`)
+    const data = await this.client.get(key)
+
+    if (!data) return null
+
+    try {
+      const sessionInfo = JSON.parse(data) as SessionInfo
+      // 日付フィールドをDateオブジェクトに変換
+      sessionInfo.expires_at = new Date(sessionInfo.expires_at)
+      sessionInfo.created_at = new Date(sessionInfo.created_at)
+      sessionInfo.last_activity = new Date(sessionInfo.last_activity)
+
+      // 期限切れチェック
+      if (sessionInfo.expires_at < new Date()) {
+        // 期限切れセッションは削除
+        await this.client.del(key)
+        return null
+      }
+
+      return sessionInfo
+    } catch (error) {
+      console.error('Error parsing session data:', error)
+      return null
+    }
+  }
+
+  /**
+   * セッションIDでセッション保存（Cookie認証用）
+   * SSOT準拠: hotel:session:{sessionId}
+   */
+  async saveSessionById(sessionId: string, sessionInfo: SessionInfo, ttlSeconds: number = 3600): Promise<void> {
+    if (!this.connected) await this.connect()
+
+    const key = `hotel:session:${sessionId}` // プレフィックスなしで直接指定（SSOT準拠）
+    await this.client.setEx(key, ttlSeconds, JSON.stringify(sessionInfo))
+  }
+
+  /**
+   * セッションIDでセッション削除（Cookie認証用）
+   * SSOT準拠: hotel:session:{sessionId}
+   */
+  async deleteSessionById(sessionId: string): Promise<number> {
+    if (!this.connected) await this.connect()
+
+    const key = `hotel:session:${sessionId}` // プレフィックスなしで直接指定（SSOT準拠）
+    return await this.client.del(key)
   }
 
   /**
@@ -143,25 +198,25 @@ export class HotelRedisClient {
    */
   async setCache(key: string, value: any, ttlSeconds?: number): Promise<void> {
     if (!this.connected) await this.connect()
-    
+
     const prefixedKey = this.prefixKey(`cache:${key}`)
     const serialized = JSON.stringify(value)
-    
+
     if (ttlSeconds) {
       await this.client.setEx(prefixedKey, ttlSeconds, serialized)
     } else {
       await this.client.set(prefixedKey, serialized)
     }
   }
-  
+
   /**
    * 値を保存
    */
   async set(key: string, value: string, ttlSeconds?: number): Promise<void> {
     if (!this.connected) await this.connect()
-    
+
     const prefixedKey = this.prefixKey(key)
-    
+
     if (ttlSeconds) {
       await this.client.setEx(prefixedKey, ttlSeconds, value)
     } else {
@@ -174,12 +229,12 @@ export class HotelRedisClient {
    */
   async getCache<T = any>(key: string): Promise<T | null> {
     if (!this.connected) await this.connect()
-    
+
     const prefixedKey = this.prefixKey(`cache:${key}`)
     const data = await this.client.get(prefixedKey)
-    
+
     if (!data) return null
-    
+
     try {
       return JSON.parse(data) as T
     } catch (error) {
@@ -187,13 +242,13 @@ export class HotelRedisClient {
       return null
     }
   }
-  
+
   /**
    * 値を取得
    */
   async get(key: string): Promise<string | null> {
     if (!this.connected) await this.connect()
-    
+
     const prefixedKey = this.prefixKey(key)
     return await this.client.get(prefixedKey)
   }
@@ -203,7 +258,7 @@ export class HotelRedisClient {
    */
   async deleteCache(key: string): Promise<void> {
     if (!this.connected) await this.connect()
-    
+
     const prefixedKey = this.prefixKey(`cache:${key}`)
     await this.client.del(prefixedKey)
   }
@@ -213,7 +268,7 @@ export class HotelRedisClient {
    */
   async getKeysByPattern(pattern: string): Promise<string[]> {
     if (!this.connected) await this.connect()
-    
+
     const prefixedPattern = this.prefixKey(pattern)
     return await this.client.keys(prefixedPattern)
   }
@@ -223,7 +278,7 @@ export class HotelRedisClient {
    */
   async pushToQueue(queueName: string, item: any): Promise<void> {
     if (!this.connected) await this.connect()
-    
+
     const key = this.prefixKey(`queue:${queueName}`)
     await this.client.rPush(key, JSON.stringify(item))
   }
@@ -233,12 +288,12 @@ export class HotelRedisClient {
    */
   async popFromQueue<T = any>(queueName: string): Promise<T | null> {
     if (!this.connected) await this.connect()
-    
+
     const key = this.prefixKey(`queue:${queueName}`)
     const data = await this.client.lPop(key)
-    
+
     if (!data) return null
-    
+
     try {
       return JSON.parse(data) as T
     } catch (error) {
@@ -256,58 +311,58 @@ export class HotelRedisClient {
       ...event,
       timestamp: new Date().toISOString()
     }))
-    
+
     // 30日後に自動削除
     await this.client.expire(logKey, 30 * 24 * 60 * 60)
   }
-  
+
   /**
    * ハッシュに値を設定
    */
   async hset(key: string, field: string, value: string): Promise<void> {
     if (!this.connected) await this.connect()
-    
+
     const prefixedKey = this.prefixKey(key)
     await this.client.hSet(prefixedKey, field, value)
   }
-  
+
   /**
    * ハッシュから値を取得
    */
   async hget(key: string, field: string): Promise<string | null> {
     if (!this.connected) await this.connect()
-    
+
     const prefixedKey = this.prefixKey(key)
     const result = await this.client.hGet(prefixedKey, field)
     return result as string | null
   }
-  
+
   /**
    * ハッシュからフィールドを削除
    */
   async hdel(key: string, field: string): Promise<void> {
     if (!this.connected) await this.connect()
-    
+
     const prefixedKey = this.prefixKey(key)
     await this.client.hDel(prefixedKey, field)
   }
-  
+
   /**
    * キーを削除
    */
   async del(key: string): Promise<void> {
     if (!this.connected) await this.connect()
-    
+
     const prefixedKey = this.prefixKey(key)
     await this.client.del(prefixedKey)
   }
-  
+
   /**
    * ハッシュに複数の値を設定
    */
   async hsetAll(key: string, fieldValues: Record<string, string>): Promise<void> {
     if (!this.connected) await this.connect()
-    
+
     const prefixedKey = this.prefixKey(key)
     for (const [field, value] of Object.entries(fieldValues)) {
       await this.client.hSet(prefixedKey, field, value)
@@ -323,4 +378,4 @@ export function getRedisClient(config?: RedisConfig): HotelRedisClient {
     redisInstance = new HotelRedisClient(config)
   }
   return redisInstance
-} 
+}

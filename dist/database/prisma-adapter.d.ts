@@ -77,11 +77,11 @@ export declare class PrismaAdapter {
     /**
      * order -> order のマッピング
      */
-    get order(): import("../generated/prisma").Prisma.OrderDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get order(): any;
     /**
      * orderItem -> orderItem のマッピング
      */
-    get orderItem(): import("../generated/prisma").Prisma.OrderItemDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get orderItem(): any;
     /**
      * schemaVersion -> schema_version のマッピング
      */

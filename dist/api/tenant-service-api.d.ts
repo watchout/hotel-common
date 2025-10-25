@@ -5,8 +5,8 @@
 export declare function getTenantServices(tenantId: string): Promise<{
     success: boolean;
     data: {
-        is_active: boolean;
         id: string;
+        is_active: boolean;
         tenant_id: string;
         created_at: Date;
         updated_at: Date;
@@ -32,8 +32,8 @@ export declare function getTenantServices(tenantId: string): Promise<{
 export declare function updateTenantService(tenantId: string, serviceType: string, planType: string, isActive: boolean): Promise<{
     success: boolean;
     data: {
-        is_active: boolean;
         id: string;
+        is_active: boolean;
         tenant_id: string;
         created_at: Date;
         updated_at: Date;
@@ -124,8 +124,8 @@ export declare function checkServiceAccess(tenantId: string, serviceType: string
     success: boolean;
     data: {
         service: {
-            is_active: boolean;
             id: string;
+            is_active: boolean;
             tenant_id: string;
             created_at: Date;
             updated_at: Date;

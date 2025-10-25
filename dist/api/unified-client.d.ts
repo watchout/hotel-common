@@ -64,9 +64,9 @@ export declare class HotelUnifiedApiClient {
         limit?: number;
         offset?: number;
     }): Promise<{
+        id: string;
         is_deleted: boolean;
         status: string;
-        id: string;
         tenant_id: string;
         checkin_date: Date;
         checkout_date: Date;

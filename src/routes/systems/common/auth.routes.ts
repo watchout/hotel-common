@@ -1,11 +1,12 @@
-import express from 'express';
-import { Request, Response } from 'express';
+import * as bcrypt from 'bcrypt';
+import express, { Request, Response } from 'express';
+import { v4 as uuidv4 } from 'uuid';
 import { generateToken, verifyToken } from '../../../auth/jwt';
 import { HierarchicalJWTPayload } from '../../../auth/types';
-import { HotelLogger } from '../../../utils/logger';
-import { StandardResponseBuilder } from '../../../utils/response-builder';
 import { hotelDb } from '../../../database';
-import * as bcrypt from 'bcrypt';
+import { HotelLogger } from '../../../utils/logger';
+import { getRedisClient } from '../../../utils/redis';
+import { StandardResponseBuilder } from '../../../utils/response-builder';
 
 const router = express.Router();
 const logger = HotelLogger.getInstance();
@@ -14,7 +15,7 @@ const logger = HotelLogger.getInstance();
  * ログイン処理
  * POST /api/v1/auth/login
  */
-router.post('/api/v1/auth/login', async (req: Request, res: Response) => {
+router.post('/login', async (req: Request, res: Response) => {
   console.log('🔐 [AUTH] ログインリクエスト受信 - 修正版コード実行中');
   try {
     const { email, password, tenantId } = req.body;
@@ -74,10 +75,19 @@ router.post('/api/v1/auth/login', async (req: Request, res: Response) => {
         StandardResponseBuilder.error('INVALID_CREDENTIALS', '認証情報が正しくありません').response
       );
     }
-    
+
     // 複数テナントに所属している場合の処理
     const availableTenants = await Promise.all(
       staffMembers.map(async (staffMember) => {
+        // tenant_idが空または不正な場合はスキップ
+        if (!staffMember.tenant_id || staffMember.tenant_id.trim() === '') {
+          return {
+            tenantId: staffMember.tenant_id || '',
+            staffId: staffMember.id,
+            staffRole: staffMember.role,
+            tenant: null
+          };
+        }
         const tenant = await hotelDb.getAdapter().tenant.findUnique({
           where: { id: staffMember.tenant_id }
         });
@@ -94,11 +104,12 @@ router.post('/api/v1/auth/login', async (req: Request, res: Response) => {
     const selectedTenantId = selectedStaffMember.tenant_id;
     const selectedTenant = availableTenants.find(t => t.tenantId === selectedTenantId)?.tenant;
 
-    if (!selectedTenant) {
-      return res.status(404).json(
-        StandardResponseBuilder.error('TENANT_NOT_FOUND', 'テナント情報が見つかりません').response
-      );
-    }
+    // tenant_idが空または不正な場合は、デフォルトテナント情報を使用（PR2: Cookie発行を優先）
+    const tenantInfo = selectedTenant || {
+      id: selectedTenantId || '',
+      name: 'Default Tenant',
+      domain: 'default.local'
+    };
 
     // accessible_tenantsを生成（必ずtenant_idを含む）
     const accessibleTenants = availableTenants.map(t => t.tenantId);
@@ -144,29 +155,95 @@ router.post('/api/v1/auth/login', async (req: Request, res: Response) => {
 
     logger.info('ログイン成功', { userId: selectedStaffMember.id, tenantId: selectedTenantId, email });
 
-    return StandardResponseBuilder.success(res, {
-      accessToken,
-      refreshToken,
-      user: {
-        id: selectedStaffMember.id,
-        email: selectedStaffMember.email,
-        name: selectedStaffMember.name,
-        role: selectedStaffMember.role,
-        tenantId: selectedTenantId
-      },
-      tenant: selectedTenant,
-      availableTenants: availableTenants.map(t => ({
-        id: t.tenantId,
-        name: t.tenant?.name || 'Unknown',
-        domain: t.tenant?.domain || 'unknown.domain',
-        staffRole: t.staffRole
-      }))
+    // === PR2: Cookie+Redisセッション発行 ===
+    const sessionId = uuidv4();
+    const redis = getRedisClient();
+    const sessionTTL = 3600; // 1時間（暫定）
+
+    // Redisにセッション保存
+    await redis.saveSessionById(sessionId, {
+      user_id: selectedStaffMember.id,
+      tenant_id: selectedTenantId,
+      email: selectedStaffMember.email,
+      role: selectedStaffMember.role,
+      permissions: selectedStaffMember.role === 'SUPER_ADMIN' ? ['*'] : ['tenant:read', 'tenant:write'],
+      accessible_tenants: accessibleTenants,
+      created_at: new Date(),
+      last_activity: new Date(),
+      expires_at: new Date(Date.now() + sessionTTL * 1000)
+    }, sessionTTL);
+
+    // Cookie設定
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cookieOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'strict' as const,
+      path: '/',
+      maxAge: sessionTTL
+    };
+
+    // 正式Cookie名
+    res.cookie('hotel_session', sessionId, cookieOptions);
+
+    // 互換Cookie名（暫定）
+    res.cookie('hotel-session-id', sessionId, cookieOptions);
+
+    logger.info('セッションCookie発行', {
+      sessionId: sessionId.substring(0, 8) + '...',
+      userId: selectedStaffMember.id
     });
+    // === END PR2 ===
+
+    // AUTH_LOGIN_MODE による返却内容の切り替え
+    const loginMode = (process.env.AUTH_LOGIN_MODE || 'dual').toLowerCase();
+
+    if (loginMode === 'session') {
+      // session モード: JWT不要
+      return StandardResponseBuilder.success(res, {
+        sessionId, // デバッグ用（本番では削除推奨）
+        user: {
+          id: selectedStaffMember.id,
+          email: selectedStaffMember.email,
+          name: selectedStaffMember.name,
+          role: selectedStaffMember.role,
+          tenantId: selectedTenantId
+        },
+        tenant: selectedTenant,
+        availableTenants: availableTenants.map(t => ({
+          id: t.tenantId,
+          name: t.tenant?.name || 'Unknown',
+          domain: t.tenant?.domain || 'unknown.domain',
+          staffRole: t.staffRole
+        }))
+      });
+    } else {
+      // dual モード（デフォルト）: JWT互換維持
+      return StandardResponseBuilder.success(res, {
+        accessToken, // deprecated - 将来削除予定
+        refreshToken, // deprecated - 将来削除予定
+        sessionId, // デバッグ用（本番では削除推奨）
+        user: {
+          id: selectedStaffMember.id,
+          email: selectedStaffMember.email,
+          name: selectedStaffMember.name,
+          role: selectedStaffMember.role,
+          tenantId: selectedTenantId
+        },
+        tenant: selectedTenant,
+        availableTenants: availableTenants.map(t => ({
+          id: t.tenantId,
+          name: t.tenant?.name || 'Unknown',
+          domain: t.tenant?.domain || 'unknown.domain',
+          staffRole: t.staffRole
+        }))
+      });
+    }
 
   } catch (error) {
     logger.error('ログインエラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('LOGIN_ERROR', 
+      StandardResponseBuilder.error('LOGIN_ERROR',
         error instanceof Error ? error.message : 'ログインに失敗しました').response
     );
   }
@@ -176,51 +253,142 @@ router.post('/api/v1/auth/login', async (req: Request, res: Response) => {
  * ログアウト処理
  * POST /api/v1/auth/logout
  */
-router.post('/api/v1/auth/logout', async (req: Request, res: Response) => {
+router.post('/logout', async (req: Request, res: Response) => {
   try {
+    // === PR2: Cookie+Redisセッション破棄 ===
+    const cookies = req.headers.cookie;
+    let sessionId: string | null = null;
+
+    if (cookies) {
+      const cookieMap: Record<string, string> = {};
+      cookies.split(';').forEach(cookie => {
+        const [key, value] = cookie.trim().split('=');
+        if (key && value) {
+          cookieMap[key] = value;
+        }
+      });
+
+      // 正式Cookie優先、互換Cookieも確認
+      sessionId = cookieMap['hotel_session'] || cookieMap['hotel-session-id'] || null;
+    }
+
+    // Redisからセッション削除
+    if (sessionId) {
+      const redis = getRedisClient();
+      try {
+        // hotel:session:{sessionId} 形式で削除（SSOTに準拠）
+        const deletedCount = await redis.deleteSessionById(sessionId);
+        logger.info('セッション削除成功', {
+          sessionId: sessionId.substring(0, 8) + '...',
+          deletedCount
+        });
+      } catch (redisError) {
+        logger.warn('Redis削除エラー（継続）', redisError);
+      }
+    }
+
+    // Cookie破棄
+    const isProduction = process.env.NODE_ENV === 'production';
+    const clearCookieOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'strict' as const,
+      path: '/',
+      maxAge: 0
+    };
+
+    res.cookie('hotel_session', '', clearCookieOptions);
+    res.cookie('hotel-session-id', '', clearCookieOptions);
+    // === END PR2 ===
+
+    // 旧JWT互換処理（削除予定）
     const authHeader = req.headers.authorization;
-    
-    // トークンがない場合は早期リターン
-    if (!authHeader) {
-      return StandardResponseBuilder.success(res, {
-        message: 'ログアウト成功（トークンなし）',
-        clearTokens: true // クライアント側でトークンを削除するフラグ
-      });
+
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+
+      try {
+        // トークンを検証
+        const decoded = verifyToken(token);
+
+        // ログアウト記録（JWT用）
+        logger.info('ログアウト成功（JWT）', {
+          userId: decoded.user_id,
+          tenantId: decoded.tenant_id,
+          email: decoded.email
+        });
+      } catch (verifyError) {
+        logger.warn('トークン検証失敗（ログアウト時）', verifyError);
+      }
     }
 
-    const token = authHeader.replace('Bearer ', '');
-    
-    try {
-      // トークンを検証
-      const decoded = verifyToken(token);
-      
-      // ログアウト記録
-      logger.info('ログアウト成功', { 
-        userId: decoded.user_id, 
-        tenantId: decoded.tenant_id, 
-        email: decoded.email 
-      });
+    // 204 No Content（推奨）
+    return res.status(204).send();
 
-      // ログアウト成功レスポンス
-      return StandardResponseBuilder.success(res, {
-        message: 'ログアウト成功',
-        clearTokens: true // クライアント側でトークンを削除するフラグ
-      });
-    } catch (verifyError) {
-      // トークンが無効でも成功レスポンスを返す
-      return StandardResponseBuilder.success(res, {
-        message: 'ログアウト成功（無効なトークン）',
-        clearTokens: true // クライアント側でトークンを削除するフラグ
-      });
-    }
   } catch (error) {
     logger.error('ログアウトエラー:', error);
-    // エラーが発生してもユーザー側では正常にログアウトできたと表示するため、
-    // 成功レスポンスを返す
+    return res.status(500).json(
+      StandardResponseBuilder.error('LOGOUT_ERROR',
+        error instanceof Error ? error.message : 'ログアウトに失敗しました').response
+    );
+  }
+});
+
+/**
+ * セッション確認API（PR2追加）
+ * GET /api/v1/auth/session
+ */
+router.get('/session', async (req: Request, res: Response) => {
+  try {
+    const cookies = req.headers.cookie;
+    let sessionId: string | null = null;
+
+    if (cookies) {
+      const cookieMap: Record<string, string> = {};
+      cookies.split(';').forEach(cookie => {
+        const [key, value] = cookie.trim().split('=');
+        if (key && value) {
+          cookieMap[key] = value;
+        }
+      });
+
+      sessionId = cookieMap['hotel_session'] || cookieMap['hotel-session-id'] || null;
+    }
+
+    if (!sessionId) {
+      return res.status(401).json(
+        StandardResponseBuilder.error('UNAUTHORIZED', 'セッションが見つかりません').response
+      );
+    }
+
+    const redis = getRedisClient();
+    const sessionInfo = await redis.getSessionById(sessionId);
+
+    if (!sessionInfo) {
+      return res.status(401).json(
+        StandardResponseBuilder.error('SESSION_EXPIRED', 'セッションが無効または期限切れです').response
+      );
+    }
+
     return StandardResponseBuilder.success(res, {
-      message: 'ログアウト成功',
-      clearTokens: true // クライアント側でトークンを削除するフラグ
+      user: {
+        id: (sessionInfo as any).user_id,
+        email: (sessionInfo as any).email,
+        role: (sessionInfo as any).role,
+        tenantId: (sessionInfo as any).tenant_id
+      },
+      session: {
+        id: sessionId.substring(0, 8) + '...',
+        createdAt: sessionInfo.created_at,
+        expiresAt: sessionInfo.expires_at
+      }
     });
+  } catch (error) {
+    logger.error('セッション確認エラー:', error);
+    return res.status(500).json(
+      StandardResponseBuilder.error('SESSION_CHECK_ERROR',
+        error instanceof Error ? error.message : 'セッション確認に失敗しました').response
+    );
   }
 });
 
@@ -228,11 +396,11 @@ router.post('/api/v1/auth/logout', async (req: Request, res: Response) => {
  * テナント切り替え
  * POST /api/v1/auth/switch-tenant
  */
-router.post('/api/v1/auth/switch-tenant', async (req: Request, res: Response) => {
+router.post('/switch-tenant', async (req: Request, res: Response) => {
   try {
     const { tenantId } = req.body;
     const authHeader = req.headers.authorization;
-    
+
     if (!authHeader) {
       return res.status(401).json(
         StandardResponseBuilder.error('MISSING_TOKEN', 'Authorizationヘッダーが必要です').response
@@ -246,10 +414,10 @@ router.post('/api/v1/auth/switch-tenant', async (req: Request, res: Response) =>
     }
 
     const token = authHeader.replace('Bearer ', '');
-    
+
     try {
       const decoded = verifyToken(token);
-      
+
       // アクセス可能なテナントかチェック（フォールバック対応）
       const accessibleTenants = decoded.accessible_tenants || [decoded.tenant_id];
       if (!accessibleTenants.includes(tenantId)) {
@@ -350,7 +518,7 @@ router.post('/api/v1/auth/switch-tenant', async (req: Request, res: Response) =>
   } catch (error) {
     logger.error('テナント切り替えエラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('TENANT_SWITCH_ERROR', 
+      StandardResponseBuilder.error('TENANT_SWITCH_ERROR',
         error instanceof Error ? error.message : 'テナント切り替えに失敗しました').response
     );
   }
@@ -360,10 +528,10 @@ router.post('/api/v1/auth/switch-tenant', async (req: Request, res: Response) =>
  * トークン検証
  * GET /api/v1/auth/validate-token
  */
-router.get('/api/v1/auth/validate-token', async (req: Request, res: Response) => {
+router.get('/validate-token', async (req: Request, res: Response) => {
   try {
     const authHeader = req.headers.authorization;
-    
+
     if (!authHeader) {
       return res.status(401).json(
         StandardResponseBuilder.error('MISSING_TOKEN', 'Authorizationヘッダーが必要です').response
@@ -371,10 +539,10 @@ router.get('/api/v1/auth/validate-token', async (req: Request, res: Response) =>
     }
 
     const token = authHeader.replace('Bearer ', '');
-    
+
     try {
       const decoded = verifyToken(token);
-      
+
       // トークンの有効性確認
       if (decoded.exp && decoded.exp < Math.floor(Date.now() / 1000)) {
         return res.status(401).json(
@@ -404,7 +572,7 @@ router.get('/api/v1/auth/validate-token', async (req: Request, res: Response) =>
   } catch (error) {
     logger.error('トークン検証エラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('TOKEN_VALIDATION_ERROR', 
+      StandardResponseBuilder.error('TOKEN_VALIDATION_ERROR',
         error instanceof Error ? error.message : 'トークン検証に失敗しました').response
     );
   }
@@ -414,7 +582,7 @@ router.get('/api/v1/auth/validate-token', async (req: Request, res: Response) =>
  * トークンリフレッシュ
  * POST /api/v1/auth/refresh
  */
-router.post('/api/v1/auth/refresh', async (req: Request, res: Response) => {
+router.post('/refresh', async (req: Request, res: Response) => {
   try {
     const { refreshToken } = req.body;
 
@@ -465,7 +633,7 @@ router.post('/api/v1/auth/refresh', async (req: Request, res: Response) => {
   } catch (error) {
     logger.error('トークンリフレッシュエラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('REFRESH_ERROR', 
+      StandardResponseBuilder.error('REFRESH_ERROR',
         error instanceof Error ? error.message : 'トークンリフレッシュに失敗しました').response
     );
   }
@@ -478,7 +646,7 @@ router.post('/api/v1/auth/refresh', async (req: Request, res: Response) => {
 router.get('/api/v1/admin/tenant/current', async (req: Request, res: Response) => {
   try {
     const authHeader = req.headers.authorization;
-    
+
     if (!authHeader) {
       return res.status(401).json(
         StandardResponseBuilder.error('UNAUTHORIZED', 'Authorization header required').response
@@ -486,10 +654,10 @@ router.get('/api/v1/admin/tenant/current', async (req: Request, res: Response) =
     }
 
     const token = authHeader.replace('Bearer ', '');
-    
+
     try {
       const decoded = verifyToken(token);
-      
+
       // JWT整合性検証
       const accessibleTenants = decoded.accessible_tenants || [decoded.tenant_id];
       if (!accessibleTenants.includes(decoded.tenant_id)) {
@@ -550,7 +718,7 @@ router.get('/api/v1/admin/tenant/current', async (req: Request, res: Response) =
   } catch (error) {
     logger.error('現在テナント取得エラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('INTERNAL_ERROR', 
+      StandardResponseBuilder.error('INTERNAL_ERROR',
         error instanceof Error ? error.message : '現在テナント情報の取得に失敗しました').response
     );
   }
@@ -560,8 +728,8 @@ router.get('/api/v1/admin/tenant/current', async (req: Request, res: Response) =
  * テナント情報取得
  * GET /api/v1/tenants/:id
  */
-import { authMiddleware } from '../../../auth/middleware'
-import { validateTenantIdHeader, validateJwtIntegrity } from '../../../auth/tenant-validation-middleware'
+import { authMiddleware } from '../../../auth/middleware';
+import { validateJwtIntegrity, validateTenantIdHeader } from '../../../auth/tenant-validation-middleware';
 
 router.get('/api/v1/tenants/:id', authMiddleware, validateTenantIdHeader, validateJwtIntegrity, async (req: Request & { user?: any }, res: Response) => {
   try {
@@ -605,7 +773,7 @@ router.get('/api/v1/tenants/:id', authMiddleware, validateTenantIdHeader, valida
   } catch (error) {
     logger.error('テナント情報取得エラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('TENANT_FETCH_ERROR', 
+      StandardResponseBuilder.error('TENANT_FETCH_ERROR',
         error instanceof Error ? error.message : 'テナント情報取得に失敗しました').response
     );
   }
@@ -656,7 +824,7 @@ router.get('/api/v1/staff/:id', async (req: Request, res: Response) => {
   } catch (error) {
     logger.error('スタッフ情報取得エラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('STAFF_FETCH_ERROR', 
+      StandardResponseBuilder.error('STAFF_FETCH_ERROR',
         error instanceof Error ? error.message : 'スタッフ情報取得に失敗しました').response
     );
   }

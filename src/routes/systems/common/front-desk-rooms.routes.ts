@@ -1,6 +1,6 @@
 import express from 'express';
 import { Request, Response } from 'express';
-import { authMiddleware } from '../../../auth/middleware';
+import { sessionAuthMiddleware } from '../../../auth/session-auth.middleware';
 import { ResponseHelper, StandardResponseBuilder } from '../../../standards/api-response-standards';
 import { HotelLogger } from '../../../utils/logger';
 import { z } from 'zod';
@@ -34,7 +34,7 @@ const RoomUpdateSchema = z.object({
  * フロントデスク - 客室一覧取得
  * GET /api/v1/admin/front-desk/rooms
  */
-router.get('/rooms', authMiddleware, async (req: Request, res: Response) => {
+router.get('/rooms', sessionAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const query = RoomQuerySchema.parse(req.query);
     const { page, limit, status, room_type, floor } = query;
@@ -143,7 +143,7 @@ router.get('/rooms', authMiddleware, async (req: Request, res: Response) => {
  * フロントデスク - 客室詳細取得
  * GET /api/v1/admin/front-desk/rooms/:id
  */
-router.get('/rooms/:id', authMiddleware, async (req: Request, res: Response) => {
+router.get('/rooms/:id', sessionAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const roomId = req.params.id;
     const tenantId = (req as any).user?.tenant_id;
@@ -204,7 +204,7 @@ router.get('/rooms/:id', authMiddleware, async (req: Request, res: Response) => 
  * フロントデスク - 客室状態更新
  * PUT /api/v1/admin/front-desk/rooms/:id
  */
-router.put('/rooms/:id', authMiddleware, async (req: Request, res: Response) => {
+router.put('/rooms/:id', sessionAuthMiddleware, async (req: Request, res: Response) => {
   try {
     const roomId = req.params.id;
     const updateData = RoomUpdateSchema.parse(req.body);
