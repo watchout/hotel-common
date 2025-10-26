@@ -13,7 +13,6 @@ on:
 jobs:
   validate-schema:
     runs-on: ubuntu-latest
-    continue-on-error: true
     
     services:
       postgres:
@@ -48,4 +47,3 @@ jobs:
       
       - name: Run schema validation
         run: node scripts/ci-schema-validation.js
-        continue-on-error: true

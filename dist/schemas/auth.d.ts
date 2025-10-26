@@ -5,13 +5,13 @@ export declare const AuthRequestSchema: z.ZodObject<{
     tenant_id: z.ZodOptional<z.ZodString>;
     device_info: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    email: string;
     password: string;
+    email: string;
     tenant_id?: string | undefined;
     device_info?: string | undefined;
 }, {
-    email: string;
     password: string;
+    email: string;
     tenant_id?: string | undefined;
     device_info?: string | undefined;
 }>;
@@ -24,18 +24,18 @@ export declare const UserCreateSchema: z.ZodObject<{
     tenant_id: z.ZodString;
 }, "strip", z.ZodTypeAny, {
     role: "admin" | "staff" | "manager" | "readonly";
+    password: string;
     name: string;
     level: number;
     tenant_id: string;
     email: string;
-    password: string;
 }, {
     role: "admin" | "staff" | "manager" | "readonly";
+    password: string;
     name: string;
     level: number;
     tenant_id: string;
     email: string;
-    password: string;
 }>;
 export declare const UserUpdateSchema: z.ZodObject<{
     id: z.ZodString;
@@ -49,14 +49,14 @@ export declare const UserUpdateSchema: z.ZodObject<{
     role?: "admin" | "staff" | "manager" | "readonly" | undefined;
     name?: string | undefined;
     level?: number | undefined;
-    status?: "inactive" | "active" | "suspended" | undefined;
+    status?: "active" | "suspended" | "inactive" | undefined;
     email?: string | undefined;
 }, {
     id: string;
     role?: "admin" | "staff" | "manager" | "readonly" | undefined;
     name?: string | undefined;
     level?: number | undefined;
-    status?: "inactive" | "active" | "suspended" | undefined;
+    status?: "active" | "suspended" | "inactive" | undefined;
     email?: string | undefined;
 }>;
 export declare const PasswordChangeSchema: z.ZodEffects<z.ZodObject<{

@@ -19,7 +19,7 @@
  * 3. req.user に tenant_id, user_id 等を設定
  * 4. 下流の権限・tenant分離ミドルウェアで利用
  */
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 /**
  * セッション認証ミドルウェア
  *

@@ -5,8 +5,8 @@
 export declare function getTenantServices(tenantId: string): Promise<{
     success: boolean;
     data: {
-        id: string;
         is_active: boolean;
+        id: string;
         tenant_id: string;
         created_at: Date;
         updated_at: Date;
@@ -14,7 +14,7 @@ export declare function getTenantServices(tenantId: string): Promise<{
         plan_type: string;
         activated_at: Date;
         expires_at: Date | null;
-        service_config: import("../generated/prisma/runtime/library").JsonValue;
+        service_config: import("@prisma/client/runtime/library").JsonValue;
     }[];
     error?: undefined;
 } | {
@@ -32,8 +32,8 @@ export declare function getTenantServices(tenantId: string): Promise<{
 export declare function updateTenantService(tenantId: string, serviceType: string, planType: string, isActive: boolean): Promise<{
     success: boolean;
     data: {
-        id: string;
         is_active: boolean;
+        id: string;
         tenant_id: string;
         created_at: Date;
         updated_at: Date;
@@ -41,7 +41,7 @@ export declare function updateTenantService(tenantId: string, serviceType: strin
         plan_type: string;
         activated_at: Date;
         expires_at: Date | null;
-        service_config: import("../generated/prisma/runtime/library").JsonValue;
+        service_config: import("@prisma/client/runtime/library").JsonValue;
     };
     error?: undefined;
 } | {
@@ -103,7 +103,7 @@ export declare function recordServiceUsage(tenantId: string, serviceType: string
         month: string;
         active_users_count: number;
         active_devices_count: number;
-        usage_data: import("../generated/prisma/runtime/library").JsonValue;
+        usage_data: import("@prisma/client/runtime/library").JsonValue;
     };
     error?: undefined;
 } | {
@@ -124,8 +124,8 @@ export declare function checkServiceAccess(tenantId: string, serviceType: string
     success: boolean;
     data: {
         service: {
-            id: string;
             is_active: boolean;
+            id: string;
             tenant_id: string;
             created_at: Date;
             updated_at: Date;
@@ -133,7 +133,7 @@ export declare function checkServiceAccess(tenantId: string, serviceType: string
             plan_type: string;
             activated_at: Date;
             expires_at: Date | null;
-            service_config: import("../generated/prisma/runtime/library").JsonValue;
+            service_config: import("@prisma/client/runtime/library").JsonValue;
         };
         planRestrictions: {
             id: string;

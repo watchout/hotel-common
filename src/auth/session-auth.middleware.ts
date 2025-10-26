@@ -1,18 +1,18 @@
 /**
  * Cookie + Redis セッション認証ミドルウェア
  * SSOT準拠: SSOT_SAAS_ADMIN_AUTHENTICATION.md
- * 
+ *
  * 目的：
  * - JWT依存からCookie+Redisセッション認証への段階移行
  * - hotel-saas との Cookie 認証統一
- * 
+ *
  * Cookie互換性：
  * - hotel_session（正式）
  * - hotel-session-id（暫定・互換期間のみ）
- * 
+ *
  * Redisキー形式：
  * - hotel:session:{sessionId}
- * 
+ *
  * フロー：
  * 1. Cookie から sessionId 取得（互換対応）
  * 2. Redis から session 取得
@@ -20,10 +20,10 @@
  * 4. 下流の権限・tenant分離ミドルウェアで利用
  */
 
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
+import { HotelLogger } from '../utils/logger';
 import { getRedisClient } from '../utils/redis';
 import { StandardResponseBuilder } from '../utils/response-builder';
-import { HotelLogger } from '../utils/logger';
 
 const logger = HotelLogger.getInstance();
 
@@ -55,7 +55,7 @@ function extractSessionIdFromCookies(req: Request): string | null {
 
 /**
  * セッション認証ミドルウェア
- * 
+ *
  * 処理順序：
  * 1. Cookie取得
  * 2. Redis照会
@@ -68,15 +68,15 @@ export const sessionAuthMiddleware = async (
   next: NextFunction
 ) => {
   // Phase 0: 入口ログ
-  console.log('[session-auth] invoked', { 
-    path: req.path, 
-    cookie: (req.headers.cookie || '').slice(0, 80) 
+  console.log('[session-auth] invoked', {
+    path: req.path,
+    cookie: (req.headers.cookie || '').slice(0, 80)
   });
-  
+
   try {
     // 1. Cookie から sessionId 取得
     const sessionId = extractSessionIdFromCookies(req);
-    
+
     if (!sessionId) {
       logger.warn('セッション認証失敗: Cookieなし', { path: req.path });
       return res.status(401).json(
@@ -89,9 +89,9 @@ export const sessionAuthMiddleware = async (
     const sessionInfo = await redis.getSessionById(sessionId);
 
     if (!sessionInfo) {
-      logger.warn('セッション認証失敗: セッション無効または期限切れ', { 
-        sessionId: sessionId.substring(0, 10) + '...', 
-        path: req.path 
+      logger.warn('セッション認証失敗: セッション無効または期限切れ', {
+        sessionId: sessionId.substring(0, 10) + '...',
+        path: req.path
       });
       return res.status(401).json(
         StandardResponseBuilder.error('SESSION_EXPIRED', 'Session is invalid or expired').response

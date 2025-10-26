@@ -42,8 +42,8 @@ export declare class SessionMigrationService {
         isCompatible: boolean;
         issues: {
             ordersWithoutSession: any;
-            reservationsWithoutSession: number;
-            activeReservationsNeedingSessions: number;
+            reservationsWithoutSession: any;
+            activeReservationsNeedingSessions: any;
         };
         recommendations: string[];
     }>;

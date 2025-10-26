@@ -8,17 +8,17 @@ export declare class DeviceRoomRepository {
      * テナントに紐づくすべてのデバイスを取得
      */
     findAllByTenantId(tenantId: string): Promise<{
-        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
+        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
-        roomId: string;
         updatedAt: Date;
         deviceId: string | null;
+        roomId: string;
         placeId: string | null;
         roomName: string | null;
         deviceType: string | null;
@@ -30,17 +30,17 @@ export declare class DeviceRoomRepository {
      * 特定の部屋に紐づくデバイスを取得
      */
     findByRoomId(tenantId: string, roomId: string): Promise<{
-        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
+        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
-        roomId: string;
         updatedAt: Date;
         deviceId: string | null;
+        roomId: string;
         placeId: string | null;
         roomName: string | null;
         deviceType: string | null;
@@ -52,17 +52,17 @@ export declare class DeviceRoomRepository {
      * デバイスIDで特定のデバイスを取得
      */
     findByDeviceId(deviceId: string): Promise<{
-        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
+        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
-        roomId: string;
         updatedAt: Date;
         deviceId: string | null;
+        roomId: string;
         placeId: string | null;
         roomName: string | null;
         deviceType: string | null;
@@ -84,17 +84,17 @@ export declare class DeviceRoomRepository {
         ipAddress?: string;
         macAddress?: string;
     }): Promise<{
-        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
+        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
-        roomId: string;
         updatedAt: Date;
         deviceId: string | null;
+        roomId: string;
         placeId: string | null;
         roomName: string | null;
         deviceType: string | null;
@@ -116,17 +116,17 @@ export declare class DeviceRoomRepository {
         macAddress?: string;
         isActive?: boolean;
     }): Promise<{
-        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
+        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
-        roomId: string;
         updatedAt: Date;
         deviceId: string | null;
+        roomId: string;
         placeId: string | null;
         roomName: string | null;
         deviceType: string | null;
@@ -138,17 +138,17 @@ export declare class DeviceRoomRepository {
      * デバイスの最終使用日時を更新
      */
     updateLastUsed(id: number): Promise<{
-        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
+        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
-        roomId: string;
         updatedAt: Date;
         deviceId: string | null;
+        roomId: string;
         placeId: string | null;
         roomName: string | null;
         deviceType: string | null;
@@ -160,17 +160,17 @@ export declare class DeviceRoomRepository {
      * デバイスを論理削除（非アクティブ化）
      */
     deactivate(id: number): Promise<{
-        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
+        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
-        roomId: string;
         updatedAt: Date;
         deviceId: string | null;
+        roomId: string;
         placeId: string | null;
         roomName: string | null;
         deviceType: string | null;
@@ -182,17 +182,17 @@ export declare class DeviceRoomRepository {
      * デバイスを物理削除
      */
     delete(id: number): Promise<{
-        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
+        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
-        roomId: string;
         updatedAt: Date;
         deviceId: string | null;
+        roomId: string;
         placeId: string | null;
         roomName: string | null;
         deviceType: string | null;
@@ -204,17 +204,17 @@ export declare class DeviceRoomRepository {
      * プレイスIDに紐づくデバイスを取得
      */
     findByPlaceId(tenantId: string, placeId: string): Promise<{
-        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
+        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
-        roomId: string;
         updatedAt: Date;
         deviceId: string | null;
+        roomId: string;
         placeId: string | null;
         roomName: string | null;
         deviceType: string | null;
@@ -226,17 +226,17 @@ export declare class DeviceRoomRepository {
      * デバイスタイプでフィルタリングして取得
      */
     findByDeviceType(tenantId: string, deviceType: string): Promise<{
-        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
+        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
-        roomId: string;
         updatedAt: Date;
         deviceId: string | null;
+        roomId: string;
         placeId: string | null;
         roomName: string | null;
         deviceType: string | null;
@@ -248,17 +248,17 @@ export declare class DeviceRoomRepository {
      * ステータスでフィルタリングして取得
      */
     findByStatus(tenantId: string, status: string): Promise<{
-        id: number;
         tenantId: string;
         is_deleted: boolean;
         isActive: boolean;
         status: string | null;
+        id: number;
         deleted_at: Date | null;
         deleted_by: string | null;
         createdAt: Date;
-        roomId: string;
         updatedAt: Date;
         deviceId: string | null;
+        roomId: string;
         placeId: string | null;
         roomName: string | null;
         deviceType: string | null;

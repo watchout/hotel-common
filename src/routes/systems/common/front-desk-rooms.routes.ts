@@ -1,11 +1,10 @@
-import express from 'express';
-import { Request, Response } from 'express';
-import { sessionAuthMiddleware } from '../../../auth/session-auth.middleware';
-import { ResponseHelper, StandardResponseBuilder } from '../../../standards/api-response-standards';
-import { HotelLogger } from '../../../utils/logger';
+import express, { Request, Response } from 'express';
 import { z } from 'zod';
+import { sessionAuthMiddleware } from '../../../auth/session-auth.middleware';
 import { hotelDb } from '../../../database';
 import { broadcastRoomOperation } from '../../../events/room-operation-broadcaster';
+import { ResponseHelper, StandardResponseBuilder } from '../../../standards/api-response-standards';
+import { HotelLogger } from '../../../utils/logger';
 
 const router = express.Router();
 const logger = HotelLogger.getInstance();
@@ -129,12 +128,12 @@ router.get('/rooms', sessionAuthMiddleware, async (req: Request, res: Response) 
 
   } catch (error) {
     logger.error('フロントデスク客室一覧取得エラー', error as Error);
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, 'クエリパラメータが正しくありません', error.errors);
       return;
     }
-    
+
     ResponseHelper.sendInternalError(res, '客室一覧の取得に失敗しました');
   }
 });
@@ -281,7 +280,7 @@ router.put('/rooms/:id', sessionAuthMiddleware, async (req: Request, res: Respon
           notes: updateData.notes
         }
       })
-    } catch {}
+    } catch { }
 
     // レスポンス形式に変換
     const responseRoom = {
@@ -313,12 +312,12 @@ router.put('/rooms/:id', sessionAuthMiddleware, async (req: Request, res: Respon
 
   } catch (error) {
     logger.error('フロントデスク客室状態更新エラー', error as Error);
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, '更新データが正しくありません', error.errors);
       return;
     }
-    
+
     ResponseHelper.sendInternalError(res, '客室状態の更新に失敗しました');
   }
 });

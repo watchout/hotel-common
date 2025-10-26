@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hotelDb = exports.HotelDatabaseClient = void 0;
+exports.prisma = exports.hotelDb = exports.HotelDatabaseClient = void 0;
 exports.getHotelDb = getHotelDb;
 exports.withTransaction = withTransaction;
-const prisma_1 = require("../generated/prisma");
+const client_1 = require("@prisma/client");
 const prisma_adapter_1 = require("./prisma-adapter");
 /**
  * ホテル共通データベースクライアント
@@ -14,7 +14,7 @@ class HotelDatabaseClient {
     prisma;
     adapter;
     constructor() {
-        this.prisma = new prisma_1.PrismaClient({
+        this.prisma = new client_1.PrismaClient({
             log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
         });
         // ソフトデリートミドルウェアを設定（一時的に無効化）
@@ -91,3 +91,5 @@ function getHotelDb() {
 async function withTransaction(fn, options) {
     return exports.hotelDb.transaction(fn, options);
 }
+// 互換のためのエクスポート（既存コードの import { prisma } from '../../database/prisma' 対応）
+exports.prisma = exports.hotelDb.getAdapter();

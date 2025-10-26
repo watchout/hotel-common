@@ -1,10 +1,9 @@
-import express from 'express';
-import { Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import { authMiddleware } from '../../../auth/middleware';
+import { hotelDb } from '../../../database';
+import { ResponseHelper } from '../../../standards/api-response-standards';
 import { HotelLogger } from '../../../utils/logger';
 import { StandardResponseBuilder } from '../../../utils/response-builder';
-import { ResponseHelper } from '../../../standards/api-response-standards';
-import { hotelDb } from '../../../database';
 
 const router = express.Router();
 const logger = HotelLogger.getInstance();
@@ -76,7 +75,7 @@ router.get('/api/v1/orders/history', authMiddleware, async (req: Request, res: R
       })
     ]);
 
-    const formattedOrders = orders.map(order => ({
+    const formattedOrders = orders.map((order: any) => ({
       id: order.id,
       roomId: order.roomId,
       placeId: order.placeId,
@@ -120,7 +119,7 @@ router.get('/api/v1/orders/history', authMiddleware, async (req: Request, res: R
 /**
  * 注文作成
  * POST /api/v1/orders
- * 
+ *
  * 仕様に準拠した拡張版注文作成API
  * - オプション対応
  * - 支払い方法対応
@@ -129,13 +128,13 @@ router.get('/api/v1/orders/history', authMiddleware, async (req: Request, res: R
 router.post('/api/v1/orders', authMiddleware, async (req: Request, res: Response) => {
   try {
     const tenantId = (req as any).user?.tenant_id;
-    const { 
-      roomId, 
-      items, 
-      specialInstructions, 
-      paymentMethod, 
-      deviceId, 
-      source 
+    const {
+      roomId,
+      items,
+      specialInstructions,
+      paymentMethod,
+      deviceId,
+      source
     } = req.body;
 
     if (!tenantId) {
@@ -146,11 +145,11 @@ router.post('/api/v1/orders', authMiddleware, async (req: Request, res: Response
 
     // 入力値検証
     const validationErrors: Record<string, string> = {};
-    
+
     if (!roomId) {
       validationErrors.roomId = '部屋IDは必須です';
     }
-    
+
     if (!items || !Array.isArray(items) || items.length === 0) {
       validationErrors.items = '少なくとも1つのアイテムが必要です';
     } else {
@@ -164,7 +163,7 @@ router.post('/api/v1/orders', authMiddleware, async (req: Request, res: Response
         if (typeof item.quantity !== 'number' || item.quantity < 1) {
           validationErrors[`items[${index}].quantity`] = '数量は1以上である必要があります';
         }
-        
+
         // オプションの検証
         if (item.options && Array.isArray(item.options)) {
           item.options.forEach((option: any, optIndex: number) => {
@@ -177,18 +176,18 @@ router.post('/api/v1/orders', authMiddleware, async (req: Request, res: Response
         }
       });
     }
-    
+
     // 支払い方法の検証
     const validPaymentMethods = ['room-charge', 'credit-card', 'cash'];
     if (paymentMethod && !validPaymentMethods.includes(paymentMethod)) {
       validationErrors.paymentMethod = '有効な支払い方法を指定してください';
     }
-    
+
     // 特別指示の長さ検証
     if (specialInstructions && specialInstructions.length > 500) {
       validationErrors.specialInstructions = '特別指示は500文字以内にしてください';
     }
-    
+
     // バリデーションエラーがあれば400エラーを返す
     if (Object.keys(validationErrors).length > 0) {
       return res.status(400).json(
@@ -199,7 +198,7 @@ router.post('/api/v1/orders', authMiddleware, async (req: Request, res: Response
     // 合計金額計算（アイテム価格 + オプション価格）
     const total = items.reduce((sum: number, item: any) => {
       const itemTotal = item.price * item.quantity;
-      const optionsTotal = item.options && Array.isArray(item.options) 
+      const optionsTotal = item.options && Array.isArray(item.options)
         ? item.options.reduce((optSum: number, opt: any) => optSum + opt.price, 0) * item.quantity
         : 0;
       return sum + itemTotal + optionsTotal;
@@ -250,7 +249,7 @@ router.post('/api/v1/orders', authMiddleware, async (req: Request, res: Response
 
       // 注文アイテム作成
       const orderItems = await Promise.all(
-        items.map((item: any) => 
+        items.map((item: any) =>
           tx.orderItem.create({
             data: {
               tenantId,
@@ -271,10 +270,10 @@ router.post('/api/v1/orders', authMiddleware, async (req: Request, res: Response
       return { order, orderItems };
     });
 
-    logger.info('注文作成成功', { 
-      orderId: result.order.id, 
-      tenantId, 
-      roomId, 
+    logger.info('注文作成成功', {
+      orderId: result.order.id,
+      tenantId,
+      roomId,
       sessionId: activeSession?.id,
       sessionNumber: activeSession?.sessionNumber,
       total,
@@ -312,7 +311,7 @@ router.post('/api/v1/orders', authMiddleware, async (req: Request, res: Response
   } catch (error) {
     logger.error('注文作成エラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('ORDER_CREATE_ERROR', 
+      StandardResponseBuilder.error('ORDER_CREATE_ERROR',
         error instanceof Error ? error.message : '注文作成に失敗しました').response
     );
   }
@@ -362,7 +361,7 @@ router.get('/api/v1/orders/active', authMiddleware, async (req: Request, res: Re
       orderBy: { createdAt: 'asc' }
     });
 
-    const formattedOrders = activeOrders.map(order => ({
+    const formattedOrders = activeOrders.map((order: any) => ({
       id: order.id,
       roomId: order.roomId,
       placeId: order.placeId,
@@ -378,7 +377,7 @@ router.get('/api/v1/orders/active', authMiddleware, async (req: Request, res: Re
   } catch (error) {
     logger.error('アクティブ注文取得エラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('ACTIVE_ORDERS_ERROR', 
+      StandardResponseBuilder.error('ACTIVE_ORDERS_ERROR',
         error instanceof Error ? error.message : 'アクティブ注文取得に失敗しました').response
     );
   }
@@ -446,7 +445,7 @@ router.get('/api/v1/orders/:id', authMiddleware, async (req: Request, res: Respo
   } catch (error) {
     logger.error('注文詳細取得エラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('ORDER_DETAIL_ERROR', 
+      StandardResponseBuilder.error('ORDER_DETAIL_ERROR',
         error instanceof Error ? error.message : '注文詳細取得に失敗しました').response
     );
   }
@@ -502,11 +501,11 @@ router.put('/api/v1/orders/:id/status', authMiddleware, async (req: Request, res
       }
     });
 
-    logger.info('注文ステータス更新', { 
-      orderId: id, 
-      tenantId, 
-      oldStatus: existingOrder.status, 
-      newStatus: status 
+    logger.info('注文ステータス更新', {
+      orderId: id,
+      tenantId,
+      oldStatus: existingOrder.status,
+      newStatus: status
     });
 
     return StandardResponseBuilder.success(res, {
@@ -519,7 +518,7 @@ router.put('/api/v1/orders/:id/status', authMiddleware, async (req: Request, res
   } catch (error) {
     logger.error('注文ステータス更新エラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('ORDER_STATUS_UPDATE_ERROR', 
+      StandardResponseBuilder.error('ORDER_STATUS_UPDATE_ERROR',
         error instanceof Error ? error.message : '注文ステータス更新に失敗しました').response
     );
   }
@@ -613,7 +612,7 @@ router.get('/api/v1/order/menu', authMiddleware, async (req: Request, res: Respo
   } catch (error) {
     logger.error('メニュー一覧取得エラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('MENU_FETCH_ERROR', 
+      StandardResponseBuilder.error('MENU_FETCH_ERROR',
         error instanceof Error ? error.message : 'メニュー一覧取得に失敗しました').response
     );
   }
@@ -648,12 +647,13 @@ router.get('/api/v1/menus/top', authMiddleware, async (req: Request, res: Respon
       take: 6
     });
 
-    const topMenu = popularItems.map((item, index) => ({
+    const topMenu = popularItems.map((item: any, index: number) => ({
       id: `top-${index + 1}`,
       name: item.name,
       price: item.price,
-      order_count: item._count.name,
-      total_quantity: item._sum.quantity || 0,
+      order_count: (item as any)._count?.name ?? item._count ?? 0,
+      total_quantity: item._sum?.quantity || 0,
+      total_revenue: item._sum?.price || 0,
       rank: index + 1,
       badge: index < 3 ? 'popular' : null
     }));
@@ -667,7 +667,7 @@ router.get('/api/v1/menus/top', authMiddleware, async (req: Request, res: Respon
   } catch (error) {
     logger.error('トップメニュー取得エラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('TOP_MENU_ERROR', 
+      StandardResponseBuilder.error('TOP_MENU_ERROR',
         error instanceof Error ? error.message : 'トップメニュー取得に失敗しました').response
     );
   }
@@ -727,7 +727,7 @@ router.post('/api/v1/order/place', authMiddleware, async (req: Request, res: Res
 
     // 注文アイテム作成
     const orderItems = await Promise.all(
-      items.map(item => 
+      items.map(item =>
         hotelDb.getAdapter().orderItem.create({
           data: {
             tenantId,
@@ -745,14 +745,14 @@ router.post('/api/v1/order/place', authMiddleware, async (req: Request, res: Res
       )
     );
 
-    logger.info('注文配置成功', { 
-      orderId: order.id, 
-      tenantId, 
-      roomId, 
+    logger.info('注文配置成功', {
+      orderId: order.id,
+      tenantId,
+      roomId,
       sessionId: activeSession?.id,
       sessionNumber: activeSession?.sessionNumber,
       total,
-      itemCount: items.length 
+      itemCount: items.length
     });
 
     return StandardResponseBuilder.success(res, {
@@ -772,7 +772,7 @@ router.post('/api/v1/order/place', authMiddleware, async (req: Request, res: Res
   } catch (error) {
     logger.error('注文配置エラー:', error);
     return res.status(500).json(
-      StandardResponseBuilder.error('ORDER_PLACE_ERROR', 
+      StandardResponseBuilder.error('ORDER_PLACE_ERROR',
         error instanceof Error ? error.message : '注文配置に失敗しました').response
     );
   }

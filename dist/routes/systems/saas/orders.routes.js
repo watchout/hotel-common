@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const middleware_1 = require("../../../auth/middleware");
+const database_1 = require("../../../database");
+const api_response_standards_1 = require("../../../standards/api-response-standards");
 const logger_1 = require("../../../utils/logger");
 const response_builder_1 = require("../../../utils/response-builder");
-const api_response_standards_1 = require("../../../standards/api-response-standards");
-const database_1 = require("../../../database");
 const router = express_1.default.Router();
 const logger = logger_1.HotelLogger.getInstance();
 /**
@@ -69,7 +69,7 @@ router.get('/api/v1/orders/history', middleware_1.authMiddleware, async (req, re
                 where: whereConditions
             })
         ]);
-        const formattedOrders = orders.map(order => ({
+        const formattedOrders = orders.map((order) => ({
             id: order.id,
             roomId: order.roomId,
             placeId: order.placeId,
@@ -315,7 +315,7 @@ router.get('/api/v1/orders/active', middleware_1.authMiddleware, async (req, res
             },
             orderBy: { createdAt: 'asc' }
         });
-        const formattedOrders = activeOrders.map(order => ({
+        const formattedOrders = activeOrders.map((order) => ({
             id: order.id,
             roomId: order.roomId,
             placeId: order.placeId,
@@ -552,8 +552,9 @@ router.get('/api/v1/menus/top', middleware_1.authMiddleware, async (req, res) =>
             id: `top-${index + 1}`,
             name: item.name,
             price: item.price,
-            order_count: item._count.name,
-            total_quantity: item._sum.quantity || 0,
+            order_count: item._count?.name ?? item._count ?? 0,
+            total_quantity: item._sum?.quantity || 0,
+            total_revenue: item._sum?.price || 0,
             rank: index + 1,
             badge: index < 3 ? 'popular' : null
         }));

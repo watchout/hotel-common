@@ -34,9 +34,9 @@ export declare const RoomSchema: z.ZodObject<{
     created_by_system: z.ZodDefault<z.ZodString>;
     updated_by_system: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    id: string;
     is_active: boolean;
     status: "occupied" | "cleaning" | "maintenance" | "available" | "out_of_order" | "reserved";
+    id: string;
     tenant_id: string;
     room_type: "standard" | "premium" | "deluxe" | "suite" | "executive" | "penthouse";
     room_number: string;
@@ -173,8 +173,8 @@ export declare const UpdateRoomRequestSchema: z.ZodObject<{
     maintenance_notes?: string | undefined;
     capacity?: number | undefined;
     amenities?: string[] | undefined;
-    room_size_sqm?: number | undefined;
     floor_number?: number | undefined;
+    room_size_sqm?: number | undefined;
     is_smoking?: boolean | undefined;
     is_accessible?: boolean | undefined;
     bed_configuration?: string | undefined;
@@ -192,8 +192,8 @@ export declare const UpdateRoomRequestSchema: z.ZodObject<{
     maintenance_notes?: string | undefined;
     capacity?: number | undefined;
     amenities?: string[] | undefined;
-    room_size_sqm?: number | undefined;
     floor_number?: number | undefined;
+    room_size_sqm?: number | undefined;
     is_smoking?: boolean | undefined;
     is_accessible?: boolean | undefined;
     bed_configuration?: string | undefined;

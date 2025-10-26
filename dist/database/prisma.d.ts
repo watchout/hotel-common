@@ -1,4 +1,4 @@
-import { PrismaClient } from '../generated/prisma';
+import { PrismaClient } from '@prisma/client';
 import { PrismaAdapter } from './prisma-adapter';
 /**
  * ホテル共通データベースクライアント
@@ -31,32 +31,33 @@ export declare class HotelDatabaseClient {
      * 以下のゲッターは互換性のために残していますが、
      * 将来的には getAdapter() を使用することを推奨します
      */
-    get page(): import("../generated/prisma").Prisma.pagesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get pageHistory(): import("../generated/prisma").Prisma.page_historiesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get responseNode(): import("../generated/prisma").Prisma.response_nodesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get responseTree(): import("../generated/prisma").Prisma.response_treesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get responseTreeVersion(): import("../generated/prisma").Prisma.response_tree_versionsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get responseTreeSession(): import("../generated/prisma").Prisma.response_tree_sessionsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get responseTreeMobileLink(): import("../generated/prisma").Prisma.response_tree_mobile_linksDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get responseTreeHistory(): import("../generated/prisma").Prisma.response_tree_historyDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get responseNodeTranslation(): import("../generated/prisma").Prisma.response_node_translationsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get campaign(): import("../generated/prisma").Prisma.campaignsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get campaignCategory(): import("../generated/prisma").Prisma.campaign_categoriesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get campaignCategoryRelation(): import("../generated/prisma").Prisma.campaign_category_relationsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get campaignItem(): import("../generated/prisma").Prisma.campaign_itemsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get campaignTranslation(): import("../generated/prisma").Prisma.campaign_translationsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get campaignUsageLog(): import("../generated/prisma").Prisma.campaign_usage_logsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get deviceVideoCache(): import("../generated/prisma").Prisma.device_video_cachesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get notificationTemplate(): import("../generated/prisma").Prisma.notification_templatesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get tenantAccessLog(): import("../generated/prisma").Prisma.tenant_access_logsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get systemEvent(): import("../generated/prisma").Prisma.system_eventDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get deviceRoom(): import("../generated/prisma").Prisma.device_roomsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get page(): import(".prisma/client").Prisma.pagesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get pageHistory(): import(".prisma/client").Prisma.page_historiesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get responseNode(): import(".prisma/client").Prisma.response_nodesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get responseTree(): import(".prisma/client").Prisma.response_treesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get responseTreeVersion(): import(".prisma/client").Prisma.response_tree_versionsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get responseTreeSession(): import(".prisma/client").Prisma.response_tree_sessionsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get responseTreeMobileLink(): import(".prisma/client").Prisma.response_tree_mobile_linksDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get responseTreeHistory(): import(".prisma/client").Prisma.response_tree_historyDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get responseNodeTranslation(): import(".prisma/client").Prisma.response_node_translationsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get campaign(): import(".prisma/client").Prisma.campaignsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get campaignCategory(): import(".prisma/client").Prisma.campaign_categoriesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get campaignCategoryRelation(): import(".prisma/client").Prisma.campaign_category_relationsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get campaignItem(): import(".prisma/client").Prisma.campaign_itemsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get campaignTranslation(): import(".prisma/client").Prisma.campaign_translationsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get campaignUsageLog(): import(".prisma/client").Prisma.campaign_usage_logsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get deviceVideoCache(): import(".prisma/client").Prisma.device_video_cachesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get notificationTemplate(): import(".prisma/client").Prisma.notification_templatesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get tenantAccessLog(): import(".prisma/client").Prisma.tenant_access_logsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get systemEvent(): import(".prisma/client").Prisma.system_eventDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get deviceRoom(): import(".prisma/client").Prisma.device_roomsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     get order(): any;
     get orderItem(): any;
-    get schemaVersion(): import("../generated/prisma").Prisma.schema_versionDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get systemPlanRestrictions(): import("../generated/prisma").Prisma.SystemPlanRestrictionsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get tenantSystemPlan(): import("../generated/prisma").Prisma.TenantSystemPlanDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get schemaVersion(): import(".prisma/client").Prisma.schema_versionDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get systemPlanRestrictions(): import(".prisma/client").Prisma.SystemPlanRestrictionsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get tenantSystemPlan(): import(".prisma/client").Prisma.TenantSystemPlanDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
 }
 export declare const hotelDb: HotelDatabaseClient;
 export declare function getHotelDb(): HotelDatabaseClient;
 export declare function withTransaction<T>(fn: (tx: any) => Promise<T>, options?: Parameters<PrismaClient['$transaction']>[1]): Promise<T>;
+export declare const prisma: PrismaAdapter;

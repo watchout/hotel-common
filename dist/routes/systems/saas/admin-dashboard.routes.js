@@ -333,7 +333,7 @@ router.get('/api/v1/admin/orders', middleware_1.verifyAdminAuth, async (req, res
             })
         ]);
         const totalPages = Math.ceil(totalCount / limitNum);
-        const formattedOrders = orders.map(order => ({
+        const formattedOrders = orders.map((order) => ({
             id: order.id,
             tenantId: order.tenantId,
             roomId: order.roomId,

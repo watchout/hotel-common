@@ -164,7 +164,7 @@ export class HotelRedisClient {
    * セッションIDでセッション保存（Cookie認証用）
    * SSOT準拠: hotel:session:{sessionId}
    */
-  async saveSessionById(sessionId: string, sessionInfo: SessionInfo, ttlSeconds: number = 3600): Promise<void> {
+  async saveSessionById(sessionId: string, sessionInfo: any, ttlSeconds: number = 3600): Promise<void> {
     if (!this.connected) await this.connect()
 
     const key = `hotel:session:${sessionId}` // プレフィックスなしで直接指定（SSOT準拠）

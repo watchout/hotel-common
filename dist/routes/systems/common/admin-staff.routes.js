@@ -10,10 +10,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const zod_1 = require("zod");
 const session_auth_middleware_1 = require("../../../auth/session-auth.middleware");
-const admin_permission_1 = require("../../../middleware/admin-permission");
 const database_1 = require("../../../database");
-const response_builder_1 = require("../../../utils/response-builder");
+const admin_permission_1 = require("../../../middleware/admin-permission");
+const staff_repository_1 = require("../../../repositories/staff/staff.repository");
 const logger_1 = require("../../../utils/logger");
+const response_builder_1 = require("../../../utils/response-builder");
 const staff_helpers_1 = require("../../../utils/staff-helpers");
 const router = express_1.default.Router();
 const logger = logger_1.HotelLogger.getInstance();
@@ -109,7 +110,7 @@ router.get('/staff', session_auth_middleware_1.sessionAuthMiddleware, admin_perm
             lastLoginAfter,
             lastLoginBefore
         });
-        // 拡張ソート条件構築
+        // 拡張ソート条件構築（DB実在カラムに限定）
         let orderBy = {};
         switch (sortBy) {
             case 'displayName':
@@ -118,16 +119,6 @@ router.get('/staff', session_auth_middleware_1.sessionAuthMiddleware, admin_perm
             case 'email':
                 orderBy = { email: sortOrder };
                 break;
-            case 'role':
-                orderBy = { role: sortOrder };
-                break;
-            case 'departmentCode':
-                orderBy = { department: sortOrder };
-                break;
-            case 'baseLevel':
-                // roleでソートしてからbaseLevelの順序に
-                orderBy = { role: sortOrder };
-                break;
             case 'lastLoginAt':
                 orderBy = { last_login_at: sortOrder };
                 break;
@@ -135,51 +126,44 @@ router.get('/staff', session_auth_middleware_1.sessionAuthMiddleware, admin_perm
                 orderBy = { created_at: sortOrder };
                 break;
             case 'staffCode':
-                // IDベースでソート（staffCodeは生成値のため）
                 orderBy = { id: sortOrder };
                 break;
+            // role / departmentCode / baseLevel はスキーマにないため name へフォールバック
+            case 'role':
+            case 'departmentCode':
+            case 'baseLevel':
             default:
                 orderBy = { name: 'asc' };
         }
-        // データ取得
-        const [staffList, total] = await Promise.all([
-            database_1.hotelDb.getAdapter().staff.findMany({
-                where,
-                orderBy,
-                skip: (page - 1) * limitedPageSize,
-                take: limitedPageSize
-            }),
-            database_1.hotelDb.getAdapter().staff.count({ where })
-        ]);
-        // 統計情報計算
-        const [activeCount, inactiveCount, allStaffForDeptCount] = await Promise.all([
-            database_1.hotelDb.getAdapter().staff.count({
-                where: { ...where, is_active: true }
-            }),
-            database_1.hotelDb.getAdapter().staff.count({
-                where: { ...where, is_active: false }
-            }),
-            database_1.hotelDb.getAdapter().staff.findMany({
-                where: { tenant_id: req.user?.tenant_id, is_deleted: false },
-                select: { department: true }
-            })
-        ]);
-        const departmentCounts = (0, staff_helpers_1.calculateDepartmentCounts)(allStaffForDeptCount);
-        // レスポンス構築
+        // Repository経由で取得
+        const repo = new staff_repository_1.StaffRepository();
+        const result = await repo.list({
+            tenantId: req.user?.tenant_id,
+            page,
+            pageSize: limitedPageSize,
+            search,
+            email,
+            departmentCode,
+            role,
+            employmentStatus,
+            baseLevel,
+            isActive,
+            createdAfter,
+            createdBefore,
+            lastLoginAfter,
+            lastLoginBefore,
+            sortBy,
+            sortOrder
+        });
         const response = {
-            data: staffList.map(staff_helpers_1.mapStaffToSummary),
-            pagination: (0, staff_helpers_1.createPaginationInfo)(total, page, limitedPageSize),
-            summary: {
-                totalStaff: total,
-                activeStaff: activeCount,
-                inactiveStaff: inactiveCount,
-                departmentCounts
-            }
+            data: result.items,
+            pagination: result.pagination,
+            summary: result.summary
         };
         logger.info('Staff list response', {
             userId: req.user?.user_id,
-            totalStaff: total,
-            returnedCount: staffList.length
+            totalStaff: result?.pagination?.total,
+            returnedCount: result.items.length
         });
         return response_builder_1.StandardResponseBuilder.success(res, response);
     }
@@ -226,7 +210,7 @@ router.patch('/staff/bulk', session_auth_middleware_1.sessionAuthMiddleware, adm
         }
         // 権限チェック
         const managerRole = req.user?.role || 'staff';
-        const unauthorizedStaff = existingStaff.filter(staff => !(0, staff_helpers_1.canManageStaff)(managerRole, staff.role) ||
+        const unauthorizedStaff = existingStaff.filter(staff => !(0, staff_helpers_1.canManageStaff)(managerRole, staff?.role ?? 'staff') ||
             (updates.role && !(0, staff_helpers_1.canManageStaff)(managerRole, updates.role)));
         if (unauthorizedStaff.length > 0) {
             return res.status(403).json(response_builder_1.StandardResponseBuilder.error('INSUFFICIENT_PERMISSIONS', `権限不足により更新できないスタッフがあります: ${unauthorizedStaff.map(s => s.name).join(', ')}`).response);
@@ -360,7 +344,7 @@ router.delete('/staff/bulk', session_auth_middleware_1.sessionAuthMiddleware, ad
                         id: s.id,
                         email: s.email,
                         name: s.name,
-                        role: s.role
+                        role: s?.role ?? null
                     }))
                 },
                 status: 'COMPLETED'
@@ -502,7 +486,7 @@ router.post('/staff', session_auth_middleware_1.sessionAuthMiddleware, admin_per
             createdStaffId: createdStaff.id,
             email: createdStaff.email
         });
-        return res.status(201).json(response_builder_1.StandardResponseBuilder.success(res.status(201), response).response);
+        return response_builder_1.StandardResponseBuilder.success(res, response, {}, 201);
     }
     catch (error) {
         logger.error('Staff create error', error);
@@ -543,7 +527,7 @@ router.patch('/staff/:id', session_auth_middleware_1.sessionAuthMiddleware, admi
         }
         // 権限チェック（自分より上位レベルのスタッフは更新不可）
         const managerRole = req.user?.role || 'staff';
-        if (!(0, staff_helpers_1.canManageStaff)(managerRole, existingStaff.role)) {
+        if (!(0, staff_helpers_1.canManageStaff)(managerRole, existingStaff?.role ?? 'staff')) {
             logger.warn('Insufficient permission to update higher level staff', {
                 managerRole,
                 targetRole: existingStaff.role,
@@ -594,8 +578,8 @@ router.patch('/staff/:id', session_auth_middleware_1.sessionAuthMiddleware, admi
                     updatedFields: Object.keys(data),
                     previousData: {
                         name: existingStaff.name,
-                        role: existingStaff.role,
-                        department: existingStaff.department,
+                        role: existingStaff?.role ?? null,
+                        department: existingStaff?.department ?? null,
                         is_active: existingStaff.is_active
                     },
                     newData: updateData

@@ -102,7 +102,7 @@ class HotelIntegrationServer {
             const origJson = res.json.bind(res);
             res.json = (body) => {
                 const code = res.statusCode;
-                if (code === 401) {
+                if (code === 401 && process.env.DEBUG_GLOBAL_401 === '1') {
                     console.error('[GLOBAL-401]', {
                         path: req.originalUrl,
                         hasAuthHeader: !!req.headers.authorization,
@@ -117,7 +117,9 @@ class HotelIntegrationServer {
         // === END Phase G1 ===
         // === 決定打の切り分け：デバッグヘッダ付与 ===
         this.app.use((req, res, next) => {
-            res.set('X-HC-Debug', 'hotel-common');
+            if (process.env.DEBUG_RESPONSE_HEADER === '1') {
+                res.set('X-HC-Debug', 'hotel-common');
+            }
             next();
         });
         // === END 決定打 ===
@@ -334,9 +336,11 @@ class HotelIntegrationServer {
             }
             return [];
         }) || [];
-        console.log('[ROUTE-DUMP] Total routes:', routeList.length);
-        console.log('[ROUTE-DUMP] /operations routes:');
-        routeList.filter((r) => r.includes('/operations')).forEach((r) => console.log('  ', r));
+        if (process.env.DEBUG_ROUTE_DUMP === '1') {
+            console.log('[ROUTE-DUMP] Total routes:', routeList.length);
+            console.log('[ROUTE-DUMP] /operations routes:');
+            routeList.filter((r) => r.includes('/operations')).forEach((r) => console.log('  ', r));
+        }
         // === END ROUTE-DUMP ===
         // === SaaSシステムAPI ===
         // 管理画面統計APIエンドポイント

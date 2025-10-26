@@ -11,7 +11,6 @@
  */
 
 import { Request, Response } from 'express';
-import { SessionUser } from '../../../../../auth/SessionAuthService';
 import { getResourceMetadata } from '../../../../../config/resource-metadata';
 import { prisma } from '../../../../../database/prisma';
 
@@ -34,7 +33,7 @@ export default async function handler(req: Request, res: Response) {
     }
 
     // 2. Session認証チェック
-    const user = req.user as SessionUser | undefined;
+    const user = req.user as any | undefined;
     if (!user) {
       console.error('❌ [hotel-common] 認証ユーザーがありません');
       return res.status(401).json({
@@ -94,34 +93,18 @@ export default async function handler(req: Request, res: Response) {
         some: { tenant_id: tenantId }
       };
 
-      // Include設定（役職・権限情報を含む）
-      const include = {
-        staff_tenant_memberships: {
-          where: { tenant_id: tenantId },
-          include: {
-            role: {
-              include: {
-                role_permissions: {
-                  include: {
-                    permission: true
-                  }
-                }
-              }
-            }
-          }
-        }
-      };
+      // orderByのフォールバック
+      const orderBy = (metadata.orderByDefault as any) || { created_at: 'desc' };
 
       console.log('🔍 [hotel-common] where:', JSON.stringify(where, null, 2));
 
-      // データ取得
+      // データ取得（シンプル版）
       const [staff, total] = await Promise.all([
         prisma.staff.findMany({
           where,
           skip,
           take: limit,
-          orderBy: metadata.orderByDefault,
-          include
+          orderBy
         }),
         prisma.staff.count({ where })
       ]);
@@ -134,20 +117,11 @@ export default async function handler(req: Request, res: Response) {
         email: s.email,
         name: s.name || '',
         isActive: s.is_active,
-        isLocked: s.is_locked,
         lockedUntil: s.locked_until?.toISOString() || null,
         failedLoginCount: s.failed_login_count || 0,
         lastLoginAt: s.last_login_at?.toISOString() || null,
         createdAt: s.created_at.toISOString(),
-        role: s.staff_tenant_memberships[0]?.role ? {
-          id: s.staff_tenant_memberships[0].role.id,
-          name: s.staff_tenant_memberships[0].role.name,
-          permissions: s.staff_tenant_memberships[0].role.role_permissions?.map((rp: any) => ({
-            id: rp.permission.id,
-            code: rp.permission.code,
-            name: rp.permission.name
-          })) || []
-        } : null
+        role: null
       }));
 
       return res.status(200).json({

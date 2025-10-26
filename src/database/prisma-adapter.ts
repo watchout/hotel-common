@@ -6,7 +6,7 @@
  * アダプターレイヤーです。
  */
 
-import { PrismaClient } from '../generated/prisma';
+import { PrismaClient } from '@prisma/client';
 
 /**
  * Prismaクライアントのラッパークラス
@@ -129,7 +129,9 @@ export class PrismaAdapter {
    * order -> order のマッピング
    */
   get order() {
-    return this.prisma.order;
+    // 互換レイヤー: 新クライアントでは複数形/snake_caseに寄せる
+    // @ts-ignore
+    return (this.prisma as any).orders || (this.prisma as any).order;
   }
 
   // Detector互換: orders (snake_case plural)
@@ -142,7 +144,8 @@ export class PrismaAdapter {
    * orderItem -> orderItem のマッピング
    */
   get orderItem() {
-    return this.prisma.orderItem;
+    // @ts-ignore
+    return (this.prisma as any).order_items || (this.prisma as any).orderItem;
   }
 
   // Detector互換: order_items (snake_case plural)
@@ -301,40 +304,44 @@ export class PrismaAdapter {
    * reservation -> reservations のマッピング
    */
   get reservation() {
-    return this.prisma.reservations;
+    return (this.prisma as any).reservations;
   }
 
   /**
    * roomMemo -> room_memos のマッピング
    */
   get roomMemo() {
-    return this.prisma.roomMemo;
+    // @ts-ignore
+    return (this.prisma as any).room_memos || (this.prisma as any).roomMemo;
   }
 
   get roomMemoComment() {
-    return this.prisma.roomMemoComment;
+    // @ts-ignore
+    return (this.prisma as any).room_memo_comments || (this.prisma as any).roomMemoComment;
   }
 
   get roomMemoStatusLog() {
-    return this.prisma.roomMemoStatusLog;
+    // @ts-ignore
+    return (this.prisma as any).room_memo_status_logs || (this.prisma as any).roomMemoStatusLog;
   }
 
   get roomMemoRead() {
-    return this.prisma.roomMemoRead;
+    // @ts-ignore
+    return (this.prisma as any).room_memo_reads || (this.prisma as any).roomMemoRead;
   }
 
   /**
    * checkinSession -> checkin_sessions のマッピング
    */
   get checkinSession() {
-    return this.prisma.checkin_sessions;
+    return (this.prisma as any).checkin_sessions;
   }
 
   /**
    * sessionBilling -> session_billings のマッピング
    */
   get sessionBilling() {
-    return this.prisma.session_billings;
+    return (this.prisma as any).session_billings;
   }
 
 

@@ -177,8 +177,18 @@ class HotelRedisClient {
     async saveSessionById(sessionId, sessionInfo, ttlSeconds = 3600) {
         if (!this.connected)
             await this.connect();
-        const key = this.prefixKey(`session:${sessionId}`);
+        const key = `hotel:session:${sessionId}`; // プレフィックスなしで直接指定（SSOT準拠）
         await this.client.setEx(key, ttlSeconds, JSON.stringify(sessionInfo));
+    }
+    /**
+     * セッションIDでセッション削除（Cookie認証用）
+     * SSOT準拠: hotel:session:{sessionId}
+     */
+    async deleteSessionById(sessionId) {
+        if (!this.connected)
+            await this.connect();
+        const key = `hotel:session:${sessionId}`; // プレフィックスなしで直接指定（SSOT準拠）
+        return await this.client.del(key);
     }
     /**
      * セッション更新（最終アクティビティ時間）

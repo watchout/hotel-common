@@ -387,7 +387,7 @@ router.get('/payments', middleware_1.authMiddleware, async (req, res) => {
             payment_method: payment.paymentMethod,
             status: payment.status.toLowerCase(),
             processed_at: payment.processedAt,
-            payment_reference: payment.paymentReference ?? payment.reference ?? null
+            payment_reference: payment?.paymentReference ?? payment?.reference ?? null
         }));
         const pagination = api_response_standards_1.StandardResponseBuilder.createPagination(page, limit, totalCount);
         // サマリー計算

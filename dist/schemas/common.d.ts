@@ -29,14 +29,14 @@ export declare const SearchSchema: z.ZodObject<{
     limit: number;
     page: number;
     sort_order: "asc" | "desc";
-    filter?: Record<string, string> | undefined;
     search?: string | undefined;
+    filter?: Record<string, string> | undefined;
     sort_by?: string | undefined;
     date_from?: string | undefined;
     date_to?: string | undefined;
 }, {
-    filter?: Record<string, string> | undefined;
     search?: string | undefined;
+    filter?: Record<string, string> | undefined;
     limit?: number | undefined;
     page?: number | undefined;
     sort_by?: string | undefined;
