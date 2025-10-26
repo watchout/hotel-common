@@ -49,7 +49,7 @@ export class UnifiedTenantManager {
         where: { id: tenantId }
       })
       return !!tenant && tenant.status === 'active'
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('テナント検証エラー', { tenantId, error })
       return false
     }
@@ -92,7 +92,7 @@ export class UnifiedTenantManager {
       )
 
       return tenantConfig
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('テナント取得エラー', { tenantId, error })
       return null
     }
@@ -165,7 +165,7 @@ export class UnifiedTenantManager {
           timestamp: new Date()
         }
       })
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('テナントアクセスログ記録エラー', { context, error })
     }
   }

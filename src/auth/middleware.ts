@@ -1,9 +1,11 @@
-import { Request, Response, NextFunction } from 'express';
-import * as jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
-import { StandardResponseBuilder } from '../utils/response-builder';
-import { HotelLogger } from '../utils/logger';
+import * as jwt from 'jsonwebtoken';
+
 import { hotelDb } from '../database/prisma';
+import { HotelLogger } from '../utils/logger';
+import { StandardResponseBuilder } from '../utils/response-builder';
+
+import type { Request, Response, NextFunction } from 'express';
 
 // 環境変数読み込み
 config();
@@ -47,7 +49,7 @@ export const verifyAdminAuth = (req: Request & { user?: any }, res: Response, ne
     // @ts-ignore - 型定義が不完全
     req.user = decoded;
     next();
-  } catch (error) {
+  } catch (error: Error) {
     return res.status(401).json({ error: 'Invalid token' });
   }
 };
@@ -67,7 +69,7 @@ export const verifyTenantAuth = (req: Request & { user?: any }, res: Response, n
     // @ts-ignore - 型定義が不完全
     req.user = decoded;
     next();
-  } catch (error) {
+  } catch (error: Error) {
     return res.status(401).json({ error: 'Invalid token' });
   }
 };
@@ -216,7 +218,7 @@ export const authMiddleware = (req: Request & { user?: any }, res: Response, nex
     }
 
     next();
-  } catch (error) {
+  } catch (error: Error) {
     // 419 for expired, 401 otherwise
     const isExpired = (error as any)?.name === 'TokenExpiredError'
     const status = isExpired ? 419 : 401

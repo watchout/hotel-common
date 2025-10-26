@@ -1,7 +1,8 @@
 // Hotel Common - API設計標準とガイドライン
 
-import { ApiResponse, ApiError } from '../types/common'
 import { ERROR_CODES } from '../types/api'
+
+import type { ApiResponse, ApiError } from '../types/common'
 
 /**
  * REST API設計標準
@@ -87,7 +88,7 @@ export class StandardResponseBuilder {
   /**
    * 成功レスポンス生成
    */
-  static success<T>(res: any, data: T, meta?: any, statusCode: number = 200): any {
+  static success<T>(res: any, data: T, meta?: any, statusCode = 200): any {
     const response: ApiResponse<T> = {
       success: true,
       data,
@@ -107,7 +108,7 @@ export class StandardResponseBuilder {
     page: number, 
     limit: number, 
     total: number,
-    statusCode: number = 200
+    statusCode = 200
   ): any {
     const response: ApiResponse<{ items: T[], pagination: any }> = {
       success: true,
@@ -140,7 +141,7 @@ export class StandardResponseBuilder {
     code: string, 
     message: string, 
     details?: any,
-    statusCode: number = 400
+    statusCode = 400
   ): { response: ApiResponse<null>, statusCode: number } {
     const error: ApiError = {
       code,
@@ -191,7 +192,7 @@ export class StandardResponseBuilder {
   /**
    * 認証エラーレスポンス
    */
-  static authError(message: string = 'Authentication required'): {
+  static authError(message = 'Authentication required'): {
     response: ApiResponse<null>, 
     statusCode: number 
   } {
@@ -206,7 +207,7 @@ export class StandardResponseBuilder {
   /**
    * 権限エラーレスポンス
    */
-  static forbiddenError(message: string = 'Insufficient permissions'): {
+  static forbiddenError(message = 'Insufficient permissions'): {
     response: ApiResponse<null>, 
     statusCode: number 
   } {
@@ -251,7 +252,7 @@ export class StandardResponseBuilder {
   /**
    * サーバーエラーレスポンス
    */
-  static serverError(message: string = 'Internal server error'): {
+  static serverError(message = 'Internal server error'): {
     response: ApiResponse<null>, 
     statusCode: number 
   } {

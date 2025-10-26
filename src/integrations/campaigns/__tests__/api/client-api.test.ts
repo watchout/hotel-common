@@ -1,5 +1,6 @@
-import request from 'supertest';
 import express from 'express';
+import request from 'supertest';
+
 import clientRouter from '../../client-api';
 import { CampaignService } from '../../services';
 import { WelcomeScreenService } from '../../welcome-screen-service';

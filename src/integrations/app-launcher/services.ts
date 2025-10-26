@@ -2,8 +2,7 @@
  * Google Playアプリ選択機能のサービス実装
  */
 
-import { PrismaClient } from '@prisma/client';
-import { 
+import type { 
   GooglePlayAppCreateInput, 
   GooglePlayAppUpdateInput,
   GooglePlayAppListQuery,
@@ -12,6 +11,8 @@ import {
   HotelAppListQuery,
   LayoutAppBlockUpdateInput
 } from './types';
+import type { PrismaClient } from '@prisma/client';
+
 
 export class AppLauncherService {
   private prisma: PrismaClient;

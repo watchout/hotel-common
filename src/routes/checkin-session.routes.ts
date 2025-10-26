@@ -1,9 +1,12 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { z } from 'zod';
+
 import { authMiddleware } from '../auth/middleware';
 import { hotelDb } from '../database/prisma';
-import { StandardResponseBuilder } from '../utils/response-builder';
 import { logger } from '../utils/logger';
+import { StandardResponseBuilder } from '../utils/response-builder';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 
@@ -130,7 +133,7 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       roomId: validatedData.roomId
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('チェックインセッション作成エラー', error as Error);
     
     if (error instanceof z.ZodError) {
@@ -191,7 +194,7 @@ router.get('/:sessionId', authMiddleware, async (req: Request, res: Response) =>
       tenantId
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('セッション詳細取得エラー', error as Error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', 'セッション詳細の取得に失敗しました').response
@@ -245,7 +248,7 @@ router.get('/by-number/:sessionNumber', authMiddleware, async (req: Request, res
       tenantId
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('セッション番号による取得エラー', error as Error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', 'セッションの取得に失敗しました').response
@@ -294,7 +297,7 @@ router.get('/active-by-room/:roomId', authMiddleware, async (req: Request, res: 
       tenantId
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('部屋のアクティブセッション取得エラー', error as Error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', 'アクティブセッションの取得に失敗しました').response
@@ -339,7 +342,7 @@ router.patch('/:sessionId', authMiddleware, async (req: Request, res: Response) 
       updates: validatedData
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('セッション更新エラー', error as Error);
     
     if (error instanceof z.ZodError) {
@@ -412,7 +415,7 @@ router.post('/:sessionId/checkout', authMiddleware, async (req: Request, res: Re
       checkoutTime
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('チェックアウト処理エラー', error as Error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', 'チェックアウト処理に失敗しました').response

@@ -1,7 +1,11 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
+
+import { getTenantManager } from '../multitenancy/unified-tenant-manager'
 import { HotelLogger } from '../utils/logger'
 import { getRedisClient } from '../utils/redis'
-import { getTenantManager, TenantContext } from '../multitenancy/unified-tenant-manager'
+
+import type { TenantContext } from '../multitenancy/unified-tenant-manager';
+import type { AxiosInstance, AxiosRequestConfig} from 'axios';
 
 /**
  * 標準化されたAPIクライアント設定
@@ -266,7 +270,7 @@ export class StandardizedApiClient {
         cacheKey,
         JSON.stringify(data)
       )
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.warn('キャッシュ保存エラー', error)
     }
   }
@@ -284,7 +288,7 @@ export class StandardizedApiClient {
       }
       
       return null
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.warn('キャッシュ取得エラー', error)
       return null
     }
@@ -304,7 +308,7 @@ export class StandardizedApiClient {
   }): void {
     try {
       // メトリクス記録（実装は別途）
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.warn('メトリクス記録エラー', error)
     }
   }

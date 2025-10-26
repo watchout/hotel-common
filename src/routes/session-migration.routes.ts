@@ -1,8 +1,11 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+
 import { authMiddleware } from '../auth/middleware';
-import { StandardResponseBuilder } from '../utils/response-builder';
-import { logger } from '../utils/logger';
 import SessionMigrationService from '../services/session-migration.service';
+import { logger } from '../utils/logger';
+import { StandardResponseBuilder } from '../utils/response-builder';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 
@@ -41,7 +44,7 @@ router.post('/migrate-orders', authMiddleware, async (req: Request, res: Respons
       errorCount: result.errors.length
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('既存注文データ移行エラー', error as Error);
     const errorResponse = StandardResponseBuilder.error('INTERNAL_ERROR', '注文データの移行に失敗しました');
     return res.status(errorResponse.status).json(errorResponse.response);
@@ -67,7 +70,7 @@ router.get('/statistics', authMiddleware, async (req: Request, res: Response) =>
 
     logger.info('セッション統計情報取得完了', { tenantId, statistics });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('セッション統計情報取得エラー', error as Error);
     const errorResponse = StandardResponseBuilder.error('INTERNAL_ERROR', 'セッション統計情報の取得に失敗しました');
     return res.status(errorResponse.status).json(errorResponse.response);
@@ -93,7 +96,7 @@ router.get('/compatibility-check', authMiddleware, async (req: Request, res: Res
 
     logger.info('後方互換性チェック完了', { tenantId, compatibility });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('後方互換性チェックエラー', error as Error);
     const errorResponse = StandardResponseBuilder.error('INTERNAL_ERROR', '後方互換性チェックに失敗しました');
     return res.status(errorResponse.status).json(errorResponse.response);
@@ -134,7 +137,7 @@ router.get('/report', authMiddleware, async (req: Request, res: Response) => {
 
     logger.info('移行状況レポート取得完了', { tenantId });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('移行状況レポート取得エラー', error as Error);
     const errorResponse = StandardResponseBuilder.error('INTERNAL_ERROR', '移行状況レポートの取得に失敗しました');
     return res.status(errorResponse.status).json(errorResponse.response);

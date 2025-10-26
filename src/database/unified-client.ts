@@ -1,6 +1,8 @@
-import { PrismaClient } from '@prisma/client';
-import { HotelLogger } from '../utils/logger';
+
 import { hotelDb } from './prisma';
+import { HotelLogger } from '../utils/logger';
+
+import type { PrismaClient } from '@prisma/client';
 
 // マルチテナント対応統一Prismaクライアント
 export class UnifiedPrismaClient {
@@ -63,7 +65,7 @@ export class UnifiedPrismaClient {
       });
 
       return result;
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error(`[${this.systemName}] Create operation failed`, {
         error: error as Error
       });
@@ -88,7 +90,7 @@ export class UnifiedPrismaClient {
       });
 
       return result;
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error(`[${this.systemName}] FindMany operation failed`, {
         error: error as Error
       });
@@ -109,7 +111,7 @@ export class UnifiedPrismaClient {
       });
 
       return result;
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error(`[${this.systemName}] FindUnique operation failed`, {
         error: error as Error
       });
@@ -144,7 +146,7 @@ export class UnifiedPrismaClient {
       });
 
       return result;
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error(`[${this.systemName}] Update operation failed`, {
         error: error as Error
       });
@@ -172,7 +174,7 @@ export class UnifiedPrismaClient {
       });
 
       return result;
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error(`[${this.systemName}] Delete operation failed`, {
         error: error as Error
       });
@@ -185,7 +187,7 @@ export class UnifiedPrismaClient {
     try {
       // TODO: audit_logsテーブルのスキーマ確認後に実装
       this.logger.info(`[${this.systemName}] Operation: ${operation} on ${model} for tenant: ${this.tenantId}`);
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error(`[${this.systemName}] Audit log creation failed`, {
         error: error as Error
       });
@@ -200,7 +202,7 @@ export class UnifiedPrismaClient {
       this.logger.info(`[${this.systemName}] Database connected successfully`, {
         tenantId: this.tenantId
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error(`[${this.systemName}] Failed to connect to database`, {
         error: error as Error
       });
@@ -214,7 +216,7 @@ export class UnifiedPrismaClient {
       this.logger.info(`[${this.systemName}] Database disconnected successfully`, {
         tenantId: this.tenantId
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error(`[${this.systemName}] Failed to disconnect from database`, {
         error: error as Error
       });
@@ -248,7 +250,7 @@ export class UnifiedPrismaClient {
     try {
       await this.prisma.$queryRaw`SELECT 1`;
       return true;
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error(`[${this.systemName}] Health check failed`, {
         error: error as Error
       });

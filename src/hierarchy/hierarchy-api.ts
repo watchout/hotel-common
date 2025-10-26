@@ -1,6 +1,7 @@
 import { hotelDb } from '../database'
-import { HotelLogger } from '../utils/logger'
 import { HierarchyPermissionManager } from './permission-manager'
+import { HotelLogger } from '../utils/logger'
+
 import type {
   OrganizationHierarchy,
   DataSharingPolicy,
@@ -87,7 +88,7 @@ export class HierarchyApiManager {
       this.logger.info(`組織作成完了: ${organization.id} (${data.name})`)
       return organization as OrganizationHierarchy
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('組織作成エラー:', error as Error)
       throw error
     }
@@ -152,7 +153,7 @@ export class HierarchyApiManager {
       this.logger.info(`組織更新完了: ${organizationId} (変更: ${Object.keys(data).join(', ')})`)
       return organization as OrganizationHierarchy
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('組織更新エラー:', error as Error)
       throw error
     }
@@ -216,7 +217,7 @@ export class HierarchyApiManager {
 
       this.logger.info(`組織削除完了: ${organizationId}`)
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('組織削除エラー:', error as Error)
       throw error
     }
@@ -271,7 +272,7 @@ export class HierarchyApiManager {
 
       return results as DataSharingPolicy[]
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('データ共有ポリシー設定エラー:', error as Error)
       throw error
     }
@@ -318,7 +319,7 @@ export class HierarchyApiManager {
 
       this.logger.info(`プリセット適用完了: ${organizationId} (プリセット: ${preset.name})`)
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('プリセット適用エラー:', error as Error)
       throw error
     }
@@ -347,7 +348,7 @@ export class HierarchyApiManager {
 
       this.logger.info(`テナント-組織関係設定完了: ${tenantId} -> ${organizationId} (${role})`)
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('テナント-組織関係設定エラー:', error as Error)
       throw error
     }
@@ -493,7 +494,7 @@ export class HierarchyApiManager {
         sync_mode: 'realtime'
       })
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('階層変更イベント発行エラー:', error as Error)
       // イベント発行失敗は非致命的なため、処理を継続
     }

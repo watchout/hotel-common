@@ -3,6 +3,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+
 import { glob } from 'glob';
 
 export interface RAGSearchParams {
@@ -33,7 +34,7 @@ export interface RAGResponse {
 export class RealRAGService {
   private docsPath: string;
   private knowledgeIndex: Map<string, any>;
-  private initialized: boolean = false;
+  private initialized = false;
 
   constructor() {
     this.docsPath = path.join(__dirname, '../../docs');
@@ -64,7 +65,7 @@ export class RealRAGService {
       const initTime = Date.now() - startTime;
       console.log(`✅ RAGシステム初期化完了 (${initTime}ms)`);
       
-    } catch (error) {
+    } catch (error: Error) {
       console.error('❌ RAGシステム初期化エラー:', error);
       throw error;
     }
@@ -305,7 +306,7 @@ export class RealRAGService {
   private async readFileContent(filePath: string): Promise<string> {
     try {
       return fs.readFileSync(path.join(this.docsPath, filePath), 'utf-8');
-    } catch (error) {
+    } catch (error: Error) {
       console.warn(`ファイル読み込みエラー: ${filePath}`);
       return '';
     }

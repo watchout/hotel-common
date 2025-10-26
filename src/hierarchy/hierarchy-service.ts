@@ -1,7 +1,8 @@
 import { HierarchyApiManager } from './hierarchy-api'
-import { HierarchyPermissionManager } from './permission-manager'
 import { HierarchicalJwtManager } from './jwt-extension'
+import { HierarchyPermissionManager } from './permission-manager'
 import { HotelLogger } from '../utils/logger'
+
 import type {
   OrganizationHierarchy,
   DataSharingPolicy,
@@ -135,7 +136,7 @@ export class HierarchyService {
 
       return { group, brands, hotels, departments }
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('組織階層セットアップエラー:', error as Error)
       throw error
     }
@@ -185,7 +186,7 @@ export class HierarchyService {
 
       return { user, tokens }
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('階層権限付きユーザー作成エラー:', error as Error)
       throw error
     }
@@ -196,7 +197,7 @@ export class HierarchyService {
    */
   static async getCompleteOrganizationTree(
     rootOrganizationId?: string,
-    includeStats: boolean = true
+    includeStats = true
   ): Promise<OrganizationTreeNode[]> {
     try {
       const organizations = await HierarchyPermissionManager.getOrganizationTree(rootOrganizationId)
@@ -220,7 +221,7 @@ export class HierarchyService {
 
       return enrichedOrgs
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('組織階層ツリー取得エラー:', error as Error)
       return []
     }
@@ -310,7 +311,7 @@ export class HierarchyService {
         hierarchy_summary: hierarchySummary
       }
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('ユーザー実効権限取得エラー:', error as Error)
       throw error
     }
@@ -372,7 +373,7 @@ export class HierarchyService {
         preset_suggestions: presetSuggestions
       }
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('権限診断エラー:', error as Error)
       throw error
     }

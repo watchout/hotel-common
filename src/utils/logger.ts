@@ -164,7 +164,7 @@ export class HotelLogger {
       const fs = require('fs').promises
       const logLine = JSON.stringify(entry) + '\n'
       await fs.appendFile(this.config.filePath, logLine)
-    } catch (error) {
+    } catch (error: Error) {
       console.error('Failed to write log to file:', error)
     }
   }
@@ -177,7 +177,7 @@ export class HotelLogger {
       const { getRedisClient } = await import('./redis')
       const redis = getRedisClient()
       await redis.logEvent(entry)
-    } catch (error) {
+    } catch (error: Error) {
       console.error('Failed to write log to Redis:', error)
     }
   }

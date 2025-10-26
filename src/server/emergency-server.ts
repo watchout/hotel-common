@@ -3,8 +3,12 @@
 // 🚨 最終緊急対応：超簡素hotel-commonサーバー
 // ルーティングエラー回避、Sunoブロック解除最優先
 
-import express, { Request, Response, NextFunction } from 'express'
 import { createServer } from 'http'
+
+import express from 'express'
+
+import type { Request, Response, NextFunction } from 'express';
+
 
 const app = express()
 const server = createServer(app)

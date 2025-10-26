@@ -1,6 +1,8 @@
-import { Request, Response } from 'express';
+
 import { ResponseTreeService } from '../../services/response-tree/response-tree.service';
 import { HotelLogger } from '../../utils/logger';
+
+import type { Request, Response } from 'express';
 
 /**
  * レスポンスツリーコントローラー
@@ -30,7 +32,7 @@ export class ResponseTreeController {
         success: true,
         data: trees
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error getting active trees:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -68,7 +70,7 @@ export class ResponseTreeController {
         success: true,
         data: tree
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error getting tree by id:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,

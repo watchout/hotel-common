@@ -1,12 +1,14 @@
 import express from 'express';
-import { Request, Response } from 'express';
+import { z } from 'zod';
+
 import { authMiddleware } from '../../../auth/middleware';
+import { hotelDb } from '../../../database';
+import { broadcastRoomOperation } from '../../../events/room-operation-broadcaster';
+import { ReservationService } from '../../../services/reservation.service';
 import { StandardResponseBuilder } from '../../../standards/api-standards';
 import { HotelLogger } from '../../../utils/logger';
-import { z } from 'zod';
-import { hotelDb } from '../../../database';
-import { ReservationService } from '../../../services/reservation.service';
-import { broadcastRoomOperation } from '../../../events/room-operation-broadcaster';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 const logger = HotelLogger.getInstance();
@@ -177,7 +179,7 @@ router.post('/checkin', authMiddleware, async (req: Request, res: Response) => {
           details: { guest_count: validatedData.guestCount }
         })
       } catch {}
-    } catch (e) {
+    } catch (e: Error) {
       logger.warn('CHECKIN操作ログ記録に失敗（継続）', { error: e instanceof Error ? e.message : e })
     }
 
@@ -189,7 +191,7 @@ router.post('/checkin', authMiddleware, async (req: Request, res: Response) => {
       }).response
     );
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('統合チェックイン処理エラー:', error);
     
     if (error instanceof z.ZodError) {
@@ -467,7 +469,7 @@ router.post('/checkout', authMiddleware, async (req: Request, res: Response) => 
           details: { final_amount: (result as any).totalAmount, payment_method: validatedData.paymentMethod }
         })
       } catch {}
-    } catch (e) {
+    } catch (e: Error) {
       logger.warn('CHECKOUT操作ログ記録に失敗（継続）', { error: e instanceof Error ? e.message : e })
     }
 
@@ -479,7 +481,7 @@ router.post('/checkout', authMiddleware, async (req: Request, res: Response) => 
       }).response
     );
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('統合チェックアウト処理エラー:', error);
     
     if (error instanceof z.ZodError) {
@@ -769,7 +771,7 @@ async function updateSessionOnCheckout(tenantId: string, reservationId: string) 
         tenantId
       });
     }
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('チェックアウト時セッション更新エラー', error);
     // セッション更新エラーは致命的ではないため、処理を続行
   }

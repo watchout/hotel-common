@@ -20,10 +20,12 @@
  * 4. 下流の権限・tenant分離ミドルウェアで利用
  */
 
-import { NextFunction, Request, Response } from 'express';
+
 import { HotelLogger } from '../utils/logger';
 import { getRedisClient } from '../utils/redis';
 import { StandardResponseBuilder } from '../utils/response-builder';
+
+import type { NextFunction, Request, Response } from 'express';
 
 const logger = HotelLogger.getInstance();
 
@@ -120,7 +122,7 @@ export const sessionAuthMiddleware = async (
 
     // 4. 下流へ
     next();
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('セッション認証エラー', error);
     return res.status(500).json(
       StandardResponseBuilder.error('AUTH_ERROR', 'Authentication service error').response

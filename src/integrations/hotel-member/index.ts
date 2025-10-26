@@ -62,7 +62,7 @@ ${Object.entries(HOTEL_MEMBER_HIERARCHY_ENDPOINTS)
 🔐 セキュリティ: 階層別データアクセス制御
     `)
     
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('hotel-member階層権限管理統合初期化エラー:', error as Error)
     throw error
   }

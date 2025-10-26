@@ -5,8 +5,10 @@
  * is_deleted = falseの条件を自動的に追加し、削除済みレコードを除外します。
  */
 
-import { PrismaClient } from '@prisma/client'
 import { HotelLogger } from '../utils/logger'
+
+import type { PrismaClient } from '@prisma/client'
+
 
 const logger = HotelLogger.getInstance()
 

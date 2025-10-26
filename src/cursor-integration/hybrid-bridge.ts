@@ -1,9 +1,9 @@
 // 🔥 Cursor対話 × 実際のRAG/ガードレール統合システム
 // 対話便利性 + 90%トークン削減 + 完全精度を実現
 
-import { SevenIntegrationOrchestrator } from '../seven-integration/orchestrator';
-import { RealRAGService } from './rag-service';
 import { RealGuardrailsValidator } from './guardrails-validator';
+import { RealRAGService } from './rag-service';
+import { SevenIntegrationOrchestrator } from '../seven-integration/orchestrator';
 // TokenOptimizerモジュールが存在しないため、コメントアウト
 // import { TokenOptimizer } from './token-optimizer';
 
@@ -85,7 +85,7 @@ export class HybridCursorIntegration {
         qualityScore: metrics.qualityScore
       };
       
-    } catch (error) {
+    } catch (error: Error) {
       console.error('HybridCursor処理エラー:', error);
       return this.fallbackResponse(message);
     }

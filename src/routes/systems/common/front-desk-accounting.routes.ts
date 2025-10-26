@@ -1,10 +1,12 @@
 import express from 'express';
-import { Request, Response } from 'express';
+import { z } from 'zod';
+
 import { authMiddleware } from '../../../auth/middleware';
+import { hotelDb } from '../../../database';
 import { ResponseHelper, StandardResponseBuilder } from '../../../standards/api-response-standards';
 import { HotelLogger } from '../../../utils/logger';
-import { z } from 'zod';
-import { hotelDb } from '../../../database';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 const logger = HotelLogger.getInstance();
@@ -154,7 +156,7 @@ router.get('/accounting', authMiddleware, async (req: Request, res: Response) =>
       result_count: filteredTransactions.length
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('フロントデスク会計取引一覧取得エラー', error as Error);
     
     if (error instanceof z.ZodError) {
@@ -236,7 +238,7 @@ router.get('/accounting/:id', authMiddleware, async (req: Request, res: Response
       transaction_id: transactionId
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('フロントデスク会計取引詳細取得エラー', error as Error);
     ResponseHelper.sendInternalError(res, '会計取引詳細の取得に失敗しました');
   }
@@ -306,7 +308,7 @@ router.post('/accounting/process-payment', authMiddleware, async (req: Request, 
       amount: paymentData.amount
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('フロントデスク決済処理エラー', error as Error);
     
     if (error instanceof z.ZodError) {
@@ -375,7 +377,7 @@ router.get('/accounting/daily-report', authMiddleware, async (req: Request, res:
       report_date: reportDate.toISOString().split('T')[0]
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('フロントデスク日次売上レポート取得エラー', error as Error);
     ResponseHelper.sendInternalError(res, '日次売上レポートの取得に失敗しました');
   }

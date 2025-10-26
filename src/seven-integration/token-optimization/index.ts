@@ -12,8 +12,10 @@ export type {
 } from './core/context-manager';
 
 // Imports for internal use
-import { LanguageOptimizer, LanguageOptimizationConfig } from './core/language-optimizer';
 import { HotelCommonContextManager } from './core/context-manager';
+import { LanguageOptimizer } from './core/language-optimizer';
+
+import type { LanguageOptimizationConfig } from './core/language-optimizer';
 
 // Main optimization system
 export interface TokenOptimizationConfig {

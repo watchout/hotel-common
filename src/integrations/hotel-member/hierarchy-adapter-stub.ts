@@ -80,7 +80,7 @@ export class HotelMemberHierarchyAdapterStub {
           accessible_tenants: ['default']
         }
       };
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('階層JWTトークン検証エラー', error as Error);
       return {
         success: false,
@@ -113,7 +113,7 @@ export class HotelMemberHierarchyAdapterStub {
         effective_scope: 'HOTEL',
         effective_level: 'FULL'
       };
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('顧客データアクセスチェックエラー', error as Error);
       return {
         allowed: false,
@@ -144,7 +144,7 @@ export class HotelMemberHierarchyAdapterStub {
       return {
         allowed: true
       };
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('会員制限チェックエラー', error as Error);
       return {
         allowed: false,
@@ -174,7 +174,7 @@ export class HotelMemberHierarchyAdapterStub {
         allowed: true,
         effective_level: 'READ_ONLY'
       };
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('グループ分析アクセスチェックエラー', error as Error);
       return {
         allowed: false,
@@ -197,7 +197,7 @@ export class HotelMemberHierarchyAdapterStub {
         success: true,
         tenants: ['default', 'tenant_1', 'tenant_2']
       };
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('アクセス可能テナント取得エラー', error as Error);
       return {
         success: false,
@@ -226,7 +226,7 @@ export class HotelMemberHierarchyAdapterStub {
           fallback_mode: true
         }
       };
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('ヘルスチェックエラー', error as Error);
       return {
         status: 'error',

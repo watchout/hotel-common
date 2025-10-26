@@ -3,11 +3,12 @@
  * 
  * このファイルは、管理者用のAPIエンドポイントを提供します。
  */
-import * as express from 'express';
-import { hotelDb } from '../database/prisma';
-import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
+import * as express from 'express';
+import * as jwt from 'jsonwebtoken';
+
 import { getTenantServices, updateTenantService } from '../api/tenant-service-api';
+import { hotelDb } from '../database/prisma';
 
 // PrismaClientの直接インスタンス化は避け、hotelDb.getClient()を使用
 const prisma = hotelDb.getClient();
@@ -25,7 +26,7 @@ const authMiddleware = (req: any, res: any, next: any) => {
     const decoded = jwt.verify(token, JWT_SECRET);
     req.admin = decoded;
     next();
-  } catch (error) {
+  } catch (error: Error) {
     return res.status(401).json({ success: false, error: '無効なトークンです' });
   }
 };
@@ -72,7 +73,7 @@ router.post('/auth/login', async (req, res) => {
         adminLevel: admin.admin_level
       }
     });
-  } catch (error) {
+  } catch (error: Error) {
     console.error('Login error:', error);
     res.status(500).json({ success: false, error: 'ログイン処理中にエラーが発生しました' });
   }
@@ -95,7 +96,7 @@ router.get('/tenants', authMiddleware, async (req, res) => {
     });
 
     res.json({ success: true, tenants });
-  } catch (error) {
+  } catch (error: Error) {
     console.error('Get tenants error:', error);
     res.status(500).json({ success: false, error: 'テナント一覧の取得中にエラーが発生しました' });
   }
@@ -112,7 +113,7 @@ router.get('/chains', authMiddleware, async (req, res) => {
     ];
 
     res.json({ success: true, chains });
-  } catch (error) {
+  } catch (error: Error) {
     console.error('Get chains error:', error);
     res.status(500).json({ success: false, error: 'チェーン一覧の取得中にエラーが発生しました' });
   }
@@ -129,7 +130,7 @@ router.get('/groups', authMiddleware, async (req, res) => {
     ];
 
     res.json({ success: true, groups });
-  } catch (error) {
+  } catch (error: Error) {
     console.error('Get groups error:', error);
     res.status(500).json({ success: false, error: 'グループ一覧の取得中にエラーが発生しました' });
   }
@@ -146,7 +147,7 @@ router.get('/integration-status', authMiddleware, async (req, res) => {
     };
 
     res.json({ success: true, status });
-  } catch (error) {
+  } catch (error: Error) {
     console.error('Get integration status error:', error);
     res.status(500).json({ success: false, error: '統合状況の取得中にエラーが発生しました' });
   }
@@ -163,7 +164,7 @@ router.get('/tenant-services/:tenantId', authMiddleware, async (req, res) => {
     } else {
       res.status(404).json({ success: false, error: result.error });
     }
-  } catch (error) {
+  } catch (error: Error) {
     console.error('Get tenant services error:', error);
     res.status(500).json({ success: false, error: 'テナントサービスの取得中にエラーが発生しました' });
   }
@@ -192,7 +193,7 @@ router.put('/tenant-services/:tenantId/:serviceId', authMiddleware, async (req, 
     } else {
       res.status(500).json({ success: false, error: result.error });
     }
-  } catch (error) {
+  } catch (error: Error) {
     console.error('Update tenant service error:', error);
     res.status(500).json({ success: false, error: 'テナントサービスの更新中にエラーが発生しました' });
   }
@@ -211,7 +212,7 @@ router.post('/tenant-services/:tenantId', authMiddleware, async (req, res) => {
     } else {
       res.status(500).json({ success: false, error: result.error });
     }
-  } catch (error) {
+  } catch (error: Error) {
     console.error('Add tenant service error:', error);
     res.status(500).json({ success: false, error: 'テナントサービスの追加中にエラーが発生しました' });
   }

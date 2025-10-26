@@ -38,7 +38,7 @@ export class LanguageOptimizer {
 
     private buildOptimizedPrompt(
         task: string,
-        context: string = '',
+        context = '',
         config: LanguageOptimizationConfig
     ): string {
         const contextSection = context ? `Context: ${context}\n\n` : '';

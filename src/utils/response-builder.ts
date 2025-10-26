@@ -2,7 +2,7 @@
  * 標準レスポンスビルダー
  * APIレスポンスの統一フォーマットを提供します
  */
-import { Response } from 'express';
+import type { Response } from 'express';
 
 interface StandardResponse {
   success: boolean;
@@ -27,7 +27,7 @@ export class StandardResponseBuilder {
   /**
    * 成功レスポンスを作成
    */
-  static success(res: Response, data: any = {}, meta: any = {}, statusCode: number = 200): Response {
+  static success(res: Response, data: any = {}, meta: any = {}, statusCode = 200): Response {
     const response: StandardResponse = {
       success: true,
       data,

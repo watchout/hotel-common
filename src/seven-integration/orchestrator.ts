@@ -2,7 +2,22 @@
 // 文献1-7完全統合メインコントローラー
 
 import { EventEmitter } from 'events'
+
 import { 
+  getSevenIntegrationConfig,
+  validateSevenIntegrationConfig,
+  PERFORMANCE_TARGETS,
+  AI_AGENT_CONFIGS,
+  INTEGRATION_LAYER_CONFIGS
+} from './config'
+import { 
+  SevenLayerIntegrationFactory
+} from './seven-layer-integration'
+
+import type {
+  BaseIntegrationLayer
+} from './seven-layer-integration';
+import type { 
   SevenIntegrationConfig,
   SevenIntegrationResult,
   IntegrationStatus,
@@ -12,24 +27,14 @@ import {
   IntegrationLayer,
   AIAgentType
 } from './types'
-import { 
-  SevenLayerIntegrationFactory,
-  BaseIntegrationLayer
-} from './seven-layer-integration'
-import { 
-  getSevenIntegrationConfig,
-  validateSevenIntegrationConfig,
-  PERFORMANCE_TARGETS,
-  AI_AGENT_CONFIGS,
-  INTEGRATION_LAYER_CONFIGS
-} from './config'
+
 
 export class SevenIntegrationOrchestrator extends EventEmitter {
   private config: SevenIntegrationConfig
   private status: IntegrationStatus
   private events: IntegrationEvent[] = []
   private layers: BaseIntegrationLayer[] = []
-  private currentLayerIndex: number = 0
+  private currentLayerIndex = 0
 
   constructor(customConfig?: Partial<SevenIntegrationConfig>) {
     super()
@@ -102,7 +107,7 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
           // プログレス更新
           this.updateProgress((i + 1) / this.layers.length * 100)
           
-        } catch (error) {
+        } catch (error: Error) {
           const errorMessage = error instanceof Error ? error.message : 'Unknown error'
           this.emitEvent('error', layerType, `Layer ${i + 1} 実行エラー: ${errorMessage}`)
           
@@ -142,7 +147,7 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
       
       return result
       
-    } catch (error) {
+    } catch (error: Error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
       this.emitEvent('error', undefined, `七重統合システム実行エラー: ${errorMessage}`)
       
@@ -228,7 +233,7 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
    * 継続的監視・改善実行
    */
   async startContinuousMonitoring(
-    interval: number = 60000, // 1分間隔
+    interval = 60000, // 1分間隔
     improvementCallback?: (improvements: string[]) => void
   ): Promise<() => void> {
     const monitoringInterval = setInterval(async () => {
@@ -245,7 +250,7 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
           }
         }
         
-      } catch (error) {
+      } catch (error: Error) {
         console.error('継続監視エラー:', error)
       }
     }, interval)

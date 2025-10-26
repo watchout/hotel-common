@@ -154,7 +154,7 @@ export class DeviceRoomService {
       try {
         const result = await this.registerDevice(device)
         results.push({ success: true, device: result })
-      } catch (error) {
+      } catch (error: Error) {
         results.push({ 
           success: false, 
           error: error instanceof Error ? error.message : '不明なエラー',

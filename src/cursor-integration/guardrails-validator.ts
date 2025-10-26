@@ -1,8 +1,9 @@
 // 🛡️ 実際のガードレールシステム - 品質・セキュリティ・パフォーマンス検証
 // Custom Instructionsの擬似的「チェックせよ」を実際の検証に置換
 
-import * as ts from 'typescript';
 import { execSync } from 'child_process';
+
+import * as ts from 'typescript';
 
 export interface GuardrailResult {
   passed: boolean;
@@ -67,7 +68,7 @@ export class RealGuardrailsValidator {
         processingTime: Date.now() - startTime
       };
 
-    } catch (error) {
+    } catch (error: Error) {
       console.error('ガードレール検証エラー:', error);
       return {
         overall: false,
@@ -126,7 +127,7 @@ export class RealGuardrailsValidator {
       // 5. hotel-common特有のパターンチェック
       results.push(...this.checkHotelCommonPatterns(content, ragResults));
 
-    } catch (error) {
+    } catch (error: Error) {
       results.push({
         passed: false,
         category: 'typescript',

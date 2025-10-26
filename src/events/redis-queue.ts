@@ -1,6 +1,9 @@
 import Redis from 'redis'
-import { HotelEvent, EventDeliveryLog, SystemId } from './types'
+
+import { SystemId } from './types'
 import { HotelLogger } from '../utils/logger'
+
+import type { HotelEvent, EventDeliveryLog} from './types';
 
 export interface RedisQueueConfig {
   host: string
@@ -23,7 +26,7 @@ export interface RedisQueueConfig {
 export class RedisEventQueue {
   private redis: Redis.RedisClientType
   private logger: HotelLogger
-  private isConnected: boolean = false
+  private isConnected = false
   private consumerGroups: Map<string, Set<string>> = new Map()
 
   constructor(private config: RedisQueueConfig) {
@@ -64,7 +67,7 @@ export class RedisEventQueue {
     try {
       await this.redis.connect()
       this.logger.info('RedisEventQueue接続完了')
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Redis接続エラー:', error as Error)
       throw error
     }
@@ -77,7 +80,7 @@ export class RedisEventQueue {
     try {
       await this.redis.quit()
       this.logger.info('RedisEventQueue切断完了')
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Redis切断エラー:', error as Error)
       throw error
     }
@@ -134,7 +137,7 @@ export class RedisEventQueue {
 
       return eventId
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('イベント発行エラー:', error as Error)
       
       // エラーログ記録
@@ -203,14 +206,14 @@ export class RedisEventQueue {
             }
           }
 
-        } catch (error) {
+        } catch (error: Error) {
           this.logger.error('ストリーム消費エラー:', error as Error)
           // エラー時は5秒待機して再試行
           await new Promise(resolve => setTimeout(resolve, 5000))
         }
       }
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('ストリーム消費初期化エラー:', error as Error)
       throw error
     }
@@ -232,7 +235,7 @@ export class RedisEventQueue {
       }
       this.consumerGroups.get(streamName)!.add(consumerGroup)
       
-    } catch (error) {
+    } catch (error: Error) {
       // グループが既存の場合はOK
       if (error instanceof Error && error.message.includes('BUSYGROUP')) {
         this.logger.debug(`コンシューマーグループ既存: ${streamName}/${consumerGroup}`)
@@ -276,7 +279,7 @@ export class RedisEventQueue {
           }
         }
       }
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('未処理メッセージ処理エラー:', error)
     }
   }
@@ -321,7 +324,7 @@ export class RedisEventQueue {
         timestamp: new Date()
       })
 
-    } catch (error) {
+    } catch (error: Error) {
       const processingTime = Date.now() - startTime
       this.logger.error(`メッセージ処理エラー: ${message.id}`, error)
 
@@ -423,7 +426,7 @@ export class RedisEventQueue {
       // 7日後に自動削除
       await this.redis.expire(logKey, 7 * 24 * 60 * 60)
       
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('配信ログ記録エラー:', error)
     }
   }
@@ -445,7 +448,7 @@ export class RedisEventQueue {
         // @ts-ignore - プロパティ名の不一致
         last_entry: info.lastEntry
       }
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('ストリーム統計取得エラー:', error)
       return null
     }
@@ -471,7 +474,7 @@ export class RedisEventQueue {
           }))
         }
       }
-    } catch (error) {
+    } catch (error: Error) {
       return {
         status: 'unhealthy',
         details: {

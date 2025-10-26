@@ -1,5 +1,7 @@
-import { PrismaClient } from '@prisma/client';
 import { hotelDb } from './prisma';
+
+import type { PrismaClient } from '@prisma/client';
+
 
 export interface UnifiedClientConfig {
   tenantId: string;
@@ -157,7 +159,7 @@ export class UnifiedPrismaClient {
     try {
       await this.prisma.$queryRaw`SELECT 1`;
       return true;
-    } catch (error) {
+    } catch (error: Error) {
       console.error(`[${this.systemName}] Health check failed:`, error);
       return false;
     }

@@ -1,8 +1,10 @@
-import { Request, Response } from 'express';
-import { ResponseTreeService } from '../../services/response-tree/response-tree.service';
+
 import { ResponseNodeService } from '../../services/response-tree/response-node.service';
-import { CreateTreeRequestDto, UpdateTreeRequestDto, PublishTreeRequestDto, CreateNodeRequestDto } from '../../dtos/response-tree/response-tree.dto';
+import { ResponseTreeService } from '../../services/response-tree/response-tree.service';
 import { HotelLogger } from '../../utils/logger';
+
+import type { CreateTreeRequestDto, UpdateTreeRequestDto, PublishTreeRequestDto, CreateNodeRequestDto } from '../../dtos/response-tree/response-tree.dto';
+import type { Request, Response } from 'express';
 
 /**
  * 管理者向けレスポンスツリーコントローラー
@@ -44,7 +46,7 @@ export class AdminResponseTreeController {
         success: true,
         data: tree
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error creating tree:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -81,7 +83,7 @@ export class AdminResponseTreeController {
         success: true,
         data: tree
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error updating tree:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -119,7 +121,7 @@ export class AdminResponseTreeController {
         success: true,
         data: tree
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error publishing tree:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -170,7 +172,7 @@ export class AdminResponseTreeController {
         success: true,
         data: node
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error creating node:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,

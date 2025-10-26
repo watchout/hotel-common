@@ -1,6 +1,8 @@
+import { createClient } from 'redis'
+
 import { hotelDb } from '../database'
 import { HotelLogger } from '../utils/logger'
-import { createClient, RedisClientType } from 'redis'
+
 import type {
   HierarchicalJWTPayload,
   HierarchyPermissionCheck,
@@ -12,6 +14,7 @@ import type {
   AccessLevel,
   OrganizationType
 } from './types'
+import type { RedisClientType } from 'redis';
 
 /**
  * Hotel Group階層権限管理システム
@@ -67,7 +70,7 @@ export class HierarchyPermissionManager {
         restrictions: {}
       }
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('階層権限チェックエラー:', error as Error)
       return {
         allowed: false,
@@ -86,7 +89,7 @@ export class HierarchyPermissionManager {
     try {
       // 緊急対応：スタブ実装
       return ["tenant_1", "tenant_2", "tenant_3"]
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('アクセス可能テナント取得エラー:', error as Error)
       return []
     }
@@ -97,12 +100,12 @@ export class HierarchyPermissionManager {
    */
   static async getOrganizationTree(
     rootOrganizationId?: string,
-    maxDepth: number = 4
+    maxDepth = 4
   ): Promise<OrganizationHierarchy[]> {
     try {
       // 緊急対応：スタブ実装
       return []
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('組織階層ツリー取得エラー:', error as Error)
       return []
     }
@@ -119,7 +122,7 @@ export class HierarchyPermissionManager {
       // 現在は未実装のため空配列を返す
       this.logger.warn('データ共有ポリシー取得は未実装です', { organizationId })
       return []
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('データ共有ポリシー取得エラー:', error as Error)
       return []
     }

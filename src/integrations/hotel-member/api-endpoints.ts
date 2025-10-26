@@ -2,6 +2,7 @@
 // FastAPI (Python) からの階層権限要求を処理するREST API
 
 import express from 'express'
+
 import { HotelMemberHierarchyAdapterStub } from './hierarchy-adapter-stub'
 
 // 名前の互換性のために別名を使用
@@ -43,7 +44,7 @@ router.post('/hierarchy/auth/verify', async (req, res) => {
       })
     }
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('階層JWT検証エンドポイントエラー:', error as Error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -72,7 +73,7 @@ router.post('/hierarchy/permissions/check-customer-access', async (req, res) => 
 
     res.json(result)
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('顧客データアクセス権限チェックエンドポイントエラー:', error as Error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -109,7 +110,7 @@ router.post('/hierarchy/tenants/accessible', async (req, res) => {
       })
     }
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('アクセス可能テナント取得エンドポイントエラー:', error as Error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -138,7 +139,7 @@ router.post('/hierarchy/permissions/check-membership-restrictions', async (req, 
 
     res.json(result)
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('会員データ階層制限チェックエンドポイントエラー:', error as Error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -166,7 +167,7 @@ router.post('/hierarchy/permissions/check-analytics-access', async (req, res) =>
 
     res.json(result)
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('グループ分析権限チェックエンドポイントエラー:', error as Error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -262,7 +263,7 @@ router.post('/hierarchy/user/permissions-detail', async (req, res) => {
 
     res.json(response)
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('階層権限詳細情報取得エンドポイントエラー:', error as Error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -281,7 +282,7 @@ router.get('/hierarchy/health', async (req, res) => {
 
     res.status(statusCode).json(health)
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('ヘルスチェックエンドポイントエラー:', error as Error)
     res.status(503).json({
       status: 'unhealthy',
@@ -356,7 +357,7 @@ router.post('/hierarchy/permissions/batch-check', async (req, res) => {
       allowed_count: results.filter(r => r.allowed).length
     })
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('バッチ権限チェックエンドポイントエラー:', error as Error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',

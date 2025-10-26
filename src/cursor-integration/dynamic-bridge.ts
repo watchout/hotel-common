@@ -3,8 +3,9 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { RealRAGService } from './rag-service';
+
 import { RealGuardrailsValidator } from './guardrails-validator';
+import { RealRAGService } from './rag-service';
 // TokenOptimizerモジュールが存在しないため、コメントアウト
 // import { TokenOptimizer } from './token-optimizer';
 
@@ -25,7 +26,7 @@ export class DynamicCursorIntegration {
   // @ts-ignore - TokenOptimizerクラスが存在しない
   private tokenOptimizer: any;
   private watchInterval: NodeJS.Timeout | null = null;
-  private lastContext: string = '';
+  private lastContext = '';
 
   constructor() {
     this.ragService = new RealRAGService();
@@ -86,7 +87,7 @@ export class DynamicCursorIntegration {
           await this.performDynamicOptimization(currentContext);
           this.lastContext = currentContext;
         }
-      } catch (error) {
+      } catch (error: Error) {
         console.error('⚠️ コンテキスト監視エラー:', error);
       }
     }, 5000); // 5秒間隔で監視
@@ -133,7 +134,7 @@ export class DynamicCursorIntegration {
         changes: recentChanges,
         timestamp: Date.now()
       });
-    } catch (error) {
+    } catch (error: Error) {
       return 'context-error';
     }
   }
@@ -158,7 +159,7 @@ export class DynamicCursorIntegration {
       const { execSync } = require('child_process');
       const gitLog = execSync('git log --oneline -5', { encoding: 'utf8' });
       return gitLog.split('\n').filter((line: string) => line.trim());
-    } catch (error) {
+    } catch (error: Error) {
       return ['変更履歴取得不可'];
     }
   }
@@ -304,7 +305,7 @@ ${JSON.stringify(data.optimization, null, 2)}
     try {
       const instructionsPath = path.join(process.cwd(), '.cursor', 'instructions.md');
       return fs.readFileSync(instructionsPath, 'utf8');
-    } catch (error) {
+    } catch (error: Error) {
       return '# hotel-common統合システム';
     }
   }
@@ -356,7 +357,7 @@ ${JSON.stringify(data.optimization, null, 2)}
       // ファイル更新
       fs.writeFileSync(instructionsPath, content, 'utf8');
       console.log('📝 Custom Instructions動的更新完了');
-    } catch (error) {
+    } catch (error: Error) {
       console.error('❌ Custom Instructions更新エラー:', error);
     }
   }

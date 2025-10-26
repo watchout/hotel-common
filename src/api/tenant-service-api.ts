@@ -27,7 +27,7 @@ export async function getTenantServices(tenantId: string) {
       success: true,
       data: services
     };
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('テナントサービス取得エラー', { 
       tenantId, 
       error: error instanceof Error ? error : new Error(String(error)) 
@@ -114,7 +114,7 @@ export async function updateTenantService(
         data: newService
       };
     }
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('テナントサービス更新エラー', { 
       tenantId, 
       serviceType: serviceType, 
@@ -138,7 +138,7 @@ export async function updateTenantService(
 export async function getServicePlanRestrictions(
   serviceType: string,
   planType: string,
-  planCategory: string = 'omotenasuai'
+  planCategory = 'omotenasuai'
 ) {
   try {
     // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
@@ -161,7 +161,7 @@ export async function getServicePlanRestrictions(
       success: true,
       data: planRestrictions
     };
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('プラン制限取得エラー', { 
       serviceType: serviceType, 
       planType, 
@@ -244,7 +244,7 @@ export async function recordServiceUsage(
         data: newStat
       };
     }
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('サービス利用統計記録エラー', { 
       tenantId, 
       serviceType: serviceType, 
@@ -301,7 +301,7 @@ export async function checkServiceAccess(tenantId: string, serviceType: string) 
         planRestrictions
       }
     };
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('サービスアクセス確認エラー', { 
       tenantId, 
       serviceType: serviceType, 

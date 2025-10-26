@@ -23,7 +23,7 @@ export class HotelMigrationManager {
         orderBy: { appliedAt: 'desc' }
       })
       return latestVersion?.version || null
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Failed to get current schema version', { error: error as Error })
       return null
     }
@@ -63,7 +63,7 @@ export class HotelMigrationManager {
       })
 
       return true
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Migration failed', {
         version,
         description,
@@ -105,7 +105,7 @@ export class HotelMigrationManager {
       })
 
       return true
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Rollback failed', { version, error: error as Error } as any)
       return false
     }
@@ -118,7 +118,7 @@ export class HotelMigrationManager {
         // @ts-ignore - フィールド名の不一致
         orderBy: { appliedAt: 'desc' }
       })
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Failed to get migration history', { error })
       return []
     }
@@ -153,7 +153,7 @@ export class HotelMigrationManager {
       })
 
       return true
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Database integrity check failed', { error })
       return false
     }

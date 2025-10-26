@@ -1,9 +1,12 @@
 // seed-test-data.ts
-import { PrismaClient } from '@prisma/client';
-import { hotelDb } from '../database/prisma';
-import { v4 as uuidv4 } from 'uuid';
-import * as bcrypt from 'bcrypt';
 import * as readline from 'readline';
+
+import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
+
+import { hotelDb } from '../database/prisma';
+
 
 /**
  * データベース操作の安全確認を行う関数
@@ -261,7 +264,7 @@ async function seedTestData() {
       } else {
         console.log(`ℹ️ 既存のスタッフを使用: ${staffCount}件`);
       }
-    } catch (error) {
+    } catch (error: Error) {
       console.log('⚠️ スタッフテーブルがないか、アクセスできません。スキップします。');
     }
 
@@ -270,7 +273,7 @@ async function seedTestData() {
     console.log('ℹ️ システムプラン作成はスキップします（スキーマの不一致のため）');
     
     console.log('🌱 テストデータのシード完了');
-  } catch (error) {
+  } catch (error: Error) {
     console.error('❌ テストデータのシード中にエラーが発生しました:', error);
   } finally {
     await prisma.$disconnect();

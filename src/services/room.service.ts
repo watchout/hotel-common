@@ -1,4 +1,6 @@
 import { hotelDb } from '../database/prisma'
+import { HotelLogger } from '../utils/logger'
+
 import type {
   CreateRoomRequest,
   Room,
@@ -7,7 +9,6 @@ import type {
   UpdateRoomRequest,
   UpdateRoomStatusRequest
 } from '../schemas/room'
-import { HotelLogger } from '../utils/logger'
 
 /**
  * 部屋管理サービス
@@ -73,7 +74,7 @@ export class RoomService {
       })
 
       return room as any as Room
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('部屋作成エラー', error as Error)
       throw error
     }
@@ -82,7 +83,7 @@ export class RoomService {
   /**
    * 部屋取得（ID指定）
    */
-  static async getRoomById(id: string, tenantId: string, includeGrade: boolean = false): Promise<Room | null> {
+  static async getRoomById(id: string, tenantId: string, includeGrade = false): Promise<Room | null> {
     try {
       const include: any = {}
       if (includeGrade) {
@@ -98,7 +99,7 @@ export class RoomService {
       })
 
       return room as any as Room | null
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('部屋取得エラー', error as Error)
       throw error
     }
@@ -117,7 +118,7 @@ export class RoomService {
       })
 
       return room as any as Room | null
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('部屋番号取得エラー', error as Error)
       throw error
     }
@@ -230,7 +231,7 @@ export class RoomService {
         total,
         hasNext
       }
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('部屋一覧取得エラー', error as Error)
       throw error
     }
@@ -288,7 +289,7 @@ export class RoomService {
       })
 
       return room as any as Room
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('部屋更新エラー', error as Error)
       throw error
     }
@@ -349,7 +350,7 @@ export class RoomService {
       })
 
       return room as any as Room
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('部屋ステータス更新エラー', error as Error)
       throw error
     }
@@ -388,7 +389,7 @@ export class RoomService {
       })
 
       return room as any as Room
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('部屋削除エラー', error as Error)
       throw error
     }
@@ -411,7 +412,7 @@ export class RoomService {
       })
 
       return rooms as any as Room[]
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('フロア別部屋取得エラー', error as Error)
       throw error
     }
@@ -505,7 +506,7 @@ export class RoomService {
       })
 
       return rooms as any as Room[]
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('空室検索エラー', error as Error)
       throw error
     }
@@ -573,7 +574,7 @@ export class RoomService {
         by_type: byType,
         by_floor: byFloor
       }
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('部屋統計取得エラー', error as Error)
       throw error
     }

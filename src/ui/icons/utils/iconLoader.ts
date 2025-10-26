@@ -4,8 +4,10 @@
  * Iconifyを使用してアイコンを効率的にロードするためのユーティリティ関数
  */
 import { loadIcon } from '@iconify/vue';
-import { IconSetType } from '../types';
+
 import { DEFAULT_ICON_SET, ICON_SETS } from '../constants/iconSets';
+
+import type { IconSetType } from '../types';
 
 /**
  * アイコン名を完全修飾名に変換
@@ -64,7 +66,7 @@ export async function iconExists(
   try {
     await loadIcon(fullName);
     return true;
-  } catch (error) {
+  } catch (error: Error) {
     return false;
   }
 }

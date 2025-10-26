@@ -1,5 +1,8 @@
+import express from 'express';
+
 import { HotelIntegrationServer } from './integration-server';
-import express, { Router } from 'express';
+
+import type { Router } from 'express';
 
 /**
  * HotelIntegrationServerクラスを拡張してaddRouterメソッドを追加

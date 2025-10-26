@@ -1,6 +1,9 @@
+import { staff as Staff } from '@prisma/client'
+
 import { hotelDb } from '../database'
 import { HotelLogger } from '../utils/logger'
-import { Tenant, staff as Staff } from '@prisma/client'
+
+import type { Tenant} from '@prisma/client';
 
 // 型定義（スキーマから自動生成されるべきだが、現在は手動定義）
 interface customers {
@@ -62,7 +65,7 @@ export class HotelUnifiedApiClient {
       return await this.db.tenant.findUnique({
         where: { id: this.config.tenantId }
       })
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Failed to get tenant', { 
         tenantId: this.config.tenantId,
         error: error as Error
@@ -111,7 +114,7 @@ export class HotelUnifiedApiClient {
       await this.updateSystemAccess('customer', 'read')
 
       return customers
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Failed to get customers', { error: error as Error })
       return []
     }
@@ -139,7 +142,7 @@ export class HotelUnifiedApiClient {
 
       await this.logSystemEvent('customer', 'create', customer.id, data)
       return customer
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Failed to create customer', { error: error as Error, data })
       return null
     }
@@ -148,7 +151,7 @@ export class HotelUnifiedApiClient {
   async updateCustomer(
     customerId: string, 
     data: Partial<customers>,
-    restrictUpdatableFields: boolean = true
+    restrictUpdatableFields = true
   ): Promise<customers | null> {
     try {
       // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
@@ -186,7 +189,7 @@ export class HotelUnifiedApiClient {
 
       await this.logSystemEvent('customer', 'update', customerId, data, existing)
       return updated
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Failed to update customer', { error: error as Error, customerId, data } as any)
       return null
     }
@@ -238,7 +241,7 @@ export class HotelUnifiedApiClient {
 
       await this.updateSystemAccess('reservation', 'read')
       return reservations
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Failed to get reservations', { error: error as Error })
       return []
     }
@@ -283,7 +286,7 @@ export class HotelUnifiedApiClient {
 
       await this.logSystemEvent('reservation', 'create', reservation.id, data)
       return reservation as any
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Failed to create reservation', { error: error as Error, data })
       return null
     }
@@ -315,7 +318,7 @@ export class HotelUnifiedApiClient {
           eventData: data
         }
       })
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Failed to log system event', { error: error as Error })
     }
   }

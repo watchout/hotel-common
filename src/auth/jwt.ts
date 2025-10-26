@@ -1,6 +1,7 @@
 import * as jwt from 'jsonwebtoken';
+
+import type { HierarchicalJWTPayload, JWTOptions } from './types';
 import type { StringValue } from 'ms';
-import { HierarchicalJWTPayload, JWTOptions } from './types';
 
 const DEFAULT_JWT_SECRET = 'hotel-common-development-secret';
 const DEFAULT_EXPIRES_IN = '24h';
@@ -40,7 +41,7 @@ export function verifyToken(
   try {
     // Enforce HS256 and exp validation
     return jwt.verify(token, jwtSecret, { algorithms: ['HS256'] }) as HierarchicalJWTPayload;
-  } catch (error) {
+  } catch (error: Error) {
     throw new Error('Invalid token');
   }
 }
@@ -53,7 +54,7 @@ export function verifyToken(
 export function decodeToken(token: string): HierarchicalJWTPayload | null {
   try {
     return jwt.decode(token) as HierarchicalJWTPayload;
-  } catch (error) {
+  } catch (error: Error) {
     return null;
   }
 }

@@ -1,14 +1,19 @@
 #!/usr/bin/env node
 
-import express, { Router } from 'express';
-import { config } from 'dotenv';
-import { PrismaClient } from '@prisma/client';
-import { hotelDb } from '../database/prisma';
+
+
 import cors from 'cors';
+import { config } from 'dotenv';
+import express from 'express';
+
+import { hotelDb } from '../database/prisma';
 import { initializeHotelMemberHierarchy } from '../integrations/hotel-member';
 import hotelMemberApiRouter from '../integrations/hotel-member/api-endpoints';
 import pageRoutes from '../routes/systems/common/page.routes';
 import ordersRouter from '../routes/systems/saas/orders.routes';
+
+import type { PrismaClient } from '@prisma/client';
+import type { Router } from 'express';
 
 // 環境変数読み込み
 config();
@@ -105,7 +110,7 @@ class HotelIntegrationServer {
       try {
         const result = await this.testSystemConnection(systemName);
         res.json(result);
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           error: 'CONNECTION_TEST_FAILED',
           message: error instanceof Error ? error.message : 'Unknown error'
@@ -122,7 +127,7 @@ class HotelIntegrationServer {
           timestamp: new Date().toISOString(),
           database: 'PostgreSQL'
         });
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           status: 'error',
           error: error instanceof Error ? error.message : 'Database connection failed'
@@ -148,7 +153,7 @@ class HotelIntegrationServer {
           count: tenants.length,
           tenants
         });
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           error: 'DATABASE_ERROR',
           message: error instanceof Error ? error.message : 'Failed to fetch tenants'
@@ -194,7 +199,7 @@ class HotelIntegrationServer {
           database_stats: stats,
           system_connections: this.systemConnections.size
         });
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           error: 'STATS_ERROR',
           message: error instanceof Error ? error.message : 'Failed to fetch statistics'
@@ -223,7 +228,7 @@ class HotelIntegrationServer {
           endpoints_available: 8,
           timestamp: new Date().toISOString()
         });
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           integration_status: 'error',
           error: error instanceof Error ? error.message : 'Integration health check failed',
@@ -266,7 +271,7 @@ class HotelIntegrationServer {
     });
 
     // エラーハンドラー
-    this.app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    this.app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
       console.error('Server error:', error);
       res.status(500).json({
         error: 'INTERNAL_ERROR',
@@ -346,7 +351,7 @@ class HotelIntegrationServer {
         try {
           const data = await response.json();
           updatedConnection.version = data.version;
-        } catch (e) {
+        } catch (e: Error) {
           // JSONパースエラーは無視
         }
       }
@@ -354,7 +359,7 @@ class HotelIntegrationServer {
       this.systemConnections.set(systemName, updatedConnection);
       return updatedConnection;
 
-    } catch (error) {
+    } catch (error: Error) {
       const updatedConnection: SystemConnectionStatus = {
         ...connection,
         status: 'ERROR',
@@ -375,7 +380,7 @@ class HotelIntegrationServer {
       for (const systemName of this.systemConnections.keys()) {
         try {
           await this.testSystemConnection(systemName);
-        } catch (error) {
+        } catch (error: Error) {
           console.error(`Health check failed for ${systemName}:`, error);
         }
       }
@@ -395,7 +400,7 @@ class HotelIntegrationServer {
       try {
         await initializeHotelMemberHierarchy();
         console.log('hotel-member統合初期化完了');
-      } catch (error) {
+      } catch (error: Error) {
         console.warn('hotel-member統合初期化警告:', { error: error instanceof Error ? error : new Error('Unknown error') });
       }
 
@@ -433,7 +438,7 @@ class HotelIntegrationServer {
       process.on('SIGINT', () => this.shutdown());
       process.on('SIGTERM', () => this.shutdown());
 
-    } catch (error) {
+    } catch (error: Error) {
       console.error('サーバー起動エラー:', { error: error instanceof Error ? error : new Error('Unknown error') });
       throw error;
     }
@@ -452,7 +457,7 @@ class HotelIntegrationServer {
       await this.prisma.$disconnect();
       console.log('hotel-common統合APIサーバー停止完了');
       process.exit(0);
-    } catch (error) {
+    } catch (error: Error) {
       console.error('サーバー停止エラー:', { error: error instanceof Error ? error : new Error('Unknown error') });
       process.exit(1);
     }

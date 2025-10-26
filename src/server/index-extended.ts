@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-import { HotelWebSocketServer } from './websocket-server'
-import { HotelLogger } from '../utils/logger'
 import { config } from 'dotenv'
+
 import { HotelIntegrationServer } from './integration-server-extended'
-import { integrateCampaignFeature } from '../integrations/campaigns/api-endpoints'
+import { HotelWebSocketServer } from './websocket-server'
 import { integrateAiConciergeFeature } from '../integrations/ai-concierge'
+import { integrateCampaignFeature } from '../integrations/campaigns/api-endpoints'
+import { HotelLogger } from '../utils/logger'
 
 // 環境変数読み込み
 config()
@@ -68,7 +69,7 @@ class HotelCommonServer {
         const campaignRouter = integrateCampaignFeature();
         this.integrationServer.addRouter('/api/campaigns', campaignRouter)
         this.logger.info('キャンペーン機能を統合しました')
-      } catch (error) {
+      } catch (error: Error) {
         this.logger.warn('キャンペーン機能統合に失敗しました:', { error: error instanceof Error ? error : new Error('Unknown error') })
       }
       
@@ -76,7 +77,7 @@ class HotelCommonServer {
       try {
         integrateAiConciergeFeature(this.integrationServer)
         this.logger.info('AIコンシェルジュ機能を統合しました')
-      } catch (error) {
+      } catch (error: Error) {
         this.logger.warn('AIコンシェルジュ機能統合に失敗しました:', { error: error instanceof Error ? error : new Error('Unknown error') })
       }
 
@@ -106,7 +107,7 @@ class HotelCommonServer {
       process.on('SIGINT', () => this.shutdown())
       process.on('SIGTERM', () => this.shutdown())
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('サーバー起動エラー:', error as Error)
       process.exit(1)
     }
@@ -125,7 +126,7 @@ class HotelCommonServer {
       
       this.logger.info('hotel-common統合サーバー停止完了')
       process.exit(0)
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('サーバー停止エラー:', error as Error)
       process.exit(1)
     }

@@ -1,5 +1,6 @@
-import { ApiError } from '../types/common'
 import { ERROR_CODES } from '../types/api'
+
+import type { ApiError } from '../types/common'
 
 export interface ValidationRule {
   field: string

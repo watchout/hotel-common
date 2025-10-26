@@ -1,12 +1,15 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { z } from 'zod';
+
 import { CampaignService } from './services';
-import { WelcomeScreenService } from './welcome-screen-service';
-import { StandardResponseBuilder } from '../../standards/api-standards';
-import { verifyTenantAuth } from '../../auth/middleware';
 import { checkCampaignSchema, welcomeScreenMarkCompletedSchema } from './types';
-import { logger } from '../../utils/logger';
 import { getLanguageFromRequest } from './utils';
+import { WelcomeScreenService } from './welcome-screen-service';
+import { verifyTenantAuth } from '../../auth/middleware';
+import { StandardResponseBuilder } from '../../standards/api-standards';
+import { logger } from '../../utils/logger';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 const campaignService = new CampaignService();
@@ -38,7 +41,7 @@ router.get('/campaigns/check', verifyTenantAuth, async (req: Request, res: Respo
       applicable: !!applicableCampaign,
       campaign: applicableCampaign || null
     });
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Failed to check campaign applicability', error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to check campaign applicability').response
@@ -53,7 +56,7 @@ router.get('/campaigns/active', verifyTenantAuth, async (req: Request, res: Resp
     const activeCampaigns = await campaignService.getActiveCampaigns();
     
     return StandardResponseBuilder.success(res, activeCampaigns);
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Failed to get active campaigns', error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to get active campaigns').response
@@ -70,7 +73,7 @@ router.get('/campaigns/by-category/:code', verifyTenantAuth, async (req: Request
     const campaigns = await campaignService.getCampaignsByCategory(code, language);
     
     return StandardResponseBuilder.success(res, campaigns);
-  } catch (error) {
+  } catch (error: Error) {
     logger.error(`Failed to get campaigns by category: ${req.params.code}`, error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to get campaigns by category').response
@@ -85,7 +88,7 @@ router.get('/welcome-screen/config', verifyTenantAuth, async (req: Request, res:
     const config = await welcomeScreenService.getWelcomeScreenConfig(language);
     
     return StandardResponseBuilder.success(res, config);
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Failed to get welcome screen config', error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to get welcome screen config').response
@@ -109,7 +112,7 @@ router.get('/welcome-screen/should-show', verifyTenantAuth, async (req: Request,
     const shouldShow = await welcomeScreenService.shouldShowWelcomeScreen(userId, deviceId);
     
     return StandardResponseBuilder.success(res, { shouldShow });
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Failed to check if welcome screen should be shown', error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to check if welcome screen should be shown').response
@@ -135,7 +138,7 @@ router.post('/welcome-screen/mark-completed', verifyTenantAuth, async (req: Requ
     await welcomeScreenService.markWelcomeScreenCompleted(userId, deviceId);
     
     return StandardResponseBuilder.success(res, { success: true });
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Failed to mark welcome screen as completed', error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to mark welcome screen as completed').response

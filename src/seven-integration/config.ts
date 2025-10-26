@@ -1,7 +1,7 @@
 // 🎊 hotel-common七重統合システム - 設定管理
 // 文献1-7完全統合デフォルト設定
 
-import { SevenIntegrationConfig, AIAgentType, IntegrationLayer, OptimizationLevel } from './types'
+import type { SevenIntegrationConfig, AIAgentType, IntegrationLayer, OptimizationLevel } from './types'
 
 // デフォルト設定
 export const DEFAULT_SEVEN_INTEGRATION_CONFIG: SevenIntegrationConfig = {

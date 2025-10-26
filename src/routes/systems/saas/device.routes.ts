@@ -1,6 +1,7 @@
 import express from 'express'
-import DeviceRoomService from '../../../services/device/device-room.service'
+
 import { authMiddleware } from '../../../auth/middleware'
+import DeviceRoomService from '../../../services/device/device-room.service'
 
 const router = express.Router()
 
@@ -33,7 +34,7 @@ router.get('/api/v1/devices', async (req, res) => {
       count: devices.length,
       devices
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('デバイス一覧取得エラー:', error)
     return res.status(500).json({
       success: false,
@@ -64,7 +65,7 @@ router.get('/api/v1/devices/room/:roomId', async (req, res) => {
       count: devices.length,
       devices
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('部屋デバイス取得エラー:', error)
     return res.status(500).json({
       success: false,
@@ -101,7 +102,7 @@ router.get('/api/v1/devices/device/:deviceId', async (req, res) => {
       success: true,
       device
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('デバイス取得エラー:', error)
     return res.status(500).json({
       success: false,
@@ -135,7 +136,7 @@ router.post('/api/v1/devices', async (req, res) => {
       success: true,
       device
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('デバイス登録エラー:', error)
     return res.status(400).json({
       success: false,
@@ -181,7 +182,7 @@ router.put('/api/v1/devices/:id', async (req, res) => {
       success: true,
       device: updatedDevice
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('デバイス更新エラー:', error)
     return res.status(400).json({
       success: false,
@@ -227,7 +228,7 @@ router.patch('/api/v1/devices/:id/last-used', async (req, res) => {
       success: true,
       device: updatedDevice
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('デバイス最終使用日時更新エラー:', error)
     return res.status(500).json({
       success: false,
@@ -273,7 +274,7 @@ router.delete('/api/v1/devices/:id/deactivate', async (req, res) => {
       success: true,
       device: deactivatedDevice
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('デバイス非アクティブ化エラー:', error)
     return res.status(500).json({
       success: false,
@@ -319,7 +320,7 @@ router.delete('/api/v1/devices/:id', async (req, res) => {
       success: true,
       message: 'デバイスが正常に削除されました'
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('デバイス削除エラー:', error)
     return res.status(500).json({
       success: false,
@@ -350,7 +351,7 @@ router.get('/api/v1/devices/place/:placeId', async (req, res) => {
       count: devices.length,
       devices
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('プレイスデバイス取得エラー:', error)
     return res.status(500).json({
       success: false,
@@ -381,7 +382,7 @@ router.get('/api/v1/devices/type/:deviceType', async (req, res) => {
       count: devices.length,
       devices
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('デバイスタイプ検索エラー:', error)
     return res.status(500).json({
       success: false,
@@ -412,7 +413,7 @@ router.get('/api/v1/devices/status/:status', async (req, res) => {
       count: devices.length,
       devices
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('ステータス検索エラー:', error)
     return res.status(500).json({
       success: false,
@@ -455,7 +456,7 @@ router.post('/api/v1/devices/bulk', async (req, res) => {
     return res.status(201).json({
       ...result
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('デバイス一括登録エラー:', error)
     return res.status(400).json({
       success: false,

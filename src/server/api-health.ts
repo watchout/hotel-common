@@ -1,5 +1,5 @@
-import express from 'express'
 import { PrismaClient } from '@prisma/client'
+import express from 'express'
 
 /**
  * /api/health エンドポイント用のルーター
@@ -47,7 +47,7 @@ apiHealthRouter.get('/api/health', async (req, res) => {
         hierarchical_auth: true
       }
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('Health check error:', error)
     
     // エラーレスポンス

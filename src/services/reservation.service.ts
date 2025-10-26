@@ -1,5 +1,6 @@
 import { hotelDb } from '../database/prisma'
 import { HotelLogger } from '../utils/logger'
+
 import type { 
   Reservation, 
   CreateReservationRequest, 
@@ -74,7 +75,7 @@ export class ReservationService {
       })
 
       return reservation as any
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('予約作成エラー', error as Error)
       throw error
     }
@@ -97,7 +98,7 @@ export class ReservationService {
       })
 
       return reservation as any | null
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('予約取得エラー', error as Error)
       throw error
     }
@@ -185,7 +186,7 @@ export class ReservationService {
         total,
         hasNext
       }
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('予約一覧取得エラー', error as Error)
       throw error
     }
@@ -264,7 +265,7 @@ export class ReservationService {
       })
 
       return reservation as any
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('予約更新エラー', error as Error)
       throw error
     }
@@ -301,7 +302,7 @@ export class ReservationService {
       })
 
       return reservation as any
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('予約キャンセルエラー', error as Error)
       throw error
     }
@@ -339,7 +340,7 @@ export class ReservationService {
       })
 
       return reservation as any
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('チェックイン処理エラー', error as Error)
       throw error
     }
@@ -375,7 +376,7 @@ export class ReservationService {
       })
 
       return reservation as any
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('チェックアウト処理エラー', error as Error)
       throw error
     }
@@ -419,7 +420,7 @@ export class ReservationService {
         completed,
         cancelled
       }
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('予約統計取得エラー', error as Error)
       throw error
     }

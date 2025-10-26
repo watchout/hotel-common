@@ -1,7 +1,10 @@
 import { z } from 'zod'
-import { ValidationResult } from './validation'
-import { ApiError } from '../types/common'
+
 import { ERROR_CODES } from '../types/api'
+
+import type { ValidationResult } from './validation'
+import type { ApiError } from '../types/common'
+
 
 /**
  * Zodスキーマバリデーション統合ヘルパー
@@ -17,7 +20,7 @@ export class ZodValidator {
         isValid: true,
         errors: []
       }
-    } catch (error) {
+    } catch (error: Error) {
       if (error instanceof z.ZodError) {
         const errors = error.issues.map(err => ({
           field: err.path.join('.'),

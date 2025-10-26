@@ -1,6 +1,7 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { hotelDb } from '../../database/prisma';
 import { logger } from '../../utils/logger';
-import { v4 as uuidv4 } from 'uuid';
 
 /**
  * キャンペーン関連のデータベース初期設定を行う
@@ -43,7 +44,7 @@ export async function setupCampaignDatabase(): Promise<void> {
     }
     
     logger.info('キャンペーン機能のデータベース初期設定が完了しました');
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('キャンペーン機能のデータベース初期設定中にエラーが発生しました', error);
     throw error;
   }
@@ -66,7 +67,7 @@ export async function checkCampaignDatabase(): Promise<{
       campaigns: campaignCount,
       isReady: true
     };
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('キャンペーンデータベース状態確認中にエラーが発生しました', error);
     return {
       categories: 0,

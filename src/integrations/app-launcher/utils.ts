@@ -2,7 +2,7 @@
  * Google Playアプリ選択機能のユーティリティ関数
  */
 
-import { Request } from 'express';
+import type { Request } from 'express';
 
 // Expressのリクエスト型を拡張してuserプロパティを追加
 declare global {

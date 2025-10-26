@@ -1,16 +1,22 @@
 #!/usr/bin/env node
 
-import { PrismaClient } from '@prisma/client'
 import cors from 'cors'
 import { config } from 'dotenv'
 import express from 'express'
+
 import { sessionAuthMiddleware } from '../auth/session-auth.middleware'
 import { hotelDb } from '../database/prisma'
 import { appLauncherApiRouter } from '../integrations/app-launcher'
 import campaignsApiRouter from '../integrations/campaigns/api-endpoints'
 import { initializeHotelMemberHierarchy } from '../integrations/hotel-member'
 import hotelMemberApiRouter from '../integrations/hotel-member/api-endpoints'
+import apiHealthRouter from './api-health'
 // システム別APIルーター
+
+// セッション管理APIルーター
+import checkinSessionRouter from '../routes/checkin-session.routes'
+import sessionBillingRouter from '../routes/session-billing.routes'
+import sessionMigrationRouter from '../routes/session-migration.routes'
 import {
   accountingRouter,
   adminDashboardRouter,
@@ -30,15 +36,11 @@ import {
   roomMemosRouter
 } from '../routes/systems'
 
-// セッション管理APIルーター
-import checkinSessionRouter from '../routes/checkin-session.routes'
-import sessionBillingRouter from '../routes/session-billing.routes'
-import sessionMigrationRouter from '../routes/session-migration.routes'
-
 // PMSシステムAPI
 import { reservationRouter, roomRouter } from '../routes/systems/pms'
 
-import apiHealthRouter from './api-health'
+import type { PrismaClient } from '@prisma/client'
+
 
 // 環境変数読み込み
 config()
@@ -96,23 +98,38 @@ class HotelIntegrationServer {
       credentials: true
     }))
 
-    // === Phase G1: グローバル早期401捕捉 ===
-    this.app.use((req, res, next) => {
-      const origJson = res.json.bind(res);
-      res.json = (body: any) => {
-        const code = res.statusCode;
-        if (code === 401 && process.env.DEBUG_GLOBAL_401 === '1') {
-          console.error('[GLOBAL-401]', {
-            path: req.originalUrl,
-            hasAuthHeader: !!req.headers.authorization,
-            cookieHead: (req.headers.cookie || '').slice(0, 120)
-          });
-          console.error('[GLOBAL-401] stack note: 旧authMiddlewareがどこかで発火中（次段で特定）');
-        }
-        return origJson(body);
-      };
-      next();
-    });
+    // === Phase G1: グローバル早期401捕捉（ENV制御可能） ===
+    if (process.env.ENABLE_401_MONITORING === '1') {
+      this.app.use((req, res, next) => {
+        const origJson = res.json.bind(res);
+        res.json = (body: any) => {
+          const code = res.statusCode;
+          if (code === 401) {
+            // 原因種別を判定
+            const hasAuth = !!req.headers.authorization;
+            const hasCookie = !!(req.headers.cookie && (req.headers.cookie.includes('hotel_session') || req.headers.cookie.includes('hotel-session-id')));
+            let cause = 'UNKNOWN';
+            if (!hasAuth && !hasCookie) cause = 'NO_CREDENTIALS';
+            else if (hasAuth && !hasCookie) cause = 'JWT_ONLY';
+            else if (!hasAuth && hasCookie) cause = 'COOKIE_ONLY';
+            else cause = 'BOTH_PRESENT';
+
+            console.error('[GLOBAL-401]', {
+              path: req.originalUrl,
+              cause,
+              hasAuthHeader: hasAuth,
+              hasCookie,
+              cookieHead: (req.headers.cookie || '').slice(0, 120)
+            });
+
+            // X-HC-Debug ヘッダーで原因種別を返却（デバッグ用）
+            res.set('X-HC-Debug-401-Cause', cause);
+          }
+          return origJson(body);
+        };
+        next();
+      });
+    }
     // === END Phase G1 ===
 
     // === 決定打の切り分け：デバッグヘッダ付与 ===
@@ -203,7 +220,7 @@ class HotelIntegrationServer {
       try {
         const result = await this.testSystemConnection(systemName)
         res.json(result)
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           error: 'CONNECTION_TEST_FAILED',
           message: error instanceof Error ? error.message : 'Unknown error'
@@ -220,7 +237,7 @@ class HotelIntegrationServer {
           timestamp: new Date().toISOString(),
           database: 'PostgreSQL'
         })
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           status: 'error',
           error: error instanceof Error ? error.message : 'Database connection failed'
@@ -246,7 +263,7 @@ class HotelIntegrationServer {
           count: tenants.length,
           tenants
         })
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           error: 'DATABASE_ERROR',
           message: error instanceof Error ? error.message : 'Failed to fetch tenants'
@@ -292,7 +309,7 @@ class HotelIntegrationServer {
           database_stats: stats,
           system_connections: this.systemConnections.size
         })
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           error: 'STATS_ERROR',
           message: error instanceof Error ? error.message : 'Failed to fetch statistics'
@@ -417,7 +434,7 @@ class HotelIntegrationServer {
           endpoints_available: 8,
           timestamp: new Date().toISOString()
         })
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           integration_status: 'error',
           error: error instanceof Error ? error.message : 'Integration health check failed',
@@ -584,7 +601,7 @@ class HotelIntegrationServer {
     })
 
     // エラーハンドラー
-    this.app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    this.app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
       console.error('Server error:', error)
       res.status(500).json({
         error: 'INTERNAL_ERROR',
@@ -676,7 +693,7 @@ class HotelIntegrationServer {
       this.systemConnections.set(systemName, updatedStatus)
       return updatedStatus
 
-    } catch (error) {
+    } catch (error: Error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
 
       const updatedStatus: SystemConnectionStatus = {
@@ -723,7 +740,7 @@ class HotelIntegrationServer {
     const promises = Array.from(this.systemConnections.keys()).map(async (systemName) => {
       try {
         await this.testSystemConnection(systemName)
-      } catch (error) {
+      } catch (error: Error) {
         // エラーは testSystemConnection 内で処理済み
       }
     })
@@ -751,7 +768,7 @@ class HotelIntegrationServer {
       try {
         await initializeHotelMemberHierarchy()
         console.log('hotel-member統合初期化完了')
-      } catch (error) {
+      } catch (error: Error) {
         console.warn('hotel-member統合初期化警告:', error instanceof Error ? error.message : 'Unknown error')
       }
 
@@ -791,7 +808,7 @@ class HotelIntegrationServer {
       process.on('SIGINT', () => this.shutdown())
       process.on('SIGTERM', () => this.shutdown())
 
-    } catch (error) {
+    } catch (error: Error) {
       console.error('サーバー起動エラー:', error)
       throw error
     }
@@ -810,7 +827,7 @@ class HotelIntegrationServer {
       await this.prisma.$disconnect()
       console.log('hotel-common統合APIサーバー停止完了')
       process.exit(0)
-    } catch (error) {
+    } catch (error: Error) {
       console.error('サーバー停止エラー:', error)
       process.exit(1)
     }

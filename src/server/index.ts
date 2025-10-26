@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
+import { config } from 'dotenv'
+
+import { HotelIntegrationServer } from './integration-server'
 import { HotelWebSocketServer } from './websocket-server'
 import { HotelLogger } from '../utils/logger'
-import { config } from 'dotenv'
-import { HotelIntegrationServer } from './integration-server'
 
 // 環境変数読み込み
 config()
@@ -84,7 +85,7 @@ class HotelCommonServer {
       process.on('SIGINT', () => this.shutdown())
       process.on('SIGTERM', () => this.shutdown())
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('サーバー起動エラー:', error as Error)
       process.exit(1)
     }
@@ -103,7 +104,7 @@ class HotelCommonServer {
       
       this.logger.info('hotel-common統合サーバー停止完了')
       process.exit(0)
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('サーバー停止エラー:', error as Error)
       process.exit(1)
     }

@@ -1,9 +1,12 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+
 import { authMiddleware } from '../../../auth/middleware';
 import { hotelDb } from '../../../database';
 import { ResponseHelper } from '../../../standards/api-response-standards';
 import { HotelLogger } from '../../../utils/logger';
 import { StandardResponseBuilder } from '../../../utils/response-builder';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 const logger = HotelLogger.getInstance();
@@ -110,7 +113,7 @@ router.get('/api/v1/orders/history', authMiddleware, async (req: Request, res: R
       }
     }, 200, pagination);
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('注文履歴取得エラー:', error);
     ResponseHelper.sendInternalError(res, '注文履歴取得に失敗しました');
   }
@@ -308,7 +311,7 @@ router.post('/api/v1/orders', authMiddleware, async (req: Request, res: Response
       }
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('注文作成エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('ORDER_CREATE_ERROR',
@@ -374,7 +377,7 @@ router.get('/api/v1/orders/active', authMiddleware, async (req: Request, res: Re
 
     return StandardResponseBuilder.success(res, formattedOrders);
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('アクティブ注文取得エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('ACTIVE_ORDERS_ERROR',
@@ -442,7 +445,7 @@ router.get('/api/v1/orders/:id', authMiddleware, async (req: Request, res: Respo
 
     return StandardResponseBuilder.success(res, formattedOrder);
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('注文詳細取得エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('ORDER_DETAIL_ERROR',
@@ -515,7 +518,7 @@ router.put('/api/v1/orders/:id/status', authMiddleware, async (req: Request, res
       paidAt: updatedOrder.paidAt
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('注文ステータス更新エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('ORDER_STATUS_UPDATE_ERROR',
@@ -609,7 +612,7 @@ router.get('/api/v1/order/menu', authMiddleware, async (req: Request, res: Respo
       total_items: filteredMenu.length
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('メニュー一覧取得エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('MENU_FETCH_ERROR',
@@ -664,7 +667,7 @@ router.get('/api/v1/menus/top', authMiddleware, async (req: Request, res: Respon
       updatedAt: new Date()
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('トップメニュー取得エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('TOP_MENU_ERROR',
@@ -769,7 +772,7 @@ router.post('/api/v1/order/place', authMiddleware, async (req: Request, res: Res
       message: '注文を受け付けました'
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('注文配置エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('ORDER_PLACE_ERROR',

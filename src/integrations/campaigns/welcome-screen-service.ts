@@ -1,7 +1,9 @@
-import { WelcomeScreenConfig } from './types';
-import { hotelDb } from '../../database/prisma';
-import { CampaignCache, CACHE_TYPES } from './cache';
 import { v4 as uuidv4 } from 'uuid';
+
+import { CampaignCache, CACHE_TYPES } from './cache';
+import { hotelDb } from '../../database/prisma';
+
+import type { WelcomeScreenConfig } from './types';
 
 export class WelcomeScreenService {
   private cache = new CampaignCache();

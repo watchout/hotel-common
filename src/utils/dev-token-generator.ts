@@ -1,5 +1,5 @@
-import * as jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
+import * as jwt from 'jsonwebtoken';
 
 config();
 
@@ -14,7 +14,7 @@ export class DevTokenGenerator {
   /**
    * 開発用管理者トークン生成
    */
-  static generateAdminToken(tenantId: string = 'default'): string {
+  static generateAdminToken(tenantId = 'default'): string {
     const payload = {
       user_id: 'dev-admin-001',
       tenant_id: tenantId,
@@ -42,7 +42,7 @@ export class DevTokenGenerator {
   /**
    * 開発用スタッフトークン生成
    */
-  static generateStaffToken(tenantId: string = 'default'): string {
+  static generateStaffToken(tenantId = 'default'): string {
     const payload = {
       user_id: 'dev-staff-001',
       tenant_id: tenantId,
@@ -70,7 +70,7 @@ export class DevTokenGenerator {
   /**
    * 開発用ゲストトークン生成
    */
-  static generateGuestToken(tenantId: string = 'default'): string {
+  static generateGuestToken(tenantId = 'default'): string {
     const payload = {
       user_id: 'dev-guest-001',
       tenant_id: tenantId,
@@ -101,7 +101,7 @@ export class DevTokenGenerator {
   static verifyToken(token: string): any {
     try {
       return jwt.verify(token, JWT_SECRET);
-    } catch (error) {
+    } catch (error: Error) {
       throw new Error(`Invalid token: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
@@ -109,7 +109,7 @@ export class DevTokenGenerator {
   /**
    * 開発用トークン一覧表示
    */
-  static displayDevTokens(tenantId: string = 'default'): void {
+  static displayDevTokens(tenantId = 'default'): void {
     const adminToken = this.generateAdminToken(tenantId);
     const staffToken = this.generateStaffToken(tenantId);
     const guestToken = this.generateGuestToken(tenantId);
