@@ -31,7 +31,7 @@ const INTEGRATION_SERVER_PATH = path.join(__dirname, '../src/server/integration-
 const PRIORITY_ROUTES = [
   '/api/v1/logs',
   '/api/v1/admin/front-desk',
-  '/api/v1/admin'
+  '/api/v1/admin/staff'
 ];
 
 // 無印ルーター（最後尾に必要）
@@ -143,7 +143,7 @@ function generateReport(routes: RouteDefinition[], validation: { valid: boolean;
     console.log('\n📖 期待される順序:');
     console.log('   1. /api/v1/logs (sessionAuthMiddleware)');
     console.log('   2. /api/v1/admin/front-desk (sessionAuthMiddleware)');
-    console.log('   3. /api/v1/admin (sessionAuthMiddleware)');
+    console.log('   3. /api/v1/admin/staff (sessionAuthMiddleware)');
     console.log('   4. その他の明示的パス');
     console.log('   5. 無印ルーター (/?, /api など) - 最後尾\n');
   }
