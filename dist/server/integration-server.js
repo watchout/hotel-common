@@ -55,6 +55,8 @@ const session_billing_routes_1 = __importDefault(require("../routes/session-bill
 const session_migration_routes_1 = __importDefault(require("../routes/session-migration.routes"));
 // PMSシステムAPI
 const pms_1 = require("../routes/systems/pms");
+// 汎用CRUD API
+const resources_router_1 = __importDefault(require("../routes/api/v1/admin/resources.router"));
 const api_health_1 = __importDefault(require("./api-health"));
 // 環境変数読み込み
 (0, dotenv_1.config)();
@@ -298,6 +300,8 @@ class HotelIntegrationServer {
         this.app.use('/api/v1/admin/front-desk', session_auth_middleware_1.sessionAuthMiddleware, systems_1.frontDeskRoomsRouter);
         // スタッフ管理APIエンドポイント（Cookie+Redis認証）
         this.app.use('/api/v1/admin/staff', session_auth_middleware_1.sessionAuthMiddleware, systems_1.adminStaffRouter);
+        // 汎用CRUD API（Cookie+Redis認証、フィーチャーフラグ制御）
+        this.app.use('/api/v1/admin', session_auth_middleware_1.sessionAuthMiddleware, resources_router_1.default);
         // === END Cookie認証保護ルート ===
         // hotel-member統合APIエンドポイント
         this.app.use('/api/hotel-member', api_endpoints_2.default);

@@ -38,6 +38,9 @@ import sessionMigrationRouter from '../routes/session-migration.routes'
 // PMSシステムAPI
 import { reservationRouter, roomRouter } from '../routes/systems/pms'
 
+// 汎用CRUD API
+import genericResourcesRouter from '../routes/api/v1/admin/resources.router'
+
 import apiHealthRouter from './api-health'
 
 // 環境変数読み込み
@@ -312,6 +315,9 @@ class HotelIntegrationServer {
 
     // スタッフ管理APIエンドポイント（Cookie+Redis認証）
     this.app.use('/api/v1/admin/staff', sessionAuthMiddleware, adminStaffRouter)
+
+    // 汎用CRUD API（Cookie+Redis認証、フィーチャーフラグ制御）
+    this.app.use('/api/v1/admin', sessionAuthMiddleware, genericResourcesRouter)
     // === END Cookie認証保護ルート ===
 
     // hotel-member統合APIエンドポイント
