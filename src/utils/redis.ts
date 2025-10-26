@@ -112,7 +112,7 @@ export class HotelRedisClient {
       sessionInfo.created_at = new Date(sessionInfo.created_at)
       sessionInfo.last_activity = new Date(sessionInfo.last_activity)
       return sessionInfo
-    } catch (error) {
+    } catch (error: Error) {
       console.error('Error parsing session data:', error)
       return null
     }
@@ -155,7 +155,7 @@ export class HotelRedisClient {
       }
 
       return sessionInfo
-    } catch (error) {
+    } catch (error: Error) {
       console.error('Error parsing session data:', error)
       return null
     }
@@ -238,7 +238,7 @@ export class HotelRedisClient {
 
     try {
       return JSON.parse(data) as T
-    } catch (error) {
+    } catch (error: Error) {
       console.error('Error parsing cache data:', error)
       return null
     }
@@ -297,7 +297,7 @@ export class HotelRedisClient {
 
     try {
       return JSON.parse(data) as T
-    } catch (error) {
+    } catch (error: Error) {
       console.error('Error parsing queue data:', error)
       return null
     }

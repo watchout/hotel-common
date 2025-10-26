@@ -93,7 +93,7 @@ router.get('/staff', sessionAuthMiddleware, requireStaffManagementPermission, as
       try {
         // URLデコードされていない場合の対応
         req.query.search = decodeURIComponent(req.query.search);
-      } catch (e) {
+      } catch (e: Error) {
         // 既にデコード済みの場合はそのまま使用
       }
     }
@@ -195,7 +195,7 @@ router.get('/staff', sessionAuthMiddleware, requireStaffManagementPermission, as
 
     return StandardResponseBuilder.success(res, response);
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Staff list error', error);
 
     if (error instanceof z.ZodError) {
@@ -318,7 +318,7 @@ router.patch('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission, 
       targetCount: staffIds.length
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Staff bulk update error', error);
 
     if (error instanceof z.ZodError) {
@@ -456,7 +456,7 @@ router.delete('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission,
       deletedAt: soft ? deletedAt.toISOString() : null
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Staff bulk delete error', error);
 
     if (error instanceof z.ZodError) {
@@ -519,7 +519,7 @@ router.get('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermission
 
     return StandardResponseBuilder.success(res, response);
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Staff detail error', error);
     return res.status(500).json(
       StandardResponseBuilder.error(
@@ -631,7 +631,7 @@ router.post('/staff', sessionAuthMiddleware, requireStaffAdminPermission, async 
 
     return StandardResponseBuilder.success(res, response, {}, 201);
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Staff create error', error);
 
     if (error instanceof z.ZodError) {
@@ -771,7 +771,7 @@ router.patch('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermissi
 
     return StandardResponseBuilder.success(res, response);
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Staff update error', error);
 
     if (error instanceof z.ZodError) {
@@ -914,7 +914,7 @@ router.delete('/staff/:id', sessionAuthMiddleware, requireStaffAdminPermission, 
       deletedAt: deletedAt?.toISOString() || null
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Staff delete error', error);
 
     return res.status(500).json(

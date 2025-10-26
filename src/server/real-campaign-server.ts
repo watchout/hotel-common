@@ -148,7 +148,7 @@ class RealCampaignServer {
       process.on('SIGINT', () => this.shutdown());
       process.on('SIGTERM', () => this.shutdown());
 
-    } catch (error) {
+    } catch (error: Error) {
       logger.error('サーバー起動エラー:', { error: error instanceof Error ? error : new Error(String(error)) });
       throw error;
     }
@@ -167,7 +167,7 @@ class RealCampaignServer {
       await prisma.$disconnect();
       logger.info('キャンペーンAPI実サーバー停止完了');
       process.exit(0);
-    } catch (error) {
+    } catch (error: Error) {
       logger.error('サーバー停止エラー:', { error: error instanceof Error ? error : new Error(String(error)) });
       process.exit(1);
     }

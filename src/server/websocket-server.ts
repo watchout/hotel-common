@@ -76,7 +76,7 @@ export class HotelWebSocketServer {
 
       // イベントハンドラ設定
       this.setupEventHandlers();
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('WebSocketサーバー起動エラー:', error as Error);
       throw error;
     }
@@ -105,7 +105,7 @@ export class HotelWebSocketServer {
       }
 
       this.logger.info('WebSocketサーバー停止完了');
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('WebSocketサーバー停止エラー:', error as Error);
       throw error;
     }
@@ -133,7 +133,7 @@ export class HotelWebSocketServer {
 
       await this.redisClient.connect();
       this.logger.info(`Redis接続完了 (${host}:${port})`);
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Redis接続エラー:', error as Error);
       throw error;
     }

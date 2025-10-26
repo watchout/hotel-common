@@ -45,7 +45,7 @@ export const autoSessionMapping = async (req: Request, res: Response, next: Next
     }
 
     next();
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('セッション自動紐付けエラー', error);
     // エラーが発生してもAPIの実行は継続
     next();
@@ -71,7 +71,7 @@ export const legacyApiCompatibility = async (req: Request, res: Response, next: 
     };
 
     next();
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('レガシーAPI互換性ミドルウェアエラー', error);
     next();
   }
@@ -106,7 +106,7 @@ async function addSessionInfoToResponse(responseBody: any, tenantId: string) {
         };
       }
     }
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('レスポンスセッション情報追加エラー', error);
     // エラーが発生してもレスポンスは返す
   }
@@ -174,7 +174,7 @@ export const requireSession = async (req: Request, res: Response, next: NextFunc
     }
 
     next();
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('セッション必須チェックエラー', error);
     return res.status(500).json({
       error: 'SESSION_CHECK_ERROR',
@@ -207,7 +207,7 @@ export const validateSessionStatus = (allowedStatuses: string[] = ['ACTIVE']) =>
       }
 
       next();
-    } catch (error) {
+    } catch (error: Error) {
       logger.error('セッション状態チェックエラー', error);
       return res.status(500).json({
         error: 'SESSION_STATUS_CHECK_ERROR',
@@ -253,7 +253,7 @@ export const flexibleSessionCheck = async (req: Request, res: Response, next: Ne
     }
 
     next();
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('柔軟なセッションチェックエラー', error);
     // エラーが発生しても処理を継続
     next();

@@ -42,7 +42,7 @@ export class JwtManager {
   static verifyAccessToken(token: string) {
     try {
       return jwt.verify(token, HOTEL_SAAS_CONFIG.JWT_SECRET);
-    } catch (error) {
+    } catch (error: Error) {
       return null;
     }
   }
@@ -122,7 +122,7 @@ export class HotelSaasAuth {
         tokens,
         user: authResult.user
       }
-    } catch (error) {
+    } catch (error: Error) {
       return { 
         success: false, 
         error: error instanceof Error ? error.message : 'Authentication failed' 
@@ -139,7 +139,7 @@ export class HotelSaasAuth {
       return jwt.sign(payload, HOTEL_SAAS_CONFIG.JWT_SECRET, { 
         expiresIn: expiresIn as StringValue 
       });
-    } catch (error) {
+    } catch (error: Error) {
       throw new Error(`Token generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }

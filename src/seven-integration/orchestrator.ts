@@ -107,7 +107,7 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
           // プログレス更新
           this.updateProgress((i + 1) / this.layers.length * 100)
           
-        } catch (error) {
+        } catch (error: Error) {
           const errorMessage = error instanceof Error ? error.message : 'Unknown error'
           this.emitEvent('error', layerType, `Layer ${i + 1} 実行エラー: ${errorMessage}`)
           
@@ -147,7 +147,7 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
       
       return result
       
-    } catch (error) {
+    } catch (error: Error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
       this.emitEvent('error', undefined, `七重統合システム実行エラー: ${errorMessage}`)
       
@@ -250,7 +250,7 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
           }
         }
         
-      } catch (error) {
+      } catch (error: Error) {
         console.error('継続監視エラー:', error)
       }
     }, interval)

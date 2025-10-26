@@ -21,7 +21,7 @@ router.get('/campaigns/active', (req: Request, res: Response) => {
       'キャンペーン機能は現在開発中です'
     );
     return res.status(501).json(response);
-  } catch (error) {
+  } catch (error: Error) {
     const { response, statusCode } = StandardResponseBuilder.error(
       'CAMPAIGN_ERROR', 
       'キャンペーン取得エラー', 
@@ -45,7 +45,7 @@ router.get('/campaigns/:id', (req: Request, res: Response) => {
       'キャンペーン機能は現在開発中です'
     );
     return res.status(501).json(response);
-  } catch (error) {
+  } catch (error: Error) {
     const { response, statusCode } = StandardResponseBuilder.error(
       'CAMPAIGN_ERROR', 
       'キャンペーン取得エラー', 
@@ -69,7 +69,7 @@ router.get('/campaigns/category/:categoryId', (req: Request, res: Response) => {
       'キャンペーン機能は現在開発中です'
     );
     return res.status(501).json(response);
-  } catch (error) {
+  } catch (error: Error) {
     const { response, statusCode } = StandardResponseBuilder.error(
       'CAMPAIGN_ERROR', 
       'キャンペーン取得エラー', 

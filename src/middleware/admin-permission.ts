@@ -64,7 +64,7 @@ export const requireAdminLevel = (requiredLevel: number) => {
       });
 
       next();
-    } catch (error) {
+    } catch (error: Error) {
       logger.error('Admin permission check error', error);
       return res.status(500).json(
         StandardResponseBuilder.error(

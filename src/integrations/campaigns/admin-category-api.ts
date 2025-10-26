@@ -45,7 +45,7 @@ router.get('/campaign-categories', verifyAdminAuth, async (req: Request, res: Re
         }
       }
     );
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Failed to get campaign categories', error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to get campaign categories').response
@@ -70,7 +70,7 @@ router.post(
       });
       
       return StandardResponseBuilder.success(res, mapCategoryToInfo(category), null, 201);
-    } catch (error) {
+    } catch (error: Error) {
       logger.error('Failed to create campaign category', error);
       return res.status(500).json(
         StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to create campaign category').response
@@ -94,7 +94,7 @@ router.get('/campaign-categories/:id', verifyAdminAuth, async (req: Request, res
     }
     
     return StandardResponseBuilder.success(res, mapCategoryToInfo(category));
-  } catch (error) {
+  } catch (error: Error) {
     logger.error(`Failed to get campaign category: ${req.params.id}`, error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to get campaign category').response
@@ -129,7 +129,7 @@ router.put(
       });
       
       return StandardResponseBuilder.success(res, mapCategoryToInfo(updatedCategory));
-    } catch (error) {
+    } catch (error: Error) {
       logger.error(`Failed to update campaign category: ${req.params.id}`, error);
       return res.status(500).json(
         StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to update campaign category').response
@@ -171,7 +171,7 @@ router.delete('/campaign-categories/:id', verifyAdminAuth, async (req: Request, 
     });
     
     return res.status(204).send();
-  } catch (error) {
+  } catch (error: Error) {
     logger.error(`Failed to delete campaign category: ${req.params.id}`, error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to delete campaign category').response

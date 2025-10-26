@@ -85,7 +85,7 @@ export class HybridCursorIntegration {
         qualityScore: metrics.qualityScore
       };
       
-    } catch (error) {
+    } catch (error: Error) {
       console.error('HybridCursor処理エラー:', error);
       return this.fallbackResponse(message);
     }

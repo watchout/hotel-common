@@ -42,7 +42,7 @@ async function main() {
       console.log('🗑️ スタッフテーブルをクリア中...')
       await prisma.$executeRaw`DELETE FROM staff WHERE 1=1`
       console.log('✅ スタッフテーブルのクリア完了')
-    } catch (error) {
+    } catch (error: Error) {
       console.log('⚠️ スタッフテーブルが存在しないか、クリアに失敗しました')
     }
 
@@ -53,7 +53,7 @@ async function main() {
 
     console.log('🎉 データベースのリセットが完了しました！')
     console.log('ℹ️ テスト用データを作成するには src/scripts/seed-test-data.ts を実行してください')
-  } catch (error) {
+  } catch (error: Error) {
     console.error('❌ エラーが発生しました:', error)
   } finally {
     await prisma.$disconnect()

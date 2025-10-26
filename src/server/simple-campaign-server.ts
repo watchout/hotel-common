@@ -292,7 +292,7 @@ class SimpleCampaignServer {
       process.on('SIGINT', () => this.shutdown());
       process.on('SIGTERM', () => this.shutdown());
 
-    } catch (error) {
+    } catch (error: Error) {
       console.error('サーバー起動エラー:', error);
       throw error;
     }
@@ -310,7 +310,7 @@ class SimpleCampaignServer {
       }
       console.log('キャンペーンAPI簡易サーバー停止完了');
       process.exit(0);
-    } catch (error) {
+    } catch (error: Error) {
       console.error('サーバー停止エラー:', error);
       process.exit(1);
     }

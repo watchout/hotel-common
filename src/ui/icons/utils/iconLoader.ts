@@ -66,7 +66,7 @@ export async function iconExists(
   try {
     await loadIcon(fullName);
     return true;
-  } catch (error) {
+  } catch (error: Error) {
     return false;
   }
 }

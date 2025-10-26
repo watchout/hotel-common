@@ -93,7 +93,7 @@ export class HierarchicalJwtManager {
         expiresIn: 86400 // 24時間（秒単位）
       }
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('階層JWT生成エラー:', error as Error)
       throw new Error('階層JWT生成に失敗しました')
     }
@@ -123,7 +123,7 @@ export class HierarchicalJwtManager {
           INVENTORY: { scope: 'HOTEL' as SharingScope, level: 'FULL' as AccessLevel }
         }
       }
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('階層コンテキスト構築エラー:', error as Error)
       return null
     }
@@ -214,7 +214,7 @@ export class HierarchicalJwtManager {
 
       return newTokens.accessToken
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('階層コンテキスト更新エラー:', error as Error)
       throw new Error('階層コンテキスト更新に失敗しました')
     }
@@ -230,7 +230,7 @@ export class HierarchicalJwtManager {
     try {
       // 緊急対応：スタブ実装
       return "org_default"
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('ユーザー所属組織検索エラー:', error as Error)
       return null
     }
@@ -264,7 +264,7 @@ export class HierarchicalJwtManager {
 
       return hierarchicalToken
 
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('階層トークン検証エラー:', error as Error)
       return null
     }
@@ -295,7 +295,7 @@ export class HierarchicalJwtManager {
 
         next()
 
-      } catch (error) {
+      } catch (error: Error) {
         this.logger.error('階層認証ミドルウェアエラー:', error as Error)
         return res.status(500).json({ error: 'Authentication middleware error' })
       }

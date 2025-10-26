@@ -45,7 +45,7 @@ router.post('/api/v1/rooms', async (req, res) => {
     const room = await RoomService.createRoom(validationResult.data)
 
     return res.status(201).json(StandardResponseBuilder.success(res, room).response)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('部屋作成エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('ROOM_CREATE_ERROR', 
       error instanceof Error ? error.message : '部屋作成に失敗しました').response)
@@ -73,7 +73,7 @@ router.get('/api/v1/rooms/:id', async (req, res) => {
     }
 
     return StandardResponseBuilder.success(res, room)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('部屋取得エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('ROOM_GET_ERROR',
       error instanceof Error ? error.message : '部屋取得に失敗しました').response)
@@ -100,7 +100,7 @@ router.get('/api/v1/rooms/by-number/:roomNumber', async (req, res) => {
     }
 
     return StandardResponseBuilder.success(res, room)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('部屋番号取得エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('ROOM_GET_ERROR',
       error instanceof Error ? error.message : '部屋取得に失敗しました').response)
@@ -139,7 +139,7 @@ router.get('/api/v1/rooms', async (req, res) => {
         has_next: result.hasNext
       }
     }).response)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('部屋一覧取得エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('ROOMS_GET_ERROR',
       error instanceof Error ? error.message : '部屋一覧取得に失敗しました').response)
@@ -172,7 +172,7 @@ router.put('/api/v1/rooms/:id', async (req, res) => {
     const room = await RoomService.updateRoom(id, tenantId, validationResult.data)
 
     return res.status(200).json(StandardResponseBuilder.success(res, room).response)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('部屋更新エラー:', error)
     if (error instanceof Error && error.message.includes('not found')) {
       return res.status(404).json(StandardResponseBuilder.error('ROOM_NOT_FOUND', '指定された部屋が見つかりません').response)
@@ -208,7 +208,7 @@ router.patch('/api/v1/rooms/:id/status', async (req, res) => {
     const room = await RoomService.updateRoomStatus(id, tenantId, validationResult.data)
 
     return res.status(200).json(StandardResponseBuilder.success(res, room).response)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('部屋ステータス更新エラー:', error)
     if (error instanceof Error && error.message.includes('not found')) {
       return res.status(404).json(StandardResponseBuilder.error('ROOM_NOT_FOUND', '指定された部屋が見つかりません').response)
@@ -234,7 +234,7 @@ router.delete('/api/v1/rooms/:id', async (req, res) => {
     const room = await RoomService.deleteRoom(id, tenantId, req.user?.user_id)
 
     return res.status(200).json(StandardResponseBuilder.success(res, room).response)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('部屋削除エラー:', error)
     if (error instanceof Error && error.message.includes('not found')) {
       return res.status(404).json(StandardResponseBuilder.error('ROOM_NOT_FOUND', '指定された部屋が見つかりません').response)
@@ -265,7 +265,7 @@ router.get('/api/v1/rooms/by-floor/:floorNumber', async (req, res) => {
     const rooms = await RoomService.getRoomsByFloor(floorNum, tenantId)
 
     return StandardResponseBuilder.success(res, rooms)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('フロア別部屋取得エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('ROOMS_BY_FLOOR_ERROR',
       error instanceof Error ? error.message : 'フロア別部屋取得に失敗しました').response)
@@ -296,7 +296,7 @@ router.post('/api/v1/rooms/search-available', async (req, res) => {
     const rooms = await RoomService.searchAvailableRooms(validationResult.data)
 
     return StandardResponseBuilder.success(res, rooms)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('空室検索エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('ROOM_AVAILABILITY_SEARCH_ERROR',
       error instanceof Error ? error.message : '空室検索に失敗しました').response)
@@ -318,7 +318,7 @@ router.get('/api/v1/rooms/stats', async (req, res) => {
     const stats = await RoomService.getRoomStats(tenantId)
 
     return StandardResponseBuilder.success(res, stats)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('部屋統計取得エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('ROOM_STATS_ERROR',
       error instanceof Error ? error.message : '部屋統計取得に失敗しました').response)

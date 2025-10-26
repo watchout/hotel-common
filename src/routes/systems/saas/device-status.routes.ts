@@ -86,7 +86,7 @@ router.post('/api/v1/devices/check-status', async (req: Request, res: Response) 
         message: 'デバイス情報を取得できませんでした。マイグレーションが必要です。'
       })
     }
-  } catch (error) {
+  } catch (error: Error) {
     console.error('デバイスステータス確認エラー:', error)
     return res.status(500).json({
       success: false,
@@ -129,7 +129,7 @@ router.get('/api/v1/devices/client-ip', (req: Request, res: Response) => {
         'x-client-ip': xClientIp || null
       }
     })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('クライアントIP取得エラー:', error)
     return res.status(500).json({
       success: false,
@@ -236,7 +236,7 @@ router.get('/api/v1/devices/count', authMiddleware, async (req: Request & { user
         }
       })
     }
-  } catch (error) {
+  } catch (error: Error) {
     console.error('デバイス数取得エラー:', error)
     return res.status(500).json({
       success: false,

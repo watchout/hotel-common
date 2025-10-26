@@ -33,7 +33,7 @@ export const adminAuthMiddleware = (req: Request, res: Response, next: NextFunct
     // @ts-ignore - 型の互換性の問題
     req.user = decoded;
     next();
-  } catch (error) {
+  } catch (error: Error) {
     return res.status(401).json({
       success: false,
       error: 'INVALID_TOKEN',

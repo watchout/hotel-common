@@ -83,7 +83,7 @@ export class ProblemSolvingLayer extends BaseIntegrationLayer {
         ],
         ['Layer 2: トークン最適化実行準備完了']
       )
-    } catch (error) {
+    } catch (error: Error) {
       const executionTime = Date.now() - startTime
       return this.createLayerResult(
         false,
@@ -174,7 +174,7 @@ export class TokenOptimizationLayer extends BaseIntegrationLayer {
         ],
         ['Layer 3: ガードレール実装準備完了']
       )
-    } catch (error) {
+    } catch (error: Error) {
       const executionTime = Date.now() - startTime
       return this.createLayerResult(
         false,
@@ -262,7 +262,7 @@ export class GuardrailsLayer extends BaseIntegrationLayer {
         ],
         ['Layer 4: Cursor最適化実行準備完了']
       )
-    } catch (error) {
+    } catch (error: Error) {
       const executionTime = Date.now() - startTime
       return this.createLayerResult(
         false,
@@ -365,7 +365,7 @@ export class CursorOptimizationLayer extends BaseIntegrationLayer {
         ],
         ['Layer 5: プロセス最適化実行準備完了']
       )
-    } catch (error) {
+    } catch (error: Error) {
       const executionTime = Date.now() - startTime
       return this.createLayerResult(
         false,
@@ -457,7 +457,7 @@ export class ProcessOptimizationLayer extends BaseIntegrationLayer {
         ],
         ['Layer 6: RAG実装実行準備完了']
       )
-    } catch (error) {
+    } catch (error: Error) {
       const executionTime = Date.now() - startTime
       return this.createLayerResult(
         false,
@@ -552,7 +552,7 @@ export class RAGImplementationLayer extends BaseIntegrationLayer {
         ],
         ['Layer 7: プロンプト完璧化実行準備完了']
       )
-    } catch (error) {
+    } catch (error: Error) {
       const executionTime = Date.now() - startTime
       return this.createLayerResult(
         false,
@@ -646,7 +646,7 @@ export class PromptPerfectionLayer extends BaseIntegrationLayer {
         ],
         ['七重統合システム完全稼働！']
       )
-    } catch (error) {
+    } catch (error: Error) {
       const executionTime = Date.now() - startTime
       return this.createLayerResult(
         false,

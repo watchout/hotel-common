@@ -43,7 +43,7 @@ export class ResponseNodeController {
         success: true,
         data: node
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error getting node by id:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -69,7 +69,7 @@ export class ResponseNodeController {
         success: true,
         data: children
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error getting child nodes:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -108,7 +108,7 @@ export class ResponseNodeController {
         success: true,
         data: results
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error searching nodes:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,

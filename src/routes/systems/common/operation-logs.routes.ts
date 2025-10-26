@@ -181,7 +181,7 @@ router.get('/operations', wrappedSessionAuth, async (req: Request, res: Response
       result_count: logs.length
     })
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('操作ログ一覧取得エラー', error as Error)
 
     if (error instanceof z.ZodError) {
@@ -235,7 +235,7 @@ router.get('/operations/:id', sessionAuthMiddleware, async (req: Request, res: R
       log_id: id
     })
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('操作ログ詳細取得エラー', error as Error)
     ResponseHelper.sendInternalError(res, '操作ログの詳細取得に失敗しました')
   }
@@ -344,7 +344,7 @@ router.post('/operations', sessionAuthMiddleware, async (req: Request, res: Resp
       log_id: systemEvent.id
     })
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('操作ログ記録エラー', error as Error)
 
     if (error instanceof z.ZodError) {
@@ -433,7 +433,7 @@ router.post('/operations/search', sessionAuthMiddleware, async (req: Request, re
       result_count: logs.length
     })
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('操作ログ検索エラー', error as Error)
 
     if (error instanceof z.ZodError) {
@@ -514,7 +514,7 @@ router.get('/operations/export', sessionAuthMiddleware, async (req: Request, res
       record_count: logs.length
     })
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('操作ログエクスポートエラー', error as Error)
 
     if (error instanceof z.ZodError) {

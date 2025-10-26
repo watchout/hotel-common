@@ -49,7 +49,7 @@ export const validateUniquePackageName = async (req: Request, res: Response, nex
     }
     
     next();
-  } catch (error) {
+  } catch (error: Error) {
     const { response, statusCode } = StandardResponseBuilder.error('SERVER_ERROR', '一意性チェックに失敗しました', undefined, 500);
     return res.status(statusCode).json(response);
   }
@@ -74,7 +74,7 @@ export const validateGooglePlayAppExists = async (req: Request, res: Response, n
     
     req.app.locals.googlePlayApp = app;
     next();
-  } catch (error) {
+  } catch (error: Error) {
     const { response, statusCode } = StandardResponseBuilder.error('SERVER_ERROR', 'アプリの検索に失敗しました', undefined, 500);
     return res.status(statusCode).json(response);
   }
@@ -105,7 +105,7 @@ export const validateHotelAppExists = async (req: Request, res: Response, next: 
     
     req.app.locals.hotelApp = hotelApp;
     next();
-  } catch (error) {
+  } catch (error: Error) {
     const { response, statusCode } = StandardResponseBuilder.error('SERVER_ERROR', 'アプリ設定の検索に失敗しました', undefined, 500);
     return res.status(statusCode).json(response);
   }
@@ -136,7 +136,7 @@ export const validateLayoutAppBlockExists = async (req: Request, res: Response, 
     
     req.app.locals.layoutAppBlock = layoutAppBlock;
     next();
-  } catch (error) {
+  } catch (error: Error) {
     const { response, statusCode } = StandardResponseBuilder.error('SERVER_ERROR', 'レイアウトブロックの検索に失敗しました', undefined, 500);
     return res.status(statusCode).json(response);
   }

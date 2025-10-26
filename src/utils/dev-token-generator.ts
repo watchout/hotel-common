@@ -101,7 +101,7 @@ export class DevTokenGenerator {
   static verifyToken(token: string): any {
     try {
       return jwt.verify(token, JWT_SECRET);
-    } catch (error) {
+    } catch (error: Error) {
       throw new Error(`Invalid token: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }

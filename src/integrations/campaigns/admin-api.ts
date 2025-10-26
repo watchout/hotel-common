@@ -40,7 +40,7 @@ router.get('/campaigns', verifyAdminAuth, async (req: Request, res: Response) =>
     });
     
     return StandardResponseBuilder.success(res, campaigns.data, campaigns.meta);
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Failed to get campaigns', error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to get campaigns').response
@@ -58,7 +58,7 @@ router.post(
     try {
       const campaign = await campaignService.createCampaign(req.body);
       return StandardResponseBuilder.success(res, campaign, null, 201);
-    } catch (error) {
+    } catch (error: Error) {
       logger.error('Failed to create campaign', error);
       return res.status(500).json(
         StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to create campaign').response
@@ -80,7 +80,7 @@ router.get('/campaigns/:id', verifyAdminAuth, async (req: Request, res: Response
     }
     
     return StandardResponseBuilder.success(res, campaign);
-  } catch (error) {
+  } catch (error: Error) {
     logger.error(`Failed to get campaign: ${req.params.id}`, error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to get campaign').response
@@ -106,7 +106,7 @@ router.put(
       
       const updatedCampaign = await campaignService.updateCampaign(id, req.body);
       return StandardResponseBuilder.success(res, updatedCampaign);
-    } catch (error) {
+    } catch (error: Error) {
       logger.error(`Failed to update campaign: ${req.params.id}`, error);
       return res.status(500).json(
         StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to update campaign').response
@@ -129,7 +129,7 @@ router.delete('/campaigns/:id', verifyAdminAuth, async (req: Request, res: Respo
     
     await campaignService.deleteCampaign(id);
     return res.status(204).send();
-  } catch (error) {
+  } catch (error: Error) {
     logger.error(`Failed to delete campaign: ${req.params.id}`, error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to delete campaign').response
@@ -166,7 +166,7 @@ router.get('/campaigns/:id/analytics', verifyAdminAuth, async (req: Request, res
     };
     
     return StandardResponseBuilder.success(res, analytics);
-  } catch (error) {
+  } catch (error: Error) {
     logger.error(`Failed to get campaign analytics: ${req.params.id}`, error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to get campaign analytics').response
@@ -195,7 +195,7 @@ router.get('/campaigns/analytics/summary', verifyAdminAuth, async (req: Request,
     };
     
     return StandardResponseBuilder.success(res, summary);
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('Failed to get campaigns analytics summary', error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Failed to get campaigns analytics summary').response

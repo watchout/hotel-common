@@ -220,7 +220,7 @@ class HotelIntegrationServer {
       try {
         const result = await this.testSystemConnection(systemName)
         res.json(result)
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           error: 'CONNECTION_TEST_FAILED',
           message: error instanceof Error ? error.message : 'Unknown error'
@@ -237,7 +237,7 @@ class HotelIntegrationServer {
           timestamp: new Date().toISOString(),
           database: 'PostgreSQL'
         })
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           status: 'error',
           error: error instanceof Error ? error.message : 'Database connection failed'
@@ -263,7 +263,7 @@ class HotelIntegrationServer {
           count: tenants.length,
           tenants
         })
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           error: 'DATABASE_ERROR',
           message: error instanceof Error ? error.message : 'Failed to fetch tenants'
@@ -309,7 +309,7 @@ class HotelIntegrationServer {
           database_stats: stats,
           system_connections: this.systemConnections.size
         })
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           error: 'STATS_ERROR',
           message: error instanceof Error ? error.message : 'Failed to fetch statistics'
@@ -434,7 +434,7 @@ class HotelIntegrationServer {
           endpoints_available: 8,
           timestamp: new Date().toISOString()
         })
-      } catch (error) {
+      } catch (error: Error) {
         res.status(500).json({
           integration_status: 'error',
           error: error instanceof Error ? error.message : 'Integration health check failed',
@@ -693,7 +693,7 @@ class HotelIntegrationServer {
       this.systemConnections.set(systemName, updatedStatus)
       return updatedStatus
 
-    } catch (error) {
+    } catch (error: Error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error'
 
       const updatedStatus: SystemConnectionStatus = {
@@ -740,7 +740,7 @@ class HotelIntegrationServer {
     const promises = Array.from(this.systemConnections.keys()).map(async (systemName) => {
       try {
         await this.testSystemConnection(systemName)
-      } catch (error) {
+      } catch (error: Error) {
         // エラーは testSystemConnection 内で処理済み
       }
     })
@@ -768,7 +768,7 @@ class HotelIntegrationServer {
       try {
         await initializeHotelMemberHierarchy()
         console.log('hotel-member統合初期化完了')
-      } catch (error) {
+      } catch (error: Error) {
         console.warn('hotel-member統合初期化警告:', error instanceof Error ? error.message : 'Unknown error')
       }
 
@@ -808,7 +808,7 @@ class HotelIntegrationServer {
       process.on('SIGINT', () => this.shutdown())
       process.on('SIGTERM', () => this.shutdown())
 
-    } catch (error) {
+    } catch (error: Error) {
       console.error('サーバー起動エラー:', error)
       throw error
     }
@@ -827,7 +827,7 @@ class HotelIntegrationServer {
       await this.prisma.$disconnect()
       console.log('hotel-common統合APIサーバー停止完了')
       process.exit(0)
-    } catch (error) {
+    } catch (error: Error) {
       console.error('サーバー停止エラー:', error)
       process.exit(1)
     }

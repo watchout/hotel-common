@@ -46,7 +46,7 @@ export class AdminResponseTreeController {
         success: true,
         data: tree
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error creating tree:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -83,7 +83,7 @@ export class AdminResponseTreeController {
         success: true,
         data: tree
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error updating tree:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -121,7 +121,7 @@ export class AdminResponseTreeController {
         success: true,
         data: tree
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error publishing tree:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -172,7 +172,7 @@ export class AdminResponseTreeController {
         success: true,
         data: node
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error creating node:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,

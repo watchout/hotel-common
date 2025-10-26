@@ -41,7 +41,7 @@ async function testActualI18n() {
     
     console.log('\n✅ i18nシステムテスト完了')
     
-  } catch (error) {
+  } catch (error: Error) {
     console.error('❌ i18nシステムテストエラー:', error)
   }
 }
@@ -99,13 +99,13 @@ async function testFileSystemAccess() {
       const enData = JSON.parse(enContent)
       console.log(`  - キー数: ${Object.keys(enData).length}`)
       console.log(`  - ボタン数: ${Object.keys(enData.ui?.buttons || {}).length}`)
-    } catch (err) {
+    } catch (err: Error) {
       const error = err as Error
       console.log(`  - 読み込みエラー: ${error.message}`)
     }
     
     console.log('\n✅ ファイルシステムアクセステスト完了')
-  } catch (err) {
+  } catch (err: Error) {
     const error = err as Error
     console.error('❌ ファイルシステムアクセスエラー:', error)
   }

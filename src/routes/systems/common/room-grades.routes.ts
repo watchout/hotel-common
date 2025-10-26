@@ -42,7 +42,7 @@ router.post('/api/v1/room-grades', async (req, res) => {
     const roomGrade = await RoomGradeService.createRoomGrade(validationResult.data)
 
     return StandardResponseBuilder.success(res.status(201), roomGrade)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('客室ランク作成エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('ROOM_GRADE_CREATE_ERROR', 
       error instanceof Error ? error.message : '客室ランク作成に失敗しました'))
@@ -63,7 +63,7 @@ router.get('/api/v1/room-grades', async (req, res) => {
     const roomGrades = await RoomGradeService.getRoomGrades(tenantId)
 
     return StandardResponseBuilder.success(res, roomGrades)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('客室ランク一覧取得エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('ROOM_GRADE_LIST_ERROR', 
       error instanceof Error ? error.message : '客室ランク一覧取得に失敗しました'))
@@ -93,7 +93,7 @@ router.get('/api/v1/room-grades/:id', async (req, res) => {
     }
 
     return StandardResponseBuilder.success(res, roomGrade)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('客室ランク詳細取得エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('ROOM_GRADE_GET_ERROR', 
       error instanceof Error ? error.message : '客室ランク詳細取得に失敗しました'))
@@ -126,7 +126,7 @@ router.put('/api/v1/room-grades/:id', async (req, res) => {
     const updatedRoomGrade = await RoomGradeService.updateRoomGrade(id, tenantId, validationResult.data)
 
     return StandardResponseBuilder.success(res, updatedRoomGrade)
-  } catch (error) {
+  } catch (error: Error) {
     console.error('客室ランク更新エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('ROOM_GRADE_UPDATE_ERROR', 
       error instanceof Error ? error.message : '客室ランク更新に失敗しました'))
@@ -153,7 +153,7 @@ router.delete('/api/v1/room-grades/:id', async (req, res) => {
     await RoomGradeService.deleteRoomGrade(id, tenantId, deletedBy)
 
     return StandardResponseBuilder.success(res, { message: '客室ランクを削除しました' })
-  } catch (error) {
+  } catch (error: Error) {
     console.error('客室ランク削除エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('ROOM_GRADE_DELETE_ERROR', 
       error instanceof Error ? error.message : '客室ランク削除に失敗しました'))

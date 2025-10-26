@@ -81,7 +81,7 @@ export class SessionMigrationService {
               errors.push(`注文ID ${order.id}: 適切なセッションが見つからず、フォールバック作成も失敗`);
             }
           }
-        } catch (error) {
+        } catch (error: Error) {
           const errorMsg = `注文ID ${order.id}: ${error instanceof Error ? error.message : '不明なエラー'}`;
           errors.push(errorMsg);
           logger.error('注文セッション紐付けエラー', { orderId: order.id, error });
@@ -101,7 +101,7 @@ export class SessionMigrationService {
         errors
       };
 
-    } catch (error) {
+    } catch (error: Error) {
       logger.error('セッション移行処理エラー', { tenantId, error });
       return {
         success: false,
@@ -235,7 +235,7 @@ export class SessionMigrationService {
 
       return fallbackSession;
 
-    } catch (error) {
+    } catch (error: Error) {
       logger.error('フォールバックセッション作成エラー', { orderId: order.id, error });
       return null;
     }
@@ -283,7 +283,7 @@ export class SessionMigrationService {
           mappingRate: totalOrders > 0 ? (mappedOrders / totalOrders * 100).toFixed(2) : '0.00'
         }
       };
-    } catch (error) {
+    } catch (error: Error) {
       logger.error('セッション統計取得エラー', { tenantId, error });
       throw error;
     }
@@ -319,7 +319,7 @@ export class SessionMigrationService {
         issues: compatibilityChecks,
         recommendations: this.generateCompatibilityRecommendations(compatibilityChecks)
       };
-    } catch (error) {
+    } catch (error: Error) {
       logger.error('後方互換性チェックエラー', { tenantId, error });
       throw error;
     }

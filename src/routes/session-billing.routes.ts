@@ -106,7 +106,7 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       tenantId
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('セッション請求書作成エラー', error as Error);
     
     if (error instanceof z.ZodError) {
@@ -193,7 +193,7 @@ router.get('/:billingId', authMiddleware, async (req: Request, res: Response) =>
       tenantId
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('セッション請求書取得エラー', error as Error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', 'セッション請求書の取得に失敗しました').response
@@ -259,7 +259,7 @@ router.get('/by-session/:sessionId', authMiddleware, async (req: Request, res: R
       tenantId
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('セッション別請求書一覧取得エラー', error as Error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', 'セッション別請求書一覧の取得に失敗しました').response
@@ -341,7 +341,7 @@ router.patch('/:billingId', authMiddleware, async (req: Request, res: Response) 
       updates: validatedData
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('セッション請求書更新エラー', error as Error);
     
     if (error instanceof z.ZodError) {
@@ -440,7 +440,7 @@ router.post('/:billingId/payment', authMiddleware, async (req: Request, res: Res
       tenantId
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('セッション請求書支払い処理エラー', error as Error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', '支払い処理に失敗しました').response
@@ -509,7 +509,7 @@ router.get('/calculate/:sessionId', authMiddleware, async (req: Request, res: Re
       tenantId
     });
 
-  } catch (error) {
+  } catch (error: Error) {
     logger.error('セッション料金計算エラー', error as Error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', 'セッション料金計算に失敗しました').response

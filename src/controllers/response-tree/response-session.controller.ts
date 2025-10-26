@@ -47,7 +47,7 @@ export class ResponseSessionController {
         success: true,
         data: session
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error starting session:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -83,7 +83,7 @@ export class ResponseSessionController {
         success: true,
         data: session
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error getting session:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -135,7 +135,7 @@ export class ResponseSessionController {
         success: true,
         data: session
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error updating session:', { error: error instanceof Error ? error : new Error('Unknown error') });
       
       if ((error as Error).message === 'Node not found') {
@@ -183,7 +183,7 @@ export class ResponseSessionController {
         success: true,
         data: session
       });
-    } catch (error) {
+    } catch (error: Error) {
       this.logger.error('Error ending session:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
