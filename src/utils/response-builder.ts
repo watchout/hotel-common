@@ -27,7 +27,7 @@ export class StandardResponseBuilder {
   /**
    * 成功レスポンスを作成
    */
-  static success(res: Response, data: any = {}, meta: any = {}): Response {
+  static success(res: Response, data: any = {}, meta: any = {}, statusCode: number = 200): Response {
     const response: StandardResponse = {
       success: true,
       data,
@@ -36,7 +36,7 @@ export class StandardResponseBuilder {
       request_id: res.locals.requestId || this.generateRequestId()
     };
 
-    return res.status(200).json(response);
+    return res.status(statusCode).json(response);
   }
 
   /**

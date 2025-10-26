@@ -1,4 +1,4 @@
-import type { Room, CreateRoomRequest, UpdateRoomRequest, UpdateRoomStatusRequest, RoomSearchParams, RoomAvailabilitySearch } from '../schemas/room';
+import type { CreateRoomRequest, Room, RoomAvailabilitySearch, RoomSearchParams, UpdateRoomRequest, UpdateRoomStatusRequest } from '../schemas/room';
 /**
  * 部屋管理サービス
  * PMS基本機能の部屋管理

@@ -5,20 +5,17 @@
 
 import express, { Request, Response } from 'express';
 import { z } from 'zod';
-import { authMiddleware } from '../../../auth/middleware';
-import { requireStaffManagementPermission, requireStaffAdminPermission } from '../../../middleware/admin-permission';
+import { sessionAuthMiddleware } from '../../../auth/session-auth.middleware';
 import { hotelDb } from '../../../database';
-import { StandardResponseBuilder } from '../../../utils/response-builder';
+import { requireStaffAdminPermission, requireStaffManagementPermission } from '../../../middleware/admin-permission';
+import { StaffRepository } from '../../../repositories/staff/staff.repository';
 import { HotelLogger } from '../../../utils/logger';
+import { StandardResponseBuilder } from '../../../utils/response-builder';
 import {
-  mapStaffToApiResponse,
-  mapStaffToSummary,
   buildStaffSearchWhere,
-  calculateDepartmentCounts,
-  createPaginationInfo,
-  getRoleLevel,
-  checkEmailExists,
   canManageStaff,
+  checkEmailExists,
+  mapStaffToApiResponse,
   prepareStaffCreateData
 } from '../../../utils/staff-helpers';
 
@@ -30,24 +27,24 @@ const StaffListQuerySchema = z.object({
   // 基本パラメータ
   page: z.string().transform(Number).default('1'),
   pageSize: z.string().transform(Number).default('20'),
-  
+
   // 検索パラメータ
   search: z.string().optional(),
   email: z.string().optional(),
-  
+
   // フィルタリングパラメータ
   departmentCode: z.string().optional(), // カンマ区切りで複数部門対応
   role: z.string().optional(), // カンマ区切りで複数役職対応
   employmentStatus: z.enum(['active', 'inactive']).optional(),
   baseLevel: z.string().transform(Number).optional(),
   isActive: z.string().transform((val) => val === 'true').optional(),
-  
+
   // 日付範囲フィルタ
   createdAfter: z.string().datetime().optional(),
   createdBefore: z.string().datetime().optional(),
   lastLoginAfter: z.string().datetime().optional(),
   lastLoginBefore: z.string().datetime().optional(),
-  
+
   // ソートパラメータ
   sortBy: z.enum(['displayName', 'staffCode', 'departmentCode', 'baseLevel', 'lastLoginAt', 'createdAt', 'email', 'role']).default('displayName'),
   sortOrder: z.enum(['asc', 'desc']).default('asc')
@@ -86,7 +83,7 @@ const StaffBulkDeleteSchema = z.object({
  * スタッフ一覧取得（管理者用）
  * GET /admin/staff
  */
-router.get('/staff', authMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
+router.get('/staff', sessionAuthMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     // UTF-8エンコーディング対応
     if (req.query.search && typeof req.query.search === 'string') {
@@ -97,12 +94,12 @@ router.get('/staff', authMiddleware, requireStaffManagementPermission, async (re
         // 既にデコード済みの場合はそのまま使用
       }
     }
-    
+
     const query = StaffListQuerySchema.parse(req.query);
-    const { 
-      page, pageSize, search, email, departmentCode, role, employmentStatus, 
-      baseLevel, isActive, createdAfter, createdBefore, lastLoginAfter, 
-      lastLoginBefore, sortBy, sortOrder 
+    const {
+      page, pageSize, search, email, departmentCode, role, employmentStatus,
+      baseLevel, isActive, createdAfter, createdBefore, lastLoginAfter,
+      lastLoginBefore, sortBy, sortOrder
     } = query;
 
     // ページサイズ制限
@@ -111,10 +108,10 @@ router.get('/staff', authMiddleware, requireStaffManagementPermission, async (re
     logger.info('Staff list request', {
       userId: req.user?.user_id,
       tenantId: req.user?.tenant_id,
-      query: { 
-        page, pageSize: limitedPageSize, search, email, departmentCode, 
-        role, employmentStatus, baseLevel, isActive, createdAfter, 
-        createdBefore, lastLoginAfter, lastLoginBefore, sortBy, sortOrder 
+      query: {
+        page, pageSize: limitedPageSize, search, email, departmentCode,
+        role, employmentStatus, baseLevel, isActive, createdAfter,
+        createdBefore, lastLoginAfter, lastLoginBefore, sortBy, sortOrder
       }
     });
 
@@ -134,7 +131,7 @@ router.get('/staff', authMiddleware, requireStaffManagementPermission, async (re
       lastLoginBefore
     });
 
-    // 拡張ソート条件構築
+    // 拡張ソート条件構築（DB実在カラムに限定）
     let orderBy: any = {};
     switch (sortBy) {
       case 'displayName':
@@ -143,16 +140,6 @@ router.get('/staff', authMiddleware, requireStaffManagementPermission, async (re
       case 'email':
         orderBy = { email: sortOrder };
         break;
-      case 'role':
-        orderBy = { role: sortOrder };
-        break;
-      case 'departmentCode':
-        orderBy = { department: sortOrder };
-        break;
-      case 'baseLevel':
-        // roleでソートしてからbaseLevelの順序に
-        orderBy = { role: sortOrder };
-        break;
       case 'lastLoginAt':
         orderBy = { last_login_at: sortOrder };
         break;
@@ -160,63 +147,54 @@ router.get('/staff', authMiddleware, requireStaffManagementPermission, async (re
         orderBy = { created_at: sortOrder };
         break;
       case 'staffCode':
-        // IDベースでソート（staffCodeは生成値のため）
         orderBy = { id: sortOrder };
         break;
+      // role / departmentCode / baseLevel はスキーマにないため name へフォールバック
+      case 'role':
+      case 'departmentCode':
+      case 'baseLevel':
       default:
         orderBy = { name: 'asc' };
     }
 
-    // データ取得
-    const [staffList, total] = await Promise.all([
-      hotelDb.getAdapter().staff.findMany({
-        where,
-        orderBy,
-        skip: (page - 1) * limitedPageSize,
-        take: limitedPageSize
-      }),
-      hotelDb.getAdapter().staff.count({ where })
-    ]);
+    // Repository経由で取得
+    const repo = new StaffRepository();
+    const result = await repo.list({
+      tenantId: req.user?.tenant_id!,
+      page,
+      pageSize: limitedPageSize,
+      search,
+      email,
+      departmentCode,
+      role,
+      employmentStatus,
+      baseLevel,
+      isActive,
+      createdAfter,
+      createdBefore,
+      lastLoginAfter,
+      lastLoginBefore,
+      sortBy,
+      sortOrder
+    });
 
-    // 統計情報計算
-    const [activeCount, inactiveCount, allStaffForDeptCount] = await Promise.all([
-      hotelDb.getAdapter().staff.count({
-        where: { ...where, is_active: true }
-      }),
-      hotelDb.getAdapter().staff.count({
-        where: { ...where, is_active: false }
-      }),
-      hotelDb.getAdapter().staff.findMany({
-        where: { tenant_id: req.user?.tenant_id!, is_deleted: false },
-        select: { department: true }
-      })
-    ]);
-
-    const departmentCounts = calculateDepartmentCounts(allStaffForDeptCount);
-
-    // レスポンス構築
     const response = {
-      data: staffList.map(mapStaffToSummary),
-      pagination: createPaginationInfo(total, page, limitedPageSize),
-      summary: {
-        totalStaff: total,
-        activeStaff: activeCount,
-        inactiveStaff: inactiveCount,
-        departmentCounts
-      }
+      data: result.items,
+      pagination: result.pagination,
+      summary: result.summary
     };
 
     logger.info('Staff list response', {
       userId: req.user?.user_id,
-      totalStaff: total,
-      returnedCount: staffList.length
+      totalStaff: (result as any)?.pagination?.total,
+      returnedCount: result.items.length
     });
 
     return StandardResponseBuilder.success(res, response);
 
   } catch (error) {
     logger.error('Staff list error', error);
-    
+
     if (error instanceof z.ZodError) {
       return res.status(400).json(
         StandardResponseBuilder.error('VALIDATION_ERROR', 'リクエストパラメータが不正です', error.issues).response
@@ -236,7 +214,7 @@ router.get('/staff', authMiddleware, requireStaffManagementPermission, async (re
  * スタッフ一括更新（管理者用）
  * PATCH /admin/staff/bulk
  */
-router.patch('/staff/bulk', authMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
+router.patch('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const data = StaffBulkUpdateSchema.parse(req.body);
     const { staffIds, updates } = data;
@@ -260,17 +238,17 @@ router.patch('/staff/bulk', authMiddleware, requireStaffAdminPermission, async (
     if (existingStaff.length !== staffIds.length) {
       const foundIds = existingStaff.map(s => s.id);
       const notFoundIds = staffIds.filter(id => !foundIds.includes(id));
-      
+
       logger.warn('Staff not found for bulk update', {
         requestedIds: staffIds,
         foundIds: foundIds,
         notFoundIds: notFoundIds,
         tenantId: req.user?.tenant_id
       });
-      
+
       return res.status(404).json(
         StandardResponseBuilder.error(
-          'STAFF_NOT_FOUND', 
+          'STAFF_NOT_FOUND',
           `一部のスタッフが見つかりません: ${notFoundIds.join(', ')}`
         ).response
       );
@@ -278,8 +256,8 @@ router.patch('/staff/bulk', authMiddleware, requireStaffAdminPermission, async (
 
     // 権限チェック
     const managerRole = req.user?.role || 'staff';
-    const unauthorizedStaff = existingStaff.filter(staff => 
-      !canManageStaff(managerRole, staff.role) ||
+    const unauthorizedStaff = existingStaff.filter(staff =>
+      !canManageStaff(managerRole, (staff as any)?.role ?? 'staff') ||
       (updates.role && !canManageStaff(managerRole, updates.role))
     );
 
@@ -339,7 +317,7 @@ router.patch('/staff/bulk', authMiddleware, requireStaffAdminPermission, async (
 
   } catch (error) {
     logger.error('Staff bulk update error', error);
-    
+
     if (error instanceof z.ZodError) {
       return res.status(400).json(
         StandardResponseBuilder.error('VALIDATION_ERROR', 'リクエストデータが不正です', error.issues).response
@@ -359,7 +337,7 @@ router.patch('/staff/bulk', authMiddleware, requireStaffAdminPermission, async (
  * スタッフ一括削除（管理者用）
  * DELETE /admin/staff/bulk
  */
-router.delete('/staff/bulk', authMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
+router.delete('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const data = StaffBulkDeleteSchema.parse(req.body);
     const { staffIds, soft } = data;
@@ -390,10 +368,10 @@ router.delete('/staff/bulk', authMiddleware, requireStaffAdminPermission, async 
     if (existingStaff.length !== staffIds.length) {
       const foundIds = existingStaff.map(s => s.id);
       const notFoundIds = staffIds.filter(id => !foundIds.includes(id));
-      
+
       return res.status(404).json(
         StandardResponseBuilder.error(
-          'STAFF_NOT_FOUND', 
+          'STAFF_NOT_FOUND',
           `一部のスタッフが見つかりません: ${notFoundIds.join(', ')}`
         ).response
       );
@@ -453,7 +431,7 @@ router.delete('/staff/bulk', authMiddleware, requireStaffAdminPermission, async 
             id: s.id,
             email: s.email,
             name: s.name,
-            role: s.role
+            role: (s as any)?.role ?? null
           }))
         },
         status: 'COMPLETED'
@@ -477,7 +455,7 @@ router.delete('/staff/bulk', authMiddleware, requireStaffAdminPermission, async 
 
   } catch (error) {
     logger.error('Staff bulk delete error', error);
-    
+
     if (error instanceof z.ZodError) {
       return res.status(400).json(
         StandardResponseBuilder.error('VALIDATION_ERROR', 'リクエストデータが不正です', error.issues).response
@@ -497,7 +475,7 @@ router.delete('/staff/bulk', authMiddleware, requireStaffAdminPermission, async 
  * スタッフ詳細取得（管理者用）
  * GET /admin/staff/:id
  */
-router.get('/staff/:id', authMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
+router.get('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -521,7 +499,7 @@ router.get('/staff/:id', authMiddleware, requireStaffManagementPermission, async
         userId: req.user?.user_id,
         targetStaffId: id
       });
-      
+
       return res.status(404).json(
         StandardResponseBuilder.error('STAFF_NOT_FOUND', 'スタッフが見つかりません').response
       );
@@ -553,7 +531,7 @@ router.get('/staff/:id', authMiddleware, requireStaffManagementPermission, async
  * スタッフ作成（管理者用）
  * POST /admin/staff
  */
-router.post('/staff', authMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
+router.post('/staff', sessionAuthMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const data = StaffCreateSchema.parse(req.body);
 
@@ -572,7 +550,7 @@ router.post('/staff', authMiddleware, requireStaffAdminPermission, async (req: R
         targetRole: data.role,
         userId: req.user?.user_id
       });
-      
+
       return res.status(403).json(
         StandardResponseBuilder.error(
           'INSUFFICIENT_PERMISSIONS',
@@ -593,7 +571,7 @@ router.post('/staff', authMiddleware, requireStaffAdminPermission, async (req: R
         email: data.email,
         tenantId: req.user?.tenant_id
       });
-      
+
       return res.status(409).json(
         StandardResponseBuilder.error(
           'EMAIL_ALREADY_EXISTS',
@@ -648,13 +626,11 @@ router.post('/staff', authMiddleware, requireStaffAdminPermission, async (req: R
       email: createdStaff.email
     });
 
-    return res.status(201).json(
-      StandardResponseBuilder.success(res.status(201), response).response
-    );
+    return StandardResponseBuilder.success(res, response, {}, 201);
 
   } catch (error) {
     logger.error('Staff create error', error);
-    
+
     if (error instanceof z.ZodError) {
       return res.status(400).json(
         StandardResponseBuilder.error('VALIDATION_ERROR', 'リクエストデータが不正です', error.issues).response
@@ -674,7 +650,7 @@ router.post('/staff', authMiddleware, requireStaffAdminPermission, async (req: R
  * スタッフ更新（管理者用）
  * PATCH /admin/staff/:id
  */
-router.patch('/staff/:id', authMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
+router.patch('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const { id } = req.params;
     const data = StaffUpdateSchema.parse(req.body);
@@ -700,7 +676,7 @@ router.patch('/staff/:id', authMiddleware, requireStaffManagementPermission, asy
         userId: req.user?.user_id,
         targetStaffId: id
       });
-      
+
       return res.status(404).json(
         StandardResponseBuilder.error('STAFF_NOT_FOUND', 'スタッフが見つかりません').response
       );
@@ -708,14 +684,14 @@ router.patch('/staff/:id', authMiddleware, requireStaffManagementPermission, asy
 
     // 権限チェック（自分より上位レベルのスタッフは更新不可）
     const managerRole = req.user?.role || 'staff';
-    if (!canManageStaff(managerRole, existingStaff.role)) {
+    if (!canManageStaff(managerRole, (existingStaff as any)?.role ?? 'staff')) {
       logger.warn('Insufficient permission to update higher level staff', {
         managerRole,
         targetRole: existingStaff.role,
         userId: req.user?.user_id,
         targetStaffId: id
       });
-      
+
       return res.status(403).json(
         StandardResponseBuilder.error(
           'INSUFFICIENT_PERMISSIONS',
@@ -731,7 +707,7 @@ router.patch('/staff/:id', authMiddleware, requireStaffManagementPermission, asy
         targetRole: data.role,
         userId: req.user?.user_id
       });
-      
+
       return res.status(403).json(
         StandardResponseBuilder.error(
           'INSUFFICIENT_PERMISSIONS',
@@ -772,8 +748,8 @@ router.patch('/staff/:id', authMiddleware, requireStaffManagementPermission, asy
           updatedFields: Object.keys(data),
           previousData: {
             name: existingStaff.name,
-            role: existingStaff.role,
-            department: existingStaff.department,
+            role: (existingStaff as any)?.role ?? null,
+            department: (existingStaff as any)?.department ?? null,
             is_active: existingStaff.is_active
           },
           newData: updateData
@@ -794,7 +770,7 @@ router.patch('/staff/:id', authMiddleware, requireStaffManagementPermission, asy
 
   } catch (error) {
     logger.error('Staff update error', error);
-    
+
     if (error instanceof z.ZodError) {
       return res.status(400).json(
         StandardResponseBuilder.error('VALIDATION_ERROR', 'リクエストデータが不正です', error.issues).response
@@ -814,7 +790,7 @@ router.patch('/staff/:id', authMiddleware, requireStaffManagementPermission, asy
  * スタッフ削除（管理者用）
  * DELETE /admin/staff/:id
  */
-router.delete('/staff/:id', authMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
+router.delete('/staff/:id', sessionAuthMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const { id } = req.params;
     const { soft = 'true' } = req.query;
@@ -841,7 +817,7 @@ router.delete('/staff/:id', authMiddleware, requireStaffAdminPermission, async (
         userId: req.user?.user_id,
         targetStaffId: id
       });
-      
+
       return res.status(404).json(
         StandardResponseBuilder.error('STAFF_NOT_FOUND', 'スタッフが見つかりません').response
       );
@@ -853,7 +829,7 @@ router.delete('/staff/:id', authMiddleware, requireStaffAdminPermission, async (
         userId: req.user?.user_id,
         targetStaffId: id
       });
-      
+
       return res.status(400).json(
         StandardResponseBuilder.error('CANNOT_DELETE_SELF', '自分自身を削除することはできません').response
       );
@@ -868,7 +844,7 @@ router.delete('/staff/:id', authMiddleware, requireStaffAdminPermission, async (
         userId: req.user?.user_id,
         targetStaffId: id
       });
-      
+
       return res.status(403).json(
         StandardResponseBuilder.error(
           'INSUFFICIENT_PERMISSIONS',
@@ -937,7 +913,7 @@ router.delete('/staff/:id', authMiddleware, requireStaffAdminPermission, async (
 
   } catch (error) {
     logger.error('Staff delete error', error);
-    
+
     return res.status(500).json(
       StandardResponseBuilder.error(
         'STAFF_DELETE_ERROR',

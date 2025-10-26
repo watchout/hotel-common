@@ -168,7 +168,7 @@ router.get('/:billingId', authMiddleware, async (req: Request, res: Response) =>
       breakdown: {
         roomCharges: billing.roomCharges,
         serviceCharges: billing.serviceCharges,
-        orderCharges: billing.session.orders.reduce((total, order) => total + Number(order.total), 0),
+        orderCharges: billing.session.orders.reduce((total: number, order: any) => total + Number(order.total), 0),
         taxes: billing.taxes,
         discounts: billing.discounts,
         subtotal: Number(billing.subtotalAmount),
@@ -228,7 +228,7 @@ router.get('/by-session/:sessionId', authMiddleware, async (req: Request, res: R
       orderBy: { createdAt: 'desc' }
     });
 
-    const formattedBillings = billings.map(billing => ({
+    const formattedBillings = billings.map((billing: any) => ({
       id: billing.id,
       billingNumber: billing.billingNumber,
       status: billing.status,

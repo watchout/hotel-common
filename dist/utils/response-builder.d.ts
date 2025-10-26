@@ -25,7 +25,7 @@ export declare class StandardResponseBuilder {
     /**
      * 成功レスポンスを作成
      */
-    static success(res: Response, data?: any, meta?: any): Response;
+    static success(res: Response, data?: any, meta?: any, statusCode?: number): Response;
     /**
      * エラーレスポンスを作成
      */

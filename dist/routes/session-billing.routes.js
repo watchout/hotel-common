@@ -193,7 +193,7 @@ router.get('/by-session/:sessionId', middleware_1.authMiddleware, async (req, re
             },
             orderBy: { createdAt: 'desc' }
         });
-        const formattedBillings = billings.map(billing => ({
+        const formattedBillings = billings.map((billing) => ({
             id: billing.id,
             billingNumber: billing.billingNumber,
             status: billing.status,

@@ -439,7 +439,7 @@ router.get('/payments', authMiddleware, async (req: Request, res: Response) => {
       payment_method: payment.paymentMethod,
       status: payment.status.toLowerCase(),
       processed_at: payment.processedAt,
-      payment_reference: (payment as any).paymentReference ?? payment.reference ?? null
+      payment_reference: (payment as any)?.paymentReference ?? (payment as any)?.reference ?? null
     }))
 
     const pagination = StandardResponseBuilder.createPagination(page, limit, totalCount)

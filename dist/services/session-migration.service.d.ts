@@ -24,14 +24,14 @@ export declare class SessionMigrationService {
      */
     static getSessionStatistics(tenantId: string): Promise<{
         sessions: {
-            total: number;
-            active: number;
+            total: any;
+            active: any;
             completed: number;
         };
         orders: {
-            total: number;
-            mapped: number;
-            unmapped: number;
+            total: any;
+            mapped: any;
+            unmapped: any;
             mappingRate: string;
         };
     }>;
@@ -41,9 +41,9 @@ export declare class SessionMigrationService {
     static checkBackwardCompatibility(tenantId: string): Promise<{
         isCompatible: boolean;
         issues: {
-            ordersWithoutSession: number;
-            reservationsWithoutSession: number;
-            activeReservationsNeedingSessions: number;
+            ordersWithoutSession: any;
+            reservationsWithoutSession: any;
+            activeReservationsNeedingSessions: any;
         };
         recommendations: string[];
     }>;

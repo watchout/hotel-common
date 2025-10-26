@@ -40,6 +40,21 @@ export declare class HotelRedisClient {
      */
     deleteSession(tenantId: string, userId: string): Promise<void>;
     /**
+     * セッションIDでセッション取得（Cookie認証用）
+     * SSOT準拠: hotel:session:{sessionId}
+     */
+    getSessionById(sessionId: string): Promise<SessionInfo | null>;
+    /**
+     * セッションIDでセッション保存（Cookie認証用）
+     * SSOT準拠: hotel:session:{sessionId}
+     */
+    saveSessionById(sessionId: string, sessionInfo: any, ttlSeconds?: number): Promise<void>;
+    /**
+     * セッションIDでセッション削除（Cookie認証用）
+     * SSOT準拠: hotel:session:{sessionId}
+     */
+    deleteSessionById(sessionId: string): Promise<number>;
+    /**
      * セッション更新（最終アクティビティ時間）
      */
     updateSessionActivity(tenantId: string, userId: string): Promise<void>;

@@ -5,7 +5,7 @@ class StandardResponseBuilder {
     /**
      * 成功レスポンスを作成
      */
-    static success(res, data = {}, meta = {}) {
+    static success(res, data = {}, meta = {}, statusCode = 200) {
         const response = {
             success: true,
             data,
@@ -13,7 +13,7 @@ class StandardResponseBuilder {
             timestamp: new Date().toISOString(),
             request_id: res.locals.requestId || this.generateRequestId()
         };
-        return res.status(200).json(response);
+        return res.status(statusCode).json(response);
     }
     /**
      * エラーレスポンスを作成

@@ -162,15 +162,15 @@ router.get('/api/v1/admin/dashboard/stats', verifyAdminAuth, async (req: Request
         end_date: now
       },
       orders: {
-        by_status: orderStats.reduce((acc, stat) => {
+        by_status: orderStats.reduce((acc: Record<string, { count: number; total_amount: number }>, stat: any) => {
           acc[stat.status] = {
             count: stat._count,
             total_amount: stat._sum.total || 0
           };
           return acc;
         }, {} as Record<string, { count: number; total_amount: number }>),
-        total_count: orderStats.reduce((sum, stat) => sum + stat._count, 0),
-        total_revenue: orderStats.reduce((sum, stat) => sum + (stat._sum.total || 0), 0)
+        total_count: orderStats.reduce((sum: number, stat: any) => sum + stat._count, 0),
+        total_revenue: orderStats.reduce((sum: number, stat: any) => sum + (stat._sum.total || 0), 0)
       },
       revenue: {
         total: revenueStats._sum.total || 0,
@@ -178,11 +178,11 @@ router.get('/api/v1/admin/dashboard/stats', verifyAdminAuth, async (req: Request
         order_count: revenueStats._count
       },
       campaigns: {
-        by_status: campaignStats.reduce((acc, stat) => {
+        by_status: campaignStats.reduce((acc: Record<string, number>, stat: any) => {
           acc[stat.status] = stat._count || 0;
           return acc;
         }, {} as Record<string, number>),
-        total: campaignStats.reduce((sum, stat) => sum + (stat._count || 0), 0)
+        total: campaignStats.reduce((sum: number, stat: any) => sum + (stat._count || 0), 0)
       },
       timestamp: new Date()
     };
@@ -395,7 +395,7 @@ router.get('/api/v1/admin/orders', verifyAdminAuth, async (req: Request, res: Re
 
     const totalPages = Math.ceil(totalCount / limitNum);
 
-    const formattedOrders = orders.map(order => ({
+    const formattedOrders = orders.map((order: any) => ({
       id: order.id,
       tenantId: order.tenantId,
       roomId: order.roomId,
@@ -477,14 +477,14 @@ router.get('/api/v1/admin/rankings', verifyAdminAuth, async (req: Request, res: 
 
     const rankings = {
       period: `${periodDays} days`,
-      popular_items: popularItems.map((item, index) => ({
+      popular_items: popularItems.map((item: any, index: number) => ({
         rank: index + 1,
         name: item.name,
         order_count: item._count || 0,
         total_quantity: item._sum?.quantity || 0,
         total_revenue: item._sum?.price || 0
       })),
-      top_rooms: roomRanking.map((room, index) => ({
+      top_rooms: roomRanking.map((room: any, index: number) => ({
         rank: index + 1,
         room_id: room.roomId,
         order_count: room._count || 0,

@@ -38,14 +38,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HotelIntegrationServer = void 0;
-const express_1 = __importDefault(require("express"));
-const dotenv_1 = require("dotenv");
-const prisma_1 = require("../database/prisma");
 const cors_1 = __importDefault(require("cors"));
-const hotel_member_1 = require("../integrations/hotel-member");
-const api_endpoints_1 = __importDefault(require("../integrations/hotel-member/api-endpoints"));
-const api_endpoints_2 = __importDefault(require("../integrations/campaigns/api-endpoints"));
+const dotenv_1 = require("dotenv");
+const express_1 = __importDefault(require("express"));
+const session_auth_middleware_1 = require("../auth/session-auth.middleware");
+const prisma_1 = require("../database/prisma");
 const app_launcher_1 = require("../integrations/app-launcher");
+const api_endpoints_1 = __importDefault(require("../integrations/campaigns/api-endpoints"));
+const hotel_member_1 = require("../integrations/hotel-member");
+const api_endpoints_2 = __importDefault(require("../integrations/hotel-member/api-endpoints"));
 // システム別APIルーター
 const systems_1 = require("../routes/systems");
 // セッション管理APIルーター
@@ -81,12 +82,14 @@ class HotelIntegrationServer {
      * ミドルウェア設定
      */
     setupMiddleware() {
+        // プロキシ信頼設定（本番環境でのSecure Cookie用）
+        this.app.set('trust proxy', 1);
         // CORS設定
         this.app.use((0, cors_1.default)({
             origin: [
                 'http://localhost:3100', // hotel-saas
                 'http://localhost:3200', // hotel-member frontend
-                'http://localhost:8080', // hotel-member backend  
+                'http://localhost:8080', // hotel-member backend
                 'http://localhost:3300', // hotel-pms
                 'http://localhost:3301' // hotel-pms electron
             ],
@@ -94,6 +97,32 @@ class HotelIntegrationServer {
             allowedHeaders: ['Content-Type', 'Authorization'],
             credentials: true
         }));
+        // === Phase G1: グローバル早期401捕捉 ===
+        this.app.use((req, res, next) => {
+            const origJson = res.json.bind(res);
+            res.json = (body) => {
+                const code = res.statusCode;
+                if (code === 401 && process.env.DEBUG_GLOBAL_401 === '1') {
+                    console.error('[GLOBAL-401]', {
+                        path: req.originalUrl,
+                        hasAuthHeader: !!req.headers.authorization,
+                        cookieHead: (req.headers.cookie || '').slice(0, 120)
+                    });
+                    console.error('[GLOBAL-401] stack note: 旧authMiddlewareがどこかで発火中（次段で特定）');
+                }
+                return origJson(body);
+            };
+            next();
+        });
+        // === END Phase G1 ===
+        // === 決定打の切り分け：デバッグヘッダ付与 ===
+        this.app.use((req, res, next) => {
+            if (process.env.DEBUG_RESPONSE_HEADER === '1') {
+                res.set('X-HC-Debug', 'hotel-common');
+            }
+            next();
+        });
+        // === END 決定打 ===
         // JSON解析
         this.app.use(express_1.default.json({ limit: '10mb' }));
         this.app.use(express_1.default.urlencoded({ extended: true }));
@@ -260,31 +289,59 @@ class HotelIntegrationServer {
                 });
             }
         });
+        // === 【最優先】認証API（認証チェック不要） ===
+        this.app.use('/api/v1/auth', systems_1.authRouter);
+        // === 【最上段】Cookie認証保護ルート（必ず無印ルーターより前に配置） ===
+        // 操作ログAPIエンドポイント（Cookie+Redis認証）
+        this.app.use('/api/v1/logs', session_auth_middleware_1.sessionAuthMiddleware, systems_1.operationLogsRouter);
+        // フロントデスク客室管理APIエンドポイント（Cookie+Redis認証）
+        this.app.use('/api/v1/admin/front-desk', session_auth_middleware_1.sessionAuthMiddleware, systems_1.frontDeskRoomsRouter);
+        // スタッフ管理APIエンドポイント（Cookie+Redis認証）
+        this.app.use('/api/v1/admin/staff', session_auth_middleware_1.sessionAuthMiddleware, systems_1.adminStaffRouter);
+        // === END Cookie認証保護ルート ===
         // hotel-member統合APIエンドポイント
-        this.app.use('/api/hotel-member', api_endpoints_1.default);
-        // キャンペーン統合APIエンドポイント
-        this.app.use('/api/v1', api_endpoints_2.default);
+        this.app.use('/api/hotel-member', api_endpoints_2.default);
+        // === 共通システムAPI（明示的プレフィックス化） ===
+        // ページ管理APIエンドポイント
+        this.app.use('/api/v1/pages', systems_1.pageRouter);
+        // 客室ランク管理APIエンドポイント
+        this.app.use('/api/v1/room-grades', systems_1.roomGradesRouter);
         // Google Playアプリ選択機能APIエンドポイント
         this.app.use('/api', app_launcher_1.appLauncherApiRouter);
-        // === 共通システムAPI ===
-        // ページ管理APIエンドポイント
-        this.app.use('', systems_1.pageRouter);
-        // 認証APIエンドポイント
-        this.app.use('', systems_1.authRouter);
-        // 客室ランク管理APIエンドポイント
-        this.app.use('', systems_1.roomGradesRouter);
-        // 操作ログAPIエンドポイント
-        this.app.use('/api/v1/logs', systems_1.operationLogsRouter);
+        // キャンペーン統合APIエンドポイント（広域パス・最後に配置）
+        this.app.use('/api/v1', api_endpoints_1.default);
         // Room Memo APIエンドポイント（管理系）
-        this.app.use('/api/v1/admin', systems_1.roomMemosRouter);
+        this.app.use('/api/v1/admin/memos', systems_1.roomMemosRouter);
         // 会計APIエンドポイント
         this.app.use('/api/v1/accounting', systems_1.accountingRouter);
-        // フロントデスク管理APIエンドポイント
-        this.app.use('/api/v1/admin/front-desk', systems_1.frontDeskRoomsRouter);
-        this.app.use('/api/v1/admin/front-desk', systems_1.frontDeskAccountingRouter);
-        this.app.use('/api/v1/admin/front-desk', systems_1.frontDeskCheckinRouter);
+        // フロントデスク管理APIエンドポイント（その他）
+        this.app.use('/api/v1/admin/front-desk/accounting', systems_1.frontDeskAccountingRouter);
+        this.app.use('/api/v1/admin/front-desk/checkin', systems_1.frontDeskCheckinRouter);
         // 管理者操作ログAPIエンドポイント
-        this.app.use('/api/v1/admin', systems_1.adminOperationLogsRouter);
+        this.app.use('/api/v1/admin/operation-logs', systems_1.adminOperationLogsRouter);
+        // === ROUTE-DUMP for debugging (PR1) ===
+        const routeList = this.app._router?.stack?.flatMap((layer) => {
+            if (layer.route) {
+                const r = layer.route;
+                return r.stack.map((s) => `${Object.keys(r.methods)[0].toUpperCase()} ${r.path}  mid:${s.name}`);
+            }
+            if (layer.name === 'router' && layer.handle?.stack) {
+                const base = layer.regexp?.toString() || '';
+                return layer.handle.stack.map((s) => {
+                    const method = s.route ? Object.keys(s.route.methods)[0].toUpperCase() : 'N/A';
+                    const path = s.route ? s.route.path : '(no-route)';
+                    const middlewares = s.route?.stack?.map((m) => m.name).join(',') || 'none';
+                    return `ROUTER ${base} => ${method} ${path} mid:[${middlewares}]`;
+                });
+            }
+            return [];
+        }) || [];
+        if (process.env.DEBUG_ROUTE_DUMP === '1') {
+            console.log('[ROUTE-DUMP] Total routes:', routeList.length);
+            console.log('[ROUTE-DUMP] /operations routes:');
+            routeList.filter((r) => r.includes('/operations')).forEach((r) => console.log('  ', r));
+        }
+        // === END ROUTE-DUMP ===
         // === SaaSシステムAPI ===
         // 管理画面統計APIエンドポイント
         this.app.use('', systems_1.adminDashboardRouter);
@@ -525,7 +582,7 @@ class HotelIntegrationServer {
             const healthEndpoints = {
                 'hotel-saas': '/api/health', // Nuxt.jsアプリ用
                 'hotel-member-frontend': '/health', // 標準
-                'hotel-member-backend': '/health', // 標準  
+                'hotel-member-backend': '/health', // 標準
                 'hotel-pms': '/health' // 標準
             };
             const endpoint = healthEndpoints[systemName] || '/health';

@@ -113,13 +113,59 @@ class PrismaAdapter {
      * order -> order のマッピング
      */
     get order() {
-        return this.prisma.order;
+        // 互換レイヤー: 新クライアントでは複数形/snake_caseに寄せる
+        // @ts-ignore
+        return this.prisma.orders || this.prisma.order;
+    }
+    // Detector互換: orders (snake_case plural)
+    get orders() {
+        // @ts-ignore - generated client naming
+        return this.prisma.orders || this.prisma.order;
     }
     /**
      * orderItem -> orderItem のマッピング
      */
     get orderItem() {
-        return this.prisma.orderItem;
+        // @ts-ignore
+        return this.prisma.order_items || this.prisma.orderItem;
+    }
+    // Detector互換: order_items (snake_case plural)
+    get order_items() {
+        // @ts-ignore
+        return this.prisma.order_items || this.prisma.orderItem;
+    }
+    // Permissions / Roles family (detector expects snake_case plural)
+    get permissions() {
+        // @ts-ignore
+        return this.prisma.permissions;
+    }
+    get role_permissions() {
+        // @ts-ignore
+        return this.prisma.role_permissions;
+    }
+    get role_templates() {
+        // @ts-ignore
+        return this.prisma.role_templates;
+    }
+    get roles() {
+        // @ts-ignore
+        return this.prisma.roles;
+    }
+    get security_logs() {
+        // @ts-ignore
+        return this.prisma.security_logs;
+    }
+    get staff_invitations() {
+        // @ts-ignore
+        return this.prisma.staff_invitations;
+    }
+    get staff_tenant_memberships() {
+        // @ts-ignore
+        return this.prisma.staff_tenant_memberships;
+    }
+    get unified_media() {
+        // @ts-ignore
+        return this.prisma.unified_media;
     }
     /**
      * schemaVersion -> schema_version のマッピング
@@ -221,16 +267,20 @@ class PrismaAdapter {
      * roomMemo -> room_memos のマッピング
      */
     get roomMemo() {
-        return this.prisma.roomMemo;
+        // @ts-ignore
+        return this.prisma.room_memos || this.prisma.roomMemo;
     }
     get roomMemoComment() {
-        return this.prisma.roomMemoComment;
+        // @ts-ignore
+        return this.prisma.room_memo_comments || this.prisma.roomMemoComment;
     }
     get roomMemoStatusLog() {
-        return this.prisma.roomMemoStatusLog;
+        // @ts-ignore
+        return this.prisma.room_memo_status_logs || this.prisma.roomMemoStatusLog;
     }
     get roomMemoRead() {
-        return this.prisma.roomMemoRead;
+        // @ts-ignore
+        return this.prisma.room_memo_reads || this.prisma.roomMemoRead;
     }
     /**
      * checkinSession -> checkin_sessions のマッピング
@@ -335,8 +385,41 @@ class TransactionAdapter {
     get order() {
         return this.tx.order;
     }
+    // Detector互換: orders
+    get orders() {
+        return this.tx.orders || this.tx.order;
+    }
     get orderItem() {
         return this.tx.orderItem;
+    }
+    // Detector互換: order_items
+    get order_items() {
+        return this.tx.order_items || this.tx.orderItem;
+    }
+    // Permissions / Roles family
+    get permissions() {
+        return this.tx.permissions;
+    }
+    get role_permissions() {
+        return this.tx.role_permissions;
+    }
+    get role_templates() {
+        return this.tx.role_templates;
+    }
+    get roles() {
+        return this.tx.roles;
+    }
+    get security_logs() {
+        return this.tx.security_logs;
+    }
+    get staff_invitations() {
+        return this.tx.staff_invitations;
+    }
+    get staff_tenant_memberships() {
+        return this.tx.staff_tenant_memberships;
+    }
+    get unified_media() {
+        return this.tx.unified_media;
     }
     get schemaVersion() {
         return this.tx.schema_version;

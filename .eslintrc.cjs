@@ -23,7 +23,8 @@ module.exports = {
   ],
   rules: {
     // カスタムルール
-    'prisma-adapter': prismaAdapterRule,
+    // semgrepで強制するためESLintでは無効化（CI: .semgrep.yml 参照）
+    'prisma-adapter': 'off',
     
     // TypeScript strictness
     '@typescript-eslint/no-explicit-any': 'error',

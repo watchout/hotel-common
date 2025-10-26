@@ -5,7 +5,7 @@
  * Prismaスキーマで@@mapディレクティブを使用した後、コードの互換性を維持するための
  * アダプターレイヤーです。
  */
-import { PrismaClient } from '../generated/prisma';
+import { PrismaClient } from '@prisma/client';
 /**
  * Prismaクライアントのラッパークラス
  * 古い命名規則（キャメルケース・単数形）でのアクセスを、
@@ -17,150 +17,160 @@ export declare class PrismaAdapter {
     /**
      * tenant -> tenants のマッピング
      */
-    get tenant(): import("../generated/prisma").Prisma.TenantDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get tenant(): import(".prisma/client").Prisma.TenantDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * staff -> staff のマッピング
      */
-    get staff(): import("../generated/prisma").Prisma.staffDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get staff(): import(".prisma/client").Prisma.staffDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * responseNode -> response_nodes のマッピング
      */
-    get responseNode(): import("../generated/prisma").Prisma.response_nodesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get responseNode(): import(".prisma/client").Prisma.response_nodesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * responseTree -> response_trees のマッピング
      */
-    get responseTree(): import("../generated/prisma").Prisma.response_treesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get responseTree(): import(".prisma/client").Prisma.response_treesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * responseTreeVersion -> response_tree_versions のマッピング
      */
-    get responseTreeVersion(): import("../generated/prisma").Prisma.response_tree_versionsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get responseTreeVersion(): import(".prisma/client").Prisma.response_tree_versionsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * responseNodeTranslation -> response_node_translations のマッピング
      */
-    get responseNodeTranslation(): import("../generated/prisma").Prisma.response_node_translationsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get responseNodeTranslation(): import(".prisma/client").Prisma.response_node_translationsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * campaign -> campaigns のマッピング
      */
-    get campaign(): import("../generated/prisma").Prisma.campaignsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get campaign(): import(".prisma/client").Prisma.campaignsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * campaignCategory -> campaign_categories のマッピング
      */
-    get campaignCategory(): import("../generated/prisma").Prisma.campaign_categoriesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get campaignCategory(): import(".prisma/client").Prisma.campaign_categoriesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * campaignCategoryRelation -> campaign_category_relations のマッピング
      */
-    get campaignCategoryRelation(): import("../generated/prisma").Prisma.campaign_category_relationsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get campaignCategoryRelation(): import(".prisma/client").Prisma.campaign_category_relationsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * campaignItem -> campaign_items のマッピング
      */
-    get campaignItem(): import("../generated/prisma").Prisma.campaign_itemsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get campaignItem(): import(".prisma/client").Prisma.campaign_itemsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * campaignTranslation -> campaign_translations のマッピング
      */
-    get campaignTranslation(): import("../generated/prisma").Prisma.campaign_translationsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get campaignTranslation(): import(".prisma/client").Prisma.campaign_translationsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * campaignUsageLog -> campaign_usage_logs のマッピング
      */
-    get campaignUsageLog(): import("../generated/prisma").Prisma.campaign_usage_logsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get campaignUsageLog(): import(".prisma/client").Prisma.campaign_usage_logsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * deviceVideoCache -> device_video_caches のマッピング
      */
-    get deviceVideoCache(): import("../generated/prisma").Prisma.device_video_cachesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get deviceVideoCache(): import(".prisma/client").Prisma.device_video_cachesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * systemEvent -> system_event のマッピング
      */
-    get systemEvent(): import("../generated/prisma").Prisma.system_eventDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get systemEvent(): import(".prisma/client").Prisma.system_eventDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * deviceRoom -> device_rooms のマッピング
      */
-    get deviceRoom(): import("../generated/prisma").Prisma.device_roomsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get deviceRoom(): import(".prisma/client").Prisma.device_roomsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * order -> order のマッピング
      */
-    get order(): import("../generated/prisma").Prisma.OrderDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get order(): any;
+    get orders(): any;
     /**
      * orderItem -> orderItem のマッピング
      */
-    get orderItem(): import("../generated/prisma").Prisma.OrderItemDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get orderItem(): any;
+    get order_items(): any;
+    get permissions(): any;
+    get role_permissions(): any;
+    get role_templates(): any;
+    get roles(): any;
+    get security_logs(): any;
+    get staff_invitations(): any;
+    get staff_tenant_memberships(): any;
+    get unified_media(): any;
     /**
      * schemaVersion -> schema_version のマッピング
      */
-    get schemaVersion(): import("../generated/prisma").Prisma.schema_versionDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get schemaVersion(): import(".prisma/client").Prisma.schema_versionDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * systemPlanRestrictions -> systemPlanRestrictions のマッピング
      */
-    get systemPlanRestrictions(): import("../generated/prisma").Prisma.SystemPlanRestrictionsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get systemPlanRestrictions(): import(".prisma/client").Prisma.SystemPlanRestrictionsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * tenantSystemPlan -> tenantSystemPlan のマッピング
      */
-    get tenantSystemPlan(): import("../generated/prisma").Prisma.TenantSystemPlanDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get tenantSystemPlan(): import(".prisma/client").Prisma.TenantSystemPlanDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * page -> pages のマッピング
      */
-    get page(): import("../generated/prisma").Prisma.pagesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get page(): import(".prisma/client").Prisma.pagesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * pageHistory -> page_histories のマッピング
      */
-    get pageHistory(): import("../generated/prisma").Prisma.page_historiesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get pageHistory(): import(".prisma/client").Prisma.page_historiesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * notificationTemplate -> notification_templates のマッピング
      */
-    get notificationTemplate(): import("../generated/prisma").Prisma.notification_templatesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get notificationTemplate(): import(".prisma/client").Prisma.notification_templatesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * tenantAccessLog -> tenant_access_logs のマッピング
      */
-    get tenantAccessLog(): import("../generated/prisma").Prisma.tenant_access_logsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get tenantAccessLog(): import(".prisma/client").Prisma.tenant_access_logsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * responseTreeSession -> response_tree_sessions のマッピング
      */
-    get responseTreeSession(): import("../generated/prisma").Prisma.response_tree_sessionsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get responseTreeSession(): import(".prisma/client").Prisma.response_tree_sessionsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * responseTreeMobileLink -> response_tree_mobile_links のマッピング
      */
-    get responseTreeMobileLink(): import("../generated/prisma").Prisma.response_tree_mobile_linksDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get responseTreeMobileLink(): import(".prisma/client").Prisma.response_tree_mobile_linksDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * responseTreeHistory -> response_tree_history のマッピング
      */
-    get responseTreeHistory(): import("../generated/prisma").Prisma.response_tree_historyDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get responseTreeHistory(): import(".prisma/client").Prisma.response_tree_historyDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * room -> rooms のマッピング
      */
-    get room(): import("../generated/prisma").Prisma.RoomDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get room(): import(".prisma/client").Prisma.RoomDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * room_grades -> room_grades のマッピング
      */
-    get room_grades(): import("../generated/prisma").Prisma.room_gradesDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get room_grades(): import(".prisma/client").Prisma.room_gradesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * invoice -> invoices のマッピング
      */
-    get invoice(): import("../generated/prisma").Prisma.InvoiceDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get invoice(): import(".prisma/client").Prisma.InvoiceDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * payment -> payments のマッピング
      */
-    get payment(): import("../generated/prisma").Prisma.PaymentDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get payment(): import(".prisma/client").Prisma.PaymentDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * transaction -> transactions のマッピング
      */
-    get transaction(): import("../generated/prisma").Prisma.TransactionDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get transaction(): import(".prisma/client").Prisma.TransactionDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
     /**
      * reservation -> reservations のマッピング
      */
-    get reservation(): import("../generated/prisma").Prisma.reservationsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get reservation(): any;
     /**
      * roomMemo -> room_memos のマッピング
      */
-    get roomMemo(): import("../generated/prisma").Prisma.RoomMemoDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get roomMemoComment(): import("../generated/prisma").Prisma.RoomMemoCommentDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get roomMemoStatusLog(): import("../generated/prisma").Prisma.RoomMemoStatusLogDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
-    get roomMemoRead(): import("../generated/prisma").Prisma.RoomMemoReadDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get roomMemo(): any;
+    get roomMemoComment(): any;
+    get roomMemoStatusLog(): any;
+    get roomMemoRead(): any;
     /**
      * checkinSession -> checkin_sessions のマッピング
      */
-    get checkinSession(): import("../generated/prisma").Prisma.checkin_sessionsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get checkinSession(): any;
     /**
      * sessionBilling -> session_billings のマッピング
      */
-    get sessionBilling(): import("../generated/prisma").Prisma.session_billingsDelegate<import("../generated/prisma/runtime/library").DefaultArgs>;
+    get sessionBilling(): any;
     /**
      * トランザクション実行のラッパー
      * トランザクション内でも同じマッピングを適用します
@@ -197,7 +207,17 @@ declare class TransactionAdapter {
     get systemEvent(): any;
     get deviceRoom(): any;
     get order(): any;
+    get orders(): any;
     get orderItem(): any;
+    get order_items(): any;
+    get permissions(): any;
+    get role_permissions(): any;
+    get role_templates(): any;
+    get roles(): any;
+    get security_logs(): any;
+    get staff_invitations(): any;
+    get staff_tenant_memberships(): any;
+    get unified_media(): any;
     get schemaVersion(): any;
     get systemPlanRestrictions(): any;
     get tenantSystemPlan(): any;

@@ -92,7 +92,7 @@ router.get('/room-memos', middleware_1.authMiddleware, async (req, res) => {
         ]);
         const pagination = api_response_standards_1.StandardResponseBuilder.createPagination(page, limit, total);
         // 返却フォーマット（最小）：仕様例に近づける
-        const result = memos.map(m => ({
+        const result = memos.map((m) => ({
             id: m.id,
             room_id: m.room_id,
             room_number: room?.roomNumber || null, // 客室番号も含める

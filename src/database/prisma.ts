@@ -1,4 +1,4 @@
-import { PrismaClient } from '../generated/prisma';
+import { PrismaClient } from '@prisma/client';
 import { createPrismaAdapter, PrismaAdapter } from './prisma-adapter';
 import { setupSoftDeleteMiddleware } from './soft-delete-middleware';
 
@@ -104,3 +104,6 @@ export async function withTransaction<T>(
 ): Promise<T> {
   return hotelDb.transaction(fn, options);
 }
+
+// 互換のためのエクスポート（既存コードの import { prisma } from '../../database/prisma' 対応）
+export const prisma = hotelDb.getAdapter();

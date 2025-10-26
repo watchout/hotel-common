@@ -63,36 +63,7 @@ export declare class HotelUnifiedApiClient {
         customerId?: string;
         limit?: number;
         offset?: number;
-    }): Promise<{
-        is_deleted: boolean;
-        status: string;
-        id: string;
-        tenant_id: string;
-        checkin_date: Date;
-        checkout_date: Date;
-        room_type: string;
-        room_number: string | null;
-        total_amount: import("../generated/prisma/runtime/library").Decimal;
-        origin: string;
-        special_requests: string | null;
-        confirmation_number: string;
-        created_at: Date;
-        updated_at: Date;
-        updated_by_system: string;
-        guest_name: string;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        origin_system: string;
-        customer_id: string | null;
-        guest_phone: string | null;
-        guest_email: string | null;
-        adult_count: number;
-        child_count: number;
-        deposit_amount: import("../generated/prisma/runtime/library").Decimal;
-        ota_id: string | null;
-        internal_notes: string | null;
-        synced_at: Date;
-    }[]>;
+    }): Promise<any>;
     createReservation(data: {
         customer_id?: string;
         guest_name: string;
