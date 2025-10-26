@@ -1,5 +1,4 @@
 import path from 'path'
-import { fileURLToPath } from 'url'
 
 import cors from 'cors'
 import express from 'express'
@@ -62,7 +61,7 @@ app.use('*', (req, res) => {
 })
 
 // エラーハンドラー
-app.use((error: any, req: any, res: any, next: any) => {
+app.use((error: any, req: any, res: any, _next: any) => {
   logger.error('Admin Server Error:', error)
   
   res.status(500).json({

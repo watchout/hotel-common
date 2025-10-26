@@ -1,12 +1,12 @@
 #!/usr/bin/env ts-node
 /**
  * ルーティング順序検証スクリプト（CI用）
- * 
- * 目的: 
+ *
+ * 目的:
  * - Cookie認証保護ルート (/api/v1/logs, /api/v1/admin/*) が最上段に配置されていることを確認
  * - 無印ルーター (/?, /api など) が後方に配置されていることを確認
  * - 順序が崩れた変更でCIをFailさせる
- * 
+ *
  * 期待順序:
  * 1. /api/v1/logs (Cookie認証)
  * 2. /api/v1/admin/front-desk (Cookie認証)
@@ -48,16 +48,16 @@ const WILDCARD_PATTERNS = [
 function extractRoutes(content: string): RouteDefinition[] {
   const lines = content.split('\n');
   const routes: RouteDefinition[] = [];
-  
+
   lines.forEach((line, index) => {
     const appUseMatch = line.match(/this\.app\.use\(['"]([^'"]+)['"]/);
     if (appUseMatch) {
       const routePath = appUseMatch[1];
       const hasCookieAuth = line.includes('sessionAuthMiddleware');
-      const isWildcard = WILDCARD_PATTERNS.some(pattern => 
+      const isWildcard = WILDCARD_PATTERNS.some(pattern =>
         routePath.includes(pattern) || routePath === '' || routePath === '/'
       );
-      
+
       routes.push({
         line: index + 1,
         path: routePath,
@@ -66,7 +66,7 @@ function extractRoutes(content: string): RouteDefinition[] {
       });
     }
   });
-  
+
   return routes;
 }
 
@@ -75,43 +75,43 @@ function extractRoutes(content: string): RouteDefinition[] {
  */
 function validateRouteOrder(routes: RouteDefinition[]): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
-  
+
   // 優先ルートのインデックスを取得
   const priorityIndices = PRIORITY_ROUTES.map(priorityPath => {
     const index = routes.findIndex(r => r.path === priorityPath);
     return { path: priorityPath, index };
   });
-  
+
   // 無印ルーターのインデックスを取得
   const wildcardIndices = routes
     .map((r, i) => ({ route: r, index: i }))
     .filter(({ route }) => route.isWildcard)
     .map(({ index }) => index);
-  
+
   // 検証1: 優先ルートが存在するか
   priorityIndices.forEach(({ path, index }) => {
     if (index === -1) {
       errors.push(`❌ 優先ルート "${path}" が見つかりません`);
     }
   });
-  
+
   // 検証2: 優先ルートがCookie認証を持つか
   priorityIndices.forEach(({ path, index }) => {
     if (index !== -1 && !routes[index].hasCookieAuth) {
       errors.push(`❌ 優先ルート "${path}" (line ${routes[index].line}) にsessionAuthMiddlewareが適用されていません`);
     }
   });
-  
+
   // 検証3: 優先ルートが無印ルーターより前にあるか
   const maxPriorityIndex = Math.max(...priorityIndices.filter(p => p.index !== -1).map(p => p.index));
   const minWildcardIndex = wildcardIndices.length > 0 ? Math.min(...wildcardIndices) : Infinity;
-  
+
   if (maxPriorityIndex > minWildcardIndex) {
     errors.push(`❌ ルーティング順序違反: 優先ルートが無印ルーターより後に配置されています`);
     errors.push(`   優先ルート最後: line ${routes[maxPriorityIndex].line} (${routes[maxPriorityIndex].path})`);
     errors.push(`   無印ルート最初: line ${routes[minWildcardIndex].line} (${routes[minWildcardIndex].path})`);
   }
-  
+
   return {
     valid: errors.length === 0,
     errors
@@ -124,15 +124,15 @@ function validateRouteOrder(routes: RouteDefinition[]): { valid: boolean; errors
 function generateReport(routes: RouteDefinition[], validation: { valid: boolean; errors: string[] }) {
   console.log('\n🔍 ルーティング順序検証');
   console.log('==================================================\n');
-  
+
   console.log('📋 検出されたルート順序:\n');
   routes.forEach(route => {
     const marker = route.isWildcard ? '🌐' : route.hasCookieAuth ? '🍪' : '🔓';
     console.log(`${marker} line ${route.line.toString().padStart(3)}: ${route.path}`);
   });
-  
+
   console.log('\n==================================================\n');
-  
+
   if (validation.valid) {
     console.log('✅ ルーティング順序: OK\n');
     console.log('   - Cookie認証保護ルートが最上段に配置');
@@ -147,7 +147,7 @@ function generateReport(routes: RouteDefinition[], validation: { valid: boolean;
     console.log('   4. その他の明示的パス');
     console.log('   5. 無印ルーター (/?, /api など) - 最後尾\n');
   }
-  
+
   console.log('==================================================\n');
 }
 
@@ -159,18 +159,18 @@ function main() {
     console.error(`❌ ファイルが見つかりません: ${INTEGRATION_SERVER_PATH}`);
     process.exit(1);
   }
-  
+
   const content = fs.readFileSync(INTEGRATION_SERVER_PATH, 'utf-8');
   const routes = extractRoutes(content);
-  
+
   if (routes.length === 0) {
     console.error('❌ ルート定義が見つかりません');
     process.exit(1);
   }
-  
+
   const validation = validateRouteOrder(routes);
   generateReport(routes, validation);
-  
+
   if (!validation.valid) {
     process.exit(1);
   }

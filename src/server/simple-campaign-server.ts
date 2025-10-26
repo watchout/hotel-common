@@ -252,7 +252,7 @@ class SimpleCampaignServer {
     });
 
     // エラーハンドラー
-    this.app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    this.app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
       console.error('Server error:', error);
       res.status(500).json({
         error: 'INTERNAL_ERROR',

@@ -222,7 +222,7 @@ app.get('/api/hotel-member/hierarchy/health', async (req, res) => {
 })
 
 // エラーハンドラー
-app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('サーバーエラー:', error)
   res.status(500).json({
     error: 'INTERNAL_ERROR',

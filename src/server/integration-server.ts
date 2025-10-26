@@ -4,13 +4,13 @@ import cors from 'cors'
 import { config } from 'dotenv'
 import express from 'express'
 
-import apiHealthRouter from './api-health'
 import { sessionAuthMiddleware } from '../auth/session-auth.middleware'
 import { hotelDb } from '../database/prisma'
 import { appLauncherApiRouter } from '../integrations/app-launcher'
 import campaignsApiRouter from '../integrations/campaigns/api-endpoints'
 import { initializeHotelMemberHierarchy } from '../integrations/hotel-member'
 import hotelMemberApiRouter from '../integrations/hotel-member/api-endpoints'
+import apiHealthRouter from './api-health'
 // システム別APIルーター
 
 // セッション管理APIルーター
@@ -601,7 +601,7 @@ class HotelIntegrationServer {
     })
 
     // エラーハンドラー
-    this.app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    this.app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
       console.error('Server error:', error)
       res.status(500).json({
         error: 'INTERNAL_ERROR',

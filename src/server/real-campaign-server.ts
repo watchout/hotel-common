@@ -89,7 +89,7 @@ class RealCampaignServer {
     });
 
     // エラーハンドラー
-    this.app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+    this.app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
       logger.error('Server error:', { error: error instanceof Error ? error : new Error(String(error)) });
       res.status(500).json({
         error: 'INTERNAL_ERROR',
