@@ -38,6 +38,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HotelIntegrationServer = void 0;
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = require("dotenv");
 const express_1 = __importDefault(require("express"));
@@ -97,6 +98,8 @@ class HotelIntegrationServer {
             allowedHeaders: ['Content-Type', 'Authorization'],
             credentials: true
         }));
+        // Cookie parser（堅牢性向上）
+        this.app.use((0, cookie_parser_1.default)());
         // === Phase G1: グローバル早期401捕捉 ===
         this.app.use((req, res, next) => {
             const origJson = res.json.bind(res);

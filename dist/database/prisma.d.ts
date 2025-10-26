@@ -31,31 +31,31 @@ export declare class HotelDatabaseClient {
      * 以下のゲッターは互換性のために残していますが、
      * 将来的には getAdapter() を使用することを推奨します
      */
-    get page(): import(".prisma/client").Prisma.pagesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get pageHistory(): import(".prisma/client").Prisma.page_historiesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get responseNode(): import(".prisma/client").Prisma.response_nodesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get responseTree(): import(".prisma/client").Prisma.response_treesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get responseTreeVersion(): import(".prisma/client").Prisma.response_tree_versionsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get responseTreeSession(): import(".prisma/client").Prisma.response_tree_sessionsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get responseTreeMobileLink(): import(".prisma/client").Prisma.response_tree_mobile_linksDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get responseTreeHistory(): import(".prisma/client").Prisma.response_tree_historyDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get responseNodeTranslation(): import(".prisma/client").Prisma.response_node_translationsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get campaign(): import(".prisma/client").Prisma.campaignsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get campaignCategory(): import(".prisma/client").Prisma.campaign_categoriesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get campaignCategoryRelation(): import(".prisma/client").Prisma.campaign_category_relationsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get campaignItem(): import(".prisma/client").Prisma.campaign_itemsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get campaignTranslation(): import(".prisma/client").Prisma.campaign_translationsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get campaignUsageLog(): import(".prisma/client").Prisma.campaign_usage_logsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get deviceVideoCache(): import(".prisma/client").Prisma.device_video_cachesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get notificationTemplate(): import(".prisma/client").Prisma.notification_templatesDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get tenantAccessLog(): import(".prisma/client").Prisma.tenant_access_logsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get systemEvent(): import(".prisma/client").Prisma.system_eventDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get deviceRoom(): import(".prisma/client").Prisma.device_roomsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get page(): any;
+    get pageHistory(): any;
+    get responseNode(): any;
+    get responseTree(): any;
+    get responseTreeVersion(): any;
+    get responseTreeSession(): any;
+    get responseTreeMobileLink(): any;
+    get responseTreeHistory(): any;
+    get responseNodeTranslation(): any;
+    get campaign(): any;
+    get campaignCategory(): any;
+    get campaignCategoryRelation(): any;
+    get campaignItem(): any;
+    get campaignTranslation(): any;
+    get campaignUsageLog(): any;
+    get deviceVideoCache(): any;
+    get notificationTemplate(): any;
+    get tenantAccessLog(): any;
+    get systemEvent(): any;
+    get deviceRoom(): any;
     get order(): any;
     get orderItem(): any;
-    get schemaVersion(): import(".prisma/client").Prisma.schema_versionDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get systemPlanRestrictions(): import(".prisma/client").Prisma.SystemPlanRestrictionsDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
-    get tenantSystemPlan(): import(".prisma/client").Prisma.TenantSystemPlanDelegate<import("@prisma/client/runtime/library").DefaultArgs>;
+    get schemaVersion(): any;
+    get systemPlanRestrictions(): any;
+    get tenantSystemPlan(): any;
 }
 export declare const hotelDb: HotelDatabaseClient;
 export declare function getHotelDb(): HotelDatabaseClient;

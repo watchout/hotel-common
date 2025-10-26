@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { PrismaClient } from '@prisma/client'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { config } from 'dotenv'
 import express from 'express'
@@ -95,6 +96,9 @@ class HotelIntegrationServer {
       allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true
     }))
+
+    // Cookie parser（堅牢性向上）
+    this.app.use(cookieParser());
 
     // === Phase G1: グローバル早期401捕捉 ===
     this.app.use((req, res, next) => {

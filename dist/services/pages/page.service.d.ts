@@ -5,66 +5,15 @@ export declare class PageService {
     /**
      * テナントIDに紐づくすべてのページを取得
      */
-    getAllPages(tenantId: string): Promise<{
-        is_deleted: boolean;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        Id: string;
-        TenantId: string;
-        Slug: string;
-        Title: string;
-        Html: string | null;
-        Css: string | null;
-        Content: string | null;
-        Template: string | null;
-        IsPublished: boolean;
-        PublishedAt: Date | null;
-        Version: number;
-        CreatedAt: Date;
-        UpdatedAt: Date;
-    }[]>;
+    getAllPages(tenantId: string): Promise<any>;
     /**
      * テナントIDとスラグでページを取得
      */
-    getPageBySlug(tenantId: string, slug: string): Promise<{
-        is_deleted: boolean;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        Id: string;
-        TenantId: string;
-        Slug: string;
-        Title: string;
-        Html: string | null;
-        Css: string | null;
-        Content: string | null;
-        Template: string | null;
-        IsPublished: boolean;
-        PublishedAt: Date | null;
-        Version: number;
-        CreatedAt: Date;
-        UpdatedAt: Date;
-    } | null>;
+    getPageBySlug(tenantId: string, slug: string): Promise<any>;
     /**
      * 公開済みページをスラグで取得
      */
-    getPublishedPageBySlug(tenantId: string, slug: string): Promise<{
-        is_deleted: boolean;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        Id: string;
-        TenantId: string;
-        Slug: string;
-        Title: string;
-        Html: string | null;
-        Css: string | null;
-        Content: string | null;
-        Template: string | null;
-        IsPublished: boolean;
-        PublishedAt: Date | null;
-        Version: number;
-        CreatedAt: Date;
-        UpdatedAt: Date;
-    } | null>;
+    getPublishedPageBySlug(tenantId: string, slug: string): Promise<any>;
     /**
      * ページを保存（新規作成または更新）
      */
@@ -78,57 +27,18 @@ export declare class PageService {
     /**
      * ページを公開する
      */
-    publishPage(tenantId: string, slug: string, pageId: string): Promise<{
-        is_deleted: boolean;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        Id: string;
-        TenantId: string;
-        Slug: string;
-        Title: string;
-        Html: string | null;
-        Css: string | null;
-        Content: string | null;
-        Template: string | null;
-        IsPublished: boolean;
-        PublishedAt: Date | null;
-        Version: number;
-        CreatedAt: Date;
-        UpdatedAt: Date;
-    }>;
+    publishPage(tenantId: string, slug: string, pageId: string): Promise<any>;
     /**
      * ページの履歴一覧を取得
      */
     getPageHistory(tenantId: string, slug: string): Promise<{
-        current: {
-            Id: string;
-            Version: number;
-            UpdatedAt: Date;
-        };
-        history: {
-            Id: string;
-            Version: number;
-            CreatedAt: Date;
-            CreatedBy: string | null;
-        }[];
+        current: any;
+        history: any;
     }>;
     /**
      * 特定バージョンの履歴を取得
      */
-    getPageHistoryVersion(tenantId: string, slug: string, version: number): Promise<{
-        is_deleted: boolean;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        Id: string;
-        Html: string | null;
-        Css: string | null;
-        Content: string | null;
-        Template: string | null;
-        Version: number;
-        CreatedAt: Date;
-        PageId: string;
-        CreatedBy: string | null;
-    }>;
+    getPageHistoryVersion(tenantId: string, slug: string, version: number): Promise<any>;
     /**
      * 過去のバージョンを復元
      */

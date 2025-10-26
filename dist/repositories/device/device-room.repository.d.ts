@@ -7,69 +7,15 @@ export declare class DeviceRoomRepository {
     /**
      * テナントに紐づくすべてのデバイスを取得
      */
-    findAllByTenantId(tenantId: string): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }[]>;
+    findAllByTenantId(tenantId: string): Promise<any>;
     /**
      * 特定の部屋に紐づくデバイスを取得
      */
-    findByRoomId(tenantId: string, roomId: string): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }[]>;
+    findByRoomId(tenantId: string, roomId: string): Promise<any>;
     /**
      * デバイスIDで特定のデバイスを取得
      */
-    findByDeviceId(deviceId: string): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    } | null>;
+    findByDeviceId(deviceId: string): Promise<any>;
     /**
      * 新しいデバイスを作成
      */
@@ -83,25 +29,7 @@ export declare class DeviceRoomRepository {
         status?: string;
         ipAddress?: string;
         macAddress?: string;
-    }): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }>;
+    }): Promise<any>;
     /**
      * デバイス情報を更新
      */
@@ -115,157 +43,31 @@ export declare class DeviceRoomRepository {
         ipAddress?: string;
         macAddress?: string;
         isActive?: boolean;
-    }): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }>;
+    }): Promise<any>;
     /**
      * デバイスの最終使用日時を更新
      */
-    updateLastUsed(id: number): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }>;
+    updateLastUsed(id: number): Promise<any>;
     /**
      * デバイスを論理削除（非アクティブ化）
      */
-    deactivate(id: number): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }>;
+    deactivate(id: number): Promise<any>;
     /**
      * デバイスを物理削除
      */
-    delete(id: number): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }>;
+    delete(id: number): Promise<any>;
     /**
      * プレイスIDに紐づくデバイスを取得
      */
-    findByPlaceId(tenantId: string, placeId: string): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }[]>;
+    findByPlaceId(tenantId: string, placeId: string): Promise<any>;
     /**
      * デバイスタイプでフィルタリングして取得
      */
-    findByDeviceType(tenantId: string, deviceType: string): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }[]>;
+    findByDeviceType(tenantId: string, deviceType: string): Promise<any>;
     /**
      * ステータスでフィルタリングして取得
      */
-    findByStatus(tenantId: string, status: string): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }[]>;
+    findByStatus(tenantId: string, status: string): Promise<any>;
 }
 declare const _default: DeviceRoomRepository;
 export default _default;

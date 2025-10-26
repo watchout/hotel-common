@@ -30,13 +30,23 @@ const logger = logger_1.HotelLogger.getInstance();
  * Cookie名の互換対応
  * - 正式: hotel_session
  * - 暫定: hotel-session-id（移行期間のみ）
+ *
+ * Note: cookie-parserミドルウェアにより req.cookies が既にパース済み（堅牢性向上）
  */
 function extractSessionIdFromCookies(req) {
+    console.log('[session-auth] Cookie header:', req.headers.cookie);
+    // cookie-parserによるパース結果を使用（推奨）
+    if (req.cookies) {
+        console.log('[session-auth] Parsed cookies (via cookie-parser):', req.cookies);
+        // 正式Cookie名を優先
+        const sessionId = req.cookies['hotel_session'] || req.cookies['hotel-session-id'] || null;
+        console.log('[session-auth] Extracted sessionId:', sessionId);
+        return sessionId;
+    }
+    // フォールバック: cookie-parser未適用の場合（旧実装・後方互換）
     const cookies = req.headers.cookie;
-    console.log('[session-auth] Cookie header:', cookies);
     if (!cookies)
         return null;
-    // Cookie文字列をパース
     const cookieMap = {};
     cookies.split(';').forEach(cookie => {
         const [key, value] = cookie.trim().split('=');
@@ -44,8 +54,7 @@ function extractSessionIdFromCookies(req) {
             cookieMap[key] = value;
         }
     });
-    console.log('[session-auth] Parsed cookies:', cookieMap);
-    // 正式Cookie名を優先
+    console.log('[session-auth] Parsed cookies (fallback):', cookieMap);
     const sessionId = cookieMap['hotel_session'] || cookieMap['hotel-session-id'] || null;
     console.log('[session-auth] Extracted sessionId:', sessionId);
     return sessionId;

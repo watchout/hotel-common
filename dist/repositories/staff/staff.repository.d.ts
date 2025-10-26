@@ -19,7 +19,7 @@ interface StaffListParams {
 export declare class StaffRepository {
     private adapter;
     list(params: StaffListParams): Promise<{
-        items: import("../../utils/staff-helpers").StaffSummaryResponse[];
+        items: any;
         pagination: {
             total: number;
             page: number;
@@ -27,9 +27,9 @@ export declare class StaffRepository {
             totalPages: number;
         };
         summary: {
-            totalStaff: number;
-            activeStaff: number;
-            inactiveStaff: number;
+            totalStaff: any;
+            activeStaff: any;
+            inactiveStaff: any;
             departmentCounts: Record<string, number>;
         };
     }>;
