@@ -1,4 +1,4 @@
-import { ApiError } from '../types/common';
+import type { ApiError } from '../types/common';
 export interface ValidationRule {
     field: string;
     required?: boolean;

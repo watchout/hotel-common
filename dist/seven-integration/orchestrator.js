@@ -4,8 +4,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SevenIntegrationOrchestrator = void 0;
 const events_1 = require("events");
-const seven_layer_integration_1 = require("./seven-layer-integration");
 const config_1 = require("./config");
+const seven_layer_integration_1 = require("./seven-layer-integration");
 class SevenIntegrationOrchestrator extends events_1.EventEmitter {
     config;
     status;

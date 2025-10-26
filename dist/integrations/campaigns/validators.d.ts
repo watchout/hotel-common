@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
-import { ZodSchema } from 'zod';
-import { PrismaAdapter } from '../../database/prisma-adapter';
+import type { PrismaAdapter } from '../../database/prisma-adapter';
+import type { Request, Response, NextFunction } from 'express';
+import type { ZodSchema } from 'zod';
 /**
  * リクエストボディのバリデーション用ミドルウェア
  * @param schema バリデーションスキーマ

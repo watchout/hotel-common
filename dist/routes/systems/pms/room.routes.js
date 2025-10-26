@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const room_service_1 = require("../../../services/room.service");
 const middleware_1 = require("../../../auth/middleware");
 const room_1 = require("../../../schemas/room");
+const room_service_1 = require("../../../services/room.service");
 const api_standards_1 = require("../../../standards/api-standards");
 const router = express_1.default.Router();
 /**

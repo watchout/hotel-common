@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { Router } from 'express';
+import type { Router } from 'express';
 /**
  * キャンペーンAPI実サーバー
  * - 実際のデータベースに接続

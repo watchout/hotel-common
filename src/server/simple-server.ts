@@ -69,7 +69,7 @@ app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
           }
         })
       }
-    } catch (error: Error) {
+    } catch (error: unknown) {
       // フォールバック応答
       res.json({
         success: true,
@@ -86,7 +86,7 @@ app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
       })
     }
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('JWT検証エラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -115,7 +115,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-customer-access', async 
       effective_level: 'BASIC'
     })
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('権限チェックエラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -142,7 +142,7 @@ app.post('/api/hotel-member/hierarchy/tenants/accessible', async (req, res) => {
       tenants: ['default', 'hotel-001', 'hotel-002']
     })
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('テナント取得エラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -170,7 +170,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-membership-restrictions'
       reason: 'Basic permission granted (fallback mode)'
     })
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('会員データ制限チェックエラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -198,7 +198,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-analytics-access', async
       reason: 'Basic analytics access granted (fallback mode)'
     })
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('分析権限チェックエラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',

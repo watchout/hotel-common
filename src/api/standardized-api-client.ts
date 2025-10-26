@@ -270,7 +270,7 @@ export class StandardizedApiClient {
         cacheKey,
         JSON.stringify(data)
       )
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.warn('キャッシュ保存エラー', error)
     }
   }
@@ -288,7 +288,7 @@ export class StandardizedApiClient {
       }
       
       return null
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.warn('キャッシュ取得エラー', error)
       return null
     }
@@ -308,7 +308,7 @@ export class StandardizedApiClient {
   }): void {
     try {
       // メトリクス記録（実装は別途）
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.warn('メトリクス記録エラー', error)
     }
   }

@@ -45,7 +45,7 @@ export class RuntimeTranslationSystem extends EventEmitter {
       this.emit('languageChanged', event)
       
       console.log(`Language changed from ${previousLanguage} to ${language}`)
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error(`Failed to load language ${language}:`, error)
       throw new Error(`Language switching failed: ${language}`)
     }
@@ -85,7 +85,7 @@ export class RuntimeTranslationSystem extends EventEmitter {
     for (const language of preloadLanguages) {
       try {
         await this.loadLanguage(language)
-      } catch (error: Error) {
+      } catch (error: unknown) {
         console.warn(`Failed to preload language ${language}:`, error)
       }
     }
@@ -108,7 +108,7 @@ export class RuntimeTranslationSystem extends EventEmitter {
       }
 
       console.log(`Loaded translations for ${language}`)
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error(`Failed to load translations for ${language}:`, error)
       throw error
     }
@@ -125,7 +125,7 @@ export class RuntimeTranslationSystem extends EventEmitter {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`)
       }
       return await response.json()
-    } catch (error: Error) {
+    } catch (error: unknown) {
       // 開発環境ではローカルファイルから読み込み
       console.warn(`CDN fetch failed, trying local import for ${language}`)
       return await import(`../../../i18n/locales/${language}.json`)

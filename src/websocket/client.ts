@@ -148,7 +148,7 @@ export class HotelWebSocketClient {
       handlers.forEach(handler => {
         try {
           handler(data)
-        } catch (error: Error) {
+        } catch (error: unknown) {
           console.error('Error in event handler:', error)
         }
       })

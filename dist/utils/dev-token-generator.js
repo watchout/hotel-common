@@ -34,8 +34,8 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DevTokenGenerator = void 0;
-const jwt = __importStar(require("jsonwebtoken"));
 const dotenv_1 = require("dotenv");
+const jwt = __importStar(require("jsonwebtoken"));
 (0, dotenv_1.config)();
 const JWT_SECRET = process.env.JWT_SECRET || 'hotel-common-secret-change-in-production';
 /**

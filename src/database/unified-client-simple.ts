@@ -159,7 +159,7 @@ export class UnifiedPrismaClient {
     try {
       await this.prisma.$queryRaw`SELECT 1`;
       return true;
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error(`[${this.systemName}] Health check failed:`, error);
       return false;
     }

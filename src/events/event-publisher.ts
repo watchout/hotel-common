@@ -68,7 +68,7 @@ export class HotelEventPublisher {
           throw new Error(`未対応の同期方式: ${(validatedEvent as any).sync_mode}`)
       }
       
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('イベント発行エラー:', error as Error)
       await this.handlePublishError(event, error)
       throw error
@@ -103,7 +103,7 @@ export class HotelEventPublisher {
       
       return eventId
       
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('リアルタイムイベント発行エラー:', error as Error)
       throw error
     }
@@ -135,7 +135,7 @@ export class HotelEventPublisher {
         try {
           await this.executeBatchEvent(event)
           this.batchScheduler.delete(scheduleKey)
-        } catch (error: Error) {
+        } catch (error: unknown) {
           this.logger.error('バッチイベント実行エラー:', error as Error)
         }
       }, delay)
@@ -148,7 +148,7 @@ export class HotelEventPublisher {
       
       return eventId
       
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('バッチイベントスケジューリングエラー:', error as Error)
       throw error
     }
@@ -178,7 +178,7 @@ export class HotelEventPublisher {
       
       this.logger.debug(`WebSocketブロードキャスト完了 - Targets: ${event.targets.join(',')}, Type: ${event.type}`)
       
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.warn('WebSocketブロードキャストエラー（継続）:', error as Error)
       // WebSocketエラーは致命的ではないため継続
     }
@@ -200,7 +200,7 @@ export class HotelEventPublisher {
         data: event.data
       })
       
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('重要イベント追加配信エラー:', error)
     }
   }
@@ -294,7 +294,7 @@ export class HotelEventPublisher {
         })
       }
       
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('バッチイベント実行エラー:', error)
     }
   }
@@ -371,7 +371,7 @@ export class HotelEventPublisher {
         }
       })
       
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('監査ログ記録エラー:', error)
       // 監査ログエラーは致命的ではないため継続
     }
@@ -453,7 +453,7 @@ export class HotelEventPublisher {
       
       this.logger.info('HotelEventPublisher接続完了')
       
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('HotelEventPublisher接続エラー:', error)
       throw error
     }
@@ -479,7 +479,7 @@ export class HotelEventPublisher {
       
       this.logger.info('HotelEventPublisher切断完了')
       
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('HotelEventPublisher切断エラー:', error)
       throw error
     }
@@ -504,7 +504,7 @@ export class HotelEventPublisher {
           }
         }
       }
-    } catch (error: Error) {
+    } catch (error: unknown) {
       return {
         status: 'unhealthy',
         details: {

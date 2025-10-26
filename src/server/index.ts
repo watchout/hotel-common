@@ -85,7 +85,7 @@ class HotelCommonServer {
       process.on('SIGINT', () => this.shutdown())
       process.on('SIGTERM', () => this.shutdown())
 
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('サーバー起動エラー:', error as Error)
       process.exit(1)
     }
@@ -104,7 +104,7 @@ class HotelCommonServer {
       
       this.logger.info('hotel-common統合サーバー停止完了')
       process.exit(0)
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('サーバー停止エラー:', error as Error)
       process.exit(1)
     }

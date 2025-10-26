@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HotelApiClientFactory = exports.HotelApiClient = void 0;
+const crypto_1 = __importDefault(require("crypto"));
 const axios_1 = __importDefault(require("axios"));
 const api_1 = require("../types/api");
 // import { JwtManager } from '../auth/jwt'
-const crypto_1 = __importDefault(require("crypto"));
 class HotelApiClient {
     client;
     config;

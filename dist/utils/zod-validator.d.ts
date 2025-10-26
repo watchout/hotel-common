@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { ValidationResult } from './validation';
-import { ApiError } from '../types/common';
+import type { ValidationResult } from './validation';
+import type { ApiError } from '../types/common';
 /**
  * Zodスキーマバリデーション統合ヘルパー
  */

@@ -166,7 +166,7 @@ export class NotificationService {
       })
       
       return result
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('メール送信エラー', {
         templateId,
         to,
@@ -219,7 +219,7 @@ export class NotificationService {
       })
       
       return result
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('SMS送信エラー', {
         templateId,
         to,
@@ -275,7 +275,7 @@ export class NotificationService {
       })
       
       return result
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('プッシュ通知送信エラー', {
         templateId,
         to,
@@ -335,7 +335,7 @@ export class NotificationService {
       })
       
       return true
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('アプリ内通知送信エラー', {
         templateId,
         userId: typeof userId === 'string' ? userId : String(userId),
@@ -390,7 +390,7 @@ export class NotificationService {
       })
       
       return success
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Webhook送信エラー', {
         templateId,
         error: new Error(error instanceof Error ? error.message : String(error))
@@ -449,7 +449,7 @@ export class NotificationService {
       )
       
       return result
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('テンプレート取得エラー', {
         templateId,
         locale,
@@ -570,7 +570,7 @@ export class NotificationService {
       
       // 実装例（実際にはHTTPリクエスト）
       return true
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Webhook送信エラー', {
         data: { endpoint },
         error: new Error(error instanceof Error ? error.message : String(error))
@@ -617,7 +617,7 @@ export class NotificationService {
           metadata: data.metadata
         }
       })
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.warn('通知イベント発行エラー', error as Error)
     }
   }

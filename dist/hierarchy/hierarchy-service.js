@@ -35,8 +35,8 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HierarchyService = void 0;
 const hierarchy_api_1 = require("./hierarchy-api");
-const permission_manager_1 = require("./permission-manager");
 const jwt_extension_1 = require("./jwt-extension");
+const permission_manager_1 = require("./permission-manager");
 const logger_1 = require("../utils/logger");
 /**
  * Hotel Group階層管理統合サービス

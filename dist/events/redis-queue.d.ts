@@ -1,4 +1,4 @@
-import { HotelEvent } from './types';
+import type { HotelEvent } from './types';
 export interface RedisQueueConfig {
     host: string;
     port: number;

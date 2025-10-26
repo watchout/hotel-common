@@ -59,7 +59,7 @@ export class HierarchyMiddleware {
 
         next()
 
-      } catch (error: Error) {
+      } catch (error: unknown) {
         this.logger.error('階層認証ミドルウェアエラー:', error as Error)
         return res.status(500).json({
           error: 'AUTHENTICATION_ERROR',
@@ -140,7 +140,7 @@ export class HierarchyMiddleware {
 
         next()
 
-      } catch (error: Error) {
+      } catch (error: unknown) {
         this.logger.error('データアクセス権限チェックエラー:', error as Error)
         return res.status(500).json({
           error: 'PERMISSION_CHECK_ERROR',
@@ -192,7 +192,7 @@ export class HierarchyMiddleware {
 
         next()
 
-      } catch (error: Error) {
+      } catch (error: unknown) {
         this.logger.error('組織レベル制限チェックエラー:', error as Error)
         return res.status(500).json({
           error: 'ORGANIZATION_LEVEL_CHECK_ERROR',
@@ -230,7 +230,7 @@ export class HierarchyMiddleware {
 
         next()
 
-      } catch (error: Error) {
+      } catch (error: unknown) {
         this.logger.error('組織タイプ制限チェックエラー:', error as Error)
         return res.status(500).json({
           error: 'ORGANIZATION_TYPE_CHECK_ERROR',
@@ -281,7 +281,7 @@ export class HierarchyMiddleware {
 
         next()
 
-      } catch (error: Error) {
+      } catch (error: unknown) {
         this.logger.error('テナントアクセス権限チェックエラー:', error as Error)
         return res.status(500).json({
           error: 'TENANT_ACCESS_CHECK_ERROR',
@@ -319,7 +319,7 @@ export class HierarchyMiddleware {
 
         next()
 
-      } catch (error: Error) {
+      } catch (error: unknown) {
         this.logger.error('管理者権限チェックエラー:', error as Error)
         return res.status(500).json({
           error: 'ADMIN_ROLE_CHECK_ERROR',
@@ -421,7 +421,7 @@ export class HierarchyMiddleware {
 
         next()
 
-      } catch (error: Error) {
+      } catch (error: unknown) {
         this.logger.error('複合権限チェックエラー:', error as Error)
         return res.status(500).json({
           error: 'COMBINED_PERMISSION_CHECK_ERROR',

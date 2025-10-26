@@ -28,4 +28,8 @@ jobs:
         run: |
           node scripts/ci/route-dump-check.js
 
+      - name: Route Order Validation (Cookie auth priority)
+        run: |
+          npm run check-route-order
+
 

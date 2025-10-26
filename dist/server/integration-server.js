@@ -47,15 +47,15 @@ const app_launcher_1 = require("../integrations/app-launcher");
 const api_endpoints_1 = __importDefault(require("../integrations/campaigns/api-endpoints"));
 const hotel_member_1 = require("../integrations/hotel-member");
 const api_endpoints_2 = __importDefault(require("../integrations/hotel-member/api-endpoints"));
+const api_health_1 = __importDefault(require("./api-health"));
 // システム別APIルーター
-const systems_1 = require("../routes/systems");
 // セッション管理APIルーター
 const checkin_session_routes_1 = __importDefault(require("../routes/checkin-session.routes"));
 const session_billing_routes_1 = __importDefault(require("../routes/session-billing.routes"));
 const session_migration_routes_1 = __importDefault(require("../routes/session-migration.routes"));
+const systems_1 = require("../routes/systems");
 // PMSシステムAPI
 const pms_1 = require("../routes/systems/pms");
-const api_health_1 = __importDefault(require("./api-health"));
 // 環境変数読み込み
 (0, dotenv_1.config)();
 /**
@@ -97,23 +97,40 @@ class HotelIntegrationServer {
             allowedHeaders: ['Content-Type', 'Authorization'],
             credentials: true
         }));
-        // === Phase G1: グローバル早期401捕捉 ===
-        this.app.use((req, res, next) => {
-            const origJson = res.json.bind(res);
-            res.json = (body) => {
-                const code = res.statusCode;
-                if (code === 401 && process.env.DEBUG_GLOBAL_401 === '1') {
-                    console.error('[GLOBAL-401]', {
-                        path: req.originalUrl,
-                        hasAuthHeader: !!req.headers.authorization,
-                        cookieHead: (req.headers.cookie || '').slice(0, 120)
-                    });
-                    console.error('[GLOBAL-401] stack note: 旧authMiddlewareがどこかで発火中（次段で特定）');
-                }
-                return origJson(body);
-            };
-            next();
-        });
+        // === Phase G1: グローバル早期401捕捉（ENV制御可能） ===
+        if (process.env.ENABLE_401_MONITORING === '1') {
+            this.app.use((req, res, next) => {
+                const origJson = res.json.bind(res);
+                res.json = (body) => {
+                    const code = res.statusCode;
+                    if (code === 401) {
+                        // 原因種別を判定
+                        const hasAuth = !!req.headers.authorization;
+                        const hasCookie = !!(req.headers.cookie && (req.headers.cookie.includes('hotel_session') || req.headers.cookie.includes('hotel-session-id')));
+                        let cause = 'UNKNOWN';
+                        if (!hasAuth && !hasCookie)
+                            cause = 'NO_CREDENTIALS';
+                        else if (hasAuth && !hasCookie)
+                            cause = 'JWT_ONLY';
+                        else if (!hasAuth && hasCookie)
+                            cause = 'COOKIE_ONLY';
+                        else
+                            cause = 'BOTH_PRESENT';
+                        console.error('[GLOBAL-401]', {
+                            path: req.originalUrl,
+                            cause,
+                            hasAuthHeader: hasAuth,
+                            hasCookie,
+                            cookieHead: (req.headers.cookie || '').slice(0, 120)
+                        });
+                        // X-HC-Debug ヘッダーで原因種別を返却（デバッグ用）
+                        res.set('X-HC-Debug-401-Cause', cause);
+                    }
+                    return origJson(body);
+                };
+                next();
+            });
+        }
         // === END Phase G1 ===
         // === 決定打の切り分け：デバッグヘッダ付与 ===
         this.app.use((req, res, next) => {
@@ -538,7 +555,7 @@ class HotelIntegrationServer {
             });
         });
         // エラーハンドラー
-        this.app.use((error, req, res, next) => {
+        this.app.use((error, req, res, _next) => {
             console.error('Server error:', error);
             res.status(500).json({
                 error: 'INTERNAL_ERROR',

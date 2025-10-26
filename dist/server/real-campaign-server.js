@@ -5,12 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RealCampaignServer = void 0;
-const express_1 = __importDefault(require("express"));
-const dotenv_1 = require("dotenv");
 const cors_1 = __importDefault(require("cors"));
-const campaigns_1 = require("../integrations/campaigns");
+const dotenv_1 = require("dotenv");
+const express_1 = __importDefault(require("express"));
 const database_1 = require("../database");
-const logger_1 = require("../utils/logger");
+const campaigns_1 = require("../integrations/campaigns");
 // 環境変数読み込み
 (0, dotenv_1.config)();
 /**
@@ -79,7 +78,7 @@ class RealCampaignServer {
             });
         });
         // エラーハンドラー
-        this.app.use((error, req, res, next) => {
+        this.app.use((error, req, res, _next) => {
             logger_1.logger.error('Server error:', { error: error instanceof Error ? error : new Error(String(error)) });
             res.status(500).json({
                 error: 'INTERNAL_ERROR',
@@ -166,6 +165,7 @@ if (require.main === module) {
         process.exit(1);
     });
 }
+const logger_1 = require("../utils/logger");
 // RealCampaignServerクラスのstart()メソッドを修正
 // async start(): Promise<void> {
 //   try {

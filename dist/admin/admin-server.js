@@ -3,9 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const cors_1 = __importDefault(require("cors"));
 const path_1 = __importDefault(require("path"));
+const cors_1 = __importDefault(require("cors"));
+const express_1 = __importDefault(require("express"));
 const admin_api_1 = __importDefault(require("./admin-api"));
 const logger_1 = require("../utils/logger");
 const app = (0, express_1.default)();
@@ -53,7 +53,7 @@ app.use('*', (req, res) => {
     });
 });
 // エラーハンドラー
-app.use((error, req, res, next) => {
+app.use((error, req, res, _next) => {
     logger.error('Admin Server Error:', error);
     res.status(500).json({
         error: 'INTERNAL_SERVER_ERROR',

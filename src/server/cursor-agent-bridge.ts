@@ -46,7 +46,7 @@ export class CursorAgentBridge {
         
         this.projectContext = this.determineContext(name);
       }
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.warn('プロジェクトコンテキスト検出失敗:', error);
     }
   }
@@ -121,7 +121,7 @@ export class CursorAgentBridge {
         executionTime
       };
 
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('🚨 処理エラー:', error);
       throw new Error(`エージェント処理失敗: ${error instanceof Error ? error.message : String(error)}`);
     }
@@ -142,7 +142,7 @@ export class CursorAgentBridge {
       console.log(`✅ RAG検索完了: ${results.length}件の関連情報取得`);
       
       return results;
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('❌ RAG検索エラー:', error);
       return [];
     }
@@ -166,7 +166,7 @@ export class CursorAgentBridge {
       console.log(`✅ ガードレール検証完了: 品質スコア ${results.qualityScore}%`);
       
       return results;
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('❌ ガードレール検証エラー:', error);
       return { qualityScore: 0, issues: [] };
     }

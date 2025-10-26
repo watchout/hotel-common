@@ -38,11 +38,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  * このファイルは、管理者用のAPIエンドポイントを提供します。
  */
-const express = __importStar(require("express"));
-const prisma_1 = require("../database/prisma");
-const jwt = __importStar(require("jsonwebtoken"));
 const bcrypt = __importStar(require("bcrypt"));
+const express = __importStar(require("express"));
+const jwt = __importStar(require("jsonwebtoken"));
 const tenant_service_api_1 = require("../api/tenant-service-api");
+const prisma_1 = require("../database/prisma");
 // PrismaClientの直接インスタンス化は避け、hotelDb.getClient()を使用
 const prisma = prisma_1.hotelDb.getClient();
 const router = express.Router();

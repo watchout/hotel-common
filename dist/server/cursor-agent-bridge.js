@@ -10,9 +10,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CursorAgentBridge = void 0;
 const child_process_1 = require("child_process");
-const util_1 = require("util");
-const path_1 = __importDefault(require("path"));
 const promises_1 = __importDefault(require("fs/promises"));
+const path_1 = __importDefault(require("path"));
+const util_1 = require("util");
 const execAsync = (0, util_1.promisify)(child_process_1.exec);
 class CursorAgentBridge {
     projectContext = null;

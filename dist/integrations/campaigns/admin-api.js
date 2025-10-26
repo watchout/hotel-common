@@ -37,15 +37,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = __importStar(require("express"));
-const services_1 = require("./services");
-const api_standards_1 = require("../../standards/api-standards");
-const middleware_1 = require("../../auth/middleware");
-const types_1 = require("./types");
-const logger_1 = require("../../utils/logger");
-const validators_1 = require("./validators");
-const prisma_1 = require("../../database/prisma");
-const constants_1 = require("./constants");
 const admin_category_api_1 = __importDefault(require("./admin-category-api"));
+const constants_1 = require("./constants");
+const services_1 = require("./services");
+const types_1 = require("./types");
+const validators_1 = require("./validators");
+const middleware_1 = require("../../auth/middleware");
+const prisma_1 = require("../../database/prisma");
+const api_standards_1 = require("../../standards/api-standards");
+const logger_1 = require("../../utils/logger");
 const router = express.Router();
 const campaignService = new services_1.CampaignService();
 // カテゴリー関連のルーターをマウント

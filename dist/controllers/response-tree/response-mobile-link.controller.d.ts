@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 /**
  * レスポンスモバイル連携コントローラー
  * HTTPリクエスト/レスポンスの処理を担当

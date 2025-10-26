@@ -172,7 +172,7 @@ router.get('/operation-logs', authMiddleware, async (req: Request, res: Response
       result_count: formattedLogs.length
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('管理者操作ログ一覧取得エラー', error as Error);
     
     if (error instanceof z.ZodError) {
@@ -241,7 +241,7 @@ router.get('/operation-logs/:id', authMiddleware, async (req: Request, res: Resp
       log_id: logId
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('管理者操作ログ詳細取得エラー', error as Error);
     ResponseHelper.sendInternalError(res, '操作ログ詳細の取得に失敗しました');
   }
@@ -325,7 +325,7 @@ router.get('/operation-logs/stats', authMiddleware, async (req: Request, res: Re
       total_logs: logs.length
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('管理者操作ログ統計取得エラー', error as Error);
     ResponseHelper.sendInternalError(res, '操作ログ統計の取得に失敗しました');
   }

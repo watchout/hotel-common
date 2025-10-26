@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StandardizedApiClient = void 0;
 exports.createStandardizedApiClient = createStandardizedApiClient;
 const axios_1 = __importDefault(require("axios"));
+const unified_tenant_manager_1 = require("../multitenancy/unified-tenant-manager");
 const logger_1 = require("../utils/logger");
 const redis_1 = require("../utils/redis");
-const unified_tenant_manager_1 = require("../multitenancy/unified-tenant-manager");
 /**
  * 標準化されたAPIクライアント
  *

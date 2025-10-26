@@ -2,10 +2,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HotelCommonServer = void 0;
-const websocket_server_1 = require("./websocket-server");
-const logger_1 = require("../utils/logger");
 const dotenv_1 = require("dotenv");
 const integration_server_1 = require("./integration-server");
+const websocket_server_1 = require("./websocket-server");
+const logger_1 = require("../utils/logger");
 // 環境変数読み込み
 (0, dotenv_1.config)();
 /**

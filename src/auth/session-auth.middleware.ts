@@ -122,7 +122,7 @@ export const sessionAuthMiddleware = async (
 
     // 4. 下流へ
     next();
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('セッション認証エラー', error);
     return res.status(500).json(
       StandardResponseBuilder.error('AUTH_ERROR', 'Authentication service error').response

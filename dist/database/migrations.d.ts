@@ -10,13 +10,7 @@ export declare class HotelMigrationManager {
     getCurrentVersion(): Promise<string | null>;
     applyMigration(migration: MigrationInfo): Promise<boolean>;
     rollback(version: string): Promise<boolean>;
-    getMigrationHistory(): Promise<{
-        description: string;
-        version: string;
-        rollback_sql: string | null;
-        applied_at: Date;
-        applied_by: string | null;
-    }[]>;
+    getMigrationHistory(): Promise<any>;
     validateIntegrity(): Promise<boolean>;
 }
 export declare const migrationManager: HotelMigrationManager;

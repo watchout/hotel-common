@@ -13,7 +13,7 @@ export declare const CustomerCreateSchema: z.ZodObject<{
     phone?: string | undefined;
     address?: string | undefined;
     birthday?: string | undefined;
-    gender?: "other" | "male" | "female" | undefined;
+    gender?: "male" | "female" | "other" | undefined;
     preferences?: Record<string, any> | undefined;
 }, {
     name: string;
@@ -21,7 +21,7 @@ export declare const CustomerCreateSchema: z.ZodObject<{
     phone?: string | undefined;
     address?: string | undefined;
     birthday?: string | undefined;
-    gender?: "other" | "male" | "female" | undefined;
+    gender?: "male" | "female" | "other" | undefined;
     preferences?: Record<string, any> | undefined;
 }>;
 export declare const CustomerUpdateSchema: z.ZodObject<{
@@ -40,7 +40,7 @@ export declare const CustomerUpdateSchema: z.ZodObject<{
     phone?: string | undefined;
     address?: string | undefined;
     birthday?: string | undefined;
-    gender?: "other" | "male" | "female" | undefined;
+    gender?: "male" | "female" | "other" | undefined;
     preferences?: Record<string, any> | undefined;
 }, {
     id: string;
@@ -49,7 +49,7 @@ export declare const CustomerUpdateSchema: z.ZodObject<{
     phone?: string | undefined;
     address?: string | undefined;
     birthday?: string | undefined;
-    gender?: "other" | "male" | "female" | undefined;
+    gender?: "male" | "female" | "other" | undefined;
     preferences?: Record<string, any> | undefined;
 }>;
 export declare const CustomerSearchSchema: z.ZodObject<{

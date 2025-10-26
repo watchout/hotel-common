@@ -3,9 +3,9 @@
 // 対話便利性 + 90%トークン削減 + 完全精度を実現
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HybridCursorIntegration = void 0;
-const orchestrator_1 = require("../seven-integration/orchestrator");
-const rag_service_1 = require("./rag-service");
 const guardrails_validator_1 = require("./guardrails-validator");
+const rag_service_1 = require("./rag-service");
+const orchestrator_1 = require("../seven-integration/orchestrator");
 // TokenOptimizerモジュールが存在しないため、コメントアウト
 // import { TokenOptimizer } from './token-optimizer';
 // 簡易コンテキストエクストラクター（実装例）

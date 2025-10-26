@@ -40,10 +40,7 @@ const bcrypt = __importStar(require("bcrypt"));
 const express_1 = __importDefault(require("express"));
 const uuid_1 = require("uuid");
 const jwt_1 = require("../../../auth/jwt");
-const database_1 = require("../../../database");
-const logger_1 = require("../../../utils/logger");
-const redis_1 = require("../../../utils/redis");
-const response_builder_1 = require("../../../utils/response-builder");
+const middleware_1 = require("../../../auth/middleware");
 const router = express_1.default.Router();
 const logger = logger_1.HotelLogger.getInstance();
 /**
@@ -620,8 +617,11 @@ router.get('/api/v1/admin/tenant/current', async (req, res) => {
  * テナント情報取得
  * GET /api/v1/tenants/:id
  */
-const middleware_1 = require("../../../auth/middleware");
 const tenant_validation_middleware_1 = require("../../../auth/tenant-validation-middleware");
+const database_1 = require("../../../database");
+const logger_1 = require("../../../utils/logger");
+const redis_1 = require("../../../utils/redis");
+const response_builder_1 = require("../../../utils/response-builder");
 router.get('/api/v1/tenants/:id', middleware_1.authMiddleware, tenant_validation_middleware_1.validateTenantIdHeader, tenant_validation_middleware_1.validateJwtIntegrity, async (req, res) => {
     try {
         const { id } = req.params;

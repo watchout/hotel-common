@@ -240,7 +240,7 @@ router.post('/login', async (req: Request, res: Response) => {
       });
     }
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('ログインエラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('LOGIN_ERROR',
@@ -325,7 +325,7 @@ router.post('/logout', async (req: Request, res: Response) => {
     // 204 No Content（推奨）
     return res.status(204).send();
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('ログアウトエラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('LOGOUT_ERROR',
@@ -383,7 +383,7 @@ router.get('/session', async (req: Request, res: Response) => {
         expiresAt: sessionInfo.expires_at
       }
     });
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('セッション確認エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('SESSION_CHECK_ERROR',
@@ -515,7 +515,7 @@ router.post('/switch-tenant', async (req: Request, res: Response) => {
       );
     }
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('テナント切り替えエラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('TENANT_SWITCH_ERROR',
@@ -569,7 +569,7 @@ router.get('/validate-token', async (req: Request, res: Response) => {
       );
     }
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('トークン検証エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('TOKEN_VALIDATION_ERROR',
@@ -630,7 +630,7 @@ router.post('/refresh', async (req: Request, res: Response) => {
       );
     }
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('トークンリフレッシュエラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('REFRESH_ERROR',
@@ -715,7 +715,7 @@ router.get('/api/v1/admin/tenant/current', async (req: Request, res: Response) =
       );
     }
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('現在テナント取得エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR',
@@ -775,7 +775,7 @@ router.get('/api/v1/tenants/:id', authMiddleware, validateTenantIdHeader, valida
 
     return StandardResponseBuilder.success(res, tenant);
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('テナント情報取得エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('TENANT_FETCH_ERROR',
@@ -826,7 +826,7 @@ router.get('/api/v1/staff/:id', async (req: Request, res: Response) => {
 
     return StandardResponseBuilder.success(res, staff);
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('スタッフ情報取得エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('STAFF_FETCH_ERROR',

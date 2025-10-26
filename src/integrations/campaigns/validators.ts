@@ -26,7 +26,7 @@ export function validateBody<T>(schema: ZodSchema<T>) {
       // バリデーション済みのデータをリクエストに設定
       req.body = result.data;
       next();
-    } catch (error: Error) {
+    } catch (error: unknown) {
       const { createErrorLogOption } = require('../../utils/error-helper');
       logger.error('Validation middleware error', createErrorLogOption(error));
       return res.status(500).json(
@@ -55,7 +55,7 @@ export function validateQuery<T>(schema: ZodSchema<T>) {
       // バリデーション済みのデータをリクエストに設定
       req.query = result.data as any;
       next();
-    } catch (error: Error) {
+    } catch (error: unknown) {
       const { createErrorLogOption } = require('../../utils/error-helper');
       logger.error('Query validation middleware error', createErrorLogOption(error));
       return res.status(500).json(
@@ -84,7 +84,7 @@ export function validateParams<T>(schema: ZodSchema<T>) {
       // バリデーション済みのデータをリクエストに設定
       req.params = result.data as any;
       next();
-    } catch (error: Error) {
+    } catch (error: unknown) {
       const { createErrorLogOption } = require('../../utils/error-helper');
       logger.error('Params validation middleware error', createErrorLogOption(error));
       return res.status(500).json(
@@ -118,7 +118,7 @@ export function validateUniqueCampaignCode(adapter: PrismaAdapter) {
       }
       
       next();
-    } catch (error: Error) {
+    } catch (error: unknown) {
       logger.error('Unique campaign code validation error', { error });
       return res.status(500).json(
         StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Validation process failed').response
@@ -151,7 +151,7 @@ export function validateUniqueCategoryCode(adapter: PrismaAdapter) {
       }
       
       next();
-    } catch (error: Error) {
+    } catch (error: unknown) {
       logger.error('Unique category code validation error', { error });
       return res.status(500).json(
         StandardResponseBuilder.error('INTERNAL_SERVER_ERROR', 'Validation process failed').response

@@ -35,8 +35,8 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RuntimeTranslationSystem = void 0;
 exports.createTokenWithLanguage = createTokenWithLanguage;
-const config_1 = require("./config");
 const events_1 = require("events");
+const config_1 = require("./config");
 /** 実行時翻訳システム */
 class RuntimeTranslationSystem extends events_1.EventEmitter {
     cache = new Map();

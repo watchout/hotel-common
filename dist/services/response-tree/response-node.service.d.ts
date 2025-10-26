@@ -1,4 +1,4 @@
-import { ResponseNodeDto, ResponseNodeDetailDto, ResponseNodeSearchResultDto, CreateNodeRequestDto } from '../../dtos/response-tree/response-tree.dto';
+import type { ResponseNodeDto, ResponseNodeDetailDto, ResponseNodeSearchResultDto, CreateNodeRequestDto } from '../../dtos/response-tree/response-tree.dto';
 /**
  * レスポンスノードサービス
  * ビジネスロジックを担当

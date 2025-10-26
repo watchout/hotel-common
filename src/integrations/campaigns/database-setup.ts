@@ -44,7 +44,7 @@ export async function setupCampaignDatabase(): Promise<void> {
     }
     
     logger.info('キャンペーン機能のデータベース初期設定が完了しました');
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('キャンペーン機能のデータベース初期設定中にエラーが発生しました', error);
     throw error;
   }
@@ -67,7 +67,7 @@ export async function checkCampaignDatabase(): Promise<{
       campaigns: campaignCount,
       isReady: true
     };
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('キャンペーンデータベース状態確認中にエラーが発生しました', error);
     return {
       categories: 0,

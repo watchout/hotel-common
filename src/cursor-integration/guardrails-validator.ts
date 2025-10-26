@@ -68,7 +68,7 @@ export class RealGuardrailsValidator {
         processingTime: Date.now() - startTime
       };
 
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('ガードレール検証エラー:', error);
       return {
         overall: false,
@@ -127,7 +127,7 @@ export class RealGuardrailsValidator {
       // 5. hotel-common特有のパターンチェック
       results.push(...this.checkHotelCommonPatterns(content, ragResults));
 
-    } catch (error: Error) {
+    } catch (error: unknown) {
       results.push({
         passed: false,
         category: 'typescript',

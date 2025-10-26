@@ -1,4 +1,4 @@
-import { CreateMobileLinkRequestDto, MobileLinkDto, ConnectMobileLinkRequestDto } from '../../dtos/response-tree/response-tree.dto';
+import type { CreateMobileLinkRequestDto, MobileLinkDto, ConnectMobileLinkRequestDto } from '../../dtos/response-tree/response-tree.dto';
 /**
  * レスポンスモバイル連携サービス
  * ビジネスロジックを担当

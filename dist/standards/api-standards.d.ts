@@ -1,4 +1,4 @@
-import { ApiResponse } from '../types/common';
+import type { ApiResponse } from '../types/common';
 /**
  * REST API設計標準
  */

@@ -76,7 +76,7 @@ export class TwilioProvider extends SMSProvider {
       this.client = twilio(config.accountSid, config.authToken)
       
       this.logger.info('Twilio provider initialized')
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to initialize Twilio client', { error: error instanceof Error ? error : new Error(String(error)) })
       throw new Error('Twilio initialization failed')
     }
@@ -114,7 +114,7 @@ export class TwilioProvider extends SMSProvider {
         messageId: messageId,
         provider: 'twilio'
       }
-    } catch (error: Error) {
+    } catch (error: unknown) {
       const { createErrorLogOption } = require('../../utils/error-helper');
       this.logger.error('Failed to send SMS via Twilio', createErrorLogOption(error))
       
@@ -149,7 +149,7 @@ export class SNSProvider extends SMSProvider {
       })
       
       this.logger.info('AWS SNS provider initialized')
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to initialize AWS SNS client', { error: error instanceof Error ? error : new Error(String(error)) })
       throw new Error('AWS SNS initialization failed')
     }
@@ -193,7 +193,7 @@ export class SNSProvider extends SMSProvider {
         messageId: messageId,
         provider: 'sns'
       }
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to send SMS via AWS SNS', { error: error instanceof Error ? error : new Error(String(error)) })
       
       return {

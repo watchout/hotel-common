@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { SevenIntegrationConfig, SevenIntegrationResult, IntegrationStatus, IntegrationEvent, IntegrationLayer, AIAgentType } from './types';
+import type { SevenIntegrationConfig, SevenIntegrationResult, IntegrationStatus, IntegrationEvent, IntegrationLayer, AIAgentType } from './types';
 export declare class SevenIntegrationOrchestrator extends EventEmitter {
     private config;
     private status;

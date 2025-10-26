@@ -35,11 +35,11 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NotificationService = void 0;
 exports.getNotificationService = getNotificationService;
-const logger_1 = require("../utils/logger");
-const redis_1 = require("../utils/redis");
-const unified_tenant_manager_1 = require("../multitenancy/unified-tenant-manager");
 const event_publisher_1 = require("../events/event-publisher");
 const factory_1 = require("../i18n/factory");
+const unified_tenant_manager_1 = require("../multitenancy/unified-tenant-manager");
+const logger_1 = require("../utils/logger");
+const redis_1 = require("../utils/redis");
 /**
  * 統合通知サービス
  *

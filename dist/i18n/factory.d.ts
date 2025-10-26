@@ -1,5 +1,5 @@
 import { RuntimeTranslationSystem } from './runtime';
-import { SupportedLanguage } from './types';
+import type { SupportedLanguage } from './types';
 /** i18nインスタンス作成 */
 export declare function createI18nInstance(options?: {
     defaultLanguage?: SupportedLanguage;

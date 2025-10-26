@@ -59,7 +59,7 @@ export async function initializeHierarchySystem(): Promise<void> {
 - 統合サービス（HierarchyService）
     `)
     
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('階層権限管理システム初期化エラー:', error as Error)
     throw error
   }
@@ -255,7 +255,7 @@ export class HierarchyUtils {
         details
       }
 
-    } catch (error: Error) {
+    } catch (error: unknown) {
       return {
         allowed: false,
         reason: '権限チェック中にエラーが発生しました',
@@ -286,7 +286,7 @@ export function createHierarchyRouter() {
         // )
         const organization = null // Temporary placeholder
         res.status(201).json({ organization })
-      } catch (error: Error) {
+      } catch (error: unknown) {
         res.status(400).json({ error: (error as Error).message })
       }
     }
@@ -302,7 +302,7 @@ export function createHierarchyRouter() {
         // )
         const tree: any[] = [] // Temporary placeholder
         res.json({ tree })
-      } catch (error: Error) {
+      } catch (error: unknown) {
         res.status(500).json({ error: (error as Error).message })
       }
     }
@@ -315,7 +315,7 @@ export function createHierarchyRouter() {
         // const permissions = await HierarchyService.getUserEffectivePermissions(req.user)
         const permissions: any[] = [] // Temporary placeholder
         res.json({ permissions })
-      } catch (error: Error) {
+      } catch (error: unknown) {
         res.status(500).json({ error: (error as Error).message })
       }
     }
@@ -332,7 +332,7 @@ export function createHierarchyRouter() {
         // const diagnosis = await HierarchyService.diagnosePermissions(req.params.organizationId)
         const diagnosis = {} // Temporary placeholder
         res.json({ diagnosis })
-      } catch (error: Error) {
+      } catch (error: unknown) {
         res.status(500).json({ error: (error as Error).message })
       }
     }

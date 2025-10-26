@@ -1,5 +1,5 @@
-import { ApiClientConfig, RequestConfig } from '../types/api';
-import { ApiResponse } from '../types/common';
+import type { ApiClientConfig, RequestConfig } from '../types/api';
+import type { ApiResponse } from '../types/common';
 export declare class HotelApiClient {
     private client;
     private config;

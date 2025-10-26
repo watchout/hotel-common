@@ -149,7 +149,7 @@ export default async function handler(req: Request, res: Response) {
         }
       });
     }
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('❌ [hotel-common] [resources.get] Error:', error);
     res.status(500).json({
       success: false,

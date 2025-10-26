@@ -67,7 +67,7 @@ export class DeepLTranslationService {
         cached: false
       }))
 
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('DeepL translation failed:', error)
       return this.mockTranslation(texts, targetLanguage)
     }

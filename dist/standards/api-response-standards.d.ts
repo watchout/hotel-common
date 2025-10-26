@@ -2,7 +2,7 @@
  * API標準化ルール
  * ハイブリッド方式における統一レスポンス形式とエラーハンドリング
  */
-import { Response } from 'express';
+import type { Response } from 'express';
 export interface StandardResponse<T = any> {
     success: boolean;
     data?: T;

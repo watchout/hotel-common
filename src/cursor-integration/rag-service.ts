@@ -65,7 +65,7 @@ export class RealRAGService {
       const initTime = Date.now() - startTime;
       console.log(`✅ RAGシステム初期化完了 (${initTime}ms)`);
       
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('❌ RAGシステム初期化エラー:', error);
       throw error;
     }
@@ -306,7 +306,7 @@ export class RealRAGService {
   private async readFileContent(filePath: string): Promise<string> {
     try {
       return fs.readFileSync(path.join(this.docsPath, filePath), 'utf-8');
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.warn(`ファイル読み込みエラー: ${filePath}`);
       return '';
     }

@@ -65,7 +65,7 @@ export class HotelUnifiedApiClient {
       return await this.db.tenant.findUnique({
         where: { id: this.config.tenantId }
       })
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to get tenant', { 
         tenantId: this.config.tenantId,
         error: error as Error
@@ -114,7 +114,7 @@ export class HotelUnifiedApiClient {
       await this.updateSystemAccess('customer', 'read')
 
       return customers
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to get customers', { error: error as Error })
       return []
     }
@@ -142,7 +142,7 @@ export class HotelUnifiedApiClient {
 
       await this.logSystemEvent('customer', 'create', customer.id, data)
       return customer
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to create customer', { error: error as Error, data })
       return null
     }
@@ -189,7 +189,7 @@ export class HotelUnifiedApiClient {
 
       await this.logSystemEvent('customer', 'update', customerId, data, existing)
       return updated
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to update customer', { error: error as Error, customerId, data } as any)
       return null
     }
@@ -241,7 +241,7 @@ export class HotelUnifiedApiClient {
 
       await this.updateSystemAccess('reservation', 'read')
       return reservations
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to get reservations', { error: error as Error })
       return []
     }
@@ -286,7 +286,7 @@ export class HotelUnifiedApiClient {
 
       await this.logSystemEvent('reservation', 'create', reservation.id, data)
       return reservation as any
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to create reservation', { error: error as Error, data })
       return null
     }
@@ -318,7 +318,7 @@ export class HotelUnifiedApiClient {
           eventData: data
         }
       })
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to log system event', { error: error as Error })
     }
   }

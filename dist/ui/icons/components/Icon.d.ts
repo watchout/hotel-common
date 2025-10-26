@@ -1,10 +1,5 @@
-/**
- * 基本アイコンコンポーネント
- *
- * Iconifyを使用した統一アイコンコンポーネント
- */
-import { PropType } from 'vue';
-import { IconSize, IconColor, IconSetType } from '../types';
+import type { IconSize, IconColor, IconSetType } from '../types';
+import type { PropType } from 'vue';
 /**
  * アイコンコンポーネント
  */

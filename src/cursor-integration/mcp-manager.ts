@@ -88,7 +88,7 @@ export class OpenAPICache {
       }
 
       return cacheData.content;
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.warn(`Failed to read cache for ${specPath}:`, error);
       return null;
     }
@@ -180,7 +180,7 @@ export class MCPManager {
       console.log(`✅ MCP server ${serverName} started with PID: ${pid}`);
       return true;
 
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error(`Failed to start MCP server ${serverName}:`, error);
       return false;
     }
@@ -201,7 +201,7 @@ export class MCPManager {
       this.runningServers.delete(serverName);
       console.log(`✅ MCP server ${serverName} stopped`);
       return true;
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error(`Failed to stop MCP server ${serverName}:`, error);
       return false;
     }
@@ -270,7 +270,7 @@ export class MCPManager {
         cacheHits: this.getCacheHits(serverName),
         tokensSaved: this.getTokensSaved(serverName)
       };
-    } catch (error: Error) {
+    } catch (error: unknown) {
       // プロセスが存在しない
       this.runningServers.delete(serverName);
       return {
@@ -309,7 +309,7 @@ export class MCPManager {
         this.cache.cacheSpec(specPath, specContent);
         console.log(`📦 Cached OpenAPI spec: ${specPath}`);
       }
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.warn(`Failed to optimize spec ${specPath}:`, error);
     }
   }
@@ -327,7 +327,7 @@ export class MCPManager {
       this.simplifyExamples(spec);
       
       return JSON.stringify(spec, null, 2);
-    } catch (error: Error) {
+    } catch (error: unknown) {
       // JSON パースエラーの場合、YAML の可能性があるのでそのまま返す
       console.warn('Failed to parse spec as JSON, using as-is');
       return specContent;
@@ -351,7 +351,7 @@ export class MCPManager {
       const result = execSync(`ps -o etime= -p ${pid}`, { encoding: 'utf-8' });
       // etimeを秒に変換する簡易実装
       return parseInt(result.trim().replace(/[:-]/g, '')) || 0;
-    } catch (error: Error) {
+    } catch (error: unknown) {
       return 0;
     }
   }
@@ -365,7 +365,7 @@ export class MCPManager {
         const matches = logs.match(/cache hit/gi);
         return matches ? matches.length : 0;
       }
-    } catch (error: Error) {
+    } catch (error: unknown) {
       // ログ読み込みエラーは無視
     }
     return 0;

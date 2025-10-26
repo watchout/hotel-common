@@ -75,7 +75,7 @@ export class ReservationService {
       })
 
       return reservation as any
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('予約作成エラー', error as Error)
       throw error
     }
@@ -98,7 +98,7 @@ export class ReservationService {
       })
 
       return reservation as any | null
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('予約取得エラー', error as Error)
       throw error
     }
@@ -186,7 +186,7 @@ export class ReservationService {
         total,
         hasNext
       }
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('予約一覧取得エラー', error as Error)
       throw error
     }
@@ -265,7 +265,7 @@ export class ReservationService {
       })
 
       return reservation as any
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('予約更新エラー', error as Error)
       throw error
     }
@@ -302,7 +302,7 @@ export class ReservationService {
       })
 
       return reservation as any
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('予約キャンセルエラー', error as Error)
       throw error
     }
@@ -340,7 +340,7 @@ export class ReservationService {
       })
 
       return reservation as any
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('チェックイン処理エラー', error as Error)
       throw error
     }
@@ -376,7 +376,7 @@ export class ReservationService {
       })
 
       return reservation as any
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('チェックアウト処理エラー', error as Error)
       throw error
     }
@@ -420,7 +420,7 @@ export class ReservationService {
         completed,
         cancelled
       }
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('予約統計取得エラー', error as Error)
       throw error
     }

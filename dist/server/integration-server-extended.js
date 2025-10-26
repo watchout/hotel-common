@@ -38,10 +38,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HotelIntegrationServer = void 0;
-const express_1 = __importDefault(require("express"));
-const dotenv_1 = require("dotenv");
-const prisma_1 = require("../database/prisma");
 const cors_1 = __importDefault(require("cors"));
+const dotenv_1 = require("dotenv");
+const express_1 = __importDefault(require("express"));
+const prisma_1 = require("../database/prisma");
 const hotel_member_1 = require("../integrations/hotel-member");
 const api_endpoints_1 = __importDefault(require("../integrations/hotel-member/api-endpoints"));
 const page_routes_1 = __importDefault(require("../routes/systems/common/page.routes"));
@@ -275,7 +275,7 @@ class HotelIntegrationServer {
             });
         });
         // エラーハンドラー
-        this.app.use((error, req, res, next) => {
+        this.app.use((error, req, res, _next) => {
             console.error('Server error:', error);
             res.status(500).json({
                 error: 'INTERNAL_ERROR',

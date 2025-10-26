@@ -179,7 +179,7 @@ router.post('/checkin', authMiddleware, async (req: Request, res: Response) => {
           details: { guest_count: validatedData.guestCount }
         })
       } catch {}
-    } catch (e: Error) {
+    } catch (e: unknown) {
       logger.warn('CHECKIN操作ログ記録に失敗（継続）', { error: e instanceof Error ? e.message : e })
     }
 
@@ -191,7 +191,7 @@ router.post('/checkin', authMiddleware, async (req: Request, res: Response) => {
       }).response
     );
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('統合チェックイン処理エラー:', error);
     
     if (error instanceof z.ZodError) {
@@ -469,7 +469,7 @@ router.post('/checkout', authMiddleware, async (req: Request, res: Response) => 
           details: { final_amount: (result as any).totalAmount, payment_method: validatedData.paymentMethod }
         })
       } catch {}
-    } catch (e: Error) {
+    } catch (e: unknown) {
       logger.warn('CHECKOUT操作ログ記録に失敗（継続）', { error: e instanceof Error ? e.message : e })
     }
 
@@ -481,7 +481,7 @@ router.post('/checkout', authMiddleware, async (req: Request, res: Response) => 
       }).response
     );
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('統合チェックアウト処理エラー:', error);
     
     if (error instanceof z.ZodError) {
@@ -771,7 +771,7 @@ async function updateSessionOnCheckout(tenantId: string, reservationId: string) 
         tenantId
       });
     }
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('チェックアウト時セッション更新エラー', error);
     // セッション更新エラーは致命的ではないため、処理を続行
   }

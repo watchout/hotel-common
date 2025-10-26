@@ -129,7 +129,7 @@ router.get('/rooms', sessionAuthMiddleware, async (req: Request, res: Response) 
       result_count: paginatedRooms.length
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('フロントデスク客室一覧取得エラー', error as Error);
 
     if (error instanceof z.ZodError) {
@@ -196,7 +196,7 @@ router.get('/rooms/:id', sessionAuthMiddleware, async (req: Request, res: Respon
       room_id: roomId
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('フロントデスク客室詳細取得エラー', error as Error);
     ResponseHelper.sendInternalError(res, '客室詳細の取得に失敗しました');
   }
@@ -313,7 +313,7 @@ router.put('/rooms/:id', sessionAuthMiddleware, async (req: Request, res: Respon
       new_status: updateData.status
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('フロントデスク客室状態更新エラー', error as Error);
 
     if (error instanceof z.ZodError) {

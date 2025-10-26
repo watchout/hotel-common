@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HierarchicalJwtManager = void 0;
 const jwt_1 = require("../auth/jwt");
-const logger_1 = require("../utils/logger");
 const permission_manager_1 = require("./permission-manager");
+const logger_1 = require("../utils/logger");
 /**
  * 階層管理対応JWT拡張マネージャー
  *

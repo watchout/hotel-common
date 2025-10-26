@@ -47,7 +47,7 @@ apiHealthRouter.get('/api/health', async (req, res) => {
         hierarchical_auth: true
       }
     })
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('Health check error:', error)
     
     // エラーレスポンス

@@ -23,14 +23,14 @@ export declare const UserCreateSchema: z.ZodObject<{
     level: z.ZodNumber;
     tenant_id: z.ZodString;
 }, "strip", z.ZodTypeAny, {
-    role: "admin" | "staff" | "manager" | "readonly";
+    role: "admin" | "manager" | "staff" | "readonly";
     password: string;
     name: string;
     level: number;
     tenant_id: string;
     email: string;
 }, {
-    role: "admin" | "staff" | "manager" | "readonly";
+    role: "admin" | "manager" | "staff" | "readonly";
     password: string;
     name: string;
     level: number;
@@ -46,14 +46,14 @@ export declare const UserUpdateSchema: z.ZodObject<{
     status: z.ZodOptional<z.ZodEnum<["active", "inactive", "suspended"]>>;
 }, "strip", z.ZodTypeAny, {
     id: string;
-    role?: "admin" | "staff" | "manager" | "readonly" | undefined;
+    role?: "admin" | "manager" | "staff" | "readonly" | undefined;
     name?: string | undefined;
     level?: number | undefined;
     status?: "active" | "suspended" | "inactive" | undefined;
     email?: string | undefined;
 }, {
     id: string;
-    role?: "admin" | "staff" | "manager" | "readonly" | undefined;
+    role?: "admin" | "manager" | "staff" | "readonly" | undefined;
     name?: string | undefined;
     level?: number | undefined;
     status?: "active" | "suspended" | "inactive" | undefined;

@@ -38,12 +38,12 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = __importStar(require("express"));
 const services_1 = require("./services");
-const database_1 = require("../../database");
-const api_standards_1 = require("../../standards/api-standards");
-const middleware_1 = require("../../auth/middleware");
-const validators_1 = require("./validators");
 const types_1 = require("./types");
 const utils_1 = require("./utils");
+const validators_1 = require("./validators");
+const middleware_1 = require("../../auth/middleware");
+const database_1 = require("../../database");
+const api_standards_1 = require("../../standards/api-standards");
 // サービスのインスタンス化
 const appLauncherService = new services_1.AppLauncherService(database_1.hotelDb.getClient());
 // ルーターの作成

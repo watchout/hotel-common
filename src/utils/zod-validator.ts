@@ -20,7 +20,7 @@ export class ZodValidator {
         isValid: true,
         errors: []
       }
-    } catch (error: Error) {
+    } catch (error: unknown) {
       if (error instanceof z.ZodError) {
         const errors = error.issues.map(err => ({
           field: err.path.join('.'),

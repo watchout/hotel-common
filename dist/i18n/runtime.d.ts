@@ -1,6 +1,6 @@
-import { SupportedLanguage } from './types';
-import { TranslationConfig } from './config';
 import { EventEmitter } from 'events';
+import { TranslationConfig } from './config';
+import type { SupportedLanguage } from './types';
 /** 実行時翻訳システム */
 export declare class RuntimeTranslationSystem extends EventEmitter {
     private cache;

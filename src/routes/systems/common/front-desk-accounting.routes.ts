@@ -156,7 +156,7 @@ router.get('/accounting', authMiddleware, async (req: Request, res: Response) =>
       result_count: filteredTransactions.length
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('フロントデスク会計取引一覧取得エラー', error as Error);
     
     if (error instanceof z.ZodError) {
@@ -238,7 +238,7 @@ router.get('/accounting/:id', authMiddleware, async (req: Request, res: Response
       transaction_id: transactionId
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('フロントデスク会計取引詳細取得エラー', error as Error);
     ResponseHelper.sendInternalError(res, '会計取引詳細の取得に失敗しました');
   }
@@ -308,7 +308,7 @@ router.post('/accounting/process-payment', authMiddleware, async (req: Request, 
       amount: paymentData.amount
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('フロントデスク決済処理エラー', error as Error);
     
     if (error instanceof z.ZodError) {
@@ -377,7 +377,7 @@ router.get('/accounting/daily-report', authMiddleware, async (req: Request, res:
       report_date: reportDate.toISOString().split('T')[0]
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('フロントデスク日次売上レポート取得エラー', error as Error);
     ResponseHelper.sendInternalError(res, '日次売上レポートの取得に失敗しました');
   }

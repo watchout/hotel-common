@@ -7,8 +7,8 @@ Object.defineProperty(exports, "LanguageOptimizer", { enumerable: true, get: fun
 var context_manager_1 = require("./core/context-manager");
 Object.defineProperty(exports, "HotelCommonContextManager", { enumerable: true, get: function () { return context_manager_1.HotelCommonContextManager; } });
 // Imports for internal use
-const language_optimizer_2 = require("./core/language-optimizer");
 const context_manager_2 = require("./core/context-manager");
+const language_optimizer_2 = require("./core/language-optimizer");
 class TokenOptimizationSystem {
     languageOptimizer;
     contextManager;

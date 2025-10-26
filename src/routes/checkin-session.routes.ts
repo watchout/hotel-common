@@ -133,7 +133,7 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       roomId: validatedData.roomId
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('チェックインセッション作成エラー', error as Error);
     
     if (error instanceof z.ZodError) {
@@ -194,7 +194,7 @@ router.get('/:sessionId', authMiddleware, async (req: Request, res: Response) =>
       tenantId
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('セッション詳細取得エラー', error as Error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', 'セッション詳細の取得に失敗しました').response
@@ -248,7 +248,7 @@ router.get('/by-number/:sessionNumber', authMiddleware, async (req: Request, res
       tenantId
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('セッション番号による取得エラー', error as Error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', 'セッションの取得に失敗しました').response
@@ -297,7 +297,7 @@ router.get('/active-by-room/:roomId', authMiddleware, async (req: Request, res: 
       tenantId
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('部屋のアクティブセッション取得エラー', error as Error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', 'アクティブセッションの取得に失敗しました').response
@@ -342,7 +342,7 @@ router.patch('/:sessionId', authMiddleware, async (req: Request, res: Response) 
       updates: validatedData
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('セッション更新エラー', error as Error);
     
     if (error instanceof z.ZodError) {
@@ -415,7 +415,7 @@ router.post('/:sessionId/checkout', authMiddleware, async (req: Request, res: Re
       checkoutTime
     });
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('チェックアウト処理エラー', error as Error);
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', 'チェックアウト処理に失敗しました').response

@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setupCampaignDatabase = setupCampaignDatabase;
 exports.checkCampaignDatabase = checkCampaignDatabase;
+const uuid_1 = require("uuid");
 const prisma_1 = require("../../database/prisma");
 const logger_1 = require("../../utils/logger");
-const uuid_1 = require("uuid");
 /**
  * キャンペーン関連のデータベース初期設定を行う
  */

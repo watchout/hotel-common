@@ -1,4 +1,4 @@
-import { SessionInfo } from '../types/auth';
+import type { SessionInfo } from '../types/auth';
 export interface RedisConfig {
     host?: string;
     port?: number;

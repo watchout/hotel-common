@@ -35,8 +35,8 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HierarchyApiManager = void 0;
 const database_1 = require("../database");
-const logger_1 = require("../utils/logger");
 const permission_manager_1 = require("./permission-manager");
+const logger_1 = require("../utils/logger");
 /**
  * Hotel Group階層管理API操作クラス
  *

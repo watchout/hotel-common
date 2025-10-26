@@ -32,7 +32,7 @@ export class ResponseTreeController {
         success: true,
         data: trees
       });
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Error getting active trees:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -70,7 +70,7 @@ export class ResponseTreeController {
         success: true,
         data: tree
       });
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('Error getting tree by id:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,

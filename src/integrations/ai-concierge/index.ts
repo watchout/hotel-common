@@ -39,7 +39,7 @@ export function integrateAiConciergeFeature(server: HotelIntegrationServer): voi
   `);
     
     logger.info('AIコンシェルジュ機能を統合しました');
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('AIコンシェルジュ機能統合エラー:', { error: error instanceof Error ? error : new Error('Unknown error') });
   }
 }

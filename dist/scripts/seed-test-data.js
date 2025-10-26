@@ -34,10 +34,10 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 // seed-test-data.ts
-const client_1 = require("@prisma/client");
-const uuid_1 = require("uuid");
-const bcrypt = __importStar(require("bcrypt"));
 const readline = __importStar(require("readline"));
+const client_1 = require("@prisma/client");
+const bcrypt = __importStar(require("bcrypt"));
+const uuid_1 = require("uuid");
 /**
  * データベース操作の安全確認を行う関数
  * @param message 確認メッセージ

@@ -66,7 +66,7 @@ export class RoomGradeService {
         created_at: roomGrade.created_at.toISOString(),
         updated_at: roomGrade.updated_at.toISOString()
       } as RoomGrade
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('客室ランク作成エラー', error as Error)
       throw error
     }
@@ -98,7 +98,7 @@ export class RoomGradeService {
         created_at: rg.created_at.toISOString(),
         updated_at: rg.updated_at.toISOString()
       })) as RoomGrade[]
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('客室ランク一覧取得エラー', error as Error)
       throw error
     }
@@ -133,7 +133,7 @@ export class RoomGradeService {
         created_at: roomGrade.created_at.toISOString(),
         updated_at: roomGrade.updated_at.toISOString()
       } as RoomGrade
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('客室ランク詳細取得エラー', error as Error)
       throw error
     }
@@ -196,7 +196,7 @@ export class RoomGradeService {
         created_at: updatedGrade.created_at.toISOString(),
         updated_at: updatedGrade.updated_at.toISOString()
       } as RoomGrade
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('客室ランク更新エラー', error as Error)
       throw error
     }
@@ -230,7 +230,7 @@ export class RoomGradeService {
         id,
         name: existingGrade.name
       })
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('客室ランク削除エラー', error as Error)
       throw error
     }

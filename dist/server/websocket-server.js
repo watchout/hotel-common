@@ -8,10 +8,10 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HotelWebSocketServer = void 0;
-const socket_io_1 = require("socket.io");
-const redis_1 = require("redis");
-const logger_1 = require("../utils/logger");
 const http_1 = require("http");
+const redis_1 = require("redis");
+const socket_io_1 = require("socket.io");
+const logger_1 = require("../utils/logger");
 class HotelWebSocketServer {
     io = null;
     redisClient = null;

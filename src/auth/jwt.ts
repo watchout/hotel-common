@@ -41,7 +41,7 @@ export function verifyToken(
   try {
     // Enforce HS256 and exp validation
     return jwt.verify(token, jwtSecret, { algorithms: ['HS256'] }) as HierarchicalJWTPayload;
-  } catch (error: Error) {
+  } catch (error: unknown) {
     throw new Error('Invalid token');
   }
 }
@@ -54,7 +54,7 @@ export function verifyToken(
 export function decodeToken(token: string): HierarchicalJWTPayload | null {
   try {
     return jwt.decode(token) as HierarchicalJWTPayload;
-  } catch (error: Error) {
+  } catch (error: unknown) {
     return null;
   }
 }

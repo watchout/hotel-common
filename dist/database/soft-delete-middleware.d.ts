@@ -4,7 +4,7 @@
  * このミドルウェアは、Prismaクエリに自動的にソフトデリートフィルタを適用します。
  * is_deleted = falseの条件を自動的に追加し、削除済みレコードを除外します。
  */
-import { PrismaClient } from '@prisma/client';
+import type { PrismaClient } from '@prisma/client';
 /**
  * Prismaミドルウェア設定関数
  * @param prisma PrismaClientインスタンス

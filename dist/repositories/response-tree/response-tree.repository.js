@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ResponseTreeRepository = void 0;
-const prisma_1 = require("../../database/prisma");
 const uuid_1 = require("uuid");
+const prisma_1 = require("../../database/prisma");
 /**
  * レスポンスツリーリポジトリ
  * データベースとのやり取りを担当

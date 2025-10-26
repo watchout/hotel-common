@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 /**
  * X-Tenant-ID検証ミドルウェア
  * X-Tenant-IDヘッダーがJWTのtenant_idと一致するかチェック

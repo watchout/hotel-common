@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SimpleCampaignServer = void 0;
-const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = require("dotenv");
+const express_1 = __importDefault(require("express"));
 // 環境変数読み込み
 (0, dotenv_1.config)();
 /**
@@ -235,7 +235,7 @@ class SimpleCampaignServer {
             });
         });
         // エラーハンドラー
-        this.app.use((error, req, res, next) => {
+        this.app.use((error, req, res, _next) => {
             console.error('Server error:', error);
             res.status(500).json({
                 error: 'INTERNAL_ERROR',

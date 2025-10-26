@@ -109,7 +109,7 @@ app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
 
     console.log('JWT検証完了（フォールバック）')
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('JWT検証エラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -146,7 +146,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-customer-access', async 
 
     console.log('顧客データアクセス許可（フォールバック）')
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('権限チェックエラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR', 
@@ -182,7 +182,7 @@ app.post('/api/hotel-member/hierarchy/tenants/accessible', async (req, res) => {
 
     console.log('テナント一覧返却（フォールバック）:', tenants)
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('テナント取得エラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -214,7 +214,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-membership-restrictions'
 
     console.log('会員データ制限チェック完了（フォールバック）')
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('会員データ制限チェックエラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -246,7 +246,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-analytics-access', async
 
     console.log('グループ分析権限許可（フォールバック）')
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('分析権限チェックエラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -305,7 +305,7 @@ app.post('/api/hotel-member/hierarchy/user/permissions-detail', async (req, res)
 
     console.log('権限詳細情報返却（フォールバック）')
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('権限詳細情報取得エラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -345,7 +345,7 @@ app.post('/api/hotel-member/hierarchy/permissions/batch-check', async (req, res)
 
     console.log('バッチ権限チェック完了（フォールバック）')
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('バッチ権限チェックエラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',

@@ -38,8 +38,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DynamicCursorIntegration = void 0;
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
-const rag_service_1 = require("./rag-service");
 const guardrails_validator_1 = require("./guardrails-validator");
+const rag_service_1 = require("./rag-service");
 /**
  * 動的Custom Instructions統合システム
  * agentウィンドウの利便性 + 「ことわり」システムの完全機能

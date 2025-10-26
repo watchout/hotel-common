@@ -264,7 +264,7 @@ async function seedTestData() {
       } else {
         console.log(`ℹ️ 既存のスタッフを使用: ${staffCount}件`);
       }
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.log('⚠️ スタッフテーブルがないか、アクセスできません。スキップします。');
     }
 
@@ -273,7 +273,7 @@ async function seedTestData() {
     console.log('ℹ️ システムプラン作成はスキップします（スキーマの不一致のため）');
     
     console.log('🌱 テストデータのシード完了');
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('❌ テストデータのシード中にエラーが発生しました:', error);
   } finally {
     await prisma.$disconnect();

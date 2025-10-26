@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 /**
  * セッション互換性ミドルウェア
  * 既存APIの後方互換性を確保

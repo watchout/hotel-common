@@ -80,12 +80,12 @@ fixes.forEach((fileFixes, filePath) => {
       // Pattern 2: } catch (e) {
       // Pattern 3: } catch (err) {
       const patterns = [
-        { regex: /}\s*catch\s*\(\s*error\s*\)\s*{/, replacement: '} catch (error: Error) {' },
-        { regex: /}\s*catch\s*\(\s*e\s*\)\s*{/, replacement: '} catch (e: Error) {' },
-        { regex: /}\s*catch\s*\(\s*err\s*\)\s*{/, replacement: '} catch (err: Error) {' },
-        { regex: /catch\s*\(\s*error\s*\)\s*{/, replacement: 'catch (error: Error) {' },
-        { regex: /catch\s*\(\s*e\s*\)\s*{/, replacement: 'catch (e: Error) {' },
-        { regex: /catch\s*\(\s*err\s*\)\s*{/, replacement: 'catch (err: Error) {' }
+        { regex: /}\s*catch\s*\(\s*error\s*\)\s*{/, replacement: '} catch (error: unknown) {' },
+        { regex: /}\s*catch\s*\(\s*e\s*\)\s*{/, replacement: '} catch (e: unknown) {' },
+        { regex: /}\s*catch\s*\(\s*err\s*\)\s*{/, replacement: '} catch (err: unknown) {' },
+        { regex: /catch\s*\(\s*error\s*\)\s*{/, replacement: 'catch (error: unknown) {' },
+        { regex: /catch\s*\(\s*e\s*\)\s*{/, replacement: 'catch (e: unknown) {' },
+        { regex: /catch\s*\(\s*err\s*\)\s*{/, replacement: 'catch (err: unknown) {' }
       ];
       
       let modified = false;

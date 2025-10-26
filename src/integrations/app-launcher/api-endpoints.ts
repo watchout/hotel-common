@@ -55,7 +55,7 @@ router.get('/apps/google-play', verifyAdminAuth, async (req: Request, res: Respo
     return StandardResponseBuilder.success(res, result.data, {
       pagination: result.pagination
     });
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('Google Playアプリ一覧取得エラー:', error);
     const { response, statusCode } = StandardResponseBuilder.error('SERVER_ERROR', 'アプリ一覧の取得に失敗しました', undefined, 500);
     return res.status(statusCode).json(response);
@@ -69,7 +69,7 @@ router.get('/apps/google-play/:id', verifyAdminAuth, validateGooglePlayAppExists
     const app = await appLauncherService.getGooglePlayApp(appId);
     
     return StandardResponseBuilder.success(res, app);
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('Google Playアプリ詳細取得エラー:', error);
     const { response, statusCode } = StandardResponseBuilder.error('SERVER_ERROR', 'アプリ詳細の取得に失敗しました', undefined, 500);
     return res.status(statusCode).json(response);
@@ -89,7 +89,7 @@ router.post(
       return StandardResponseBuilder.success(res, app, {
         message: 'アプリを登録しました'
       }, 201);
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('Google Playアプリ登録エラー:', error);
       const { response, statusCode } = StandardResponseBuilder.error(
         'INTERNAL_SERVER_ERROR',
@@ -114,7 +114,7 @@ router.put(
       return StandardResponseBuilder.success(res, app, {
         message: 'アプリ情報を更新しました'
       });
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('Google Playアプリ更新エラー:', error);
       const { response, statusCode } = StandardResponseBuilder.error(
         'INTERNAL_SERVER_ERROR',
@@ -143,7 +143,7 @@ router.patch(
         : 'アプリの承認を取り消しました';
       
       return StandardResponseBuilder.success(res, app, { message });
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('Google Playアプリ承認エラー:', error);
       const { response, statusCode } = StandardResponseBuilder.error(
         'INTERNAL_SERVER_ERROR',
@@ -167,7 +167,7 @@ router.get('/places/:placeId/apps', verifyTenantAuth, async (req: Request, res: 
     const apps = await appLauncherService.listHotelApps(placeId, { isEnabled });
     
     return StandardResponseBuilder.success(res, apps);
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('場所別アプリ一覧取得エラー:', error);
     const { response, statusCode } = StandardResponseBuilder.error(
       'INTERNAL_SERVER_ERROR',
@@ -194,7 +194,7 @@ router.post(
       return StandardResponseBuilder.success(res, hotelApp, {
         message: '場所にアプリを追加しました'
       }, 201);
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('場所別アプリ追加エラー:', error);
       const { response, statusCode } = StandardResponseBuilder.error(
         'INTERNAL_SERVER_ERROR',
@@ -221,7 +221,7 @@ router.put(
       return StandardResponseBuilder.success(res, hotelApp, {
         message: '場所のアプリ設定を更新しました'
       });
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('場所別アプリ更新エラー:', error);
       const { response, statusCode } = StandardResponseBuilder.error(
         'INTERNAL_SERVER_ERROR',
@@ -247,7 +247,7 @@ router.delete(
       return StandardResponseBuilder.success(res, null, {
         message: '場所からアプリを削除しました'
       });
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('場所別アプリ削除エラー:', error);
       const { response, statusCode } = StandardResponseBuilder.error(
         'INTERNAL_SERVER_ERROR',
@@ -280,7 +280,7 @@ router.get(
       return StandardResponseBuilder.success(res, {
         appConfig: layoutAppBlock.appConfig
       });
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('レイアウトブロック別アプリ設定取得エラー:', error);
       const { response, statusCode } = StandardResponseBuilder.error(
         'INTERNAL_SERVER_ERROR',
@@ -311,7 +311,7 @@ router.put(
       return StandardResponseBuilder.success(res, layoutAppBlock, {
         message: 'レイアウトブロックのアプリ設定を更新しました'
       });
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('レイアウトブロック別アプリ設定更新エラー:', error);
       const { response, statusCode } = StandardResponseBuilder.error(
         'INTERNAL_SERVER_ERROR',
@@ -344,7 +344,7 @@ router.get('/client/places/:placeId/apps', verifyTenantAuth, async (req: Request
       : approvedApps;
     
     return StandardResponseBuilder.success(res, filteredApps);
-  } catch (error: Error) {
+  } catch (error: unknown) {
     console.error('クライアント用アプリ一覧取得エラー:', error);
     const { response, statusCode } = StandardResponseBuilder.error(
       'INTERNAL_SERVER_ERROR',

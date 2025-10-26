@@ -200,7 +200,7 @@ export class OutputValidationGuardrail implements GuardrailLayer {
       if (context.expectedFormat === 'json' && context.outputContent) {
         try {
           JSON.parse(context.outputContent);
-        } catch (e: Error) {
+        } catch (e: unknown) {
           violations.push('Invalid JSON format in response');
           riskLevel = 'medium';
         }

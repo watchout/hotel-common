@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WelcomeScreenService = void 0;
-const prisma_1 = require("../../database/prisma");
-const cache_1 = require("./cache");
 const uuid_1 = require("uuid");
+const cache_1 = require("./cache");
+const prisma_1 = require("../../database/prisma");
 class WelcomeScreenService {
     cache = new cache_1.CampaignCache();
     async getWelcomeScreenConfig(languageCode) {

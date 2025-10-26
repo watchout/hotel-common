@@ -136,7 +136,7 @@ export class HierarchyService {
 
       return { group, brands, hotels, departments }
 
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('組織階層セットアップエラー:', error as Error)
       throw error
     }
@@ -186,7 +186,7 @@ export class HierarchyService {
 
       return { user, tokens }
 
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('階層権限付きユーザー作成エラー:', error as Error)
       throw error
     }
@@ -221,7 +221,7 @@ export class HierarchyService {
 
       return enrichedOrgs
 
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('組織階層ツリー取得エラー:', error as Error)
       return []
     }
@@ -311,7 +311,7 @@ export class HierarchyService {
         hierarchy_summary: hierarchySummary
       }
 
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('ユーザー実効権限取得エラー:', error as Error)
       throw error
     }
@@ -373,7 +373,7 @@ export class HierarchyService {
         preset_suggestions: presetSuggestions
       }
 
-    } catch (error: Error) {
+    } catch (error: unknown) {
       this.logger.error('権限診断エラー:', error as Error)
       throw error
     }

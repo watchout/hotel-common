@@ -42,10 +42,10 @@ export class KnowledgeBaseValidator {
           'docs/api-specs/hotel-pms-openapi.yaml'
         ];
         // 実装可能な場合のみ読み込み
-      } catch (e: Error) {
+      } catch (e: unknown) {
         console.log('API specs not found, using basic validation');
       }
-    } catch (error: Error) {
+    } catch (error: unknown) {
       console.error('Knowledge base initialization failed:', error);
     }
   }

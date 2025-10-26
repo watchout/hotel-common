@@ -144,7 +144,7 @@ router.get('/invoices', authMiddleware, async (req: Request, res: Response) => {
       result_count: formattedInvoices.length
     })
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('請求書一覧取得エラー', error as Error)
     
     if (error instanceof z.ZodError) {
@@ -234,7 +234,7 @@ router.post('/invoices', authMiddleware, async (req: Request, res: Response) => 
       total_amount: totalAmount
     })
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('請求書作成エラー', error as Error)
     
     if (error instanceof z.ZodError) {
@@ -316,7 +316,7 @@ router.get('/invoices/:id', authMiddleware, async (req: Request, res: Response) 
       invoice_id: id
     })
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('請求書詳細取得エラー', error as Error)
     ResponseHelper.sendInternalError(res, '請求書の詳細取得に失敗しました')
   }
@@ -379,7 +379,7 @@ router.post('/payments', authMiddleware, async (req: Request, res: Response) => 
       amount: paymentData.amount
     })
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('決済記録エラー', error as Error)
     
     if (error instanceof z.ZodError) {
@@ -476,7 +476,7 @@ router.get('/payments', authMiddleware, async (req: Request, res: Response) => {
       result_count: formattedPayments.length
     })
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('決済履歴取得エラー', error as Error)
     
     if (error instanceof z.ZodError) {
@@ -618,7 +618,7 @@ router.get('/reports', authMiddleware, async (req: Request, res: Response) => {
       report_type: type
     })
 
-  } catch (error: Error) {
+  } catch (error: unknown) {
     logger.error('会計レポート取得エラー', error as Error)
     
     if (error instanceof z.ZodError) {

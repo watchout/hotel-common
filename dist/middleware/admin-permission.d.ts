@@ -2,7 +2,7 @@
  * 管理者権限チェックミドルウェア
  * baseLevelベースの権限管理（既存roleフィールドから計算）
  */
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 /**
  * 管理者権限レベルチェックミドルウェア
  */

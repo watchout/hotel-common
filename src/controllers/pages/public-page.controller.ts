@@ -65,7 +65,7 @@ export class PublicPageController {
         content,
         template: page.Template
       });
-    } catch (error: Error) {
+    } catch (error: unknown) {
       logger.error('公開ページ取得エラー', { error: error as Error });
       const { response, statusCode } = StandardResponseBuilder.serverError('サーバーエラー');
       return res.status(statusCode).json(response);

@@ -4,9 +4,9 @@ exports.HotelEventPublisher = void 0;
 exports.createEventPublisher = createEventPublisher;
 exports.getEventPublisher = getEventPublisher;
 const redis_queue_1 = require("./redis-queue");
-const client_1 = require("../websocket/client");
-const logger_1 = require("../utils/logger");
 const prisma_1 = require("../database/prisma");
+const logger_1 = require("../utils/logger");
+const client_1 = require("../websocket/client");
 /**
  * 統一EventPublisher - Event-driven連携の発行側統一インターフェース
  *

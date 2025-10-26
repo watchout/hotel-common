@@ -1,4 +1,4 @@
-import { SystemEvent } from '../types/common';
+import type { SystemEvent } from '../types/common';
 export interface WebSocketConfig {
     url: string;
     tenantId?: string;
