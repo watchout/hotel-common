@@ -1,4 +1,4 @@
-import { HierarchicalJWTPayload } from '../auth/types';
+import type { HierarchicalJWTPayload } from '../auth/types';
 
 declare global {
   namespace Express {

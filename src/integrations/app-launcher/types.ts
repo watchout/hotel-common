@@ -68,7 +68,7 @@ export interface HotelAppCreateInput {
   isEnabled?: boolean;
 }
 
-export interface HotelAppUpdateInput extends Partial<Omit<HotelAppCreateInput, 'placeId' | 'appId'>> {}
+export type HotelAppUpdateInput = Partial<Omit<HotelAppCreateInput, 'placeId' | 'appId'>>
 
 export interface LayoutAppBlockUpdateInput {
   layoutId: number;

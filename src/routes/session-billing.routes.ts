@@ -1,10 +1,14 @@
-import express, { Request, Response } from 'express';
+import { Decimal } from '@prisma/client/runtime/library';
+import express from 'express';
 import { z } from 'zod';
+
 import { authMiddleware } from '../auth/middleware';
 import { hotelDb } from '../database/prisma';
-import { StandardResponseBuilder } from '../utils/response-builder';
 import { logger } from '../utils/logger';
-import { Decimal } from '@prisma/client/runtime/library';
+import { StandardResponseBuilder } from '../utils/response-builder';
+
+import type { Request, Response } from 'express';
+
 
 const router = express.Router();
 

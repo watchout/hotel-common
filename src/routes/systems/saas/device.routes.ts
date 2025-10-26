@@ -1,6 +1,7 @@
 import express from 'express'
-import DeviceRoomService from '../../../services/device/device-room.service'
+
 import { authMiddleware } from '../../../auth/middleware'
+import DeviceRoomService from '../../../services/device/device-room.service'
 
 const router = express.Router()
 

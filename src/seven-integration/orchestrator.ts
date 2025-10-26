@@ -2,7 +2,22 @@
 // 文献1-7完全統合メインコントローラー
 
 import { EventEmitter } from 'events'
+
 import { 
+  getSevenIntegrationConfig,
+  validateSevenIntegrationConfig,
+  PERFORMANCE_TARGETS,
+  AI_AGENT_CONFIGS,
+  INTEGRATION_LAYER_CONFIGS
+} from './config'
+import { 
+  SevenLayerIntegrationFactory
+} from './seven-layer-integration'
+
+import type {
+  BaseIntegrationLayer
+} from './seven-layer-integration';
+import type { 
   SevenIntegrationConfig,
   SevenIntegrationResult,
   IntegrationStatus,
@@ -12,24 +27,14 @@ import {
   IntegrationLayer,
   AIAgentType
 } from './types'
-import { 
-  SevenLayerIntegrationFactory,
-  BaseIntegrationLayer
-} from './seven-layer-integration'
-import { 
-  getSevenIntegrationConfig,
-  validateSevenIntegrationConfig,
-  PERFORMANCE_TARGETS,
-  AI_AGENT_CONFIGS,
-  INTEGRATION_LAYER_CONFIGS
-} from './config'
+
 
 export class SevenIntegrationOrchestrator extends EventEmitter {
   private config: SevenIntegrationConfig
   private status: IntegrationStatus
   private events: IntegrationEvent[] = []
   private layers: BaseIntegrationLayer[] = []
-  private currentLayerIndex: number = 0
+  private currentLayerIndex = 0
 
   constructor(customConfig?: Partial<SevenIntegrationConfig>) {
     super()
@@ -228,7 +233,7 @@ export class SevenIntegrationOrchestrator extends EventEmitter {
    * 継続的監視・改善実行
    */
   async startContinuousMonitoring(
-    interval: number = 60000, // 1分間隔
+    interval = 60000, // 1分間隔
     improvementCallback?: (improvements: string[]) => void
   ): Promise<() => void> {
     const monitoringInterval = setInterval(async () => {

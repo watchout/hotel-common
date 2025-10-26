@@ -6,10 +6,15 @@
  * - イベント駆動型アーキテクチャサポート
  */
 
-import { Server } from 'socket.io';
-import { createClient, RedisClientType } from 'redis';
-import { HotelLogger } from '../utils/logger';
 import { createServer } from 'http';
+
+import { createClient } from 'redis';
+import { Server } from 'socket.io';
+
+import { HotelLogger } from '../utils/logger';
+
+import type { RedisClientType } from 'redis';
+
 
 interface WebSocketServerOptions {
   port: number;

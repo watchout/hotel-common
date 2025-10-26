@@ -1,6 +1,9 @@
-import { io, Socket } from 'socket.io-client'
-import { WebSocketMessage, SystemEvent } from '../types/common'
+import { io } from 'socket.io-client'
+
 import { verifyToken } from '../auth/jwt'
+
+import type { WebSocketMessage, SystemEvent } from '../types/common'
+import type { Socket } from 'socket.io-client';
 
 export interface WebSocketConfig {
   url: string

@@ -1,5 +1,6 @@
 import * as Redis from 'redis'
-import { SessionInfo } from '../types/auth'
+
+import type { SessionInfo } from '../types/auth'
 
 export interface RedisConfig {
   host?: string
@@ -12,7 +13,7 @@ export interface RedisConfig {
 export class HotelRedisClient {
   private client: Redis.RedisClientType
   private config: RedisConfig
-  private connected: boolean = false
+  private connected = false
 
   constructor(config: RedisConfig = {}) {
     this.config = {
@@ -164,7 +165,7 @@ export class HotelRedisClient {
    * セッションIDでセッション保存（Cookie認証用）
    * SSOT準拠: hotel:session:{sessionId}
    */
-  async saveSessionById(sessionId: string, sessionInfo: any, ttlSeconds: number = 3600): Promise<void> {
+  async saveSessionById(sessionId: string, sessionInfo: any, ttlSeconds = 3600): Promise<void> {
     if (!this.connected) await this.connect()
 
     const key = `hotel:session:${sessionId}` // プレフィックスなしで直接指定（SSOT準拠）

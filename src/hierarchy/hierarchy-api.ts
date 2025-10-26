@@ -1,6 +1,7 @@
 import { hotelDb } from '../database'
-import { HotelLogger } from '../utils/logger'
 import { HierarchyPermissionManager } from './permission-manager'
+import { HotelLogger } from '../utils/logger'
+
 import type {
   OrganizationHierarchy,
   DataSharingPolicy,

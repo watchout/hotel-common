@@ -3,7 +3,9 @@
  * ハイブリッド方式における統一レスポンス形式とエラーハンドリング
  */
 
-import { Request, Response } from 'express'
+import { Request } from 'express'
+
+import type { Response } from 'express';
 
 // 統一レスポンス形式
 export interface StandardResponse<T = any> {
@@ -134,7 +136,7 @@ export class ResponseHelper {
   static sendSuccess<T>(
     res: Response,
     data: T,
-    statusCode: number = 200,
+    statusCode = 200,
     pagination?: PaginationInfo
   ): void {
     const response = StandardResponseBuilder.success(data, pagination)
@@ -148,7 +150,7 @@ export class ResponseHelper {
     res: Response,
     code: StandardErrorCode | string,
     message: string,
-    statusCode: number = 400,
+    statusCode = 400,
     details?: any
   ): void {
     const response = StandardResponseBuilder.error(code, message, details)
@@ -160,7 +162,7 @@ export class ResponseHelper {
    */
   static sendValidationError(
     res: Response,
-    message: string = '入力データが正しくありません',
+    message = '入力データが正しくありません',
     details?: any
   ): void {
     this.sendError(res, StandardErrorCode.VALIDATION_ERROR, message, 400, details)
@@ -171,7 +173,7 @@ export class ResponseHelper {
    */
   static sendUnauthorized(
     res: Response,
-    message: string = '認証が必要です'
+    message = '認証が必要です'
   ): void {
     this.sendError(res, StandardErrorCode.UNAUTHORIZED, message, 401)
   }
@@ -181,7 +183,7 @@ export class ResponseHelper {
    */
   static sendForbidden(
     res: Response,
-    message: string = 'アクセス権限がありません'
+    message = 'アクセス権限がありません'
   ): void {
     this.sendError(res, StandardErrorCode.FORBIDDEN, message, 403)
   }
@@ -191,7 +193,7 @@ export class ResponseHelper {
    */
   static sendNotFound(
     res: Response,
-    message: string = 'リソースが見つかりません'
+    message = 'リソースが見つかりません'
   ): void {
     this.sendError(res, StandardErrorCode.NOT_FOUND, message, 404)
   }
@@ -201,7 +203,7 @@ export class ResponseHelper {
    */
   static sendInternalError(
     res: Response,
-    message: string = 'システムエラーが発生しました',
+    message = 'システムエラーが発生しました',
     details?: any
   ): void {
     this.sendError(res, StandardErrorCode.INTERNAL_ERROR, message, 500, details)
@@ -218,7 +220,7 @@ export class ApiError extends Error {
 
   constructor(
     message: string,
-    statusCode: number = 500,
+    statusCode = 500,
     code: StandardErrorCode | string = StandardErrorCode.INTERNAL_ERROR,
     details?: any
   ) {

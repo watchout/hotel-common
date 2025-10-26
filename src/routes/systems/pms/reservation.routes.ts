@@ -1,11 +1,12 @@
 import express from 'express'
-import { ReservationService } from '../../../services/reservation.service'
+
 import { verifyTenantAuth } from '../../../auth/middleware'
 import { 
   CreateReservationRequestSchema,
   UpdateReservationRequestSchema,
   ReservationSearchParamsSchema
 } from '../../../schemas/reservation'
+import { ReservationService } from '../../../services/reservation.service'
 import { StandardResponseBuilder } from '../../../standards/api-standards'
 
 const router = express.Router()

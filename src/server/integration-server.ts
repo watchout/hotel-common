@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-import { PrismaClient } from '@prisma/client'
 import cors from 'cors'
 import { config } from 'dotenv'
 import express from 'express'
+
+import apiHealthRouter from './api-health'
 import { sessionAuthMiddleware } from '../auth/session-auth.middleware'
 import { hotelDb } from '../database/prisma'
 import { appLauncherApiRouter } from '../integrations/app-launcher'
@@ -11,6 +12,11 @@ import campaignsApiRouter from '../integrations/campaigns/api-endpoints'
 import { initializeHotelMemberHierarchy } from '../integrations/hotel-member'
 import hotelMemberApiRouter from '../integrations/hotel-member/api-endpoints'
 // システム別APIルーター
+
+// セッション管理APIルーター
+import checkinSessionRouter from '../routes/checkin-session.routes'
+import sessionBillingRouter from '../routes/session-billing.routes'
+import sessionMigrationRouter from '../routes/session-migration.routes'
 import {
   accountingRouter,
   adminDashboardRouter,
@@ -30,15 +36,11 @@ import {
   roomMemosRouter
 } from '../routes/systems'
 
-// セッション管理APIルーター
-import checkinSessionRouter from '../routes/checkin-session.routes'
-import sessionBillingRouter from '../routes/session-billing.routes'
-import sessionMigrationRouter from '../routes/session-migration.routes'
-
 // PMSシステムAPI
 import { reservationRouter, roomRouter } from '../routes/systems/pms'
 
-import apiHealthRouter from './api-health'
+import type { PrismaClient } from '@prisma/client'
+
 
 // 環境変数読み込み
 config()
@@ -96,23 +98,38 @@ class HotelIntegrationServer {
       credentials: true
     }))
 
-    // === Phase G1: グローバル早期401捕捉 ===
-    this.app.use((req, res, next) => {
-      const origJson = res.json.bind(res);
-      res.json = (body: any) => {
-        const code = res.statusCode;
-        if (code === 401 && process.env.DEBUG_GLOBAL_401 === '1') {
-          console.error('[GLOBAL-401]', {
-            path: req.originalUrl,
-            hasAuthHeader: !!req.headers.authorization,
-            cookieHead: (req.headers.cookie || '').slice(0, 120)
-          });
-          console.error('[GLOBAL-401] stack note: 旧authMiddlewareがどこかで発火中（次段で特定）');
-        }
-        return origJson(body);
-      };
-      next();
-    });
+    // === Phase G1: グローバル早期401捕捉（ENV制御可能） ===
+    if (process.env.ENABLE_401_MONITORING === '1') {
+      this.app.use((req, res, next) => {
+        const origJson = res.json.bind(res);
+        res.json = (body: any) => {
+          const code = res.statusCode;
+          if (code === 401) {
+            // 原因種別を判定
+            const hasAuth = !!req.headers.authorization;
+            const hasCookie = !!(req.headers.cookie && (req.headers.cookie.includes('hotel_session') || req.headers.cookie.includes('hotel-session-id')));
+            let cause = 'UNKNOWN';
+            if (!hasAuth && !hasCookie) cause = 'NO_CREDENTIALS';
+            else if (hasAuth && !hasCookie) cause = 'JWT_ONLY';
+            else if (!hasAuth && hasCookie) cause = 'COOKIE_ONLY';
+            else cause = 'BOTH_PRESENT';
+
+            console.error('[GLOBAL-401]', {
+              path: req.originalUrl,
+              cause,
+              hasAuthHeader: hasAuth,
+              hasCookie,
+              cookieHead: (req.headers.cookie || '').slice(0, 120)
+            });
+
+            // X-HC-Debug ヘッダーで原因種別を返却（デバッグ用）
+            res.set('X-HC-Debug-401-Cause', cause);
+          }
+          return origJson(body);
+        };
+        next();
+      });
+    }
     // === END Phase G1 ===
 
     // === 決定打の切り分け：デバッグヘッダ付与 ===

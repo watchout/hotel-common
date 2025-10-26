@@ -1,6 +1,8 @@
-import { Request, Response } from 'express';
+
 import { ResponseTreeService } from '../../services/response-tree/response-tree.service';
 import { HotelLogger } from '../../utils/logger';
+
+import type { Request, Response } from 'express';
 
 /**
  * レスポンスツリーコントローラー

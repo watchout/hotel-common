@@ -1,12 +1,15 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { z } from 'zod';
+
 import { CampaignService } from './services';
-import { WelcomeScreenService } from './welcome-screen-service';
-import { StandardResponseBuilder } from '../../standards/api-standards';
-import { verifyTenantAuth } from '../../auth/middleware';
 import { checkCampaignSchema, welcomeScreenMarkCompletedSchema } from './types';
-import { logger } from '../../utils/logger';
 import { getLanguageFromRequest } from './utils';
+import { WelcomeScreenService } from './welcome-screen-service';
+import { verifyTenantAuth } from '../../auth/middleware';
+import { StandardResponseBuilder } from '../../standards/api-standards';
+import { logger } from '../../utils/logger';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 const campaignService = new CampaignService();

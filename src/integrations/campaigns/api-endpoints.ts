@@ -2,8 +2,10 @@
 // 緊急対応：最小限の実装
 
 import express from 'express';
-import { Request, Response } from 'express';
+
 import { StandardResponseBuilder } from '../../standards/api-standards';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 

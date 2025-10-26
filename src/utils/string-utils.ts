@@ -4,7 +4,7 @@
  * @param chars 使用する文字セット（デフォルトはアルファベット大文字と数字）
  * @returns ランダムな文字列
  */
-export function generateRandomString(length: number, chars: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'): string {
+export function generateRandomString(length: number, chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'): string {
   let result = '';
   const charsLength = chars.length;
   
@@ -22,7 +22,7 @@ export function generateRandomString(length: number, chars: string = 'ABCDEFGHIJ
  * @param suffix 切り詰めた場合に末尾に付加する文字列
  * @returns 切り詰められた文字列
  */
-export function truncateString(str: string, maxLength: number, suffix: string = '...'): string {
+export function truncateString(str: string, maxLength: number, suffix = '...'): string {
   if (!str) return '';
   if (str.length <= maxLength) return str;
   

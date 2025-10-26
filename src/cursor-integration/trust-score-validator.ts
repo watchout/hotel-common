@@ -25,7 +25,7 @@ export interface FactCheckResult {
  * Knowledge Base検証（文献1要求事項）
  */
 export class KnowledgeBaseValidator {
-  private prismaSchema: string = '';
+  private prismaSchema = '';
   private apiSpecs: any = {};
   private typescriptDefinitions: any = {};
 

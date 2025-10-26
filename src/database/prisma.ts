@@ -1,6 +1,9 @@
 import { PrismaClient } from '@prisma/client';
-import { createPrismaAdapter, PrismaAdapter } from './prisma-adapter';
+
+import { createPrismaAdapter } from './prisma-adapter';
 import { setupSoftDeleteMiddleware } from './soft-delete-middleware';
+
+import type { PrismaAdapter } from './prisma-adapter';
 
 /**
  * ホテル共通データベースクライアント

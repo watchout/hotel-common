@@ -3,10 +3,12 @@
 // 緊急対応：最低限動作するhotel-commonサーバー
 // Sunoの階層権限統合ブロック解除を最優先
 
-import express from 'express'
 import { createServer } from 'http'
-import { HierarchyPermissionManager } from '../hierarchy/permission-manager'
+
+import express from 'express'
+
 import { HierarchicalJwtManager } from '../hierarchy/jwt-extension'
+import { HierarchyPermissionManager } from '../hierarchy/permission-manager'
 
 const app = express()
 const server = createServer(app)

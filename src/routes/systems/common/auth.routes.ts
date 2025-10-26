@@ -1,12 +1,12 @@
 import * as bcrypt from 'bcrypt';
-import express, { Request, Response } from 'express';
+
+import type { Request, Response } from 'express';
+
+import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
+
 import { generateToken, verifyToken } from '../../../auth/jwt';
-import { HierarchicalJWTPayload } from '../../../auth/types';
-import { hotelDb } from '../../../database';
-import { HotelLogger } from '../../../utils/logger';
-import { getRedisClient } from '../../../utils/redis';
-import { StandardResponseBuilder } from '../../../utils/response-builder';
+import { authMiddleware } from '../../../auth/middleware';
 
 const router = express.Router();
 const logger = HotelLogger.getInstance();
@@ -728,8 +728,13 @@ router.get('/api/v1/admin/tenant/current', async (req: Request, res: Response) =
  * テナント情報取得
  * GET /api/v1/tenants/:id
  */
-import { authMiddleware } from '../../../auth/middleware';
 import { validateJwtIntegrity, validateTenantIdHeader } from '../../../auth/tenant-validation-middleware';
+import { hotelDb } from '../../../database';
+import { HotelLogger } from '../../../utils/logger';
+import { getRedisClient } from '../../../utils/redis';
+import { StandardResponseBuilder } from '../../../utils/response-builder';
+
+import type { HierarchicalJWTPayload } from '../../../auth/types';
 
 router.get('/api/v1/tenants/:id', authMiddleware, validateTenantIdHeader, validateJwtIntegrity, async (req: Request & { user?: any }, res: Response) => {
   try {

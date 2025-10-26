@@ -3,6 +3,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+
 import { glob } from 'glob';
 
 export interface RAGSearchParams {
@@ -33,7 +34,7 @@ export interface RAGResponse {
 export class RealRAGService {
   private docsPath: string;
   private knowledgeIndex: Map<string, any>;
-  private initialized: boolean = false;
+  private initialized = false;
 
   constructor() {
     this.docsPath = path.join(__dirname, '../../docs');

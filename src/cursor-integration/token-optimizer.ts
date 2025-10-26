@@ -83,7 +83,7 @@ export class HotelCommonTokenOptimizer {
     };
   }
 
-  optimizePrompt(task: string, context: string = ''): TokenOptimizationResult {
+  optimizePrompt(task: string, context = ''): TokenOptimizationResult {
     const originalPrompt = `${task}\n${context}`;
     const optimizedPrompt = createEfficientPrompt(task, context, this.config);
     

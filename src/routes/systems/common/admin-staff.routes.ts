@@ -3,8 +3,9 @@
  * 既存staffテーブル構造を活用した実装
  */
 
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { z } from 'zod';
+
 import { sessionAuthMiddleware } from '../../../auth/session-auth.middleware';
 import { hotelDb } from '../../../database';
 import { requireStaffAdminPermission, requireStaffManagementPermission } from '../../../middleware/admin-permission';
@@ -18,6 +19,8 @@ import {
   mapStaffToApiResponse,
   prepareStaffCreateData
 } from '../../../utils/staff-helpers';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 const logger = HotelLogger.getInstance();

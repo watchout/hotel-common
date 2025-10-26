@@ -1,6 +1,8 @@
-import { PrismaClient } from '@prisma/client';
-import { HotelLogger } from '../utils/logger';
+
 import { hotelDb } from './prisma';
+import { HotelLogger } from '../utils/logger';
+
+import type { PrismaClient } from '@prisma/client';
 
 // マルチテナント対応統一Prismaクライアント
 export class UnifiedPrismaClient {

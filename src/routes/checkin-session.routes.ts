@@ -1,9 +1,12 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { z } from 'zod';
+
 import { authMiddleware } from '../auth/middleware';
 import { hotelDb } from '../database/prisma';
-import { StandardResponseBuilder } from '../utils/response-builder';
 import { logger } from '../utils/logger';
+import { StandardResponseBuilder } from '../utils/response-builder';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 

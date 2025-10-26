@@ -1,6 +1,9 @@
+import { staff as Staff } from '@prisma/client'
+
 import { hotelDb } from '../database'
 import { HotelLogger } from '../utils/logger'
-import { Tenant, staff as Staff } from '@prisma/client'
+
+import type { Tenant} from '@prisma/client';
 
 // 型定義（スキーマから自動生成されるべきだが、現在は手動定義）
 interface customers {
@@ -148,7 +151,7 @@ export class HotelUnifiedApiClient {
   async updateCustomer(
     customerId: string, 
     data: Partial<customers>,
-    restrictUpdatableFields: boolean = true
+    restrictUpdatableFields = true
   ): Promise<customers | null> {
     try {
       // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル

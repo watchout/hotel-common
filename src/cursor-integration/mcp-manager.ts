@@ -3,9 +3,9 @@
  * Apidog MCP Server統合・OpenAPI仕様キャッシュ
  */
 
+import { execSync } from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
-import { execSync } from 'child_process';
 
 export interface MCPServerConfig {
   name: string;
@@ -37,7 +37,7 @@ export class OpenAPICache {
   private cacheDir: string;
   private cacheTTL: number; // キャッシュ有効期限（秒）
 
-  constructor(cacheDir: string = './cache/openapi', ttl: number = 3600) {
+  constructor(cacheDir = './cache/openapi', ttl = 3600) {
     this.cacheDir = cacheDir;
     this.cacheTTL = ttl;
     this.ensureCacheDirectory();

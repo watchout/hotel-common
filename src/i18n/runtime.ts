@@ -1,6 +1,10 @@
-import { SupportedLanguage, TranslationData, TranslationKey, LanguageChangeEvent } from './types'
-import { TranslationConfig } from './config'
 import { EventEmitter } from 'events'
+
+import { TranslationConfig } from './config'
+import { TranslationKey } from './types'
+
+import type { SupportedLanguage, TranslationData, LanguageChangeEvent } from './types';
+
 
 /** 実行時翻訳システム */
 export class RuntimeTranslationSystem extends EventEmitter {

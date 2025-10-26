@@ -1,4 +1,6 @@
 import { hotelDb } from '../database/prisma'
+import { HotelLogger } from '../utils/logger'
+
 import type {
   CreateRoomRequest,
   Room,
@@ -7,7 +9,6 @@ import type {
   UpdateRoomRequest,
   UpdateRoomStatusRequest
 } from '../schemas/room'
-import { HotelLogger } from '../utils/logger'
 
 /**
  * 部屋管理サービス
@@ -82,7 +83,7 @@ export class RoomService {
   /**
    * 部屋取得（ID指定）
    */
-  static async getRoomById(id: string, tenantId: string, includeGrade: boolean = false): Promise<Room | null> {
+  static async getRoomById(id: string, tenantId: string, includeGrade = false): Promise<Room | null> {
     try {
       const include: any = {}
       if (includeGrade) {

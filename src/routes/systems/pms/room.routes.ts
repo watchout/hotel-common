@@ -1,5 +1,5 @@
 import express from 'express'
-import { RoomService } from '../../../services/room.service'
+
 import { verifyTenantAuth } from '../../../auth/middleware'
 import { 
   CreateRoomRequestSchema,
@@ -8,6 +8,7 @@ import {
   RoomSearchParamsSchema,
   RoomAvailabilitySearchSchema
 } from '../../../schemas/room'
+import { RoomService } from '../../../services/room.service'
 import { StandardResponseBuilder } from '../../../standards/api-standards'
 
 const router = express.Router()

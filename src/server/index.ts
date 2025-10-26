@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
+import { config } from 'dotenv'
+
+import { HotelIntegrationServer } from './integration-server'
 import { HotelWebSocketServer } from './websocket-server'
 import { HotelLogger } from '../utils/logger'
-import { config } from 'dotenv'
-import { HotelIntegrationServer } from './integration-server'
 
 // 環境変数読み込み
 config()

@@ -1,12 +1,14 @@
 // 🎊 hotel-common七重統合システム - 七層統合実装
 // 文献1-7完全統合レイヤー処理
 
-import { 
-  IntegrationLayer, 
-  LayerResult, 
-  SevenIntegrationConfig,
+import {
   AIAgentType 
 } from './types'
+
+import type { 
+  IntegrationLayer, 
+  LayerResult, 
+  SevenIntegrationConfig} from './types';
 
 // 基底レイヤークラス
 export abstract class BaseIntegrationLayer {

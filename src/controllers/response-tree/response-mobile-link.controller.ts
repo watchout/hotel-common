@@ -1,7 +1,9 @@
-import { Request, Response } from 'express';
+
 import { ResponseMobileLinkService } from '../../services/response-tree/response-mobile-link.service';
-import { CreateMobileLinkRequestDto, ConnectMobileLinkRequestDto } from '../../dtos/response-tree/response-tree.dto';
 import { HotelLogger } from '../../utils/logger';
+
+import type { CreateMobileLinkRequestDto, ConnectMobileLinkRequestDto } from '../../dtos/response-tree/response-tree.dto';
+import type { Request, Response } from 'express';
 
 /**
  * レスポンスモバイル連携コントローラー

@@ -1,6 +1,7 @@
 import { ResponseMobileLinkRepository } from '../../repositories/response-tree/response-mobile-link.repository';
 import { ResponseSessionRepository } from '../../repositories/response-tree/response-session.repository';
-import { CreateMobileLinkRequestDto, MobileLinkDto, ConnectMobileLinkRequestDto } from '../../dtos/response-tree/response-tree.dto';
+
+import type { CreateMobileLinkRequestDto, MobileLinkDto, ConnectMobileLinkRequestDto } from '../../dtos/response-tree/response-tree.dto';
 
 /**
  * レスポンスモバイル連携サービス

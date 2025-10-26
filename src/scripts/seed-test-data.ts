@@ -1,9 +1,12 @@
 // seed-test-data.ts
-import { PrismaClient } from '@prisma/client';
-import { hotelDb } from '../database/prisma';
-import { v4 as uuidv4 } from 'uuid';
-import * as bcrypt from 'bcrypt';
 import * as readline from 'readline';
+
+import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
+
+import { hotelDb } from '../database/prisma';
+
 
 /**
  * データベース操作の安全確認を行う関数

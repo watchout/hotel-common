@@ -1,5 +1,7 @@
-import { PrismaClient } from '@prisma/client';
 import { hotelDb } from './prisma';
+
+import type { PrismaClient } from '@prisma/client';
+
 
 export interface UnifiedClientConfig {
   tenantId: string;

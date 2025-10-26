@@ -1,14 +1,19 @@
 #!/usr/bin/env node
 
-import express, { Router } from 'express';
-import { config } from 'dotenv';
-import { PrismaClient } from '@prisma/client';
-import { hotelDb } from '../database/prisma';
+
+
 import cors from 'cors';
+import { config } from 'dotenv';
+import express from 'express';
+
+import { hotelDb } from '../database/prisma';
 import { initializeHotelMemberHierarchy } from '../integrations/hotel-member';
 import hotelMemberApiRouter from '../integrations/hotel-member/api-endpoints';
 import pageRoutes from '../routes/systems/common/page.routes';
 import ordersRouter from '../routes/systems/saas/orders.routes';
+
+import type { PrismaClient } from '@prisma/client';
+import type { Router } from 'express';
 
 // 環境変数読み込み
 config();

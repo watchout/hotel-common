@@ -1,14 +1,16 @@
 import * as express from 'express';
-import { Request, Response } from 'express';
 import { z } from 'zod';
-import { StandardResponseBuilder } from '../../standards/api-standards';
-import { verifyAdminAuth } from '../../auth/middleware';
-import { campaignCategoryCreateSchema, campaignCategoryUpdateSchema } from './types';
-import { logger } from '../../utils/logger';
-import { mapCategoryToInfo } from './utils';
-import { hotelDb } from '../../database/prisma';
-import { validateBody, validateUniqueCategoryCode } from './validators';
+
 import { PAGINATION } from './constants';
+import { campaignCategoryCreateSchema, campaignCategoryUpdateSchema } from './types';
+import { mapCategoryToInfo } from './utils';
+import { validateBody, validateUniqueCategoryCode } from './validators';
+import { verifyAdminAuth } from '../../auth/middleware';
+import { hotelDb } from '../../database/prisma';
+import { StandardResponseBuilder } from '../../standards/api-standards';
+import { logger } from '../../utils/logger';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 

@@ -3,18 +3,9 @@
  */
 
 import * as express from 'express';
-import { Request, Response } from 'express';
+
+
 import { AppLauncherService } from './services';
-import { hotelDb } from '../../database';
-import { StandardResponseBuilder } from '../../standards/api-standards';
-import { verifyAdminAuth, verifyTenantAuth } from '../../auth/middleware';
-import { 
-  validateBody, 
-  validateUniquePackageName, 
-  validateGooglePlayAppExists,
-  validateHotelAppExists,
-  validateLayoutAppBlockExists
-} from './validators';
 import { 
   googlePlayAppCreateSchema, 
   googlePlayAppUpdateSchema, 
@@ -24,6 +15,18 @@ import {
   layoutAppBlockUpdateSchema
 } from './types';
 import { parseBooleanParam, parsePaginationParams } from './utils';
+import { 
+  validateBody, 
+  validateUniquePackageName, 
+  validateGooglePlayAppExists,
+  validateHotelAppExists,
+  validateLayoutAppBlockExists
+} from './validators';
+import { verifyAdminAuth, verifyTenantAuth } from '../../auth/middleware';
+import { hotelDb } from '../../database';
+import { StandardResponseBuilder } from '../../standards/api-standards';
+
+import type { Request, Response } from 'express';
 
 // サービスのインスタンス化
 const appLauncherService = new AppLauncherService(hotelDb.getClient());

@@ -3,11 +3,12 @@
  * 
  * このファイルは、管理者用のAPIエンドポイントを提供します。
  */
-import * as express from 'express';
-import { hotelDb } from '../database/prisma';
-import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
+import * as express from 'express';
+import * as jwt from 'jsonwebtoken';
+
 import { getTenantServices, updateTenantService } from '../api/tenant-service-api';
+import { hotelDb } from '../database/prisma';
 
 // PrismaClientの直接インスタンス化は避け、hotelDb.getClient()を使用
 const prisma = hotelDb.getClient();

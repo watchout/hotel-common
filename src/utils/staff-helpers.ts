@@ -3,8 +3,9 @@
  * 既存のstaffテーブル構造を活用したマッピング・権限管理
  */
 
-import { HotelLogger } from './logger';
 import * as bcrypt from 'bcrypt';
+
+import { HotelLogger } from './logger';
 
 const logger = HotelLogger.getInstance();
 

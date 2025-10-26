@@ -1,7 +1,8 @@
 import { generateToken, verifyToken, decodeToken } from '../auth/jwt'
-import { HotelLogger } from '../utils/logger'
 import { hotelDb } from '../database'
 import { HierarchyPermissionManager } from './permission-manager'
+import { HotelLogger } from '../utils/logger'
+
 import type { 
   HierarchicalJWTPayload, 
   OrganizationType, 

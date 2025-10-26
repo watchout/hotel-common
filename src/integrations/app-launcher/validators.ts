@@ -2,7 +2,7 @@
  * Google Playアプリ選択機能のバリデーション関数
  */
 
-import { Request, Response, NextFunction } from 'express';
+
 import { 
   googlePlayAppCreateSchema, 
   googlePlayAppUpdateSchema, 
@@ -13,6 +13,8 @@ import {
 } from './types';
 import { prisma } from '../../database';
 import { StandardResponseBuilder } from '../../standards/api-standards';
+
+import type { Request, Response, NextFunction } from 'express';
 
 /**
  * リクエストボディのバリデーション

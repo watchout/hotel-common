@@ -1,6 +1,9 @@
 import Redis from 'redis'
-import { HotelEvent, EventDeliveryLog, SystemId } from './types'
+
+import { SystemId } from './types'
 import { HotelLogger } from '../utils/logger'
+
+import type { HotelEvent, EventDeliveryLog} from './types';
 
 export interface RedisQueueConfig {
   host: string
@@ -23,7 +26,7 @@ export interface RedisQueueConfig {
 export class RedisEventQueue {
   private redis: Redis.RedisClientType
   private logger: HotelLogger
-  private isConnected: boolean = false
+  private isConnected = false
   private consumerGroups: Map<string, Set<string>> = new Map()
 
   constructor(private config: RedisQueueConfig) {

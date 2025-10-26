@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import type { Request } from 'express';
 // Prismaクライアントから生成される型
 interface Campaign {
   id: string;
@@ -26,7 +26,7 @@ interface Campaign {
 }
 
 // 列挙型の定義
-import { CampaignStatus, CampaignDisplayType, CampaignCtaType } from './types';
+import type { CampaignStatus, CampaignDisplayType, CampaignCtaType } from './types';
 
 interface CampaignTranslation {
   id: string;
@@ -38,7 +38,8 @@ interface CampaignTranslation {
   createdAt: Date;
   updatedAt: Date;
 }
-import { CampaignBasicInfo, CampaignDetailInfo, CampaignCategoryInfo } from './types';
+import type { CampaignBasicInfo, CampaignDetailInfo, CampaignCategoryInfo } from './types';
+
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from './constants';
 
 /**

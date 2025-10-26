@@ -1,10 +1,12 @@
 import express from 'express';
-import { Request, Response } from 'express';
+
 import { verifyAdminAuth } from '../../../auth/middleware';
+import { hotelDb } from '../../../database';
+import { ResponseHelper } from '../../../standards/api-response-standards';
 import { HotelLogger } from '../../../utils/logger';
 import { StandardResponseBuilder } from '../../../utils/response-builder';
-import { ResponseHelper } from '../../../standards/api-response-standards';
-import { hotelDb } from '../../../database';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 const logger = HotelLogger.getInstance();

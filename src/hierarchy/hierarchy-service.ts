@@ -1,7 +1,8 @@
 import { HierarchyApiManager } from './hierarchy-api'
-import { HierarchyPermissionManager } from './permission-manager'
 import { HierarchicalJwtManager } from './jwt-extension'
+import { HierarchyPermissionManager } from './permission-manager'
 import { HotelLogger } from '../utils/logger'
+
 import type {
   OrganizationHierarchy,
   DataSharingPolicy,
@@ -196,7 +197,7 @@ export class HierarchyService {
    */
   static async getCompleteOrganizationTree(
     rootOrganizationId?: string,
-    includeStats: boolean = true
+    includeStats = true
   ): Promise<OrganizationTreeNode[]> {
     try {
       const organizations = await HierarchyPermissionManager.getOrganizationTree(rootOrganizationId)

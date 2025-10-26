@@ -15,6 +15,7 @@
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "check-api-routes": "ts-node scripts/check-api-routes.ts",
+    "check-route-order": "ts-node scripts/check-route-order.ts",
     "fix-api-routes": "ts-node scripts/fix-api-routes.ts",
     "dev-history": "ts-node scripts/generate-dev-history.ts",
     "dev-metrics": "ts-node scripts/dev-metrics-dashboard.ts",
@@ -23,7 +24,7 @@
     "api-monitor:continuous": "node scripts/api-monitor.js continuous",
     "api-spec-validate": "node scripts/api-spec-validator.js validate",
     "api-health": "npm run api-monitor && npm run api-spec-validate",
-    "pre-commit": "npm run check-api-routes && npm run lint",
+    "pre-commit": "npm run check-api-routes && npm run check-route-order && npm run lint",
     "prepare": "husky install"
   },
   "husky": {

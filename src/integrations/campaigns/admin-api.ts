@@ -1,15 +1,17 @@
 import * as express from 'express';
-import { Request, Response } from 'express';
 import { z } from 'zod';
-import { CampaignService } from './services';
-import { StandardResponseBuilder } from '../../standards/api-standards';
-import { verifyAdminAuth } from '../../auth/middleware';
-import { campaignCreateSchema, campaignUpdateSchema } from './types';
-import { logger } from '../../utils/logger';
-import { validateBody, validateUniqueCampaignCode } from './validators';
-import { hotelDb } from '../../database/prisma';
-import { PAGINATION } from './constants';
+
 import adminCategoryRouter from './admin-category-api';
+import { PAGINATION } from './constants';
+import { CampaignService } from './services';
+import { campaignCreateSchema, campaignUpdateSchema } from './types';
+import { validateBody, validateUniqueCampaignCode } from './validators';
+import { verifyAdminAuth } from '../../auth/middleware';
+import { hotelDb } from '../../database/prisma';
+import { StandardResponseBuilder } from '../../standards/api-standards';
+import { logger } from '../../utils/logger';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 const campaignService = new CampaignService();

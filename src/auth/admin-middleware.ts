@@ -1,6 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+
 import { verifyToken } from './jwt';
-import { HierarchicalJWTPayload } from './types';
+
+import type { HierarchicalJWTPayload } from './types';
+import type { Request, Response, NextFunction } from 'express';
 
 /**
  * 管理者認証ミドルウェア

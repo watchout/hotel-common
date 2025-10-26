@@ -1,8 +1,11 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+
 import { authMiddleware } from '../auth/middleware';
-import { StandardResponseBuilder } from '../utils/response-builder';
-import { logger } from '../utils/logger';
 import SessionMigrationService from '../services/session-migration.service';
+import { logger } from '../utils/logger';
+import { StandardResponseBuilder } from '../utils/response-builder';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 

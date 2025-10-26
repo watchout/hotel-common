@@ -1,5 +1,6 @@
 import { ResponseNodeRepository } from '../../repositories/response-tree/response-node.repository';
-import { ResponseNodeDto, ResponseNodeDetailDto, ResponseNodeSearchResultDto, CreateNodeRequestDto } from '../../dtos/response-tree/response-tree.dto';
+
+import type { ResponseNodeDto, ResponseNodeDetailDto, ResponseNodeSearchResultDto, CreateNodeRequestDto } from '../../dtos/response-tree/response-tree.dto';
 
 /**
  * レスポンスノードサービス

@@ -1,4 +1,4 @@
-import { SupportedLanguage, TranslationResult } from '../i18n/types'
+import type { SupportedLanguage, TranslationResult } from '../i18n/types'
 
 /** DeepL API統合サービス */
 export class DeepLTranslationService {

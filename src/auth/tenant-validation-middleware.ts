@@ -1,5 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
 import { StandardResponseBuilder } from '../utils/response-builder';
+
+import type { Request, Response, NextFunction } from 'express';
+
 
 /**
  * X-Tenant-ID検証ミドルウェア

@@ -1,7 +1,9 @@
-import { Request, Response } from 'express';
+
 import { ResponseSessionService } from '../../services/response-tree/response-session.service';
-import { CreateSessionRequestDto, UpdateSessionRequestDto } from '../../dtos/response-tree/response-tree.dto';
 import { HotelLogger } from '../../utils/logger';
+
+import type { CreateSessionRequestDto, UpdateSessionRequestDto } from '../../dtos/response-tree/response-tree.dto';
+import type { Request, Response } from 'express';
 
 /**
  * レスポンスセッションコントローラー

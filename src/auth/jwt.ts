@@ -1,6 +1,7 @@
 import * as jwt from 'jsonwebtoken';
+
+import type { HierarchicalJWTPayload, JWTOptions } from './types';
 import type { StringValue } from 'ms';
-import { HierarchicalJWTPayload, JWTOptions } from './types';
 
 const DEFAULT_JWT_SECRET = 'hotel-common-development-secret';
 const DEFAULT_EXPIRES_IN = '24h';

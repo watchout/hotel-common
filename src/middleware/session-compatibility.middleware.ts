@@ -1,6 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+
 import { hotelDb } from '../database/prisma';
 import { logger } from '../utils/logger';
+
+import type { Request, Response, NextFunction } from 'express';
 
 /**
  * セッション互換性ミドルウェア

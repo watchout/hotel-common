@@ -138,7 +138,7 @@ export async function updateTenantService(
 export async function getServicePlanRestrictions(
   serviceType: string,
   planType: string,
-  planCategory: string = 'omotenasuai'
+  planCategory = 'omotenasuai'
 ) {
   try {
     // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル

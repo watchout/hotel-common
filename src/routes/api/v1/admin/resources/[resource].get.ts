@@ -10,9 +10,11 @@
  * Phase C-1: staff一覧のみ実装
  */
 
-import { Request, Response } from 'express';
+
 import { getResourceMetadata } from '../../../../../config/resource-metadata';
 import { prisma } from '../../../../../database/prisma';
+
+import type { Request, Response } from 'express';
 
 export default async function handler(req: Request, res: Response) {
   try {

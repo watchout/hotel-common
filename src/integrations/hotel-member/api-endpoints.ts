@@ -2,6 +2,7 @@
 // FastAPI (Python) からの階層権限要求を処理するREST API
 
 import express from 'express'
+
 import { HotelMemberHierarchyAdapterStub } from './hierarchy-adapter-stub'
 
 // 名前の互換性のために別名を使用

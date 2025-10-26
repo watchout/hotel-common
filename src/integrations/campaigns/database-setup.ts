@@ -1,6 +1,7 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { hotelDb } from '../../database/prisma';
 import { logger } from '../../utils/logger';
-import { v4 as uuidv4 } from 'uuid';
 
 /**
  * キャンペーン関連のデータベース初期設定を行う

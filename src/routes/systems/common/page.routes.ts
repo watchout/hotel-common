@@ -1,7 +1,8 @@
 import express from 'express';
+
+import { verifyAdminAuth, authMiddleware } from '../../../auth/middleware';
 import adminPageController from '../../../controllers/pages/admin-page.controller';
 import publicPageController from '../../../controllers/pages/public-page.controller';
-import { verifyAdminAuth, authMiddleware } from '../../../auth/middleware';
 
 const router = express.Router();
 

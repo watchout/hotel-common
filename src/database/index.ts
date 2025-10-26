@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+
 import { HotelDatabaseClient } from './prisma';
 
 // シングルトンインスタンスをエクスポート

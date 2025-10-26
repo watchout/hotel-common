@@ -15,7 +15,7 @@ export interface ContextOptimizationResult {
 }
 
 export class HotelCommonContextManager {
-    private maxTokens: number = 4000;
+    private maxTokens = 4000;
     private messages: ContextMessage[] = [];
     private permanentConstraints: string[] = [
         "Database: hotel_unified_db (NOT hotel_common_dev)",

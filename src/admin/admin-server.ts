@@ -1,7 +1,9 @@
-import express from 'express'
-import cors from 'cors'
 import path from 'path'
 import { fileURLToPath } from 'url'
+
+import cors from 'cors'
+import express from 'express'
+
 import adminRouter from './admin-api'
 import { HotelLogger } from '../utils/logger'
 

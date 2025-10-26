@@ -1,8 +1,10 @@
 import { RedisEventQueue, RedisQueueConfig } from './redis-queue'
-import { HotelWebSocketClient } from '../websocket/client'
-import { HotelEvent, EventPublisherConfig, SystemId, EventPriority } from './types'
-import { HotelLogger } from '../utils/logger'
+import { SystemId } from './types'
 import { hotelDb } from '../database/prisma'
+import { HotelLogger } from '../utils/logger'
+import { HotelWebSocketClient } from '../websocket/client'
+
+import type { HotelEvent, EventPublisherConfig, EventPriority } from './types';
 
 /**
  * 統一EventPublisher - Event-driven連携の発行側統一インターフェース

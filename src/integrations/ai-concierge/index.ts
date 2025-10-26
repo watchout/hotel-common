@@ -2,9 +2,11 @@
  * AIコンシェルジュ機能統合
  */
 import express from 'express';
-import { HotelIntegrationServer } from '../../server/integration-server-extended';
+
 import responseTreeRoutes from '../../routes/systems/member/response-tree.routes';
 import { HotelLogger } from '../../utils/logger';
+
+import type { HotelIntegrationServer } from '../../server/integration-server-extended';
 
 const logger = HotelLogger.getInstance();
 

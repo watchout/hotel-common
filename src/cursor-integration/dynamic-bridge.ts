@@ -3,8 +3,9 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { RealRAGService } from './rag-service';
+
 import { RealGuardrailsValidator } from './guardrails-validator';
+import { RealRAGService } from './rag-service';
 // TokenOptimizerモジュールが存在しないため、コメントアウト
 // import { TokenOptimizer } from './token-optimizer';
 
@@ -25,7 +26,7 @@ export class DynamicCursorIntegration {
   // @ts-ignore - TokenOptimizerクラスが存在しない
   private tokenOptimizer: any;
   private watchInterval: NodeJS.Timeout | null = null;
-  private lastContext: string = '';
+  private lastContext = '';
 
   constructor() {
     this.ragService = new RealRAGService();

@@ -5,7 +5,7 @@
  * 詳細: https://icon-sets.iconify.design/
  */
 
-import { IconSetType } from '../types';
+import type { IconSetType } from '../types';
 
 /**
  * アイコンセット設定

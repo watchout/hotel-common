@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
-import express, { Router } from 'express';
-import { config } from 'dotenv';
+import type { Router } from 'express';
+
 import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
-import { integrateCampaignFeature } from '../integrations/campaigns';
+import { config } from 'dotenv';
+import express from 'express';
+
 import { prisma } from '../database';
-import { logger } from '../utils/logger';
+import { integrateCampaignFeature } from '../integrations/campaigns';
 
 // 環境変数読み込み
 config();
@@ -185,6 +187,7 @@ export { RealCampaignServer };
 
 // データベース初期設定を追加
 import { setupCampaignDatabase, checkCampaignDatabase } from '../integrations/campaigns/database-setup';
+import { logger } from '../utils/logger';
 
 // RealCampaignServerクラスのstart()メソッドを修正
 // async start(): Promise<void> {

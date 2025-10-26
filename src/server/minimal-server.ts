@@ -3,8 +3,9 @@
 // 🚨緊急対応：最小版hotel-commonサーバー
 // 依存関係なし、Sunoの階層権限統合ブロック解除専用
 
-import express from 'express'
 import { createServer } from 'http'
+
+import express from 'express'
 
 const app = express()
 const server = createServer(app)

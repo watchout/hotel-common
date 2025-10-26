@@ -1,8 +1,9 @@
 // 🛡️ 実際のガードレールシステム - 品質・セキュリティ・パフォーマンス検証
 // Custom Instructionsの擬似的「チェックせよ」を実際の検証に置換
 
-import * as ts from 'typescript';
 import { execSync } from 'child_process';
+
+import * as ts from 'typescript';
 
 export interface GuardrailResult {
   passed: boolean;

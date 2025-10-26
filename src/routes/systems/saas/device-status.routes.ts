@@ -1,8 +1,11 @@
 import * as express from 'express'
-import { Request, Response } from 'express'
-import { hotelDb } from '../../../database/prisma'
+
+
 import { authMiddleware } from '../../../auth/middleware'
+import { hotelDb } from '../../../database/prisma'
 import { ResponseHelper } from '../../../standards/api-response-standards'
+
+import type { Request, Response } from 'express'
 
 const router = express.Router()
 

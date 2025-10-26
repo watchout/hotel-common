@@ -1,6 +1,8 @@
+import { createClient } from 'redis'
+
 import { hotelDb } from '../database'
 import { HotelLogger } from '../utils/logger'
-import { createClient, RedisClientType } from 'redis'
+
 import type {
   HierarchicalJWTPayload,
   HierarchyPermissionCheck,
@@ -12,6 +14,7 @@ import type {
   AccessLevel,
   OrganizationType
 } from './types'
+import type { RedisClientType } from 'redis';
 
 /**
  * Hotel Group階層権限管理システム
@@ -97,7 +100,7 @@ export class HierarchyPermissionManager {
    */
   static async getOrganizationTree(
     rootOrganizationId?: string,
-    maxDepth: number = 4
+    maxDepth = 4
   ): Promise<OrganizationHierarchy[]> {
     try {
       // 緊急対応：スタブ実装
