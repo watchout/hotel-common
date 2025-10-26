@@ -62,6 +62,18 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       },
     },
+    // テスト専用: 品質ルールを緩和（本番コードは対象外）
+    {
+      files: ['**/test-*.ts', '**/tests/**/*.ts', '**/__tests__/**/*.ts'],
+      rules: {
+        '@typescript-eslint/no-implicit-any-catch': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
+        'no-console': 'off',
+        'import/order': 'off',
+      },
+    },
   ],
 };
 
