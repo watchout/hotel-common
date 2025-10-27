@@ -11,10 +11,10 @@
  * 5. フォールバック機能
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testActualI18n = testActualI18n;
-exports.testManualTranslation = testManualTranslation;
-exports.testFileSystemAccess = testFileSystemAccess;
 exports.runTests = runTests;
+exports.testActualI18n = testActualI18n;
+exports.testFileSystemAccess = testFileSystemAccess;
+exports.testManualTranslation = testManualTranslation;
 const factory_1 = require("../i18n/factory");
 /**
  * 実際のi18nシステムのテスト

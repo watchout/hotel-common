@@ -16,4 +16,4 @@ declare function testActualI18n(): Promise<void>;
 declare function testManualTranslation(): void;
 declare function testFileSystemAccess(): Promise<void>;
 declare function runTests(): Promise<void>;
-export { testActualI18n, testManualTranslation, testFileSystemAccess, runTests };
+export { runTests, testActualI18n, testFileSystemAccess, testManualTranslation };

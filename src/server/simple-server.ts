@@ -8,7 +8,6 @@ import { createServer } from 'http'
 import express from 'express'
 
 import { HierarchicalJwtManager } from '../hierarchy/jwt-extension'
-import { HierarchyPermissionManager } from '../hierarchy/permission-manager'
 
 const app = express()
 const server = createServer(app)
@@ -36,7 +35,7 @@ app.get('/health', (req, res) => {
 app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
   try {
     const { token } = req.body
-    
+
     if (!token) {
       return res.status(400).json({
         error: 'TOKEN_REQUIRED',
@@ -47,7 +46,7 @@ app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
     // 簡易JWT検証（フォールバック）
     try {
       const decoded = HierarchicalJwtManager.verifyHierarchicalToken(token)
-      
+
       if (decoded) {
         res.json({
           success: true,
@@ -99,7 +98,7 @@ app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
 app.post('/api/hotel-member/hierarchy/permissions/check-customer-access', async (req, res) => {
   try {
     const { token, target_tenant_id, operation = 'READ' } = req.body
-    
+
     if (!token || !target_tenant_id) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',
@@ -128,7 +127,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-customer-access', async 
 app.post('/api/hotel-member/hierarchy/tenants/accessible', async (req, res) => {
   try {
     const { token, scope_level } = req.body
-    
+
     if (!token) {
       return res.status(400).json({
         error: 'TOKEN_REQUIRED',
@@ -155,7 +154,7 @@ app.post('/api/hotel-member/hierarchy/tenants/accessible', async (req, res) => {
 app.post('/api/hotel-member/hierarchy/permissions/check-membership-restrictions', async (req, res) => {
   try {
     const { token, operation, data_type } = req.body
-    
+
     if (!token || !operation || !data_type) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',
@@ -183,7 +182,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-membership-restrictions'
 app.post('/api/hotel-member/hierarchy/permissions/check-analytics-access', async (req, res) => {
   try {
     const { token, analytics_type } = req.body
-    
+
     if (!token || !analytics_type) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',
@@ -265,4 +264,4 @@ process.on('SIGTERM', () => {
   })
 })
 
-export default app 
+export default app

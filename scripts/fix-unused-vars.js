@@ -35,16 +35,16 @@ results.forEach(result => {
   result.messages.forEach(msg => {
     if (msg.ruleId === '@typescript-eslint/no-unused-vars') {
       totalUnused++;
-      
+
       // "Allowed unused args must match /^_/u" を含む場合のみ処理（関数引数）
       if (msg.message.includes('Allowed unused args must match')) {
         const match = msg.message.match(/'([^']+)' is defined but never used/);
         if (match) {
           const varName = match[1];
-          
+
           // すでに_で始まっている場合はスキップ
           if (varName.startsWith('_')) return;
-          
+
           // 予約語・特殊な名前はスキップ
           if (['req', 'res', 'next', 'error', 'err', 'e'].includes(varName)) {
             safeToFix++;
@@ -80,14 +80,14 @@ fixes.forEach((fileFixes, filePath) => {
   try {
     let content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
-    
+
     // 行番号でソート（降順 - 後ろから修正）
     fileFixes.sort((a, b) => b.line - a.line || b.column - a.column);
-    
+
     fileFixes.forEach(fix => {
       const lineIdx = fix.line - 1;
       if (lineIdx < 0 || lineIdx >= lines.length) return;
-      
+
       const line = lines[lineIdx];
       // 関数引数の形式を検出: (xxx, oldName, yyy) または (oldName) など
       const patterns = [
@@ -96,7 +96,7 @@ fixes.forEach((fileFixes, filePath) => {
         // 分割代入パターン
         new RegExp(`\\b${fix.oldName}\\b(?=\\s*[}])`),
       ];
-      
+
       let modified = false;
       for (const pattern of patterns) {
         if (pattern.test(line)) {
@@ -106,12 +106,12 @@ fixes.forEach((fileFixes, filePath) => {
           break;
         }
       }
-      
+
       if (!modified) {
         console.log(`⚠️  スキップ (パターン不一致): ${path.relative(process.cwd(), filePath)}:${fix.line} - ${fix.oldName}`);
       }
     });
-    
+
     // ファイル書き込み
     fs.writeFileSync(filePath, lines.join('\n'), 'utf-8');
   } catch (error) {

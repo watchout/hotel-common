@@ -44,7 +44,7 @@ class HotelIntegrationServer {
     this.app = express();
     this.prisma = hotelDb.getAdapter() as any; // 統合サーバー用の一時的な型キャスト
     this.port = parseInt(process.env.HOTEL_COMMON_PORT || '3400');
-    
+
     this.setupMiddleware();
     this.setupRoutes();
     this.initializeSystemConnections();
@@ -59,7 +59,7 @@ class HotelIntegrationServer {
       origin: [
         'http://localhost:3100', // hotel-saas
         'http://localhost:3200', // hotel-member frontend
-        'http://localhost:8080', // hotel-member backend  
+        'http://localhost:8080', // hotel-member backend
         'http://localhost:3300', // hotel-pms
         'http://localhost:3301'  // hotel-pms electron
       ],
@@ -164,7 +164,7 @@ class HotelIntegrationServer {
     // 統合認証エンドポイント（基本版）
     this.app.post('/api/auth/validate', (req, res) => {
       const { token, system } = req.body;
-      
+
       if (!token) {
         return res.status(400).json({
           error: 'TOKEN_REQUIRED',
@@ -193,7 +193,7 @@ class HotelIntegrationServer {
           // スタッフ数は一時的に0に設定（型定義の問題を回避）
           staff: 0 // await this.prisma.staff.count()
         };
-        
+
         res.json({
           timestamp: new Date().toISOString(),
           database_stats: stats,
@@ -209,7 +209,7 @@ class HotelIntegrationServer {
 
     // ページ管理APIルート追加
     this.app.use(pageRoutes);
-    
+
     // 注文管理API
     this.app.use(ordersRouter);
 
@@ -221,7 +221,7 @@ class HotelIntegrationServer {
       try {
         const { HotelMemberHierarchyAdapterStub } = await import('../integrations/hotel-member/hierarchy-adapter-stub');
         const health = await HotelMemberHierarchyAdapterStub.healthCheckForPython();
-        
+
         res.json({
           integration_status: 'active',
           hotel_member_hierarchy: health,
@@ -291,7 +291,7 @@ class HotelIntegrationServer {
       console.error('Server app is not initialized');
       return;
     }
-    
+
     this.app.use(path, router);
     console.log(`Router added to path: ${path}`);
   }
@@ -330,12 +330,12 @@ class HotelIntegrationServer {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
-      
+
       const response = await fetch(`${connection.url}/health`, {
         method: 'GET',
         signal: controller.signal
       });
-      
+
       clearTimeout(timeoutId);
       const responseTime = Date.now() - startTime;
       const isHealthy = response.ok;
@@ -366,7 +366,7 @@ class HotelIntegrationServer {
         lastCheck: new Date(),
         responseTime: Date.now() - startTime
       };
-      
+
       this.systemConnections.set(systemName, updatedConnection);
       return updatedConnection;
     }
@@ -449,7 +449,7 @@ class HotelIntegrationServer {
    */
   public async shutdown(): Promise<void> {
     console.log('hotel-common統合APIサーバー停止中...');
-    
+
     try {
       if (this.server) {
         this.server.close();

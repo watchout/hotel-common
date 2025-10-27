@@ -3,8 +3,8 @@ import path from 'path'
 import cors from 'cors'
 import express from 'express'
 
-import adminRouter from './admin-api'
 import { HotelLogger } from '../utils/logger'
+import adminRouter from './admin-api'
 
 const app = express()
 const logger = HotelLogger.getInstance()
@@ -63,7 +63,7 @@ app.use('*', (req, res) => {
 // エラーハンドラー
 app.use((error: any, req: any, res: any, _next: any) => {
   logger.error('Admin Server Error:', error)
-  
+
   res.status(500).json({
     error: 'INTERNAL_SERVER_ERROR',
     message: 'An internal server error occurred',
@@ -78,4 +78,4 @@ app.listen(PORT, () => {
   logger.info(`🔗 API Endpoint: http://localhost:${PORT}/api/admin`)
 })
 
-export default app 
+export default app

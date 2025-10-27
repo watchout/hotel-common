@@ -30,13 +30,28 @@ const logger = logger_1.HotelLogger.getInstance();
  * Cookie名の互換対応
  * - 正式: hotel_session
  * - 暫定: hotel-session-id（移行期間のみ）
+ *
+ * 優先順位:
+ * 1. cookie-parserによる解析（req.cookies）
+ * 2. ヘッダ直読みフォールバック（cookie-parser未適用時の互換）
  */
 function extractSessionIdFromCookies(req) {
+    console.log('[session-auth] Cookie header:', req.headers.cookie);
+    // 1. cookie-parserによる解析結果を優先（推奨）
+    if (req.cookies && typeof req.cookies === 'object') {
+        console.log('[session-auth] Using cookie-parser result:', Object.keys(req.cookies));
+        const sessionId = req.cookies['hotel_session'] || req.cookies['hotel-session-id'] || null;
+        if (sessionId) {
+            console.log('[session-auth] Extracted sessionId (via cookie-parser):', sessionId.substring(0, 8) + '...');
+            return sessionId;
+        }
+    }
+    // 2. フォールバック: ヘッダ直読み（cookie-parser未適用時の互換）
     const cookies = req.headers.cookie;
-    console.log('[session-auth] Cookie header:', cookies);
-    if (!cookies)
+    if (!cookies) {
+        console.log('[session-auth] No cookies found');
         return null;
-    // Cookie文字列をパース
+    }
     const cookieMap = {};
     cookies.split(';').forEach(cookie => {
         const [key, value] = cookie.trim().split('=');
@@ -44,10 +59,11 @@ function extractSessionIdFromCookies(req) {
             cookieMap[key] = value;
         }
     });
-    console.log('[session-auth] Parsed cookies:', cookieMap);
-    // 正式Cookie名を優先
+    console.log('[session-auth] Parsed cookies (fallback):', Object.keys(cookieMap));
     const sessionId = cookieMap['hotel_session'] || cookieMap['hotel-session-id'] || null;
-    console.log('[session-auth] Extracted sessionId:', sessionId);
+    if (sessionId) {
+        console.log('[session-auth] Extracted sessionId (fallback):', sessionId.substring(0, 8) + '...');
+    }
     return sessionId;
 }
 /**

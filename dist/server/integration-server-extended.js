@@ -77,7 +77,7 @@ class HotelIntegrationServer {
             origin: [
                 'http://localhost:3100', // hotel-saas
                 'http://localhost:3200', // hotel-member frontend
-                'http://localhost:8080', // hotel-member backend  
+                'http://localhost:8080', // hotel-member backend
                 'http://localhost:3300', // hotel-pms
                 'http://localhost:3301' // hotel-pms electron
             ],

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { config } from 'dotenv'
 import express from 'express'
@@ -97,6 +98,9 @@ class HotelIntegrationServer {
       allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true
     }))
+
+    // Cookie parser（CORS後に適用・堅牢なCookie解析）
+    this.app.use(cookieParser());
 
     // === Phase G1: グローバル早期401捕捉（ENV制御可能） ===
     if (process.env.ENABLE_401_MONITORING === '1') {

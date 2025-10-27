@@ -1,14 +1,12 @@
 // 🎊 hotel-common七重統合システム - 七層統合実装
 // 文献1-7完全統合レイヤー処理
 
-import {
-  AIAgentType 
-} from './types'
 
-import type { 
-  IntegrationLayer, 
-  LayerResult, 
-  SevenIntegrationConfig} from './types';
+import type {
+  IntegrationLayer,
+  LayerResult,
+  SevenIntegrationConfig
+} from './types';
 
 // 基底レイヤークラス
 export abstract class BaseIntegrationLayer {
@@ -21,9 +19,9 @@ export abstract class BaseIntegrationLayer {
   }
 
   abstract execute(input: any, context?: any): Promise<LayerResult>
-  
+
   protected createLayerResult(
-    success: boolean, 
+    success: boolean,
     executionTime: number,
     metrics: Record<string, any>,
     improvements: string[] = [],
@@ -48,28 +46,28 @@ export class ProblemSolvingLayer extends BaseIntegrationLayer {
 
   async execute(input: any, context?: any): Promise<LayerResult> {
     const startTime = Date.now()
-    
+
     try {
       // ハルシネーション対策実装
       const hallucinationPrevention = await this.implementHallucinationPrevention(input)
-      
+
       // 忘却問題解決
       const memoryManagement = await this.implementMemoryManagement(input, context)
-      
+
       // コスト問題対策
       const costOptimization = await this.implementCostOptimization(input)
-      
+
       // 品質保証システム
       const qualityAssurance = await this.implementQualityAssurance(input)
-      
+
       const executionTime = Date.now() - startTime
-      
+
       return this.createLayerResult(
         true,
         executionTime,
         {
           hallucinationReduction: hallucinationPrevention.reduction,
-          memoryEfficiency: memoryManagement.efficiency, 
+          memoryEfficiency: memoryManagement.efficiency,
           costSavings: costOptimization.savings,
           qualityScore: qualityAssurance.score,
           accuracyImprovement: 99.9,
@@ -140,22 +138,22 @@ export class TokenOptimizationLayer extends BaseIntegrationLayer {
 
   async execute(input: any, context?: any): Promise<LayerResult> {
     const startTime = Date.now()
-    
+
     try {
       // 言語切り替え戦略
       const languageSwitching = await this.implementLanguageSwitching(input)
-      
+
       // コンテキスト管理最適化
       const contextOptimization = await this.implementContextOptimization(input, context)
-      
+
       // セマンティックチャンキング
       const semanticChunking = await this.implementSemanticChunking(input)
-      
+
       // トークン圧縮
       const tokenCompression = await this.implementTokenCompression(input)
-      
+
       const executionTime = Date.now() - startTime
-      
+
       return this.createLayerResult(
         true,
         executionTime,
@@ -232,7 +230,7 @@ export class GuardrailsLayer extends BaseIntegrationLayer {
 
   async execute(input: any, context?: any): Promise<LayerResult> {
     const startTime = Date.now()
-    
+
     try {
       // 5層ガードレールシステム実装
       const inputValidation = await this.implementInputValidation(input)
@@ -240,9 +238,9 @@ export class GuardrailsLayer extends BaseIntegrationLayer {
       const businessCompliance = await this.implementBusinessCompliance(input)
       const outputQuality = await this.implementOutputQuality(input)
       const monitoring = await this.implementMonitoring(input)
-      
+
       const executionTime = Date.now() - startTime
-      
+
       return this.createLayerResult(
         true,
         executionTime,
@@ -331,22 +329,22 @@ export class CursorOptimizationLayer extends BaseIntegrationLayer {
 
   async execute(input: any, context?: any): Promise<LayerResult> {
     const startTime = Date.now()
-    
+
     try {
       // Cursor料金最適化
       const costOptimization = await this.implementCostOptimization(input)
-      
+
       // MCP統合連携
       const mcpIntegration = await this.implementMCPIntegration(input)
-      
+
       // API統合最適化
       const apiOptimization = await this.implementAPIOptimization(input)
-      
+
       // 開発効率化
       const developmentEfficiency = await this.implementDevelopmentEfficiency(input)
-      
+
       const executionTime = Date.now() - startTime
-      
+
       return this.createLayerResult(
         true,
         executionTime,
@@ -423,22 +421,22 @@ export class ProcessOptimizationLayer extends BaseIntegrationLayer {
 
   async execute(input: any, context?: any): Promise<LayerResult> {
     const startTime = Date.now()
-    
+
     try {
       // 3層ループ開発プロセス
       const threeLayerLoop = await this.implementThreeLayerLoop(input)
-      
+
       // ステークホルダー協力体制
       const stakeholderCoordination = await this.implementStakeholderCoordination(input)
-      
+
       // 継続的評価・改善
       const continuousImprovement = await this.implementContinuousImprovement(input)
-      
+
       // 自動化システム
       const automationSystem = await this.implementAutomationSystem(input)
-      
+
       const executionTime = Date.now() - startTime
-      
+
       return this.createLayerResult(
         true,
         executionTime,
@@ -518,22 +516,22 @@ export class RAGImplementationLayer extends BaseIntegrationLayer {
 
   async execute(input: any, context?: any): Promise<LayerResult> {
     const startTime = Date.now()
-    
+
     try {
       // 9事例ベストプラクティス統合
       const bestPractices = await this.implementBestPractices(input)
-      
+
       // 統合知識ベース構築
       const knowledgeBase = await this.implementKnowledgeBase(input)
-      
+
       // 技術スタック統合
       const techStackIntegration = await this.implementTechStackIntegration(input)
-      
+
       // コスト効率化実現
       const costEfficiency = await this.implementCostEfficiency(input)
-      
+
       const executionTime = Date.now() - startTime
-      
+
       return this.createLayerResult(
         true,
         executionTime,
@@ -612,22 +610,22 @@ export class PromptPerfectionLayer extends BaseIntegrationLayer {
 
   async execute(input: any, context?: any): Promise<LayerResult> {
     const startTime = Date.now()
-    
+
     try {
       // CO-STARフレームワーク完全実装
       const costarImplementation = await this.implementCOSTAR(input)
-      
+
       // 思考誘導技術統合
       const thoughtGuidance = await this.implementThoughtGuidance(input)
-      
+
       // 自動最適化システム
       const autoOptimization = await this.implementAutoOptimization(input)
-      
+
       // 統合効果測定
       const effectivenessMeasurement = await this.measureEffectiveness(input)
-      
+
       const executionTime = Date.now() - startTime
-      
+
       return this.createLayerResult(
         true,
         executionTime,
@@ -704,7 +702,7 @@ export class PromptPerfectionLayer extends BaseIntegrationLayer {
 // 七重統合レイヤーファクトリー
 export class SevenLayerIntegrationFactory {
   static createLayer(
-    layerType: IntegrationLayer, 
+    layerType: IntegrationLayer,
     config: SevenIntegrationConfig
   ): BaseIntegrationLayer {
     switch (layerType) {
@@ -728,8 +726,8 @@ export class SevenLayerIntegrationFactory {
   }
 
   static createAllLayers(config: SevenIntegrationConfig): BaseIntegrationLayer[] {
-    return config.integrationLayers.map(layerType => 
+    return config.integrationLayers.map(layerType =>
       this.createLayer(layerType, config)
     )
   }
-} 
+}

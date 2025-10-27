@@ -17,7 +17,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-  
+
   if (req.method === 'OPTIONS') {
     res.sendStatus(200)
   } else {
@@ -72,9 +72,9 @@ app.get('/api/campaigns/active', (req, res) => {
 app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
   try {
     const { token } = req.body
-    
+
     console.log('JWT検証要求:', { token: token ? '***' : 'なし' })
-    
+
     if (!token) {
       return res.status(400).json({
         error: 'TOKEN_REQUIRED',
@@ -122,13 +122,13 @@ app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
 app.post('/api/hotel-member/hierarchy/permissions/check-customer-access', async (req, res) => {
   try {
     const { token, target_tenant_id, operation = 'READ' } = req.body
-    
-    console.log('顧客データアクセス権限チェック:', { 
-      tenant: target_tenant_id, 
+
+    console.log('顧客データアクセス権限チェック:', {
+      tenant: target_tenant_id,
       operation,
       token: token ? '***' : 'なし'
     })
-    
+
     if (!token || !target_tenant_id) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',
@@ -149,7 +149,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-customer-access', async 
   } catch (error: unknown) {
     console.error('権限チェックエラー:', error)
     res.status(500).json({
-      error: 'INTERNAL_ERROR', 
+      error: 'INTERNAL_ERROR',
       message: 'Permission check failed'
     })
   }
@@ -159,12 +159,12 @@ app.post('/api/hotel-member/hierarchy/permissions/check-customer-access', async 
 app.post('/api/hotel-member/hierarchy/tenants/accessible', async (req, res) => {
   try {
     const { token, scope_level } = req.body
-    
-    console.log('アクセス可能テナント取得:', { 
+
+    console.log('アクセス可能テナント取得:', {
       scope: scope_level,
       token: token ? '***' : 'なし'
     })
-    
+
     if (!token) {
       return res.status(400).json({
         error: 'TOKEN_REQUIRED',
@@ -195,9 +195,9 @@ app.post('/api/hotel-member/hierarchy/tenants/accessible', async (req, res) => {
 app.post('/api/hotel-member/hierarchy/permissions/check-membership-restrictions', async (req, res) => {
   try {
     const { token, operation, data_type } = req.body
-    
+
     console.log('会員データ制限チェック:', { operation, data_type })
-    
+
     if (!token || !operation || !data_type) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',
@@ -227,9 +227,9 @@ app.post('/api/hotel-member/hierarchy/permissions/check-membership-restrictions'
 app.post('/api/hotel-member/hierarchy/permissions/check-analytics-access', async (req, res) => {
   try {
     const { token, analytics_type } = req.body
-    
+
     console.log('グループ分析権限チェック:', { analytics_type })
-    
+
     if (!token || !analytics_type) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',
@@ -259,9 +259,9 @@ app.post('/api/hotel-member/hierarchy/permissions/check-analytics-access', async
 app.post('/api/hotel-member/hierarchy/user/permissions-detail', async (req, res) => {
   try {
     const { token } = req.body
-    
+
     console.log('権限詳細情報取得要求')
-    
+
     if (!token) {
       return res.status(400).json({
         error: 'TOKEN_REQUIRED',
@@ -318,9 +318,9 @@ app.post('/api/hotel-member/hierarchy/user/permissions-detail', async (req, res)
 app.post('/api/hotel-member/hierarchy/permissions/batch-check', async (req, res) => {
   try {
     const { token, checks } = req.body
-    
+
     console.log('バッチ権限チェック:', { count: checks?.length || 0 })
-    
+
     if (!token || !Array.isArray(checks)) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',

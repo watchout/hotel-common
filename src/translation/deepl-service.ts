@@ -58,7 +58,7 @@ export class DeepLTranslationService {
       }
 
       const data = await response.json()
-      
+
       return texts.map((original, index) => ({
         original,
         translated: data.translations[index]?.text || original,
@@ -165,4 +165,4 @@ export class DeepLTranslationService {
 }
 
 /** 翻訳サービス統合インスタンス */
-export const translationService = new DeepLTranslationService() 
+export const translationService = new DeepLTranslationService()

@@ -2,7 +2,6 @@
 
 import type { Router } from 'express';
 
-import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 import { config } from 'dotenv';
 import express from 'express';
@@ -27,7 +26,7 @@ class RealCampaignServer {
   constructor() {
     this.app = express();
     this.port = parseInt(process.env.HOTEL_COMMON_PORT || '3400');
-    
+
     this.setupMiddleware();
     this.setupRoutes();
   }
@@ -75,7 +74,7 @@ class RealCampaignServer {
         this.app.use(path, router);
       }
     };
-    
+
     // キャンペーン機能を統合
     // @ts-ignore - 引数の型が不一致
     integrateCampaignFeature();
@@ -109,7 +108,7 @@ class RealCampaignServer {
       console.error('Server app is not initialized');
       return;
     }
-    
+
     this.app.use(path, router);
     logger.info(`Router added to path: ${path}`);
   }
@@ -159,7 +158,7 @@ class RealCampaignServer {
    */
   private async shutdown(): Promise<void> {
     logger.info('キャンペーンAPI実サーバー停止中...');
-    
+
     try {
       if (this.server) {
         this.server.close();
@@ -186,7 +185,6 @@ if (require.main === module) {
 export { RealCampaignServer };
 
 // データベース初期設定を追加
-import { setupCampaignDatabase, checkCampaignDatabase } from '../integrations/campaigns/database-setup';
 import { logger } from '../utils/logger';
 
 // RealCampaignServerクラスのstart()メソッドを修正

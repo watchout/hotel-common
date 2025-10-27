@@ -33,7 +33,7 @@ results.forEach(result => {
   result.messages.forEach(msg => {
     if (msg.ruleId === 'no-console') {
       totalConsole++;
-      
+
       if (!consoleErrors.has(filePath)) {
         consoleErrors.set(filePath, []);
       }
@@ -64,10 +64,10 @@ consoleErrors.forEach((errors, filePath) => {
   try {
     let content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
-    
+
     // loggerが既に定義されているか確認
     const hasLogger = /const logger = |const\s+\w+\s*=\s*HotelLogger|import.*HotelLogger/.test(content);
-    
+
     if (!hasLogger) {
       // HotelLoggerのimportを追加
       let importAdded = false;
@@ -83,16 +83,16 @@ consoleErrors.forEach((errors, filePath) => {
               break;
             }
           }
-          
+
           // HotelLoggerのimportを追加
           const relativePath = path.relative(path.dirname(filePath), path.join(path.dirname(filePath), '../utils/logger'));
           const depth = (filePath.match(/\//g) || []).length - (process.cwd().match(/\//g) || []).length - 2;
           const prefix = depth > 0 ? '../'.repeat(depth) : './';
-          
+
           lines.splice(lastImportIdx + 1, 0, `import { HotelLogger } from '${prefix}utils/logger'`);
           importAdded = true;
           addedImportCount++;
-          
+
           // loggerインスタンスを追加（importの後、空行の後）
           let insertIdx = lastImportIdx + 2;
           while (insertIdx < lines.length && lines[insertIdx].trim() === '') {
@@ -102,29 +102,29 @@ consoleErrors.forEach((errors, filePath) => {
           break;
         }
       }
-      
+
       if (!importAdded) {
         console.log(`⚠️  スキップ (import追加失敗): ${path.relative(process.cwd(), filePath)}`);
         skippedCount += errors.length;
         return;
       }
-      
+
       // 再パース
       content = lines.join('\n');
     }
-    
+
     // console → loggerに置換
     errors.forEach(error => {
       const lineIdx = error.line - 1;
       if (lineIdx < 0 || lineIdx >= lines.length) return;
-      
+
       const line = lines[lineIdx];
-      
+
       // console.log → logger.info
       // console.error → logger.error
       // console.warn → logger.warn
       // console.debug → logger.debug
-      
+
       if (/console\.log\(/.test(line)) {
         lines[lineIdx] = line.replace(/console\.log\(/g, 'logger.info(');
         fixedCount++;
@@ -145,7 +145,7 @@ consoleErrors.forEach((errors, filePath) => {
         skippedCount++;
       }
     });
-    
+
     // ファイル書き込み
     fs.writeFileSync(filePath, lines.join('\n'), 'utf-8');
   } catch (error) {

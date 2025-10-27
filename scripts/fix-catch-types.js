@@ -34,7 +34,7 @@ results.forEach(result => {
   result.messages.forEach(msg => {
     if (msg.ruleId === '@typescript-eslint/no-implicit-any-catch') {
       totalCatch++;
-      
+
       if (!fixes.has(filePath)) {
         fixes.set(filePath, []);
       }
@@ -65,16 +65,16 @@ fixes.forEach((fileFixes, filePath) => {
   try {
     let content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
-    
+
     // 行番号でソート（降順 - 後ろから修正）
     fileFixes.sort((a, b) => b.line - a.line);
-    
+
     fileFixes.forEach(fix => {
       const lineIdx = fix.line - 1;
       if (lineIdx < 0 || lineIdx >= lines.length) return;
-      
+
       const line = lines[lineIdx];
-      
+
       // catch句のパターン検出
       // Pattern 1: } catch (error) {
       // Pattern 2: } catch (e) {
@@ -87,7 +87,7 @@ fixes.forEach((fileFixes, filePath) => {
         { regex: /catch\s*\(\s*e\s*\)\s*{/, replacement: 'catch (e: unknown) {' },
         { regex: /catch\s*\(\s*err\s*\)\s*{/, replacement: 'catch (err: unknown) {' }
       ];
-      
+
       let modified = false;
       for (const pattern of patterns) {
         if (pattern.regex.test(line)) {
@@ -97,13 +97,13 @@ fixes.forEach((fileFixes, filePath) => {
           break;
         }
       }
-      
+
       if (!modified) {
         console.log(`⚠️  スキップ (パターン不一致): ${path.relative(process.cwd(), filePath)}:${fix.line}`);
         skippedCount++;
       }
     });
-    
+
     // ファイル書き込み
     fs.writeFileSync(filePath, lines.join('\n'), 'utf-8');
   } catch (error) {

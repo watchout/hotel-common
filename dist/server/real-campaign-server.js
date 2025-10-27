@@ -165,6 +165,7 @@ if (require.main === module) {
         process.exit(1);
     });
 }
+// データベース初期設定を追加
 const logger_1 = require("../utils/logger");
 // RealCampaignServerクラスのstart()メソッドを修正
 // async start(): Promise<void> {

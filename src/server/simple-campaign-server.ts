@@ -17,7 +17,7 @@ class SimpleCampaignServer {
   constructor() {
     this.app = express();
     this.port = parseInt(process.env.HOTEL_COMMON_PORT || '3400');
-    
+
     this.setupMiddleware();
     this.setupRoutes();
   }
@@ -103,7 +103,7 @@ class SimpleCampaignServer {
     // 管理者API - キャンペーン詳細取得
     this.app.get('/api/v1/admin/campaigns/:id', (req, res) => {
       const { id } = req.params;
-      
+
       if (id === '999') {
         return res.status(404).json({
           success: false,
@@ -111,7 +111,7 @@ class SimpleCampaignServer {
           message: 'キャンペーンが見つかりません'
         });
       }
-      
+
       res.json({
         success: true,
         data: {
@@ -148,7 +148,7 @@ class SimpleCampaignServer {
     this.app.put('/api/v1/admin/campaigns/:id', (req, res) => {
       const { id } = req.params;
       const updateData = req.body;
-      
+
       if (id === '999') {
         return res.status(404).json({
           success: false,
@@ -156,7 +156,7 @@ class SimpleCampaignServer {
           message: 'キャンペーンが見つかりません'
         });
       }
-      
+
       res.json({
         success: true,
         data: {
@@ -171,7 +171,7 @@ class SimpleCampaignServer {
     // 管理者API - キャンペーン削除
     this.app.delete('/api/v1/admin/campaigns/:id', (req, res) => {
       const { id } = req.params;
-      
+
       if (id === '999') {
         return res.status(404).json({
           success: false,
@@ -179,7 +179,7 @@ class SimpleCampaignServer {
           message: 'キャンペーンが見つかりません'
         });
       }
-      
+
       res.status(204).send();
     });
 
@@ -303,7 +303,7 @@ class SimpleCampaignServer {
    */
   private async shutdown(): Promise<void> {
     console.log('キャンペーンAPI簡易サーバー停止中...');
-    
+
     try {
       if (this.server) {
         this.server.close();
