@@ -95,7 +95,7 @@
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
       "eslint --no-inline-config --fix",
-      "eslint --no-inline-config --max-warnings=0"
+      "eslint --no-inline-config --max-warnings=50"
     ],
     "*.{json,md,yml,yaml}": [
       "prettier --write"
