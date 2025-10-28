@@ -1,6 +1,9 @@
 dist
 node_modules
 coverage
+backups/prisma/**
+**/@prisma/client/**
+prisma/generated/**
 
 
 
