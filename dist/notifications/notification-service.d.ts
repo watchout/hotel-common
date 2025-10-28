@@ -77,9 +77,11 @@ export declare class NotificationService {
     configure(config: NotificationConfig): void;
     /**
      * メール通知送信
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     sendEmail(to: string | string[], templateId: string, data: Record<string, any>, options?: NotificationOptions): Promise<boolean>;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * SMS通知送信
      */
     sendSms(to: string | string[], templateId: string, data: Record<string, any>, options?: NotificationOptions): Promise<boolean>;
@@ -121,6 +123,7 @@ export declare class NotificationService {
     private sendWebhookToEndpoint;
     /**
      * 通知イベント発行
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
      */
     private publishNotificationEvent;
 }

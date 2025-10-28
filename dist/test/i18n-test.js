@@ -72,7 +72,10 @@ async function testFileSystemAccess() {
     console.log('📂 翻訳ファイルアクセステスト:');
     try {
         // 直接ファイルを読み込んでみる
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const fs = require('fs').promises;
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const path = require('path');
         const jaPath = path.join(__dirname, '../../i18n/locales/ja.json');
         const enPath = path.join(__dirname, '../../i18n/locales/en.json');

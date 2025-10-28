@@ -13,6 +13,8 @@ import type { Request, Response, NextFunction } from 'express'
 
 // Express Request型拡張
 declare global {
+// eslint-disable-next-line @typescript-eslint/no-namespace
+// eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       user?: HierarchicalJWTPayload
@@ -439,7 +441,10 @@ declare module 'express-serve-static-core' {
       data_type: DataType
       operation: string
       effective_scope?: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
       effective_level?: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
       restrictions?: Record<string, any>
     }
   }

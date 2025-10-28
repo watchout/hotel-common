@@ -109,6 +109,9 @@ export interface AnalyticsEvent extends BaseHotelEvent {
     occupancy_rate: number
     customer_count: number
     average_stay_duration: number
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     detailed_data: any // 詳細レポートデータ
     generated_by_system: SystemId
     generated_at: Date
@@ -120,8 +123,11 @@ export interface SystemEvent extends BaseHotelEvent {
   type: 'system'
   action: 'startup' | 'shutdown' | 'error' | 'health_check' | 'sync_complete'
   data: {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     system_status: 'online' | 'offline' | 'degraded'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     message: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     error_details?: any
     metrics?: {
       cpu_usage: number

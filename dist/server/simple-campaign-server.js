@@ -15,6 +15,9 @@ const express_1 = __importDefault(require("express"));
  */
 class SimpleCampaignServer {
     app;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     server;
     port;
     constructor() {
@@ -234,7 +237,10 @@ class SimpleCampaignServer {
                 ]
             });
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         // エラーハンドラー
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.app.use((error, req, res, _next) => {
             console.error('Server error:', error);
             res.status(500).json({

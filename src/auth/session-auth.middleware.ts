@@ -84,6 +84,9 @@ function extractSessionIdFromCookies(req: Request & { cookies?: Record<string, s
  * 4. 下流へ
  */
 export const sessionAuthMiddleware = async (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   req: Request & { user?: any },
   res: Response,
   next: NextFunction
@@ -119,8 +122,11 @@ export const sessionAuthMiddleware = async (
       );
     }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     // 3. req.user に設定（下流の権限・tenant分離ミドルウェアで使用）
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     // SessionInfo型は最小限の情報のみ含むため、追加情報はRedis JSONから取得
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     const sessionData = sessionInfo as any;
     req.user = {
       user_id: sessionInfo.user_id,

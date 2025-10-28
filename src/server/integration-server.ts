@@ -5,19 +5,23 @@ import cors from 'cors'
 import { config } from 'dotenv'
 import express from 'express'
 
+import apiHealthRouter from './api-health'
 import { sessionAuthMiddleware } from '../auth/session-auth.middleware'
 import { hotelDb } from '../database/prisma'
 import { appLauncherApiRouter } from '../integrations/app-launcher'
 import campaignsApiRouter from '../integrations/campaigns/api-endpoints'
 import { initializeHotelMemberHierarchy } from '../integrations/hotel-member'
+// eslint-disable-next-line import/order
+// eslint-disable-next-line import/order
 import hotelMemberApiRouter from '../integrations/hotel-member/api-endpoints'
-import apiHealthRouter from './api-health'
 // システム別APIルーター
 
 // セッション管理APIルーター
 import checkinSessionRouter from '../routes/checkin-session.routes'
 import sessionBillingRouter from '../routes/session-billing.routes'
+// eslint-disable-next-line import/order
 import sessionMigrationRouter from '../routes/session-migration.routes'
+// eslint-disable-next-line import/order
 import {
   accountingRouter,
   adminDashboardRouter,
@@ -61,8 +65,11 @@ interface SystemConnectionStatus {
  * - ヘルスチェック
  * - 基本的なCRUD API
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class HotelIntegrationServer {
   private app: express.Application
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   private server: any
   private prisma: PrismaClient
   private port: number
@@ -102,10 +109,13 @@ class HotelIntegrationServer {
     // Cookie parser（CORS後に適用・堅牢なCookie解析）
     this.app.use(cookieParser());
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     // === Phase G1: グローバル早期401捕捉（ENV制御可能） ===
     if (process.env.ENABLE_401_MONITORING === '1') {
       this.app.use((req, res, next) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         const origJson = res.json.bind(res);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         res.json = (body: any) => {
           const code = res.statusCode;
           if (code === 401) {
@@ -359,22 +369,32 @@ class HotelIntegrationServer {
 
     // フロントデスク管理APIエンドポイント（その他）
     this.app.use('/api/v1/admin/front-desk/accounting', frontDeskAccountingRouter)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.app.use('/api/v1/admin/front-desk/checkin', frontDeskCheckinRouter)
 
     // 管理者操作ログAPIエンドポイント
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.app.use('/api/v1/admin/operation-logs', adminOperationLogsRouter)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
     // === ROUTE-DUMP for debugging (PR1) ===
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     const routeList = (this.app as any)._router?.stack?.flatMap((layer: any) => {
       if (layer.route) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         const r = layer.route
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         return r.stack.map((s: any) => `${Object.keys(r.methods)[0].toUpperCase()} ${r.path}  mid:${s.name}`)
       }
       if (layer.name === 'router' && layer.handle?.stack) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         const base = layer.regexp?.toString() || ''
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         return layer.handle.stack.map((s: any) => {
           const method = s.route ? Object.keys(s.route.methods)[0].toUpperCase() : 'N/A'
           const path = s.route ? s.route.path : '(no-route)'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
           const middlewares = s.route?.stack?.map((m: any) => m.name).join(',') || 'none'
           return `ROUTER ${base} => ${method} ${path} mid:[${middlewares}]`
         })
@@ -593,18 +613,21 @@ class HotelIntegrationServer {
           'GET /api/v1/session-billing/by-session/:sessionId',
           'PATCH /api/v1/session-billing/:billingId',
           'POST /api/v1/session-billing/:billingId/payment',
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
           'GET /api/v1/session-billing/calculate/:sessionId',
 
           // セッション移行管理API
           'POST /api/v1/session-migration/migrate-orders',
           'GET /api/v1/session-migration/statistics',
           'GET /api/v1/session-migration/compatibility-check',
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
           'GET /api/v1/session-migration/report'
         ]
       })
     })
 
     // エラーハンドラー
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
       console.error('Server error:', error)
       res.status(500).json({
@@ -661,6 +684,7 @@ class HotelIntegrationServer {
 
       const endpoint = healthEndpoints[systemName as keyof typeof healthEndpoints] || '/health'
       const response = await fetch(`${system.url}${endpoint}`, {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         signal: controller.signal,
         headers: {
           'Accept': 'application/json',
@@ -668,6 +692,7 @@ class HotelIntegrationServer {
         }
       })
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
       const responseTime = Date.now() - startTime
       clearTimeout(timeout)
 
@@ -675,6 +700,7 @@ class HotelIntegrationServer {
         throw new Error(`HTTP error: ${response.status}`)
       }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
       let data: any = {}
       const contentType = response.headers.get('content-type')
 

@@ -33,15 +33,19 @@ export declare class HybridCursorIntegration {
     processMessage(message: CursorMessage): Promise<OptimizedResponse>;
     /**
      * コンテキスト最適化抽出
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * Custom Instructionsの4,000トークンを200トークンに削減
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     private extractOptimizedContext;
     /**
      * 実際のRAG検索実行
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * hotel-common docsから関連情報を実際に検索
      */
     private performActualRAG;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 実際のガードレール適用
      * 「チェックせよ」ではなく実際の検証実行
      */

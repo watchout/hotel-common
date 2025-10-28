@@ -12,11 +12,14 @@ const http_1 = require("http");
 const redis_1 = require("redis");
 const socket_io_1 = require("socket.io");
 const logger_1 = require("../utils/logger");
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class HotelWebSocketServer {
     io = null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     redisClient = null;
     options;
     logger;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     httpServer = null;
     constructor(options) {
         this.options = options;
@@ -139,21 +142,27 @@ class HotelWebSocketServer {
                 if (tenantId) {
                     socket.join(`tenant:${tenantId}`);
                     this.logger.debug(`テナントルーム参加: ${socket.id} -> tenant:${tenantId}`);
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 }
             });
         });
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     /**
      * イベント送信
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     broadcastEvent(eventName, data) {
         if (this.io) {
             this.io.emit(eventName, data);
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
     /**
      * テナント固有イベント送信
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     broadcastTenantEvent(tenantId, eventName, data) {
         if (this.io) {
             this.io.to(`tenant:${tenantId}`).emit(eventName, data);

@@ -7,6 +7,7 @@
  */
 
 import { Router } from 'express';
+
 import resourcesDeleteHandler from './resources/[resource]-[id].delete';
 import resourcesGetHandler from './resources/[resource]-[id].get';
 import resourcesUpdateHandler from './resources/[resource]-[id].patch';

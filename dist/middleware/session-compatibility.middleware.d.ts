@@ -14,6 +14,7 @@ export declare const autoSessionMapping: (req: Request, res: Response, next: Nex
  */
 export declare const legacyApiCompatibility: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 /**
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * セッション必須チェックミドルウェア
  * 新しいAPIでセッションが必須の場合に使用
  */
@@ -24,6 +25,7 @@ export declare const requireSession: (req: Request, res: Response, next: NextFun
  */
 export declare const validateSessionStatus: (allowedStatuses?: string[]) => (req: Request, res: Response, next: NextFunction) => Promise<Response<any, Record<string, any>> | undefined>;
 /**
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * 移行期間用の柔軟なセッションチェック
  * セッションがない場合でも警告ログを出すだけで処理を継続
  */

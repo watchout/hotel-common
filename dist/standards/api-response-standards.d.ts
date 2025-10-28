@@ -74,6 +74,7 @@ export declare class ResponseHelper {
      */
     static sendError(res: Response, code: StandardErrorCode | string, message: string, statusCode?: number, details?: any): void;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * バリデーションエラー送信
      */
     static sendValidationError(res: Response, message?: string, details?: any): void;

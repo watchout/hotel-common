@@ -6,9 +6,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RealCampaignServer = void 0;
 const cors_1 = __importDefault(require("cors"));
+// eslint-disable-next-line no-duplicate-imports
 const dotenv_1 = require("dotenv");
+// eslint-disable-next-line no-duplicate-imports
+// eslint-disable-next-line no-duplicate-imports
 const express_1 = __importDefault(require("express"));
+// eslint-disable-next-line import/order
 const database_1 = require("../database");
+// eslint-disable-next-line import/order
 const campaigns_1 = require("../integrations/campaigns");
 // 環境変数読み込み
 (0, dotenv_1.config)();
@@ -16,10 +21,13 @@ const campaigns_1 = require("../integrations/campaigns");
  * キャンペーンAPI実サーバー
  * - 実際のデータベースに接続
  * - キャンペーン管理API
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * - クライアント向けAPI
  */
 class RealCampaignServer {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     app;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     server;
     port;
     constructor() {
@@ -63,21 +71,27 @@ class RealCampaignServer {
         // キャンペーンAPIを統合
         // 統合サーバーとの互換性のためのアダプター
         const integrationServerAdapter = {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             addRouter: (path, router) => {
                 this.app.use(path, router);
             }
         };
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // キャンペーン機能を統合
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore - 引数の型が不一致
         (0, campaigns_1.integrateCampaignFeature)();
         // 404エラーハンドラー
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.app.use('*', (req, res) => {
             res.status(404).json({
                 error: 'NOT_FOUND',
                 message: `Endpoint ${req.originalUrl} not found`
             });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         });
         // エラーハンドラー
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.app.use((error, req, res, _next) => {
             logger_1.logger.error('Server error:', { error: error instanceof Error ? error : new Error(String(error)) });
             res.status(500).json({

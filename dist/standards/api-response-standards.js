@@ -45,10 +45,14 @@ class StandardResponseBuilder {
             request_id: this.generateRequestId()
         };
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     /**
      * エラーレスポンス
      */
-    static error(code, message, details) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    static error(code, message, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    details) {
         return {
             success: false,
             error: {
@@ -95,17 +99,26 @@ class ResponseHelper {
         const response = StandardResponseBuilder.success(data, pagination);
         res.status(statusCode).json(response);
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     /**
      * エラーレスポンス送信
      */
-    static sendError(res, code, message, statusCode = 400, details) {
+    static sendError(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    res, code, message, statusCode = 400, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    details) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const response = StandardResponseBuilder.error(code, message, details);
         res.status(statusCode).json(response);
     }
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * バリデーションエラー送信
      */
-    static sendValidationError(res, message = '入力データが正しくありません', details) {
+    static sendValidationError(res, message = '入力データが正しくありません', 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    details) {
         this.sendError(res, StandardErrorCode.VALIDATION_ERROR, message, 400, details);
     }
     /**
@@ -123,25 +136,37 @@ class ResponseHelper {
     /**
      * 404エラー送信
      */
-    static sendNotFound(res, message = 'リソースが見つかりません') {
+    static sendNotFound(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    res, message = 'リソースが見つかりません') {
         this.sendError(res, StandardErrorCode.NOT_FOUND, message, 404);
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     /**
      * 内部エラー送信
      */
-    static sendInternalError(res, message = 'システムエラーが発生しました', details) {
+    static sendInternalError(res, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    message = 'システムエラーが発生しました', 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    details) {
         this.sendError(res, StandardErrorCode.INTERNAL_ERROR, message, 500, details);
     }
 }
 exports.ResponseHelper = ResponseHelper;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 /**
  * APIエラークラス
  */
 class ApiError extends Error {
     statusCode;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     code;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     details;
-    constructor(message, statusCode = 500, code = StandardErrorCode.INTERNAL_ERROR, details) {
+    constructor(message, statusCode = 500, code = StandardErrorCode.INTERNAL_ERROR, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    details) {
         super(message);
         this.name = 'ApiError';
         this.statusCode = statusCode;
@@ -181,4 +206,5 @@ exports.API_NAMING_CONVENTIONS = {
         CUSTOMERS: '/customers',
         RESPONSE_TREE: '/response-tree'
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
 };

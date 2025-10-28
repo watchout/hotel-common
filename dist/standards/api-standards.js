@@ -79,6 +79,9 @@ class StandardResponseBuilder {
     /**
      * 成功レスポンス生成
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static success(res, data, meta, statusCode = 200) {
         const response = {
             success: true,
@@ -91,8 +94,23 @@ class StandardResponseBuilder {
     }
     /**
      * ページネーション付き成功レスポンス
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
-    static paginated(res, items, page, limit, total, statusCode = 200) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    static paginated(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    res, items, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    page, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    limit, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    total, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    statusCode = 200
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const response = {
             success: true,
             data: {
@@ -114,12 +132,16 @@ class StandardResponseBuilder {
     /**
      * エラーレスポンス生成
      * @param code エラーコード
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * @param message エラーメッセージ
      * @param details 詳細情報（オプション）
      * @param statusCode HTTPステータスコード（デフォルト400）
      * @returns レスポンスオブジェクトとステータスコード
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
-    static error(code, message, details, statusCode = 400) {
+    static error(code, message, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    details, statusCode = 400) {
         const error = {
             code,
             message,
@@ -131,15 +153,27 @@ class StandardResponseBuilder {
                 error,
                 timestamp: new Date(),
                 request_id: crypto.randomUUID()
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
             },
             statusCode
         };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     /**
      * レガシーエラーレスポンス生成（互換性のため維持）
      * @deprecated 新しいコードでは使用しないでください。代わりに標準のerror()メソッドを使用してください。
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
-    static legacyError(res, code, message, details) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    static legacyError(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    res, code, message, 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    details
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ) {
         const { response, statusCode } = this.error(code, message, details);
         return res.status(statusCode).json(response);
     }

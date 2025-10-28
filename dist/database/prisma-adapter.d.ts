@@ -80,7 +80,9 @@ export declare class PrismaAdapter {
     get order(): any;
     get orders(): any;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * orderItem -> orderItem のマッピング
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     get orderItem(): any;
     get order_items(): any;
@@ -141,23 +143,30 @@ export declare class PrismaAdapter {
      */
     get room_grades(): any;
     /**
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * invoice -> invoices のマッピング
      */
     get invoice(): any;
     /**
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
      * payment -> payments のマッピング
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     get payment(): any;
     /**
      * transaction -> transactions のマッピング
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     get transaction(): any;
     /**
      * reservation -> reservations のマッピング
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
      */
     get reservation(): any;
     /**
      * roomMemo -> room_memos のマッピング
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     get roomMemo(): any;
     get roomMemoComment(): any;

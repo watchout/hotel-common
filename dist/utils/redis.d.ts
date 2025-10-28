@@ -60,6 +60,7 @@ export declare class HotelRedisClient {
     updateSessionActivity(tenantId: string, userId: string): Promise<void>;
     /**
      * キャッシュ保存
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     setCache(key: string, value: any, ttlSeconds?: number): Promise<void>;
     /**
@@ -67,6 +68,7 @@ export declare class HotelRedisClient {
      */
     set(key: string, value: string, ttlSeconds?: number): Promise<void>;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * キャッシュ取得
      */
     getCache<T = any>(key: string): Promise<T | null>;

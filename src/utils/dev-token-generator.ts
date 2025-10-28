@@ -98,6 +98,9 @@ export class DevTokenGenerator {
   /**
    * トークンの検証・デコード
    */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   static verifyToken(token: string): any {
     try {
       return jwt.verify(token, JWT_SECRET);

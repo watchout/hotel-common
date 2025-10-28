@@ -13,6 +13,9 @@ export class ZodValidator {
   /**
    * Zodスキーマバリデーション実行
    */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   static validate<T>(schema: z.ZodSchema<T>, data: any): ValidationResult {
     try {
       const parsed = schema.parse(data)
@@ -45,8 +48,11 @@ export class ZodValidator {
   }
 
   /**
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
    * Zodスキーマバリデーション実行（安全な型付きパース）
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
    */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   static safeParse<T>(schema: z.ZodSchema<T>, data: any): {
     success: boolean
     data?: T

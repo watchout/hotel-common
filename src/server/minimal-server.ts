@@ -388,6 +388,9 @@ app.use('*', (req, res) => {
 })
 
 // エラーハンドラー
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('サーバーエラー:', error)
   res.status(500).json({

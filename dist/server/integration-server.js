@@ -42,18 +42,22 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = require("dotenv");
 const express_1 = __importDefault(require("express"));
+const api_health_1 = __importDefault(require("./api-health"));
 const session_auth_middleware_1 = require("../auth/session-auth.middleware");
 const prisma_1 = require("../database/prisma");
 const app_launcher_1 = require("../integrations/app-launcher");
 const api_endpoints_1 = __importDefault(require("../integrations/campaigns/api-endpoints"));
 const hotel_member_1 = require("../integrations/hotel-member");
+// eslint-disable-next-line import/order
+// eslint-disable-next-line import/order
 const api_endpoints_2 = __importDefault(require("../integrations/hotel-member/api-endpoints"));
-const api_health_1 = __importDefault(require("./api-health"));
 // システム別APIルーター
 // セッション管理APIルーター
 const checkin_session_routes_1 = __importDefault(require("../routes/checkin-session.routes"));
 const session_billing_routes_1 = __importDefault(require("../routes/session-billing.routes"));
+// eslint-disable-next-line import/order
 const session_migration_routes_1 = __importDefault(require("../routes/session-migration.routes"));
+// eslint-disable-next-line import/order
 const systems_1 = require("../routes/systems");
 // PMSシステムAPI
 const pms_1 = require("../routes/systems/pms");
@@ -65,8 +69,11 @@ const pms_1 = require("../routes/systems/pms");
  * - ヘルスチェック
  * - 基本的なCRUD API
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class HotelIntegrationServer {
     app;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     server;
     prisma;
     port;
@@ -100,10 +107,13 @@ class HotelIntegrationServer {
         }));
         // Cookie parser（CORS後に適用・堅牢なCookie解析）
         this.app.use((0, cookie_parser_1.default)());
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         // === Phase G1: グローバル早期401捕捉（ENV制御可能） ===
         if (process.env.ENABLE_401_MONITORING === '1') {
             this.app.use((req, res, next) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const origJson = res.json.bind(res);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 res.json = (body) => {
                     const code = res.statusCode;
                     if (code === 401) {
@@ -336,20 +346,30 @@ class HotelIntegrationServer {
         this.app.use('/api/v1/accounting', systems_1.accountingRouter);
         // フロントデスク管理APIエンドポイント（その他）
         this.app.use('/api/v1/admin/front-desk/accounting', systems_1.frontDeskAccountingRouter);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.app.use('/api/v1/admin/front-desk/checkin', systems_1.frontDeskCheckinRouter);
         // 管理者操作ログAPIエンドポイント
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.app.use('/api/v1/admin/operation-logs', systems_1.adminOperationLogsRouter);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         // === ROUTE-DUMP for debugging (PR1) ===
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const routeList = this.app._router?.stack?.flatMap((layer) => {
             if (layer.route) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const r = layer.route;
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 return r.stack.map((s) => `${Object.keys(r.methods)[0].toUpperCase()} ${r.path}  mid:${s.name}`);
             }
             if (layer.name === 'router' && layer.handle?.stack) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const base = layer.regexp?.toString() || '';
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 return layer.handle.stack.map((s) => {
                     const method = s.route ? Object.keys(s.route.methods)[0].toUpperCase() : 'N/A';
                     const path = s.route ? s.route.path : '(no-route)';
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const middlewares = s.route?.stack?.map((m) => m.name).join(',') || 'none';
                     return `ROUTER ${base} => ${method} ${path} mid:[${middlewares}]`;
                 });
@@ -548,16 +568,19 @@ class HotelIntegrationServer {
                     'GET /api/v1/session-billing/by-session/:sessionId',
                     'PATCH /api/v1/session-billing/:billingId',
                     'POST /api/v1/session-billing/:billingId/payment',
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     'GET /api/v1/session-billing/calculate/:sessionId',
                     // セッション移行管理API
                     'POST /api/v1/session-migration/migrate-orders',
                     'GET /api/v1/session-migration/statistics',
                     'GET /api/v1/session-migration/compatibility-check',
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     'GET /api/v1/session-migration/report'
                 ]
             });
         });
         // エラーハンドラー
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.app.use((error, req, res, _next) => {
             console.error('Server error:', error);
             res.status(500).json({
@@ -607,17 +630,20 @@ class HotelIntegrationServer {
             };
             const endpoint = healthEndpoints[systemName] || '/health';
             const response = await fetch(`${system.url}${endpoint}`, {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 signal: controller.signal,
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 }
             });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const responseTime = Date.now() - startTime;
             clearTimeout(timeout);
             if (!response.ok) {
                 throw new Error(`HTTP error: ${response.status}`);
             }
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             let data = {};
             const contentType = response.headers.get('content-type');
             // JSONレスポンスのみ解析

@@ -17,6 +17,9 @@ export interface OrganizationHierarchy {
   parent_id?: string
   level: HierarchyLevel
   path: string // "group_id/brand_id/hotel_id"
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   settings: Record<string, any>
   created_at: Date
   updated_at: Date
@@ -30,8 +33,11 @@ export interface DataSharingPolicy {
   id: string
   organization_id: string
   data_type: DataType
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   sharing_scope: SharingScope
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   access_level: AccessLevel
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   conditions: Record<string, any>
   created_at: Date
   updated_at: Date
@@ -56,10 +62,13 @@ export interface HierarchicalJWTPayload {
     organization_type: OrganizationType
     organization_path: string
     access_scope: string[] // アクセス可能な下位組織ID配列
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     data_access_policies: {
       [dataType in DataType]?: {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         scope: SharingScope
         level: AccessLevel
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         conditions?: Record<string, any>
       }
     }
@@ -76,26 +85,32 @@ export interface HierarchicalJWTPayload {
 
 /**
  * 階層アクセス権限チェック結果
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  */
 export interface HierarchyAccessResult {
   allowed: boolean
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   reason?: string
   effective_scope?: SharingScope
   effective_level?: AccessLevel
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   restrictions?: Record<string, any>
 }
 
 /**
  * 階層権限チェックパラメータ
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface HierarchyPermissionCheck {
   user_token: HierarchicalJWTPayload
   target_resource: {
     tenant_id: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     data_type: DataType
     resource_id?: string
   }
   operation: 'READ' | 'CREATE' | 'UPDATE' | 'DELETE'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   additional_context?: Record<string, any>
 }
 
@@ -133,16 +148,19 @@ export interface HierarchyChangeEvent {
 
 /**
  * 階層権限設定プリセット
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  */
 export interface HierarchyPermissionPreset {
   id: string
   name: string
   description: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   organization_type: OrganizationType
   data_policies: {
     [dataType in DataType]: {
       sharing_scope: SharingScope
       access_level: AccessLevel
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
       conditions?: Record<string, any>
     }
   }

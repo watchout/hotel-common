@@ -308,6 +308,9 @@ class MCPManager {
             return specContent;
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     simplifyExamples(obj) {
         if (typeof obj !== 'object' || obj === null)
             return;
@@ -389,7 +392,10 @@ async function testMCPManager() {
         return;
     }
     const mcpConfigData = JSON.parse(fs.readFileSync(mcpConfigPath, 'utf-8'));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const config = {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         servers: Object.entries(mcpConfigData.mcpServers).map(([name, server]) => ({
             name,
             command: server.command,

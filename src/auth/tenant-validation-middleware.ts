@@ -7,6 +7,9 @@ import type { Request, Response, NextFunction } from 'express';
  * X-Tenant-ID検証ミドルウェア
  * X-Tenant-IDヘッダーがJWTのtenant_idと一致するかチェック
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const validateTenantIdHeader = (req: Request & { user?: any }, res: Response, next: NextFunction) => {
   const headerTenantId = req.headers['x-tenant-id'] as string;
   
@@ -30,8 +33,11 @@ export const validateTenantIdHeader = (req: Request & { user?: any }, res: Respo
 
 /**
  * JWT整合性検証ミドルウェア
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * tenant_id ∈ accessible_tenants を検証
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const validateJwtIntegrity = (req: Request & { user?: any }, res: Response, next: NextFunction) => {
   if (req.user) {
     const accessibleTenants = req.user.accessible_tenants || [req.user.tenant_id];

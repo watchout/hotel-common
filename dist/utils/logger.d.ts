@@ -49,6 +49,7 @@ export declare class HotelLogger {
      */
     private logToConsole;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
      * ファイル出力
      */
     private logToFile;

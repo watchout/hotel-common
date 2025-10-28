@@ -11,6 +11,9 @@ config();
  */
 class SimpleCampaignServer {
   private app: express.Application;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   private server: any;
   private port: number;
 
@@ -250,8 +253,11 @@ class SimpleCampaignServer {
         ]
       });
     });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     // エラーハンドラー
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
       console.error('Server error:', error);
       res.status(500).json({

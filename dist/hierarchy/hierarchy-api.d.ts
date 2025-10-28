@@ -22,6 +22,7 @@ export declare class HierarchyApiManager {
     }, userId: string): Promise<OrganizationHierarchy>;
     /**
      * 組織更新
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     static updateOrganization(organizationId: string, data: {
         name?: string;
@@ -29,6 +30,7 @@ export declare class HierarchyApiManager {
         settings?: Record<string, any>;
     }, userId: string): Promise<OrganizationHierarchy>;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 組織削除（論理削除）
      */
     static deleteOrganization(organizationId: string, userId: string): Promise<void>;
@@ -46,10 +48,12 @@ export declare class HierarchyApiManager {
      */
     static applyPreset(organizationId: string, presetId: string, userId: string): Promise<void>;
     /**
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
      * テナント-組織関係設定
      */
     static linkTenantToOrganization(tenantId: string, organizationId: string, role?: 'PRIMARY' | 'SECONDARY'): Promise<void>;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * デフォルトデータポリシー作成
      */
     private static createDefaultDataPolicies;

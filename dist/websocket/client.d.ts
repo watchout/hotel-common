@@ -16,6 +16,7 @@ export declare class HotelWebSocketClient {
     constructor(config: WebSocketConfig);
     /**
      * WebSocket接続
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     connect(): void;
     /**

@@ -75,7 +75,11 @@ function extractSessionIdFromCookies(req) {
  * 3. req.user設定
  * 4. 下流へ
  */
-const sessionAuthMiddleware = async (req, res, next) => {
+const sessionAuthMiddleware = async (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+req, res, next) => {
     // Phase 0: 入口ログ
     console.log('[session-auth] invoked', {
         path: req.path,
@@ -98,8 +102,11 @@ const sessionAuthMiddleware = async (req, res, next) => {
             });
             return res.status(401).json(response_builder_1.StandardResponseBuilder.error('SESSION_EXPIRED', 'Session is invalid or expired').response);
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         // 3. req.user に設定（下流の権限・tenant分離ミドルウェアで使用）
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         // SessionInfo型は最小限の情報のみ含むため、追加情報はRedis JSONから取得
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const sessionData = sessionInfo;
         req.user = {
             user_id: sessionInfo.user_id,

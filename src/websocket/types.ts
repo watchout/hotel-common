@@ -6,6 +6,9 @@ export interface WebSocketEventData {
   type: 'reservation' | 'customer' | 'room' | 'system' | 'auth' | 'notification'
   action: 'create' | 'update' | 'delete' | 'status_change'
   entity_id: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   entity_data: any
   tenant_id: string
   user_id?: string

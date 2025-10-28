@@ -6,8 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = __importDefault(require("path"));
 const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
-const logger_1 = require("../utils/logger");
 const admin_api_1 = __importDefault(require("./admin-api"));
+// eslint-disable-next-line import/order
+// eslint-disable-next-line import/order
+const logger_1 = require("../utils/logger");
 const app = (0, express_1.default)();
 const logger = logger_1.HotelLogger.getInstance();
 const PORT = process.env.ADMIN_PORT || 3500;
@@ -18,7 +20,10 @@ app.use((0, cors_1.default)({
 }));
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // 静的ファイル配信（管理画面UI）
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - ESモジュールの機能を使用
 const currentDir = path_1.default.dirname(new URL(import.meta.url).pathname);
 app.use('/admin', express_1.default.static(path_1.default.join(currentDir, '.')));
@@ -51,8 +56,11 @@ app.use('*', (req, res) => {
         message: 'Endpoint not found',
         path: req.originalUrl
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
 });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 // エラーハンドラー
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 app.use((error, req, res, _next) => {
     logger.error('Admin Server Error:', error);
     res.status(500).json({

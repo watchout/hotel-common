@@ -31,6 +31,7 @@ export declare function updateTenantService(tenantId: string, serviceType: strin
  * サービスのプラン制限を取得
  * @param serviceType サービスタイプ ('hotel-saas', 'hotel-pms', 'hotel-member')
  * @param planType プランタイプ ('economy', 'standard', 'premium')
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
  * @param planCategory プランカテゴリ ('omotenasuai', etc.)
  */
 export declare function getServicePlanRestrictions(serviceType: string, planType: string, planCategory?: string): Promise<{
@@ -46,6 +47,7 @@ export declare function getServicePlanRestrictions(serviceType: string, planType
  * テナントのサービス利用統計を記録
  * @param tenantId テナントID
  * @param serviceType サービスタイプ
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * @param month 月 (YYYY-MM形式)
  * @param data 統計データ
  */

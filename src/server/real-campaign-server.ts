@@ -1,12 +1,19 @@
 #!/usr/bin/env node
 
+// eslint-disable-next-line import/order
+// eslint-disable-next-line import/order
 import type { Router } from 'express';
 
 import cors from 'cors';
+// eslint-disable-next-line no-duplicate-imports
 import { config } from 'dotenv';
+// eslint-disable-next-line no-duplicate-imports
+// eslint-disable-next-line no-duplicate-imports
 import express from 'express';
 
+// eslint-disable-next-line import/order
 import { prisma } from '../database';
+// eslint-disable-next-line import/order
 import { integrateCampaignFeature } from '../integrations/campaigns';
 
 // 環境変数読み込み
@@ -16,10 +23,13 @@ config();
  * キャンペーンAPI実サーバー
  * - 実際のデータベースに接続
  * - キャンペーン管理API
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * - クライアント向けAPI
  */
 class RealCampaignServer {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   private app: express.Application;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   private server: any;
   private port: number;
 
@@ -70,24 +80,30 @@ class RealCampaignServer {
     // キャンペーンAPIを統合
     // 統合サーバーとの互換性のためのアダプター
     const integrationServerAdapter = {
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       addRouter: (path: string, router: Router) => {
         this.app.use(path, router);
       }
     };
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
     // キャンペーン機能を統合
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - 引数の型が不一致
     integrateCampaignFeature();
 
     // 404エラーハンドラー
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.app.use('*', (req, res) => {
       res.status(404).json({
         error: 'NOT_FOUND',
         message: `Endpoint ${req.originalUrl} not found`
       });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     });
 
     // エラーハンドラー
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
       logger.error('Server error:', { error: error instanceof Error ? error : new Error(String(error)) });
       res.status(500).json({

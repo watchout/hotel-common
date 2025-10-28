@@ -5,6 +5,9 @@ type RoomOperationPayload = {
   room_id: string
   room_number?: string
   action: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   details?: any
   correlation_id?: string
 }

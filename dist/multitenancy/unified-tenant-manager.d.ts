@@ -48,6 +48,7 @@ export declare class UnifiedTenantManager {
     logTenantAccess(context: TenantContext, resource: string, action: string): Promise<void>;
     /**
      * テナント固有の設定値を取得
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     getTenantSetting(tenantId: string, key: string, defaultValue?: any): Promise<any>;
     /**

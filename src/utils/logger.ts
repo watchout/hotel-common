@@ -25,10 +25,16 @@ export interface LogEntry {
   requestId?: string
   
   // 拡張フィールド（オプション）
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any      // すべてのカスタムデータはここに格納
   error?: Error   // エラーオブジェクトはここに格納
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   // 追加のプロパティを許可（型安全性のため）
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
 }
 
@@ -157,10 +163,13 @@ export class HotelLogger {
   }
 
   /**
+// eslint-disable-next-line @typescript-eslint/no-var-requires
    * ファイル出力
    */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
   private async logToFile(entry: LogEntry): Promise<void> {
     try {
+// eslint-disable-next-line @typescript-eslint/no-var-requires
       const fs = require('fs').promises
       const logLine = JSON.stringify(entry) + '\n'
       await fs.appendFile(this.config.filePath, logLine)

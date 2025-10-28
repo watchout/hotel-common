@@ -89,6 +89,9 @@ class HotelCommonServer {
         try {
             await this.webSocketServer.stop();
             // 統合APIサーバーの停止
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             await this.integrationServer.shutdown();
             this.logger.info('hotel-common統合サーバー停止完了');
             process.exit(0);

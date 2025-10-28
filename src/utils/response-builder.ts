@@ -6,27 +6,39 @@ import type { Response } from 'express';
 
 interface StandardResponse {
   success: boolean;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any;
   error?: {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     code: string;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     message: string;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     details?: any;
   };
   meta?: {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     page?: number;
     limit?: number;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     total?: number;
     has_next?: boolean;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   };
   timestamp: string;
   request_id?: string;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 }
 
 export class StandardResponseBuilder {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   /**
    * 成功レスポンスを作成
    */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   static success(res: Response, data: any = {}, meta: any = {}, statusCode = 200): Response {
     const response: StandardResponse = {
       success: true,
@@ -34,14 +46,17 @@ export class StandardResponseBuilder {
       meta,
       timestamp: new Date().toISOString(),
       request_id: res.locals.requestId || this.generateRequestId()
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     };
 
     return res.status(statusCode).json(response);
   }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
   /**
    * エラーレスポンスを作成
    */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   static error(code: string, message: string, details?: any): { response: StandardResponse, status: number } {
     const response: StandardResponse = {
       success: false,

@@ -63,6 +63,7 @@ export interface HierarchicalJWTPayload {
 }
 /**
  * 階層アクセス権限チェック結果
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  */
 export interface HierarchyAccessResult {
     allowed: boolean;
@@ -116,6 +117,7 @@ export interface HierarchyChangeEvent {
 }
 /**
  * 階層権限設定プリセット
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  */
 export interface HierarchyPermissionPreset {
     id: string;

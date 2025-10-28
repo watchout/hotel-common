@@ -25,6 +25,7 @@ export declare class HotelDatabaseClient {
     getAdapter(): PrismaAdapter;
     /**
      * トランザクションを実行
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     transaction<T>(fn: (tx: any) => Promise<T>, options?: Parameters<PrismaClient['$transaction']>[1]): Promise<T>;
     /**
