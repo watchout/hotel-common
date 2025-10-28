@@ -104,7 +104,7 @@ export class HotelCommonCostMonitor {
       try {
         const data = fs.readFileSync(this.logFile, 'utf-8');
         logs = JSON.parse(data);
-      } catch (error) {
+      } catch (error: unknown) {
         console.warn('Failed to read cost log:', error);
       }
     }
@@ -178,7 +178,7 @@ export class HotelCommonCostMonitor {
         totalCost: 0,
         savedCost: 0
       });
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to read daily usage:', error);
       return {
         date,
@@ -285,7 +285,7 @@ export class HotelCommonCostMonitor {
       }
       
       console.log('=======================================\n');
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to generate cost report:', error);
     }
   }

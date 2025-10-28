@@ -1,4 +1,4 @@
-import { SupportedLanguage, TranslationResult } from '../i18n/types'
+import type { SupportedLanguage, TranslationResult } from '../i18n/types'
 
 /** DeepL API統合サービス */
 export class DeepLTranslationService {
@@ -58,7 +58,7 @@ export class DeepLTranslationService {
       }
 
       const data = await response.json()
-      
+
       return texts.map((original, index) => ({
         original,
         translated: data.translations[index]?.text || original,
@@ -67,7 +67,7 @@ export class DeepLTranslationService {
         cached: false
       }))
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('DeepL translation failed:', error)
       return this.mockTranslation(texts, targetLanguage)
     }
@@ -165,4 +165,4 @@ export class DeepLTranslationService {
 }
 
 /** 翻訳サービス統合インスタンス */
-export const translationService = new DeepLTranslationService() 
+export const translationService = new DeepLTranslationService()

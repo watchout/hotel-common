@@ -1,4 +1,4 @@
-import { HotelEvent } from './types';
+import type { HotelEvent } from './types';
 export interface RedisQueueConfig {
     host: string;
     port: number;
@@ -65,6 +65,7 @@ export declare class RedisEventQueue {
      */
     private processMessage;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * メッセージ処理エラー・リトライ処理
      */
     private handleMessageError;

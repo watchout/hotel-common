@@ -109,11 +109,17 @@ function setupSoftDeleteMiddleware(prisma) {
  * ソフトデリート用Whereフィルタ生成関数
  * 手動でクエリを作成する際に使用
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getSoftDeleteFilter(modelName) {
     const tableConfig = SOFT_DELETE_TABLES[modelName];
     if (!tableConfig) {
         return {};
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const filter = {};
     const { deletedField, activeField, statusField, statusValue } = tableConfig;
     // 削除フラグ

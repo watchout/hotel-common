@@ -1,4 +1,4 @@
-import { Tenant } from '@prisma/client';
+import type { Tenant } from '@prisma/client';
 interface customers {
     id: string;
     tenant_id: string;

@@ -1,4 +1,4 @@
-import { Request } from 'express';
+import type { Request } from 'express';
 interface Campaign {
     id: string;
     code: string;
@@ -33,7 +33,7 @@ interface CampaignTranslation {
     createdAt: Date;
     updatedAt: Date;
 }
-import { CampaignBasicInfo, CampaignDetailInfo, CampaignCategoryInfo } from './types';
+import type { CampaignBasicInfo, CampaignDetailInfo, CampaignCategoryInfo } from './types';
 /**
  * キャンペーンモデルを基本情報に変換
  */

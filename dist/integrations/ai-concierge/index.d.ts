@@ -1,4 +1,4 @@
-import { HotelIntegrationServer } from '../../server/integration-server-extended';
+import type { HotelIntegrationServer } from '../../server/integration-server-extended';
 /**
  * AIコンシェルジュ機能の統合
  * @param server 統合サーバー

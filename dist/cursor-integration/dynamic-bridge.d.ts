@@ -45,6 +45,7 @@ export declare class DynamicCursorIntegration {
     private getCursorWorkspaceInfo;
     /**
      * 最近の変更取得
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
      */
     private getRecentChanges;
     /**
@@ -52,6 +53,7 @@ export declare class DynamicCursorIntegration {
      */
     private performDynamicOptimization;
     /**
+  // eslint-disable-next-line no-return-await
      * コンテキスト特化RAG検索
      */
     private performContextualRAG;

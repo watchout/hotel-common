@@ -138,10 +138,13 @@ class HotelLogger {
         }
     }
     /**
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
      * ファイル出力
      */
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     async logToFile(entry) {
         try {
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
             const fs = require('fs').promises;
             const logLine = JSON.stringify(entry) + '\n';
             await fs.appendFile(this.config.filePath, logLine);

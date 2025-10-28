@@ -2,7 +2,7 @@ export { LanguageOptimizer } from './core/language-optimizer';
 export type { LanguageOptimizationConfig, OptimizationResult } from './core/language-optimizer';
 export { HotelCommonContextManager } from './core/context-manager';
 export type { ContextMessage, ContextOptimizationResult } from './core/context-manager';
-import { LanguageOptimizationConfig } from './core/language-optimizer';
+import type { LanguageOptimizationConfig } from './core/language-optimizer';
 export interface TokenOptimizationConfig {
     languageOptimization: Partial<LanguageOptimizationConfig>;
     contextManagement: {

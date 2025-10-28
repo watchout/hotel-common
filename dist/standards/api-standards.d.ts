@@ -1,4 +1,4 @@
-import { ApiResponse } from '../types/common';
+import type { ApiResponse } from '../types/common';
 /**
  * REST API設計標準
  */
@@ -52,15 +52,18 @@ export declare class StandardResponseBuilder {
     static success<T>(res: any, data: T, meta?: any, statusCode?: number): any;
     /**
      * ページネーション付き成功レスポンス
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     static paginated<T>(res: any, items: T[], page: number, limit: number, total: number, statusCode?: number): any;
     /**
      * エラーレスポンス生成
      * @param code エラーコード
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * @param message エラーメッセージ
      * @param details 詳細情報（オプション）
      * @param statusCode HTTPステータスコード（デフォルト400）
      * @returns レスポンスオブジェクトとステータスコード
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     static error(code: string, message: string, details?: any, statusCode?: number): {
         response: ApiResponse<null>;
@@ -69,6 +72,7 @@ export declare class StandardResponseBuilder {
     /**
      * レガシーエラーレスポンス生成（互換性のため維持）
      * @deprecated 新しいコードでは使用しないでください。代わりに標準のerror()メソッドを使用してください。
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     static legacyError(res: any, code: string, message: string, details?: any): any;
     /**

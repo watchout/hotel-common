@@ -1,4 +1,4 @@
-import { HierarchicalJWTPayload, JWTOptions } from './types';
+import type { HierarchicalJWTPayload, JWTOptions } from './types';
 /**
  * JWTトークンを生成
  * @param payload ペイロード

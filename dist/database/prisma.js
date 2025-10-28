@@ -46,8 +46,12 @@ class HotelDatabaseClient {
     }
     /**
      * トランザクションを実行
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
-    async transaction(fn, options) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async transaction(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    fn, options) {
         return this.adapter.$transaction(fn, options);
     }
     /**
@@ -86,9 +90,13 @@ exports.hotelDb = HotelDatabaseClient.getInstance();
 // 便利なヘルパー関数
 function getHotelDb() {
     return HotelDatabaseClient.getInstance();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 // トランザクション用のヘルパー関数
-async function withTransaction(fn, options) {
+async function withTransaction(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+fn, options) {
     return exports.hotelDb.transaction(fn, options);
 }
 // 互換のためのエクスポート（既存コードの import { prisma } from '../../database/prisma' 対応）

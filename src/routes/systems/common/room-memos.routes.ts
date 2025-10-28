@@ -1,8 +1,11 @@
-import express, { Request, Response } from 'express'
+import express from 'express'
 import { z } from 'zod'
+
 import { authMiddleware } from '../../../auth/middleware'
 import { hotelDb } from '../../../database'
 import { ResponseHelper, StandardResponseBuilder } from '../../../standards/api-response-standards'
+
+import type { Request, Response } from 'express';
 
 const router = express.Router()
 

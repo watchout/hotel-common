@@ -5,8 +5,8 @@ exports.useI18n = useI18n;
 exports.createReactI18nHook = createReactI18nHook;
 exports.getGlobalI18nInstance = getGlobalI18nInstance;
 exports.setGlobalI18nInstance = setGlobalI18nInstance;
-const runtime_1 = require("./runtime");
 const config_1 = require("./config");
+const runtime_1 = require("./runtime");
 /** i18nインスタンス作成 */
 function createI18nInstance(options) {
     const config = new config_1.TranslationConfig(options);

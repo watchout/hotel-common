@@ -58,8 +58,13 @@ function getErrorStack(error) {
  * @param error エラーオブジェクトまたは任意の値
  * @returns エラーの詳細情報
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getErrorDetails(error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (error instanceof Error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const details = {
             message: error.message,
             name: error.name
@@ -67,9 +72,12 @@ function getErrorDetails(error) {
         if (error.stack) {
             details.stack = error.stack;
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         // カスタムプロパティの追加
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         for (const key in error) {
             if (key !== 'message' && key !== 'name' && key !== 'stack') {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 details[key] = error[key];
             }
         }

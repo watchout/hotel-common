@@ -3,11 +3,15 @@
  * 
  * Iconifyを使用した統一アイコンコンポーネント
  */
-import { defineComponent, h, PropType, computed } from 'vue';
 import { Icon as IconifyIcon } from '@iconify/vue';
-import { IconProps, IconSize, IconColor, IconSetType } from '../types';
-import { getFullIconName } from '../utils/iconLoader';
+import { defineComponent, h, computed } from 'vue';
+
 import { ICON_SIZES, ICON_COLORS, DEFAULT_ICON_SET } from '../constants/iconSets';
+import { IconProps } from '../types';
+import { getFullIconName } from '../utils/iconLoader';
+
+import type { IconSize, IconColor, IconSetType } from '../types';
+import type { PropType} from 'vue';
 
 /**
  * アイコンサイズをピクセル値に変換

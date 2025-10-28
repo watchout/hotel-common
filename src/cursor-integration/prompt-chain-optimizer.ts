@@ -142,10 +142,10 @@ export class DelimiterSystem {
   structurePrompt(
     context: string,
     task: string,
-    style: string = 'professional',
-    audience: string = 'developers',
-    format: string = 'structured response',
-    data: string = '',
+    style = 'professional',
+    audience = 'developers',
+    format = 'structured response',
+    data = '',
     constraints: string[] = [],
     examples: string[] = []
   ): string {
@@ -207,7 +207,7 @@ export class ExamplesDatabase {
     ]
   };
 
-  static getExamples(taskType: string, count: number = 2): string[] {
+  static getExamples(taskType: string, count = 2): string[] {
     const examples = this.hotelCommonExamples[taskType as keyof typeof this.hotelCommonExamples] || [];
     return examples.slice(0, count);
   }
@@ -244,7 +244,7 @@ export class PromptChainOptimizer {
 
   optimizePrompt(
     task: string,
-    context: string = 'hotel-common development environment'
+    context = 'hotel-common development environment'
   ): PromptChainResult {
     const originalPrompt = `${task}\nContext: ${context}`;
     let optimizedPrompt = '';

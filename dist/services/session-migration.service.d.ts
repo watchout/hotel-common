@@ -16,7 +16,9 @@ export declare class SessionMigrationService {
      */
     private static findSessionForOrder;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * フォールバックセッション作成
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     private static createFallbackSession;
     /**
@@ -48,6 +50,7 @@ export declare class SessionMigrationService {
         recommendations: string[];
     }>;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 互換性改善の推奨事項生成
      */
     private static generateCompatibilityRecommendations;

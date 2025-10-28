@@ -1,4 +1,4 @@
-import { SevenIntegrationConfig, AIAgentType, IntegrationLayer, OptimizationLevel } from './types';
+import type { SevenIntegrationConfig, AIAgentType, IntegrationLayer, OptimizationLevel } from './types';
 export declare const DEFAULT_SEVEN_INTEGRATION_CONFIG: SevenIntegrationConfig;
 export declare const ENVIRONMENT_CONFIGS: {
     development: {

@@ -1,4 +1,4 @@
-import { WelcomeScreenConfig } from './types';
+import type { WelcomeScreenConfig } from './types';
 export declare class WelcomeScreenService {
     private cache;
     getWelcomeScreenConfig(languageCode: string): Promise<WelcomeScreenConfig>;

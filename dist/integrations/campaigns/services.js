@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CampaignService = void 0;
-const prisma_1 = require("../../database/prisma");
-const utils_1 = require("./utils");
 const uuid_1 = require("uuid");
+const utils_1 = require("./utils");
+const prisma_1 = require("../../database/prisma");
 class CampaignService {
     /**
      * キャンペーンの適用可能性をチェック

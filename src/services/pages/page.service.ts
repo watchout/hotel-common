@@ -1,6 +1,7 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { hotelDb } from '../../database/prisma';
 import { HotelLogger } from '../../utils/logger';
-import { v4 as uuidv4 } from 'uuid';
 
 const logger = HotelLogger.getInstance();
 
@@ -22,7 +23,7 @@ export class PageService {
         }
       });
       return pages;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('全ページ取得エラー', { error: error as Error, data: { tenantId } });
       throw error;
     }
@@ -41,7 +42,7 @@ export class PageService {
         }
       });
       return page;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('ページ取得エラー', { error: error as Error, data: { tenantId, slug } });
       throw error;
     }
@@ -61,7 +62,7 @@ export class PageService {
         }
       });
       return page;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('公開ページ取得エラー', { error: error as Error, data: { tenantId, slug } });
       throw error;
     }
@@ -145,7 +146,7 @@ export class PageService {
 
         return newPage;
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('ページ保存エラー', { error: error as Error, data: { tenantId, slug } });
       throw error;
     }
@@ -180,7 +181,7 @@ export class PageService {
       });
 
       return publishedPage;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('ページ公開エラー', { error: error as Error, data: { tenantId, slug, pageId } });
       throw error;
     }
@@ -228,7 +229,7 @@ export class PageService {
         current: page,
         history
       };
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('ページ履歴取得エラー', { error: error as Error, data: { tenantId, slug } });
       throw error;
     }
@@ -264,7 +265,7 @@ export class PageService {
       }
 
       return historyVersion;
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('ページ履歴バージョン取得エラー', { error: error as Error, data: { tenantId, slug, version } });
       throw error;
     }
@@ -334,7 +335,7 @@ export class PageService {
 
         return restoredPage;
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('ページバージョン復元エラー', { error: error as Error, data: { tenantId, slug, version } });
       throw error;
     }

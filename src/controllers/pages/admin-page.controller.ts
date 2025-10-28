@@ -1,7 +1,9 @@
-import { Request, Response } from 'express';
-import { StandardResponseBuilder } from '../../standards/api-standards';
+
 import pageService from '../../services/pages/page.service';
+import { StandardResponseBuilder } from '../../standards/api-standards';
 import { HotelLogger } from '../../utils/logger';
+
+import type { Request, Response } from 'express';
 
 const logger = HotelLogger.getInstance();
 
@@ -32,7 +34,7 @@ export class AdminPageController {
         version: page.Version,
         updatedAt: page.UpdatedAt
       })));
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('全ページ取得エラー', { error: error as Error });
       const { response, statusCode } = StandardResponseBuilder.serverError('ページ一覧の取得に失敗しました');
       return res.status(statusCode).json(response);
@@ -82,7 +84,7 @@ export class AdminPageController {
         publishedAt: page.PublishedAt,
         version: page.Version
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('ページ取得エラー', { error: error as Error });
       const { response, statusCode } = StandardResponseBuilder.serverError('サーバーエラー');
       return res.status(statusCode).json(response);
@@ -138,7 +140,7 @@ export class AdminPageController {
         id: page.Id,
         version: page.Version
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('ページ保存エラー', { error: error as Error });
       const { response, statusCode } = StandardResponseBuilder.serverError('保存に失敗しました');
       return res.status(statusCode).json(response);
@@ -176,7 +178,7 @@ export class AdminPageController {
         isPublished: page.IsPublished,
         publishedAt: page.PublishedAt
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('ページ公開エラー', { error: error as Error });
       const { response, statusCode } = StandardResponseBuilder.serverError('公開に失敗しました');
       return res.status(statusCode).json(response);
@@ -209,7 +211,7 @@ export class AdminPageController {
       const history = await pageService.getPageHistory(tenantId, slug);
 
       return StandardResponseBuilder.success(res, history);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('ページ履歴取得エラー', { error: error as Error });
       const { response, statusCode } = StandardResponseBuilder.serverError('履歴の取得に失敗しました');
       return res.status(statusCode).json(response);
@@ -265,7 +267,7 @@ export class AdminPageController {
         createdAt: historyVersion.CreatedAt,
         createdBy: historyVersion.CreatedBy
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('ページ履歴バージョン取得エラー', { error: error as Error });
       const { response, statusCode } = StandardResponseBuilder.serverError('指定されたバージョンが見つかりません');
       return res.status(statusCode).json(response);
@@ -313,7 +315,7 @@ export class AdminPageController {
         id: restoredPage.Id,
         version: restoredPage.Version
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('ページバージョン復元エラー', { error: error as Error });
       const { response, statusCode } = StandardResponseBuilder.serverError('バージョンの復元に失敗しました');
       return res.status(statusCode).json(response);

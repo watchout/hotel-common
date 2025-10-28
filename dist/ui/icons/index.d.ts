@@ -7,10 +7,7 @@ export { ICON_SETS, DEFAULT_ICON_SET, ICON_SIZES, ICON_COLORS } from './constant
 export { SYSTEM_ICONS, FEATURE_ICONS } from './constants/systemIcons';
 export { getFullIconName, preloadIcons, iconExists } from './utils/iconLoader';
 export * from './types';
-/**
- * Vue用プラグイン
- */
-import { App } from 'vue';
+import type { App } from 'vue';
 declare const _default: {
     install(app: App): void;
 };

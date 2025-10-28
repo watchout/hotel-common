@@ -1,8 +1,11 @@
-import { ResponseTreeRepository } from '../../repositories/response-tree/response-tree.repository';
-import { ResponseNodeRepository } from '../../repositories/response-tree/response-node.repository';
-import { ResponseTreeDto, CreateTreeRequestDto, UpdateTreeRequestDto, PublishTreeRequestDto } from '../../dtos/response-tree/response-tree.dto';
-import { hotelDb } from '../../database/prisma';
 import { v4 as uuidv4 } from 'uuid';
+
+import { hotelDb } from '../../database/prisma';
+import { ResponseNodeRepository } from '../../repositories/response-tree/response-node.repository';
+import { ResponseTreeRepository } from '../../repositories/response-tree/response-tree.repository';
+
+import type { ResponseTreeDto, CreateTreeRequestDto, UpdateTreeRequestDto, PublishTreeRequestDto } from '../../dtos/response-tree/response-tree.dto';
+
 
 /**
  * レスポンスツリーサービス

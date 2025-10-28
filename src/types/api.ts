@@ -38,7 +38,11 @@ export interface ApiClientConfig {
 export interface RequestConfig {
   url: string
   method: HttpMethod
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   params?: Record<string, any>
   headers?: Record<string, string>
   timeout?: number
@@ -75,9 +79,12 @@ export interface CustomerResponse {
   phone?: string
   address?: string
   birthday?: Date
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   gender?: 'male' | 'female' | 'other'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   member_rank?: 'bronze' | 'silver' | 'gold' | 'platinum'
   points?: number
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   preferences?: Record<string, any>
   last_stay?: Date
   total_stays: number

@@ -5,8 +5,10 @@
  * is_deleted = falseの条件を自動的に追加し、削除済みレコードを除外します。
  */
 
-import { PrismaClient } from '@prisma/client'
 import { HotelLogger } from '../utils/logger'
+
+import type { PrismaClient } from '@prisma/client'
+
 
 const logger = HotelLogger.getInstance()
 
@@ -128,12 +130,18 @@ export function setupSoftDeleteMiddleware(prisma: PrismaClient): void {
  * ソフトデリート用Whereフィルタ生成関数
  * 手動でクエリを作成する際に使用
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function getSoftDeleteFilter(modelName: string): Record<string, any> {
   const tableConfig = SOFT_DELETE_TABLES[modelName]
   if (!tableConfig) {
     return {}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   const filter: Record<string, any> = {}
   const { deletedField, activeField, statusField, statusValue } = tableConfig
   

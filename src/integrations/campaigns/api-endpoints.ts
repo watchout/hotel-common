@@ -2,8 +2,10 @@
 // 緊急対応：最小限の実装
 
 import express from 'express';
-import { Request, Response } from 'express';
+
 import { StandardResponseBuilder } from '../../standards/api-standards';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 
@@ -19,7 +21,7 @@ router.get('/campaigns/active', (req: Request, res: Response) => {
       'キャンペーン機能は現在開発中です'
     );
     return res.status(501).json(response);
-  } catch (error) {
+  } catch (error: unknown) {
     const { response, statusCode } = StandardResponseBuilder.error(
       'CAMPAIGN_ERROR', 
       'キャンペーン取得エラー', 
@@ -43,7 +45,7 @@ router.get('/campaigns/:id', (req: Request, res: Response) => {
       'キャンペーン機能は現在開発中です'
     );
     return res.status(501).json(response);
-  } catch (error) {
+  } catch (error: unknown) {
     const { response, statusCode } = StandardResponseBuilder.error(
       'CAMPAIGN_ERROR', 
       'キャンペーン取得エラー', 
@@ -67,7 +69,7 @@ router.get('/campaigns/category/:categoryId', (req: Request, res: Response) => {
       'キャンペーン機能は現在開発中です'
     );
     return res.status(501).json(response);
-  } catch (error) {
+  } catch (error: unknown) {
     const { response, statusCode } = StandardResponseBuilder.error(
       'CAMPAIGN_ERROR', 
       'キャンペーン取得エラー', 

@@ -1,4 +1,4 @@
-import { ResponseTreeDto, CreateTreeRequestDto, UpdateTreeRequestDto, PublishTreeRequestDto } from '../../dtos/response-tree/response-tree.dto';
+import type { ResponseTreeDto, CreateTreeRequestDto, UpdateTreeRequestDto, PublishTreeRequestDto } from '../../dtos/response-tree/response-tree.dto';
 /**
  * レスポンスツリーサービス
  * ビジネスロジックを担当

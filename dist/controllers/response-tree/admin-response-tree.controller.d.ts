@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 /**
  * 管理者向けレスポンスツリーコントローラー
  * HTTPリクエスト/レスポンスの処理を担当

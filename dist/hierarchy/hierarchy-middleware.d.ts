@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
 import type { HierarchicalJWTPayload, DataType, OrganizationType, HierarchyLevel } from './types';
+import type { Request, Response, NextFunction } from 'express';
 declare global {
     namespace Express {
         interface Request {

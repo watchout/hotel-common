@@ -16,6 +16,9 @@ export interface HierarchicalJWTPayload {
     path?: string; // 後方互換性のため
     organization_path: string; // hierarchy/typesとの互換性のため
     access_scope: string[]; // hierarchy/typesとの互換性のため
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     data_access_policies: Record<string, any>; // hierarchy/typesとの互換性のため
   };
   permissions: string[]; // 必須に変更

@@ -4,13 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const response_tree_controller_1 = require("../../../controllers/response-tree/response-tree.controller");
+const admin_middleware_1 = require("../../../auth/admin-middleware");
+const middleware_1 = require("../../../auth/middleware");
+const admin_response_tree_controller_1 = require("../../../controllers/response-tree/admin-response-tree.controller");
+const response_mobile_link_controller_1 = require("../../../controllers/response-tree/response-mobile-link.controller");
 const response_node_controller_1 = require("../../../controllers/response-tree/response-node.controller");
 const response_session_controller_1 = require("../../../controllers/response-tree/response-session.controller");
-const response_mobile_link_controller_1 = require("../../../controllers/response-tree/response-mobile-link.controller");
-const admin_response_tree_controller_1 = require("../../../controllers/response-tree/admin-response-tree.controller");
-const middleware_1 = require("../../../auth/middleware");
-const admin_middleware_1 = require("../../../auth/admin-middleware");
+const response_tree_controller_1 = require("../../../controllers/response-tree/response-tree.controller");
 const router = express_1.default.Router();
 const responseTreeController = new response_tree_controller_1.ResponseTreeController();
 const responseNodeController = new response_node_controller_1.ResponseNodeController();

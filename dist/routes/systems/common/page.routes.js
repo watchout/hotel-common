@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const middleware_1 = require("../../../auth/middleware");
 const admin_page_controller_1 = __importDefault(require("../../../controllers/pages/admin-page.controller"));
 const public_page_controller_1 = __importDefault(require("../../../controllers/pages/public-page.controller"));
-const middleware_1 = require("../../../auth/middleware");
 const router = express_1.default.Router();
 // 管理者向けAPI
 // すべてのページ取得

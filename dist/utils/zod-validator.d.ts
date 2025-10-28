@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { ValidationResult } from './validation';
-import { ApiError } from '../types/common';
+import type { ValidationResult } from './validation';
+import type { ApiError } from '../types/common';
 /**
  * Zodスキーマバリデーション統合ヘルパー
  */
@@ -10,7 +10,9 @@ export declare class ZodValidator {
      */
     static validate<T>(schema: z.ZodSchema<T>, data: any): ValidationResult;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * Zodスキーマバリデーション実行（安全な型付きパース）
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     static safeParse<T>(schema: z.ZodSchema<T>, data: any): {
         success: boolean;

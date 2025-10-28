@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import { hotelDb } from '../../database/index';
 import { v4 as uuidv4 } from 'uuid';
+
+import { hotelDb } from '../../database/index';
 
 /**
  * レスポンスセッションリポジトリ
@@ -113,7 +114,7 @@ export class ResponseSessionRepository {
   /**
    * セッション履歴を取得
    */
-  async getSessionHistory(sessionId: string, limit: number = 10): Promise<any[]> {
+  async getSessionHistory(sessionId: string, limit = 10): Promise<any[]> {
     const session = await hotelDb.getAdapter().responseTreeSession.findFirst({
       where: { sessionId },
       select: { id: true }

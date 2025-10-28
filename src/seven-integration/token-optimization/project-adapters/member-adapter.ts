@@ -1,4 +1,6 @@
-import { TokenOptimizationSystem, TokenOptimizationConfig } from '../index';
+import { TokenOptimizationSystem } from '../index';
+
+import type { TokenOptimizationConfig } from '../index';
 
 export interface HotelMemberOptimizationConfig extends TokenOptimizationConfig {
     securityFocus: boolean;

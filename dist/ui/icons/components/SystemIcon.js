@@ -10,8 +10,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * 専用アイコンを表示するコンポーネント
  */
 const vue_1 = require("vue");
-const systemIcons_1 = require("../constants/systemIcons");
 const Icon_1 = __importDefault(require("./Icon"));
+const systemIcons_1 = require("../constants/systemIcons");
 /**
  * システムアイコンコンポーネント
  */

@@ -1,7 +1,9 @@
+import { mockDeep, mockReset } from 'jest-mock-extended';
+
 import { hotelDb } from '../database/prisma';
 import { CampaignService } from '../services';
-import { CampaignCreateInput, CampaignUpdateInput } from '../types';
-import { mockDeep, mockReset } from 'jest-mock-extended';
+
+import type { CampaignCreateInput, CampaignUpdateInput } from '../types';
 
 // Prismaクライアントのモック
 const mockPrisma = mockDeep<PrismaClient>();

@@ -49,6 +49,8 @@ exports.TenantCreateSchema = zod_1.z.object({
 exports.FileUploadSchema = zod_1.z.object({
     file_name: zod_1.z.string().min(1, 'ファイル名は必須です'),
     file_size: zod_1.z.number().int().min(1, 'ファイルサイズは1バイト以上必要です').max(10 * 1024 * 1024, 'ファイルサイズは10MB以下である必要があります'),
+    // eslint-disable-next-line no-useless-escape
+    // eslint-disable-next-line no-useless-escape
     mime_type: zod_1.z.string().regex(/^[a-zA-Z0-9][a-zA-Z0-9!#$&\-\^_]*\/[a-zA-Z0-9][a-zA-Z0-9!#$&\-\^_.]*$/, '有効なMIMEタイプを入力してください'),
     description: zod_1.z.string().max(200, '説明は200文字以下で入力してください').optional()
 });

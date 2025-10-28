@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HierarchyPermissionManager = void 0;
-const logger_1 = require("../utils/logger");
 const redis_1 = require("redis");
+const logger_1 = require("../utils/logger");
 /**
  * Hotel Group階層権限管理システム
  *

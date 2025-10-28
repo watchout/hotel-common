@@ -3,8 +3,9 @@
 // 🚨緊急対応：最小版hotel-commonサーバー
 // 依存関係なし、Sunoの階層権限統合ブロック解除専用
 
-import express from 'express'
 import { createServer } from 'http'
+
+import express from 'express'
 
 const app = express()
 const server = createServer(app)
@@ -16,7 +17,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-  
+
   if (req.method === 'OPTIONS') {
     res.sendStatus(200)
   } else {
@@ -71,9 +72,9 @@ app.get('/api/campaigns/active', (req, res) => {
 app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
   try {
     const { token } = req.body
-    
+
     console.log('JWT検証要求:', { token: token ? '***' : 'なし' })
-    
+
     if (!token) {
       return res.status(400).json({
         error: 'TOKEN_REQUIRED',
@@ -108,7 +109,7 @@ app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
 
     console.log('JWT検証完了（フォールバック）')
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('JWT検証エラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -121,13 +122,13 @@ app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
 app.post('/api/hotel-member/hierarchy/permissions/check-customer-access', async (req, res) => {
   try {
     const { token, target_tenant_id, operation = 'READ' } = req.body
-    
-    console.log('顧客データアクセス権限チェック:', { 
-      tenant: target_tenant_id, 
+
+    console.log('顧客データアクセス権限チェック:', {
+      tenant: target_tenant_id,
       operation,
       token: token ? '***' : 'なし'
     })
-    
+
     if (!token || !target_tenant_id) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',
@@ -145,10 +146,10 @@ app.post('/api/hotel-member/hierarchy/permissions/check-customer-access', async 
 
     console.log('顧客データアクセス許可（フォールバック）')
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('権限チェックエラー:', error)
     res.status(500).json({
-      error: 'INTERNAL_ERROR', 
+      error: 'INTERNAL_ERROR',
       message: 'Permission check failed'
     })
   }
@@ -158,12 +159,12 @@ app.post('/api/hotel-member/hierarchy/permissions/check-customer-access', async 
 app.post('/api/hotel-member/hierarchy/tenants/accessible', async (req, res) => {
   try {
     const { token, scope_level } = req.body
-    
-    console.log('アクセス可能テナント取得:', { 
+
+    console.log('アクセス可能テナント取得:', {
       scope: scope_level,
       token: token ? '***' : 'なし'
     })
-    
+
     if (!token) {
       return res.status(400).json({
         error: 'TOKEN_REQUIRED',
@@ -181,7 +182,7 @@ app.post('/api/hotel-member/hierarchy/tenants/accessible', async (req, res) => {
 
     console.log('テナント一覧返却（フォールバック）:', tenants)
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('テナント取得エラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -194,9 +195,9 @@ app.post('/api/hotel-member/hierarchy/tenants/accessible', async (req, res) => {
 app.post('/api/hotel-member/hierarchy/permissions/check-membership-restrictions', async (req, res) => {
   try {
     const { token, operation, data_type } = req.body
-    
+
     console.log('会員データ制限チェック:', { operation, data_type })
-    
+
     if (!token || !operation || !data_type) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',
@@ -213,7 +214,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-membership-restrictions'
 
     console.log('会員データ制限チェック完了（フォールバック）')
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('会員データ制限チェックエラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -226,9 +227,9 @@ app.post('/api/hotel-member/hierarchy/permissions/check-membership-restrictions'
 app.post('/api/hotel-member/hierarchy/permissions/check-analytics-access', async (req, res) => {
   try {
     const { token, analytics_type } = req.body
-    
+
     console.log('グループ分析権限チェック:', { analytics_type })
-    
+
     if (!token || !analytics_type) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',
@@ -245,7 +246,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-analytics-access', async
 
     console.log('グループ分析権限許可（フォールバック）')
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('分析権限チェックエラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -258,9 +259,9 @@ app.post('/api/hotel-member/hierarchy/permissions/check-analytics-access', async
 app.post('/api/hotel-member/hierarchy/user/permissions-detail', async (req, res) => {
   try {
     const { token } = req.body
-    
+
     console.log('権限詳細情報取得要求')
-    
+
     if (!token) {
       return res.status(400).json({
         error: 'TOKEN_REQUIRED',
@@ -304,7 +305,7 @@ app.post('/api/hotel-member/hierarchy/user/permissions-detail', async (req, res)
 
     console.log('権限詳細情報返却（フォールバック）')
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('権限詳細情報取得エラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -317,9 +318,9 @@ app.post('/api/hotel-member/hierarchy/user/permissions-detail', async (req, res)
 app.post('/api/hotel-member/hierarchy/permissions/batch-check', async (req, res) => {
   try {
     const { token, checks } = req.body
-    
+
     console.log('バッチ権限チェック:', { count: checks?.length || 0 })
-    
+
     if (!token || !Array.isArray(checks)) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',
@@ -344,7 +345,7 @@ app.post('/api/hotel-member/hierarchy/permissions/batch-check', async (req, res)
 
     console.log('バッチ権限チェック完了（フォールバック）')
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('バッチ権限チェックエラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -387,7 +388,10 @@ app.use('*', (req, res) => {
 })
 
 // エラーハンドラー
-app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('サーバーエラー:', error)
   res.status(500).json({
     error: 'INTERNAL_ERROR',

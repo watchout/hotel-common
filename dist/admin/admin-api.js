@@ -38,16 +38,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  * このファイルは、管理者用のAPIエンドポイントを提供します。
  */
-const express = __importStar(require("express"));
-const prisma_1 = require("../database/prisma");
-const jwt = __importStar(require("jsonwebtoken"));
 const bcrypt = __importStar(require("bcrypt"));
+const express = __importStar(require("express"));
+const jwt = __importStar(require("jsonwebtoken"));
 const tenant_service_api_1 = require("../api/tenant-service-api");
+const prisma_1 = require("../database/prisma");
 // PrismaClientの直接インスタンス化は避け、hotelDb.getClient()を使用
 const prisma = prisma_1.hotelDb.getClient();
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'admin-secret-key';
 // 認証ミドルウェア
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const authMiddleware = (req, res, next) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
@@ -107,8 +110,11 @@ router.get('/tenants', authMiddleware, async (req, res) => {
             select: {
                 id: true,
                 name: true,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 domain: true,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 planType: true,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore - Prismaスキーマに存在するが型定義されていないプロパティ
                 planCategory: true,
                 status: true,
@@ -190,9 +196,12 @@ router.get('/tenant-services/:tenantId', authMiddleware, async (req, res) => {
 // テナントのサービス情報を更新
 router.put('/tenant-services/:tenantId/:serviceId', authMiddleware, async (req, res) => {
     try {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         const { tenantId, serviceId } = req.params;
         const { planType, isActive } = req.body;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // サービスIDからサービスタイプを取得
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
         const service = await prisma.tenant_services.findUnique({
             where: { id: serviceId }

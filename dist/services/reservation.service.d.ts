@@ -17,6 +17,7 @@ export declare class ReservationService {
     static getReservationById(id: string, tenantId: string): Promise<Reservation | null>;
     /**
      * 予約一覧取得（検索・フィルタ対応）
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     static getReservations(params: ReservationSearchParams): Promise<{
         reservations: Reservation[];

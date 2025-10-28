@@ -1,5 +1,6 @@
-import { HotelIntegrationServer } from '../../server/integration-server-extended';
 import { integrateCampaignFeature } from './index';
+
+import type { HotelIntegrationServer } from '../../server/integration-server-extended';
 
 /**
  * キャンペーン機能をサーバーに統合

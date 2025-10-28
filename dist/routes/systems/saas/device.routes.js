@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const device_room_service_1 = __importDefault(require("../../../services/device/device-room.service"));
 const middleware_1 = require("../../../auth/middleware");
+const device_room_service_1 = __importDefault(require("../../../services/device/device-room.service"));
 const router = express_1.default.Router();
 /**
  * DeviceRoom管理用APIルーター

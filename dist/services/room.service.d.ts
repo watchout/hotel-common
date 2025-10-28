@@ -18,6 +18,7 @@ export declare class RoomService {
      */
     static getRoomByNumber(roomNumber: string, tenantId: string): Promise<Room | null>;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 部屋一覧取得（検索・フィルタ対応）
      */
     static getRooms(params: RoomSearchParams): Promise<{
@@ -42,6 +43,7 @@ export declare class RoomService {
      */
     static getRoomsByFloor(floorNumber: number, tenantId: string): Promise<Room[]>;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 空室検索
      */
     static searchAvailableRooms(params: RoomAvailabilitySearch): Promise<Room[]>;

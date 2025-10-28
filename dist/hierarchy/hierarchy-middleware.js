@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HierarchyMiddleware = void 0;
-const permission_manager_1 = require("./permission-manager");
 const jwt_extension_1 = require("./jwt-extension");
+const permission_manager_1 = require("./permission-manager");
 const logger_1 = require("../utils/logger");
 /**
  * Hotel Group階層権限チェックミドルウェア

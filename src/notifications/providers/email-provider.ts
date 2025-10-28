@@ -85,7 +85,7 @@ export class SendGridProvider extends EmailProvider {
       this.client = sgMail
       
       this.logger.info('SendGrid provider initialized')
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to initialize SendGrid client', { error: error instanceof Error ? error : new Error(String(error)) })
       throw new Error('SendGrid initialization failed')
     }
@@ -129,7 +129,7 @@ export class SendGridProvider extends EmailProvider {
         messageId: response[0]?.headers['x-message-id'],
         provider: 'sendgrid'
       }
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to send email via SendGrid', { error: error instanceof Error ? error : new Error(String(error)) })
       
       return {
@@ -163,7 +163,7 @@ export class SESProvider extends EmailProvider {
       })
       
       this.logger.info('AWS SES provider initialized')
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to initialize AWS SES client', { error: error instanceof Error ? error : new Error(String(error)) })
       throw new Error('AWS SES initialization failed')
     }
@@ -220,7 +220,7 @@ export class SESProvider extends EmailProvider {
         messageId: response.MessageId,
         provider: 'ses'
       }
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to send email via AWS SES', { error: error instanceof Error ? error : new Error(String(error)) })
       
       return {
@@ -268,7 +268,7 @@ export class SESProvider extends EmailProvider {
         messageId: response.messageId,
         provider: 'ses'
       }
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to send raw email via AWS SES', { error: error instanceof Error ? error : new Error(String(error)) })
       
       return {
@@ -307,7 +307,7 @@ export class SMTPProvider extends EmailProvider {
       })
       
       this.logger.info('SMTP provider initialized')
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to initialize SMTP client', { error: error instanceof Error ? error : new Error(String(error)) })
       throw new Error('SMTP initialization failed')
     }
@@ -344,7 +344,7 @@ export class SMTPProvider extends EmailProvider {
         messageId: info.messageId,
         provider: 'smtp'
       }
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to send email via SMTP', { error: error instanceof Error ? error : new Error(String(error)) })
       
       return {

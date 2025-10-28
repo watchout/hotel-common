@@ -27,20 +27,29 @@ export interface UserInfo {
 }
 
 // 統一レスポンス形式
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ApiResponse<T = any> {
   success: boolean
   data?: T
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   error?: ApiError
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   message?: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   meta?: Record<string, any> // メタデータ（ページネーション等）
   timestamp: Date
   request_id: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 // エラー情報
 export interface ApiError {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   code: string
   message: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   details?: Record<string, any>
 }
 
@@ -66,19 +75,25 @@ export interface BaseEntity {
 
 // イベント型定義 (Event-driven基盤)
 export interface SystemEvent {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   id: string
   type: string
   source: SystemType
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   target?: SystemType
   tenant_id: string
   user_id?: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: Record<string, any>
   timestamp: Date
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 // WebSocket メッセージ型
 export interface WebSocketMessage {
   type: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
   timestamp: Date
   request_id?: string

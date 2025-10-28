@@ -1,4 +1,4 @@
-import { IconSetType } from '../types';
+import type { IconSetType } from '../types';
 /**
  * アイコン名を完全修飾名に変換
  *

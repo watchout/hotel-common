@@ -12,7 +12,7 @@ export const CACHE_TYPES = {
 export class CampaignCache {
   private static instance: CampaignCache;
   private cache: Map<string, { value: any; expiry: number }>;
-  private defaultTTL: number = 300; // デフォルト5分
+  private defaultTTL = 300; // デフォルト5分
   
   constructor() {
     this.cache = new Map();

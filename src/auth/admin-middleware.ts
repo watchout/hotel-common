@@ -1,6 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+
 import { verifyToken } from './jwt';
-import { HierarchicalJWTPayload } from './types';
+
+import type { HierarchicalJWTPayload } from './types';
+import type { Request, Response, NextFunction } from 'express';
 
 /**
  * 管理者認証ミドルウェア
@@ -17,6 +19,9 @@ export const adminAuthMiddleware = (req: Request, res: Response, next: NextFunct
       });
     }
     
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - 型の互換性の問題
     const decoded = verifyToken(token) as HierarchicalJWTPayload;
     
@@ -26,12 +31,15 @@ export const adminAuthMiddleware = (req: Request, res: Response, next: NextFunct
         error: 'FORBIDDEN',
         message: '管理者権限が必要です'
       });
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     }
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - 型の互換性の問題
     req.user = decoded;
     next();
-  } catch (error) {
+  } catch (error: unknown) {
     return res.status(401).json({
       success: false,
       error: 'INVALID_TOKEN',

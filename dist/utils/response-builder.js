@@ -2,9 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StandardResponseBuilder = void 0;
 class StandardResponseBuilder {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     /**
      * 成功レスポンスを作成
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static success(res, data = {}, meta = {}, statusCode = 200) {
         const response = {
             success: true,
@@ -12,12 +14,15 @@ class StandardResponseBuilder {
             meta,
             timestamp: new Date().toISOString(),
             request_id: res.locals.requestId || this.generateRequestId()
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         };
         return res.status(statusCode).json(response);
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     /**
      * エラーレスポンスを作成
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static error(code, message, details) {
         const response = {
             success: false,

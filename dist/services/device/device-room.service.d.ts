@@ -6,69 +6,15 @@ export declare class DeviceRoomService {
     /**
      * テナントに紐づくすべてのデバイスを取得
      */
-    getAllDevicesByTenant(tenantId: string): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }[]>;
+    getAllDevicesByTenant(tenantId: string): Promise<any>;
     /**
      * 特定の部屋に紐づくデバイスを取得
      */
-    getDevicesByRoom(tenantId: string, roomId: string): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }[]>;
+    getDevicesByRoom(tenantId: string, roomId: string): Promise<any>;
     /**
      * デバイスIDで特定のデバイスを取得
      */
-    getDeviceByDeviceId(deviceId: string): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    } | null>;
+    getDeviceByDeviceId(deviceId: string): Promise<any>;
     /**
      * 新しいデバイスを登録
      */
@@ -82,25 +28,7 @@ export declare class DeviceRoomService {
         status?: string;
         ipAddress?: string;
         macAddress?: string;
-    }): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }>;
+    }): Promise<any>;
     /**
      * デバイス情報を更新
      */
@@ -114,157 +42,31 @@ export declare class DeviceRoomService {
         ipAddress?: string;
         macAddress?: string;
         isActive?: boolean;
-    }): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }>;
+    }): Promise<any>;
     /**
      * デバイスの最終使用日時を更新
      */
-    updateDeviceLastUsed(id: number): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }>;
+    updateDeviceLastUsed(id: number): Promise<any>;
     /**
      * デバイスを非アクティブ化（論理削除）
      */
-    deactivateDevice(id: number): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }>;
+    deactivateDevice(id: number): Promise<any>;
     /**
      * デバイスを物理削除
      */
-    deleteDevice(id: number): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }>;
+    deleteDevice(id: number): Promise<any>;
     /**
      * プレイスIDに紐づくデバイスを取得
      */
-    getDevicesByPlace(tenantId: string, placeId: string): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }[]>;
+    getDevicesByPlace(tenantId: string, placeId: string): Promise<any>;
     /**
      * デバイスタイプでフィルタリングして取得
      */
-    getDevicesByType(tenantId: string, deviceType: string): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }[]>;
+    getDevicesByType(tenantId: string, deviceType: string): Promise<any>;
     /**
      * ステータスでフィルタリングして取得
      */
-    getDevicesByStatus(tenantId: string, status: string): Promise<{
-        tenantId: string;
-        is_deleted: boolean;
-        isActive: boolean;
-        status: string | null;
-        id: number;
-        deleted_at: Date | null;
-        deleted_by: string | null;
-        createdAt: Date;
-        updatedAt: Date;
-        deviceId: string | null;
-        roomId: string;
-        placeId: string | null;
-        roomName: string | null;
-        deviceType: string | null;
-        ipAddress: string | null;
-        macAddress: string | null;
-        lastUsedAt: Date | null;
-    }[]>;
+    getDevicesByStatus(tenantId: string, status: string): Promise<any>;
     /**
      * デバイスの一括登録
      */
@@ -284,25 +86,7 @@ export declare class DeviceRoomService {
         failed: number;
         results: ({
             success: boolean;
-            device: {
-                tenantId: string;
-                is_deleted: boolean;
-                isActive: boolean;
-                status: string | null;
-                id: number;
-                deleted_at: Date | null;
-                deleted_by: string | null;
-                createdAt: Date;
-                updatedAt: Date;
-                deviceId: string | null;
-                roomId: string;
-                placeId: string | null;
-                roomName: string | null;
-                deviceType: string | null;
-                ipAddress: string | null;
-                macAddress: string | null;
-                lastUsedAt: Date | null;
-            };
+            device: any;
             error?: undefined;
         } | {
             success: boolean;

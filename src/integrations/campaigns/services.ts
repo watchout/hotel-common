@@ -1,7 +1,11 @@
-import { CampaignBasicInfo, CampaignDetailInfo, CampaignCategoryInfo, CampaignCreateInput, CampaignUpdateInput } from './types';
-import { hotelDb } from '../../database/prisma';
-import { mapCampaignToBasicInfo, mapCampaignToDetailInfo } from './utils';
 import { v4 as uuidv4 } from 'uuid';
+
+import { CampaignCategoryInfo } from './types';
+import { mapCampaignToBasicInfo, mapCampaignToDetailInfo } from './utils';
+import { hotelDb } from '../../database/prisma';
+
+import type { CampaignBasicInfo, CampaignDetailInfo, CampaignCreateInput, CampaignUpdateInput } from './types';
+
 
 export class CampaignService {
   /**

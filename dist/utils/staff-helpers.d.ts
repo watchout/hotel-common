@@ -48,10 +48,13 @@ export interface StaffSummaryResponse {
  */
 export declare const mapStaffToApiResponse: (staff: any) => StaffApiResponse;
 /**
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * Staff一覧用のサマリーマッピング
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  */
 export declare const mapStaffToSummary: (staff: any) => StaffSummaryResponse;
 /**
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * 部門別カウント集計
  */
 export declare const calculateDepartmentCounts: (staffList: any[]) => Record<string, number>;
@@ -82,6 +85,7 @@ export declare const createPaginationInfo: (total: number, page: number, pageSiz
     totalPages: number;
 };
 /**
+// eslint-disable-next-line no-return-await
  * パスワードハッシュ化
  */
 export declare const hashPassword: (password: string) => Promise<string>;

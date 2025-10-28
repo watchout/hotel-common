@@ -1,11 +1,12 @@
 import express from 'express'
-import { ReservationService } from '../../../services/reservation.service'
+
 import { verifyTenantAuth } from '../../../auth/middleware'
 import { 
   CreateReservationRequestSchema,
   UpdateReservationRequestSchema,
   ReservationSearchParamsSchema
 } from '../../../schemas/reservation'
+import { ReservationService } from '../../../services/reservation.service'
 import { StandardResponseBuilder } from '../../../standards/api-standards'
 
 const router = express.Router()
@@ -42,7 +43,7 @@ router.post('/api/v1/reservations', async (req, res) => {
     const reservation = await ReservationService.createReservation(validationResult.data)
 
     return res.status(201).json(StandardResponseBuilder.success(res, reservation).response)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('予約作成エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('RESERVATION_CREATE_ERROR', 
       error instanceof Error ? error.message : '予約作成に失敗しました').response)
@@ -69,7 +70,7 @@ router.get('/api/v1/reservations/:id', async (req, res) => {
     }
 
     return StandardResponseBuilder.success(res, reservation)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('予約取得エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('RESERVATION_GET_ERROR',
       error instanceof Error ? error.message : '予約取得に失敗しました').response)
@@ -108,7 +109,7 @@ router.get('/api/v1/reservations', async (req, res) => {
         has_next: result.hasNext
       }
     }).response)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('予約一覧取得エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('RESERVATIONS_GET_ERROR',
       error instanceof Error ? error.message : '予約一覧取得に失敗しました').response)
@@ -141,7 +142,7 @@ router.put('/api/v1/reservations/:id', async (req, res) => {
     const reservation = await ReservationService.updateReservation(id, tenantId, validationResult.data)
 
     return res.status(200).json(StandardResponseBuilder.success(res, reservation).response)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('予約更新エラー:', error)
     if (error instanceof Error && error.message.includes('not found')) {
       return res.status(404).json(StandardResponseBuilder.error('RESERVATION_NOT_FOUND', '指定された予約が見つかりません').response)
@@ -167,7 +168,7 @@ router.delete('/api/v1/reservations/:id', async (req, res) => {
     const reservation = await ReservationService.cancelReservation(id, tenantId, req.user?.user_id)
 
     return res.status(200).json(StandardResponseBuilder.success(res, reservation).response)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('予約キャンセルエラー:', error)
     if (error instanceof Error && error.message.includes('not found')) {
       return res.status(404).json(StandardResponseBuilder.error('RESERVATION_NOT_FOUND', '指定された予約が見つかりません').response)
@@ -198,7 +199,7 @@ router.post('/api/v1/reservations/:id/checkin', async (req, res) => {
     const reservation = await ReservationService.checkIn(id, tenantId, room_number, req.user?.user_id)
 
     return res.status(200).json(StandardResponseBuilder.success(res, reservation).response)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('チェックインエラー:', error)
     if (error instanceof Error && error.message.includes('not found')) {
       return res.status(404).json(StandardResponseBuilder.error('RESERVATION_NOT_FOUND', '指定された予約が見つかりません').response)
@@ -224,7 +225,7 @@ router.post('/api/v1/reservations/:id/checkout', async (req, res) => {
     const reservation = await ReservationService.checkOut(id, tenantId, req.user?.user_id)
 
     return res.status(200).json(StandardResponseBuilder.success(res, reservation).response)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('チェックアウトエラー:', error)
     if (error instanceof Error && error.message.includes('not found')) {
       return res.status(404).json(StandardResponseBuilder.error('RESERVATION_NOT_FOUND', '指定された予約が見つかりません').response)
@@ -249,7 +250,7 @@ router.get('/api/v1/reservations/stats', async (req, res) => {
     const stats = await ReservationService.getReservationStats(tenantId)
 
     return StandardResponseBuilder.success(res, stats)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('予約統計取得エラー:', error)
     return res.status(500).json(StandardResponseBuilder.error('RESERVATION_STATS_ERROR',
       error instanceof Error ? error.message : '予約統計取得に失敗しました').response)

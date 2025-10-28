@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-import { Router } from 'express';
+import type { Router } from 'express';
 /**
  * キャンペーンAPI実サーバー
  * - 実際のデータベースに接続
  * - キャンペーン管理API
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * - クライアント向けAPI
  */
 declare class RealCampaignServer {

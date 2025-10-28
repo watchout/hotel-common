@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ResponseMobileLinkRepository = void 0;
-const index_1 = require("../../database/index");
 const uuid_1 = require("uuid");
+const index_1 = require("../../database/index");
 const string_utils_1 = require("../../utils/string-utils");
 /**
  * レスポンスモバイル連携リポジトリ

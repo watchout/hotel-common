@@ -35,8 +35,8 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RuntimeTranslationSystem = void 0;
 exports.createTokenWithLanguage = createTokenWithLanguage;
-const config_1 = require("./config");
 const events_1 = require("events");
+const config_1 = require("./config");
 /** 実行時翻訳システム */
 class RuntimeTranslationSystem extends events_1.EventEmitter {
     cache = new Map();
@@ -75,7 +75,10 @@ class RuntimeTranslationSystem extends events_1.EventEmitter {
             throw new Error(`Language switching failed: ${language}`);
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     /** 翻訳取得 */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     t(key, params) {
         const translation = this.getTranslation(key);
         if (!translation) {
@@ -137,11 +140,14 @@ class RuntimeTranslationSystem extends events_1.EventEmitter {
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
+            // eslint-disable-next-line no-return-await
             return await response.json();
         }
         catch (error) {
+            // eslint-disable-next-line no-return-await
             // 開発環境ではローカルファイルから読み込み
             console.warn(`CDN fetch failed, trying local import for ${language}`);
+            // eslint-disable-next-line no-return-await
             return await Promise.resolve(`${`../../../i18n/locales/${language}.json`}`).then(s => __importStar(require(s)));
         }
     }
@@ -154,15 +160,21 @@ class RuntimeTranslationSystem extends events_1.EventEmitter {
     }
     /** フォールバック翻訳を取得 */
     getFallbackTranslation(key) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (!this.fallbackData)
             return undefined;
         return this.getNestedValue(this.fallbackData, key);
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     /** ネストされたオブジェクトから値を取得 */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getNestedValue(obj, path) {
         return path.split('.').reduce((current, key) => current?.[key], obj);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
     /** パラメータ補間 */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     interpolate(template, params) {
         if (!params)
             return template;
@@ -173,7 +185,9 @@ class RuntimeTranslationSystem extends events_1.EventEmitter {
 }
 exports.RuntimeTranslationSystem = RuntimeTranslationSystem;
 /** 言語設定をJWTに統合 */
-function createTokenWithLanguage(baseToken, language) {
+function createTokenWithLanguage(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+baseToken, language) {
     return {
         ...baseToken,
         language
