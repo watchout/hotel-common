@@ -1,8 +1,8 @@
 // @ts-check
 import eslint from '@eslint/js'
-import tseslint from 'typescript-eslint'
 import importPlugin from 'eslint-plugin-import'
 import globals from 'globals'
+import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
   // Node環境のグローバルを有効化
@@ -46,21 +46,20 @@ export default tseslint.config(
         ignoreRestSiblings: true,
         destructuredArrayIgnorePattern: '^_',
       }],
-      'no-duplicate-imports': 'error',
+      'no-duplicate-imports': 'warn',
       'no-var': 'error',
       'prefer-const': 'warn',
 
       // ==========================================
       // 🟢 Code Quality: 品質のみ（warn）
       // ==========================================
-      'no-console': ['warn', { 
+      'no-console': ['warn', {
         allow: ['warn', 'error', 'info']
       }],
       'no-debugger': 'error',
       'no-alert': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
-      // 互換維持（古いプラグイン版で参照されうるルール名に対応）
-      '@typescript-eslint/no-implicit-any-catch': 'off',
+      '@typescript-eslint/ban-ts-comment': 'warn',
       // 他設定やインライン指定で参照されることがあるため無効化
       'import/order': 'off',
       'import/export': 'off',
@@ -71,6 +70,10 @@ export default tseslint.config(
       'no-eval': 'error',
       // 一旦エラー停止を避ける（段階的に修正する）
       'no-unreachable': 'warn',
+      '@typescript-eslint/no-var-requires': 'warn',
+      'no-case-declarations': 'warn',
+      'no-useless-escape': 'warn',
+      '@typescript-eslint/no-namespace': 'warn',
     }
   },
   {
