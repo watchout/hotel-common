@@ -1,0 +1,53 @@
+name: Security Scan
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - main
+
+jobs:
+  npm-audit:
+    name: npm audit (High/Critical)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: npm audit (High/Critical only)
+        run: |
+          npm audit --audit-level=high || {
+            echo "❌ セキュリティ脆弱性検出（High/Critical）"
+            echo "📋 以下のコマンドで詳細を確認してください："
+            echo "   npm audit"
+            echo "💡 修正方法："
+            echo "   npm audit fix"
+            exit 1
+          }
+      
+      - name: Check for sensitive data
+        run: |
+          # APIキーの誤コミット検出
+          if grep -r "sk-.*" --include="*.ts" --include="*.js" . 2>/dev/null | grep -v node_modules; then
+            echo "❌ APIキーが検出されました"
+            exit 1
+          fi
+          
+          # データベース接続文字列の誤コミット検出
+          if grep -r "postgresql://.*:.*@" --include="*.ts" --include="*.js" . 2>/dev/null | grep -v node_modules | grep -v ".env.example"; then
+            echo "❌ データベース接続文字列が検出されました"
+            exit 1
+          fi
+          
+          echo "✅ センシティブデータチェック: OK"
