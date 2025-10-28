@@ -1,18 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+#!/bin/sh
 
-echo "🔍 API ルート品質チェック実行中..."
-
-# API ルート品質チェック
-npm run check-api-routes
-
-if [ $? -ne 0 ]; then
-  echo "❌ API ルート品質チェックでエラーが検出されました"
-  echo "📋 修正方法:"
-  echo "  1. npm run fix-api-routes で自動修正を試す"
-  echo "  2. 手動で問題のあるルートを修正"
-  echo "  3. 再度コミットを実行"
-  exit 1
-fi
-
-echo "✅ API ルート品質チェック完了"
+npx lint-staged
