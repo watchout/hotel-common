@@ -4,7 +4,7 @@
  * 各システム（hotel-saas, hotel-pms, hotel-member, hotel-common）で
  * 使用する統一アイコンの定義
  */
-import { SystemIconDefinition, SystemId } from '../types';
+import type { SystemIconDefinition, SystemId } from '../types';
 /**
  * システムアイコン定義
  */

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ResponseNodeRepository = void 0;
-const index_1 = require("../../database/index");
 const uuid_1 = require("uuid");
+const index_1 = require("../../database/index");
 /**
  * レスポンスノードリポジトリ
  * データベースとのやり取りを担当

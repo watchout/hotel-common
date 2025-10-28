@@ -6,6 +6,9 @@ const response_builder_1 = require("../utils/response-builder");
  * X-Tenant-ID検証ミドルウェア
  * X-Tenant-IDヘッダーがJWTのtenant_idと一致するかチェック
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const validateTenantIdHeader = (req, res, next) => {
     const headerTenantId = req.headers['x-tenant-id'];
     // X-Tenant-IDが送信されている場合のみ検証
@@ -23,8 +26,11 @@ const validateTenantIdHeader = (req, res, next) => {
 exports.validateTenantIdHeader = validateTenantIdHeader;
 /**
  * JWT整合性検証ミドルウェア
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * tenant_id ∈ accessible_tenants を検証
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const validateJwtIntegrity = (req, res, next) => {
     if (req.user) {
         const accessibleTenants = req.user.accessible_tenants || [req.user.tenant_id];

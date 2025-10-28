@@ -1,4 +1,4 @@
-import { SystemEvent } from '../types/common';
+import type { SystemEvent } from '../types/common';
 export interface WebSocketConfig {
     url: string;
     tenantId?: string;
@@ -16,6 +16,7 @@ export declare class HotelWebSocketClient {
     constructor(config: WebSocketConfig);
     /**
      * WebSocket接続
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     connect(): void;
     /**

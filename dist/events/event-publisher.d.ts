@@ -1,4 +1,4 @@
-import { HotelEvent, EventPublisherConfig } from './types';
+import type { HotelEvent, EventPublisherConfig } from './types';
 /**
  * 統一EventPublisher - Event-driven連携の発行側統一インターフェース
  *

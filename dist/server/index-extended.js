@@ -2,12 +2,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HotelCommonServer = void 0;
-const websocket_server_1 = require("./websocket-server");
-const logger_1 = require("../utils/logger");
 const dotenv_1 = require("dotenv");
 const integration_server_extended_1 = require("./integration-server-extended");
-const api_endpoints_1 = require("../integrations/campaigns/api-endpoints");
+const websocket_server_1 = require("./websocket-server");
 const ai_concierge_1 = require("../integrations/ai-concierge");
+const api_endpoints_1 = require("../integrations/campaigns/api-endpoints");
+const logger_1 = require("../utils/logger");
 // 環境変数読み込み
 (0, dotenv_1.config)();
 /**
@@ -111,6 +111,9 @@ class HotelCommonServer {
         try {
             await this.webSocketServer.stop();
             // 統合APIサーバーの停止
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             await this.integrationServer.shutdown();
             this.logger.info('hotel-common統合サーバー停止完了');
             process.exit(0);

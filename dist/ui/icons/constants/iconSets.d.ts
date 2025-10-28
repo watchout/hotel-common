@@ -4,7 +4,7 @@
  * Iconifyで利用可能な主要アイコンセットの定義
  * 詳細: https://icon-sets.iconify.design/
  */
-import { IconSetType } from '../types';
+import type { IconSetType } from '../types';
 /**
  * アイコンセット設定
  */

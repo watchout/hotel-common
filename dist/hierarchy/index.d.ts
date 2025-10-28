@@ -19,17 +19,21 @@ export declare class HierarchyUtils {
     static canAccessCustomerData(userToken: any, targetTenantId: string, operation?: 'READ' | 'CREATE' | 'UPDATE' | 'DELETE'): Promise<boolean>;
     /**
      * 予約データアクセス権限チェック
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     static canAccessReservationData(userToken: any, targetTenantId: string, operation?: 'READ' | 'CREATE' | 'UPDATE' | 'DELETE'): Promise<boolean>;
     /**
      * 分析データアクセス権限チェック
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     static canAccessAnalyticsData(userToken: any, targetTenantId: string, operation?: 'READ' | 'CREATE' | 'UPDATE' | 'DELETE'): Promise<boolean>;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 財務データアクセス権限チェック
      */
     static canAccessFinancialData(userToken: any, targetTenantId: string, operation?: 'READ' | 'CREATE' | 'UPDATE' | 'DELETE'): Promise<boolean>;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * ユーザーのアクセス可能テナント一覧取得
      */
     static getAccessibleTenants(userToken: any): string[];
@@ -38,11 +42,13 @@ export declare class HierarchyUtils {
      */
     static getOrganizationLevel(userToken: any): any;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * ユーザーの組織タイプ取得
      */
     static getOrganizationType(userToken: any): any;
     /**
      * 簡易権限チェック（よく使用される組み合わせ）
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     static checkQuickPermission(userToken: any, check: {
         tenantId: string;
@@ -63,5 +69,6 @@ export declare class HierarchyUtils {
 }
 /**
  * Express.js Router用のファクトリー関数
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  */
 export declare function createHierarchyRouter(): any;

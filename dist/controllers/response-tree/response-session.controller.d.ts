@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 /**
  * レスポンスセッションコントローラー
  * HTTPリクエスト/レスポンスの処理を担当

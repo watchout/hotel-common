@@ -1,11 +1,5 @@
-/**
- * システムアイコンコンポーネント
- *
- * 各システム（hotel-saas, hotel-pms, hotel-member, hotel-common）の
- * 専用アイコンを表示するコンポーネント
- */
-import { PropType } from 'vue';
-import { SystemId, IconSize, IconColor } from '../types';
+import type { SystemId, IconSize, IconColor } from '../types';
+import type { PropType } from 'vue';
 /**
  * システムアイコンコンポーネント
  */

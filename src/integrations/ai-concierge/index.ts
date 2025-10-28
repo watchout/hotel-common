@@ -2,9 +2,11 @@
  * AIコンシェルジュ機能統合
  */
 import express from 'express';
-import { HotelIntegrationServer } from '../../server/integration-server-extended';
+
 import responseTreeRoutes from '../../routes/systems/member/response-tree.routes';
 import { HotelLogger } from '../../utils/logger';
+
+import type { HotelIntegrationServer } from '../../server/integration-server-extended';
 
 const logger = HotelLogger.getInstance();
 
@@ -37,7 +39,7 @@ export function integrateAiConciergeFeature(server: HotelIntegrationServer): voi
   `);
     
     logger.info('AIコンシェルジュ機能を統合しました');
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('AIコンシェルジュ機能統合エラー:', { error: error instanceof Error ? error : new Error('Unknown error') });
   }
 }

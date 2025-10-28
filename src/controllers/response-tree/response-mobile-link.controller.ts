@@ -1,7 +1,9 @@
-import { Request, Response } from 'express';
+
 import { ResponseMobileLinkService } from '../../services/response-tree/response-mobile-link.service';
-import { CreateMobileLinkRequestDto, ConnectMobileLinkRequestDto } from '../../dtos/response-tree/response-tree.dto';
 import { HotelLogger } from '../../utils/logger';
+
+import type { CreateMobileLinkRequestDto, ConnectMobileLinkRequestDto } from '../../dtos/response-tree/response-tree.dto';
+import type { Request, Response } from 'express';
 
 /**
  * レスポンスモバイル連携コントローラー
@@ -40,7 +42,7 @@ export class ResponseMobileLinkController {
         success: true,
         data: link
       });
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Error creating mobile link:', { error: error instanceof Error ? error : new Error('Unknown error') });
       
       if ((error as Error).message === 'Session not found') {
@@ -88,7 +90,7 @@ export class ResponseMobileLinkController {
         success: true,
         data: link
       });
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Error getting mobile link:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -125,7 +127,7 @@ export class ResponseMobileLinkController {
         success: true,
         data: connection
       });
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Error connecting mobile link:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -164,7 +166,7 @@ export class ResponseMobileLinkController {
       // 画像として返す
       res.set('Content-Type', 'image/png');
       res.send(qrBuffer);
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Error generating QR code:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,

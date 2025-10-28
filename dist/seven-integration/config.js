@@ -142,6 +142,9 @@ exports.ENVIRONMENT_CONFIGS = {
     }
 };
 // AIエージェント別特化設定
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 exports.AI_AGENT_CONFIGS = {
     Sun: {
         name: 'SunConcierge',
@@ -254,7 +257,10 @@ exports.AI_AGENT_CONFIGS = {
         }
     }
 };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 // 統合レイヤー設定
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 exports.INTEGRATION_LAYER_CONFIGS = {
     'problem-solving': {
         name: '問題解決基盤',

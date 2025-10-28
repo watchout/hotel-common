@@ -38,9 +38,9 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MCPManager = exports.OpenAPICache = void 0;
+const child_process_1 = require("child_process");
 const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
-const child_process_1 = require("child_process");
 /**
  * OpenAPI仕様キャッシュ管理
  */
@@ -308,6 +308,9 @@ class MCPManager {
             return specContent;
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     simplifyExamples(obj) {
         if (typeof obj !== 'object' || obj === null)
             return;
@@ -389,7 +392,10 @@ async function testMCPManager() {
         return;
     }
     const mcpConfigData = JSON.parse(fs.readFileSync(mcpConfigPath, 'utf-8'));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const config = {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         servers: Object.entries(mcpConfigData.mcpServers).map(([name, server]) => ({
             name,
             command: server.command,

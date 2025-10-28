@@ -52,6 +52,8 @@ export const TenantCreateSchema = z.object({
 export const FileUploadSchema = z.object({
   file_name: z.string().min(1, 'ファイル名は必須です'),
   file_size: z.number().int().min(1, 'ファイルサイズは1バイト以上必要です').max(10 * 1024 * 1024, 'ファイルサイズは10MB以下である必要があります'),
+// eslint-disable-next-line no-useless-escape
+// eslint-disable-next-line no-useless-escape
   mime_type: z.string().regex(/^[a-zA-Z0-9][a-zA-Z0-9!#$&\-\^_]*\/[a-zA-Z0-9][a-zA-Z0-9!#$&\-\^_.]*$/, '有効なMIMEタイプを入力してください'),
   description: z.string().max(200, '説明は200文字以下で入力してください').optional()
 })

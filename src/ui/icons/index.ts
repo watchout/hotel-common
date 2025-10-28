@@ -19,9 +19,11 @@ export * from './types';
 /**
  * Vue用プラグイン
  */
-import { App } from 'vue';
+
 import HotelIcon from './components/Icon';
 import SystemIcon from './components/SystemIcon';
+
+import type { App } from 'vue';
 
 export default {
   install(app: App) {

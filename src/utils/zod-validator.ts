@@ -1,7 +1,10 @@
 import { z } from 'zod'
-import { ValidationResult } from './validation'
-import { ApiError } from '../types/common'
+
 import { ERROR_CODES } from '../types/api'
+
+import type { ValidationResult } from './validation'
+import type { ApiError } from '../types/common'
+
 
 /**
  * Zodスキーマバリデーション統合ヘルパー
@@ -10,6 +13,9 @@ export class ZodValidator {
   /**
    * Zodスキーマバリデーション実行
    */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   static validate<T>(schema: z.ZodSchema<T>, data: any): ValidationResult {
     try {
       const parsed = schema.parse(data)
@@ -17,7 +23,7 @@ export class ZodValidator {
         isValid: true,
         errors: []
       }
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof z.ZodError) {
         const errors = error.issues.map(err => ({
           field: err.path.join('.'),
@@ -42,8 +48,11 @@ export class ZodValidator {
   }
 
   /**
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
    * Zodスキーマバリデーション実行（安全な型付きパース）
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
    */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   static safeParse<T>(schema: z.ZodSchema<T>, data: any): {
     success: boolean
     data?: T

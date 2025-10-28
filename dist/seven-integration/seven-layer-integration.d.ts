@@ -1,4 +1,4 @@
-import { IntegrationLayer, LayerResult, SevenIntegrationConfig } from './types';
+import type { IntegrationLayer, LayerResult, SevenIntegrationConfig } from './types';
 export declare abstract class BaseIntegrationLayer {
     protected config: SevenIntegrationConfig;
     protected layerName: IntegrationLayer;

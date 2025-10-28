@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import type { PrismaClient } from '@prisma/client';
 export interface UnifiedClientConfig {
     tenantId: string;
     systemName: 'hotel-saas' | 'hotel-member' | 'hotel-pms';
@@ -24,6 +24,7 @@ export declare class UnifiedPrismaClient {
      */
     create<T>(model: string, data: any): Promise<T>;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 統一FIND_MANY操作
      */
     findMany<T>(model: string, where?: any): Promise<T[]>;

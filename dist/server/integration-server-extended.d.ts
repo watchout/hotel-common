@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { Router } from 'express';
+import type { Router } from 'express';
 /**
  * hotel-common統合APIサーバー
  * - システム間接続管理

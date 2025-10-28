@@ -2,7 +2,7 @@
  * API標準化ルール
  * ハイブリッド方式における統一レスポンス形式とエラーハンドリング
  */
-import { Response } from 'express';
+import type { Response } from 'express';
 export interface StandardResponse<T = any> {
     success: boolean;
     data?: T;
@@ -74,6 +74,7 @@ export declare class ResponseHelper {
      */
     static sendError(res: Response, code: StandardErrorCode | string, message: string, statusCode?: number, details?: any): void;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * バリデーションエラー送信
      */
     static sendValidationError(res: Response, message?: string, details?: any): void;

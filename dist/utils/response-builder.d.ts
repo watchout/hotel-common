@@ -2,7 +2,7 @@
  * 標準レスポンスビルダー
  * APIレスポンスの統一フォーマットを提供します
  */
-import { Response } from 'express';
+import type { Response } from 'express';
 interface StandardResponse {
     success: boolean;
     data?: any;

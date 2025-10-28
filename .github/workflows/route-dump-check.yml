@@ -1,0 +1,35 @@
+name: Route Quality Check
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  route-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install minimal deps
+        run: |
+          npm ci --ignore-scripts || npm i --ignore-scripts
+
+      - name: Route Depth / index.* guard
+        env:
+          ROUTE_MAX_DEPTH: '4'
+        run: |
+          node scripts/ci/route-dump-check.js
+
+      - name: Route Order Validation (Cookie auth priority)
+        run: |
+          npm run check-route-order
+
+

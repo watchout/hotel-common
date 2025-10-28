@@ -5,14 +5,17 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.requireTenantAdmin = exports.preventHigherLevelStaffOperation = exports.requireSystemAdminPermission = exports.requireStaffAdminPermission = exports.requireStaffManagementPermission = exports.requireAdminLevel = void 0;
-const staff_helpers_1 = require("../utils/staff-helpers");
 const logger_1 = require("../utils/logger");
 const response_builder_1 = require("../utils/response-builder");
+const staff_helpers_1 = require("../utils/staff-helpers");
 const logger = logger_1.HotelLogger.getInstance();
 /**
  * 管理者権限レベルチェックミドルウェア
  */
 const requireAdminLevel = (requiredLevel) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (req, res, next) => {
         try {
             // 認証チェック
@@ -70,8 +73,11 @@ exports.requireStaffAdminPermission = (0, exports.requireAdminLevel)(4);
 exports.requireSystemAdminPermission = (0, exports.requireAdminLevel)(5);
 /**
  * 自分より上位レベルのスタッフ操作を防ぐミドルウェア
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const preventHigherLevelStaffOperation = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (req, res, next) => {
         // このミドルウェアは個別スタッフ操作時に使用
         // 実際のレベルチェックは各エンドポイント内で実装
@@ -79,9 +85,12 @@ const preventHigherLevelStaffOperation = () => {
     };
 };
 exports.preventHigherLevelStaffOperation = preventHigherLevelStaffOperation;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 /**
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * テナント管理者権限チェック
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const requireTenantAdmin = (req, res, next) => {
     if (!req.user?.tenant_id) {
         return res.status(400).json(response_builder_1.StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です').response);

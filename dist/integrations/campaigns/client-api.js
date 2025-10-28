@@ -5,12 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const services_1 = require("./services");
-const welcome_screen_service_1 = require("./welcome-screen-service");
-const api_standards_1 = require("../../standards/api-standards");
-const middleware_1 = require("../../auth/middleware");
 const types_1 = require("./types");
-const logger_1 = require("../../utils/logger");
 const utils_1 = require("./utils");
+const welcome_screen_service_1 = require("./welcome-screen-service");
+const middleware_1 = require("../../auth/middleware");
+const api_standards_1 = require("../../standards/api-standards");
+const logger_1 = require("../../utils/logger");
 const router = express_1.default.Router();
 const campaignService = new services_1.CampaignService();
 const welcomeScreenService = new welcome_screen_service_1.WelcomeScreenService();

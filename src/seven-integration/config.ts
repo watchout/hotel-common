@@ -1,7 +1,7 @@
 // 🎊 hotel-common七重統合システム - 設定管理
 // 文献1-7完全統合デフォルト設定
 
-import { SevenIntegrationConfig, AIAgentType, IntegrationLayer, OptimizationLevel } from './types'
+import type { SevenIntegrationConfig, AIAgentType, IntegrationLayer, OptimizationLevel } from './types'
 
 // デフォルト設定
 export const DEFAULT_SEVEN_INTEGRATION_CONFIG: SevenIntegrationConfig = {
@@ -140,6 +140,9 @@ export const ENVIRONMENT_CONFIGS = {
 }
 
 // AIエージェント別特化設定
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const AI_AGENT_CONFIGS: Record<AIAgentType, any> = {
   Sun: {
     name: 'SunConcierge',
@@ -256,8 +259,11 @@ export const AI_AGENT_CONFIGS: Record<AIAgentType, any> = {
     }
   }
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 // 統合レイヤー設定
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const INTEGRATION_LAYER_CONFIGS: Record<IntegrationLayer, any> = {
   'problem-solving': {
     name: '問題解決基盤',

@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { SevenIntegrationConfig, SevenIntegrationResult, IntegrationStatus, IntegrationEvent, IntegrationLayer, AIAgentType } from './types';
+import type { SevenIntegrationConfig, SevenIntegrationResult, IntegrationStatus, IntegrationEvent, IntegrationLayer, AIAgentType } from './types';
 export declare class SevenIntegrationOrchestrator extends EventEmitter {
     private config;
     private status;
@@ -8,10 +8,12 @@ export declare class SevenIntegrationOrchestrator extends EventEmitter {
     private currentLayerIndex;
     constructor(customConfig?: Partial<SevenIntegrationConfig>);
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 七重統合システム実行
      */
     execute(input: any, context?: any): Promise<SevenIntegrationResult>;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 特定エージェント向け最適化実行
      */
     executeForAgent(agentType: AIAgentType, input: any, context?: any): Promise<SevenIntegrationResult>;

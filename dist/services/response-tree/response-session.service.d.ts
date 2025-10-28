@@ -1,4 +1,4 @@
-import { SessionDto, CreateSessionRequestDto } from '../../dtos/response-tree/response-tree.dto';
+import type { SessionDto, CreateSessionRequestDto } from '../../dtos/response-tree/response-tree.dto';
 /**
  * レスポンスセッションサービス
  * ビジネスロジックを担当

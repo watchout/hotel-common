@@ -1,7 +1,9 @@
-import { Request, Response } from 'express';
-import { StandardResponseBuilder } from '../../standards/api-standards';
+
 import pageService from '../../services/pages/page.service';
+import { StandardResponseBuilder } from '../../standards/api-standards';
 import { HotelLogger } from '../../utils/logger';
+
+import type { Request, Response } from 'express';
 
 const logger = HotelLogger.getInstance();
 
@@ -63,7 +65,7 @@ export class PublicPageController {
         content,
         template: page.Template
       });
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('公開ページ取得エラー', { error: error as Error });
       const { response, statusCode } = StandardResponseBuilder.serverError('サーバーエラー');
       return res.status(statusCode).json(response);

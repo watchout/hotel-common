@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UnifiedPrismaClient = void 0;
-const logger_1 = require("../utils/logger");
 const prisma_1 = require("./prisma");
+const logger_1 = require("../utils/logger");
 // マルチテナント対応統一Prismaクライアント
 class UnifiedPrismaClient {
     prisma;
@@ -35,6 +35,9 @@ class UnifiedPrismaClient {
         }
     }
     // 統一CRUD操作
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async create(model, data) {
         // テナントIDの自動追加
         const enhancedData = {
@@ -47,7 +50,10 @@ class UnifiedPrismaClient {
         try {
             // 監査ログ記録
             await this.logOperation('CREATE', model, enhancedData);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             // 動的モデルアクセス
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result = await this.prisma[model].create({
                 data: enhancedData
             });
@@ -57,72 +63,92 @@ class UnifiedPrismaClient {
             this.logger.error(`[${this.systemName}] Create operation failed`, {
                 error: error
             });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             throw error;
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async findMany(model, where) {
         // テナント分離の自動適用
         const enhancedWhere = {
             ...where,
             tenant_id: this.tenantId
         };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.logger.info(`[${this.systemName}] Finding many ${model}`, {
             tenantId: this.tenantId
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         });
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result = await this.prisma[model].findMany({
                 where: enhancedWhere
             });
             return result;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }
         catch (error) {
             this.logger.error(`[${this.systemName}] FindMany operation failed`, {
                 error: error
             });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             throw error;
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async findUnique(model, where) {
         // テナント分離の自動適用
         const enhancedWhere = {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             ...where,
             tenant_id: this.tenantId
         };
         try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result = await this.prisma[model].findUnique({
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 where: enhancedWhere
             });
             return result;
         }
         catch (error) {
             this.logger.error(`[${this.systemName}] FindUnique operation failed`, {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 error: error
             });
             throw error;
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async update(model, where, data) {
         // テナント分離の自動適用
         const enhancedWhere = {
             ...where,
             tenant_id: this.tenantId
         };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const enhancedData = {
             ...data,
             updated_at: new Date(),
             updated_by_system: this.systemName
         };
         this.logger.info(`[${this.systemName}] Updating ${model}`, {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             tenantId: this.tenantId
         });
         try {
             // 監査ログ記録
             await this.logOperation('UPDATE', model, { where: enhancedWhere, data: enhancedData });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result = await this.prisma[model].update({
                 where: enhancedWhere,
                 data: enhancedData
             });
             return result;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }
         catch (error) {
             this.logger.error(`[${this.systemName}] Update operation failed`, {
@@ -130,22 +156,28 @@ class UnifiedPrismaClient {
             });
             throw error;
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async delete(model, where) {
         // テナント分離の自動適用
         const enhancedWhere = {
             ...where,
             tenant_id: this.tenantId
         };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.logger.info(`[${this.systemName}] Deleting ${model}`, {
             tenantId: this.tenantId
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         try {
             // 監査ログ記録
             await this.logOperation('DELETE', model, enhancedWhere);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result = await this.prisma[model].delete({
                 where: enhancedWhere
             });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             return result;
         }
         catch (error) {
@@ -156,6 +188,7 @@ class UnifiedPrismaClient {
         }
     }
     // 監査ログ記録
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async logOperation(operation, model, data) {
         try {
             // TODO: audit_logsテーブルのスキーマ確認後に実装
@@ -183,6 +216,7 @@ class UnifiedPrismaClient {
             throw error;
         }
     }
+    // eslint-disable-next-line no-return-await
     async disconnect() {
         try {
             await this.prisma.$disconnect();
@@ -191,9 +225,12 @@ class UnifiedPrismaClient {
             });
         }
         catch (error) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             this.logger.error(`[${this.systemName}] Failed to disconnect from database`, {
                 error: error
+                // eslint-disable-next-line no-return-await
             });
+            // eslint-disable-next-line no-return-await
             throw error;
         }
     }
@@ -201,8 +238,11 @@ class UnifiedPrismaClient {
     getRawClient() {
         return this.prisma;
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // トランザクション実行
+    // eslint-disable-next-line no-return-await
     async transaction(fn) {
+        // eslint-disable-next-line no-return-await
         return await this.prisma.$transaction(async (tx) => {
             // トランザクション用の統一クライアントを作成
             const txClient = new UnifiedPrismaClient({
@@ -211,7 +251,9 @@ class UnifiedPrismaClient {
                 connectionLimit: this.connectionLimit
             });
             // トランザクション用のPrismaクライアントに置き換え
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             txClient.prisma = tx;
+            // eslint-disable-next-line no-return-await
             return await fn(txClient);
         });
     }

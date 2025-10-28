@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 export declare const verifyAdminAuth: (req: Request & {
     user?: any;
 }, res: Response, next: NextFunction) => Response<any, Record<string, any>> | undefined;

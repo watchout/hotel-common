@@ -8,8 +8,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.INTEGRATION_EXAMPLES = exports.HotelSaasAuth = exports.JwtManager = exports.HOTEL_SAAS_CONFIG = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 /**
  * hotel-saas統合設定
  */

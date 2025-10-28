@@ -23,15 +23,19 @@ export declare class RealGuardrailsValidator {
     private performanceThresholds;
     constructor();
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 包括的品質検証実行
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     validate(content: string, context: any, ragResults?: any): Promise<ValidationReport>;
     /**
      * TypeScript型安全性検証
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 実際のコンパイラAPIを使用した検証
      */
     validateTypeScript(content: string, ragResults?: any): Promise<GuardrailResult[]>;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * セキュリティ検証
      * 実際のセキュリティルールによる検証
      */

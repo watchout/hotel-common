@@ -30,6 +30,7 @@ export declare class ProcessingGuardrail implements GuardrailLayer {
     validate(input: any, context: any): Promise<GuardrailResult>;
 }
 /**
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * Layer 3: 業務ロジックガードレール
  */
 export declare class BusinessLogicGuardrail implements GuardrailLayer {
@@ -47,6 +48,7 @@ export declare class OutputValidationGuardrail implements GuardrailLayer {
 }
 /**
  * Layer 5: 監視・ログガードレール
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  */
 export declare class MonitoringGuardrail implements GuardrailLayer {
     getLayer(): number;

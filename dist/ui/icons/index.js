@@ -42,6 +42,9 @@ Object.defineProperty(exports, "preloadIcons", { enumerable: true, get: function
 Object.defineProperty(exports, "iconExists", { enumerable: true, get: function () { return iconLoader_1.iconExists; } });
 // 型定義
 __exportStar(require("./types"), exports);
+/**
+ * Vue用プラグイン
+ */
 const Icon_2 = __importDefault(require("./components/Icon"));
 const SystemIcon_2 = __importDefault(require("./components/SystemIcon"));
 exports.default = {

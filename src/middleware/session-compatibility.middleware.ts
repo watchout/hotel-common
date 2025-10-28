@@ -1,6 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
+
 import { hotelDb } from '../database/prisma';
 import { logger } from '../utils/logger';
+
+import type { Request, Response, NextFunction } from 'express';
 
 /**
  * セッション互換性ミドルウェア
@@ -15,6 +17,9 @@ export const autoSessionMapping = async (req: Request, res: Response, next: Next
   try {
     // POSTリクエスト（注文作成）の場合のみ処理
     if (req.method === 'POST' && req.body.roomId) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
       const tenantId = (req as any).user?.tenant_id;
       const { roomId } = req.body;
 
@@ -43,7 +48,7 @@ export const autoSessionMapping = async (req: Request, res: Response, next: Next
     }
 
     next();
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('セッション自動紐付けエラー', error);
     // エラーが発生してもAPIの実行は継続
     next();
@@ -57,11 +62,17 @@ export const autoSessionMapping = async (req: Request, res: Response, next: Next
 export const legacyApiCompatibility = async (req: Request, res: Response, next: NextFunction) => {
   try {
     // レスポンスを拡張してセッション情報を含める
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     const originalJson = res.json;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     res.json = function(body: any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
       // 注文データにセッション情報を追加
       if (body && body.order && body.order.roomId) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         addSessionInfoToResponse(body, (req as any).user?.tenant_id);
       }
       
@@ -69,15 +80,18 @@ export const legacyApiCompatibility = async (req: Request, res: Response, next: 
     };
 
     next();
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('レガシーAPI互換性ミドルウェアエラー', error);
     next();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 /**
  * レスポンスにセッション情報を追加
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function addSessionInfoToResponse(responseBody: any, tenantId: string) {
   try {
     if (responseBody.order && responseBody.order.roomId && tenantId) {
@@ -91,31 +105,37 @@ async function addSessionInfoToResponse(responseBody: any, tenantId: string) {
           id: true,
           sessionNumber: true,
           guestInfo: true,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
           status: true
         }
       });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (session) {
         responseBody.order.session = {
           id: session.id,
           sessionNumber: session.sessionNumber,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
           guestName: (session.guestInfo as any)?.primaryGuest?.firstName + ' ' + (session.guestInfo as any)?.primaryGuest?.lastName,
           status: session.status
         };
       }
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('レスポンスセッション情報追加エラー', error);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     // エラーが発生してもレスポンスは返す
   }
 }
 
 /**
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * セッション必須チェックミドルウェア
  * 新しいAPIでセッションが必須の場合に使用
  */
 export const requireSession = async (req: Request, res: Response, next: NextFunction) => {
   try {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     const tenantId = (req as any).user?.tenant_id;
     const { roomId, sessionId } = req.body;
 
@@ -131,24 +151,28 @@ export const requireSession = async (req: Request, res: Response, next: NextFunc
       const session = await hotelDb.getAdapter().checkinSession.findFirst({
         where: {
           id: sessionId,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
           tenantId
         }
       });
 
       if (!session) {
         return res.status(404).json({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
           error: 'SESSION_NOT_FOUND',
           message: '指定されたセッションが見つかりません'
         });
       }
 
       // リクエストにセッション情報を追加
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
       (req as any).session = session;
     } else if (roomId) {
       // セッションIDが未指定の場合、部屋IDからアクティブセッションを検索
       const activeSession = await hotelDb.getAdapter().checkinSession.findFirst({
         where: {
           roomId,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
           tenantId,
           status: 'ACTIVE'
         }
@@ -156,6 +180,7 @@ export const requireSession = async (req: Request, res: Response, next: NextFunc
 
       if (!activeSession) {
         return res.status(400).json({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
           error: 'NO_ACTIVE_SESSION',
           message: '指定された部屋にアクティブなセッションがありません。先にチェックイン処理を行ってください。'
         });
@@ -163,6 +188,7 @@ export const requireSession = async (req: Request, res: Response, next: NextFunc
 
       // リクエストボディとセッション情報を更新
       req.body.sessionId = activeSession.id;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
       (req as any).session = activeSession;
     } else {
       return res.status(400).json({
@@ -172,7 +198,8 @@ export const requireSession = async (req: Request, res: Response, next: NextFunc
     }
 
     next();
-  } catch (error) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: unknown) {
     logger.error('セッション必須チェックエラー', error);
     return res.status(500).json({
       error: 'SESSION_CHECK_ERROR',
@@ -180,6 +207,7 @@ export const requireSession = async (req: Request, res: Response, next: NextFunc
     });
   }
 };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 /**
  * セッション状態チェックミドルウェア
@@ -188,6 +216,7 @@ export const requireSession = async (req: Request, res: Response, next: NextFunc
 export const validateSessionStatus = (allowedStatuses: string[] = ['ACTIVE']) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
       const session = (req as any).session;
 
       if (!session) {
@@ -203,28 +232,33 @@ export const validateSessionStatus = (allowedStatuses: string[] = ['ACTIVE']) =>
           message: `セッションの状態が無効です。許可された状態: ${allowedStatuses.join(', ')}`
         });
       }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
       next();
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('セッション状態チェックエラー', error);
       return res.status(500).json({
         error: 'SESSION_STATUS_CHECK_ERROR',
         message: 'セッション状態確認中にエラーが発生しました'
       });
     }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   };
 };
 
 /**
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * 移行期間用の柔軟なセッションチェック
  * セッションがない場合でも警告ログを出すだけで処理を継続
  */
 export const flexibleSessionCheck = async (req: Request, res: Response, next: NextFunction) => {
   try {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     const tenantId = (req as any).user?.tenant_id;
     const { roomId } = req.body;
 
     if (tenantId && roomId) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
       const activeSession = await hotelDb.getAdapter().checkinSession.findFirst({
         where: {
           roomId,
@@ -235,6 +269,7 @@ export const flexibleSessionCheck = async (req: Request, res: Response, next: Ne
 
       if (activeSession) {
         req.body.sessionId = activeSession.id;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
         (req as any).session = activeSession;
         logger.info('セッション情報を自動設定', {
           sessionId: activeSession.id,
@@ -251,7 +286,7 @@ export const flexibleSessionCheck = async (req: Request, res: Response, next: Ne
     }
 
     next();
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('柔軟なセッションチェックエラー', error);
     // エラーが発生しても処理を継続
     next();

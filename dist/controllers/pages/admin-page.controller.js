@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminPageController = void 0;
-const api_standards_1 = require("../../standards/api-standards");
 const page_service_1 = __importDefault(require("../../services/pages/page.service"));
+const api_standards_1 = require("../../standards/api-standards");
 const logger_1 = require("../../utils/logger");
 const logger = logger_1.HotelLogger.getInstance();
 /**

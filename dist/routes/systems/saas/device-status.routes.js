@@ -34,8 +34,8 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = __importStar(require("express"));
-const prisma_1 = require("../../../database/prisma");
 const middleware_1 = require("../../../auth/middleware");
+const prisma_1 = require("../../../database/prisma");
 const router = express.Router();
 /**
  * デバイスステータス確認API

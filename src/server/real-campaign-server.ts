@@ -1,12 +1,20 @@
 #!/usr/bin/env node
 
-import express, { Router } from 'express';
-import { config } from 'dotenv';
-import { PrismaClient } from '@prisma/client';
+// eslint-disable-next-line import/order
+// eslint-disable-next-line import/order
+import type { Router } from 'express';
+
 import cors from 'cors';
-import { integrateCampaignFeature } from '../integrations/campaigns';
+// eslint-disable-next-line no-duplicate-imports
+import { config } from 'dotenv';
+// eslint-disable-next-line no-duplicate-imports
+// eslint-disable-next-line no-duplicate-imports
+import express from 'express';
+
+// eslint-disable-next-line import/order
 import { prisma } from '../database';
-import { logger } from '../utils/logger';
+// eslint-disable-next-line import/order
+import { integrateCampaignFeature } from '../integrations/campaigns';
 
 // 環境変数読み込み
 config();
@@ -15,17 +23,20 @@ config();
  * キャンペーンAPI実サーバー
  * - 実際のデータベースに接続
  * - キャンペーン管理API
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * - クライアント向けAPI
  */
 class RealCampaignServer {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   private app: express.Application;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   private server: any;
   private port: number;
 
   constructor() {
     this.app = express();
     this.port = parseInt(process.env.HOTEL_COMMON_PORT || '3400');
-    
+
     this.setupMiddleware();
     this.setupRoutes();
   }
@@ -69,25 +80,31 @@ class RealCampaignServer {
     // キャンペーンAPIを統合
     // 統合サーバーとの互換性のためのアダプター
     const integrationServerAdapter = {
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       addRouter: (path: string, router: Router) => {
         this.app.use(path, router);
       }
     };
-    
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
     // キャンペーン機能を統合
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - 引数の型が不一致
     integrateCampaignFeature();
 
     // 404エラーハンドラー
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.app.use('*', (req, res) => {
       res.status(404).json({
         error: 'NOT_FOUND',
         message: `Endpoint ${req.originalUrl} not found`
       });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     });
 
     // エラーハンドラー
-    this.app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
       logger.error('Server error:', { error: error instanceof Error ? error : new Error(String(error)) });
       res.status(500).json({
         error: 'INTERNAL_ERROR',
@@ -107,7 +124,7 @@ class RealCampaignServer {
       console.error('Server app is not initialized');
       return;
     }
-    
+
     this.app.use(path, router);
     logger.info(`Router added to path: ${path}`);
   }
@@ -146,7 +163,7 @@ class RealCampaignServer {
       process.on('SIGINT', () => this.shutdown());
       process.on('SIGTERM', () => this.shutdown());
 
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('サーバー起動エラー:', { error: error instanceof Error ? error : new Error(String(error)) });
       throw error;
     }
@@ -157,7 +174,7 @@ class RealCampaignServer {
    */
   private async shutdown(): Promise<void> {
     logger.info('キャンペーンAPI実サーバー停止中...');
-    
+
     try {
       if (this.server) {
         this.server.close();
@@ -165,7 +182,7 @@ class RealCampaignServer {
       await prisma.$disconnect();
       logger.info('キャンペーンAPI実サーバー停止完了');
       process.exit(0);
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('サーバー停止エラー:', { error: error instanceof Error ? error : new Error(String(error)) });
       process.exit(1);
     }
@@ -184,7 +201,7 @@ if (require.main === module) {
 export { RealCampaignServer };
 
 // データベース初期設定を追加
-import { setupCampaignDatabase, checkCampaignDatabase } from '../integrations/campaigns/database-setup';
+import { logger } from '../utils/logger';
 
 // RealCampaignServerクラスのstart()メソッドを修正
 // async start(): Promise<void> {

@@ -11,10 +11,10 @@
  * 5. フォールバック機能
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testActualI18n = testActualI18n;
-exports.testManualTranslation = testManualTranslation;
-exports.testFileSystemAccess = testFileSystemAccess;
 exports.runTests = runTests;
+exports.testActualI18n = testActualI18n;
+exports.testFileSystemAccess = testFileSystemAccess;
+exports.testManualTranslation = testManualTranslation;
 const factory_1 = require("../i18n/factory");
 /**
  * 実際のi18nシステムのテスト
@@ -72,7 +72,10 @@ async function testFileSystemAccess() {
     console.log('📂 翻訳ファイルアクセステスト:');
     try {
         // 直接ファイルを読み込んでみる
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const fs = require('fs').promises;
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         const path = require('path');
         const jaPath = path.join(__dirname, '../../i18n/locales/ja.json');
         const enPath = path.join(__dirname, '../../i18n/locales/en.json');

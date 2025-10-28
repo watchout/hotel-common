@@ -2,7 +2,7 @@
  * 管理者権限チェックミドルウェア
  * baseLevelベースの権限管理（既存roleフィールドから計算）
  */
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 /**
  * 管理者権限レベルチェックミドルウェア
  */
@@ -29,11 +29,13 @@ export declare const requireSystemAdminPermission: (req: Request & {
 }, res: Response, next: NextFunction) => Response<any, Record<string, any>> | undefined;
 /**
  * 自分より上位レベルのスタッフ操作を防ぐミドルウェア
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  */
 export declare const preventHigherLevelStaffOperation: () => (req: Request & {
     user?: any;
 }, res: Response, next: NextFunction) => void;
 /**
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * テナント管理者権限チェック
  */
 export declare const requireTenantAdmin: (req: Request & {

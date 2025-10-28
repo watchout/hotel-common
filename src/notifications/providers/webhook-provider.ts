@@ -127,7 +127,7 @@ export class WebhookProvider {
         const errorText = await response.text()
         throw new Error(`HTTP ${response.status}: ${errorText}`)
         
-      } catch (error) {
+      } catch (error: unknown) {
         currentRetry++
         
         // 最大リトライ回数に達した場合
@@ -216,7 +216,7 @@ export class WebhookProvider {
         .createHmac('sha256', secret)
         .update(payload)
         .digest('hex')
-    } catch (error) {
+    } catch (error: unknown) {
       const { createErrorLogOption } = require('../../utils/error-helper');
       this.logger.error('Failed to generate webhook signature', createErrorLogOption(error))
       return ''

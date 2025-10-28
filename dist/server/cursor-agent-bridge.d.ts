@@ -35,6 +35,7 @@ export declare class CursorAgentBridge {
      */
     private executeTokenOptimization;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 最適化された回答の生成
      */
     private generateOptimizedResponse;

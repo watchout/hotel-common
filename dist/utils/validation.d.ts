@@ -1,4 +1,4 @@
-import { ApiError } from '../types/common';
+import type { ApiError } from '../types/common';
 export interface ValidationRule {
     field: string;
     required?: boolean;
@@ -19,10 +19,13 @@ export interface ValidationResult {
 }
 export declare class HotelValidator {
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * バリデーション実行
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     static validate(data: any, rules: ValidationRule[]): ValidationResult;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 単一フィールドバリデーション
      */
     private static validateField;

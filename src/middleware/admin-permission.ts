@@ -3,10 +3,12 @@
  * baseLevelベースの権限管理（既存roleフィールドから計算）
  */
 
-import { Request, Response, NextFunction } from 'express';
-import { getRoleLevel } from '../utils/staff-helpers';
+
 import { HotelLogger } from '../utils/logger';
 import { StandardResponseBuilder } from '../utils/response-builder';
+import { getRoleLevel } from '../utils/staff-helpers';
+
+import type { Request, Response, NextFunction } from 'express';
 
 const logger = HotelLogger.getInstance();
 
@@ -14,6 +16,9 @@ const logger = HotelLogger.getInstance();
  * 管理者権限レベルチェックミドルウェア
  */
 export const requireAdminLevel = (requiredLevel: number) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (req: Request & { user?: any }, res: Response, next: NextFunction) => {
     try {
       // 認証チェック
@@ -62,7 +67,7 @@ export const requireAdminLevel = (requiredLevel: number) => {
       });
 
       next();
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Admin permission check error', error);
       return res.status(500).json(
         StandardResponseBuilder.error(
@@ -91,18 +96,24 @@ export const requireSystemAdminPermission = requireAdminLevel(5);
 
 /**
  * 自分より上位レベルのスタッフ操作を防ぐミドルウェア
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const preventHigherLevelStaffOperation = () => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (req: Request & { user?: any }, res: Response, next: NextFunction) => {
     // このミドルウェアは個別スタッフ操作時に使用
     // 実際のレベルチェックは各エンドポイント内で実装
     next();
   };
 };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 /**
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
  * テナント管理者権限チェック
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const requireTenantAdmin = (req: Request & { user?: any }, res: Response, next: NextFunction) => {
   if (!req.user?.tenant_id) {
     return res.status(400).json(

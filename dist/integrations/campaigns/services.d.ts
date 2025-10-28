@@ -1,4 +1,4 @@
-import { CampaignBasicInfo, CampaignDetailInfo, CampaignCreateInput, CampaignUpdateInput } from './types';
+import type { CampaignBasicInfo, CampaignDetailInfo, CampaignCreateInput, CampaignUpdateInput } from './types';
 export declare class CampaignService {
     /**
      * キャンペーンの適用可能性をチェック

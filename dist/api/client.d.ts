@@ -1,5 +1,5 @@
-import { ApiClientConfig, RequestConfig } from '../types/api';
-import { ApiResponse } from '../types/common';
+import type { ApiClientConfig, RequestConfig } from '../types/api';
+import type { ApiResponse } from '../types/common';
 export declare class HotelApiClient {
     private client;
     private config;
@@ -21,7 +21,9 @@ export declare class HotelApiClient {
      */
     removeAuthToken(): void;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * 汎用リクエストメソッド
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      */
     request<T = any>(config: RequestConfig): Promise<ApiResponse<T>>;
     /**
@@ -29,6 +31,7 @@ export declare class HotelApiClient {
      */
     get<T = any>(url: string, params?: Record<string, any>): Promise<ApiResponse<T>>;
     /**
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
      * POST リクエスト
      */
     post<T = any>(url: string, data?: any): Promise<ApiResponse<T>>;

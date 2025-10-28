@@ -1,4 +1,4 @@
-import { SupportedLanguage, LanguageConfig, MultilingualConfig } from './types';
+import type { SupportedLanguage, LanguageConfig, MultilingualConfig } from './types';
 /** 言語設定詳細 */
 export declare const LANGUAGE_CONFIGS: Record<SupportedLanguage, LanguageConfig>;
 /** デフォルト多言語設定 */

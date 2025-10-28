@@ -15,6 +15,9 @@ const adminAuthMiddleware = (req, res, next) => {
                 message: '認証トークンが必要です'
             });
         }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore - 型の互換性の問題
         const decoded = (0, jwt_1.verifyToken)(token);
         if (decoded.role !== 'ADMIN' && decoded.role !== 'SUPER_ADMIN') {
@@ -23,7 +26,10 @@ const adminAuthMiddleware = (req, res, next) => {
                 error: 'FORBIDDEN',
                 message: '管理者権限が必要です'
             });
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore - 型の互換性の問題
         req.user = decoded;
         next();

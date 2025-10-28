@@ -3,9 +3,10 @@
 // 緊急対応：最低限動作するhotel-commonサーバー
 // Sunoの階層権限統合ブロック解除を最優先
 
-import express from 'express'
 import { createServer } from 'http'
-import { HierarchyPermissionManager } from '../hierarchy/permission-manager'
+
+import express from 'express'
+
 import { HierarchicalJwtManager } from '../hierarchy/jwt-extension'
 
 const app = express()
@@ -34,7 +35,7 @@ app.get('/health', (req, res) => {
 app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
   try {
     const { token } = req.body
-    
+
     if (!token) {
       return res.status(400).json({
         error: 'TOKEN_REQUIRED',
@@ -45,7 +46,7 @@ app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
     // 簡易JWT検証（フォールバック）
     try {
       const decoded = HierarchicalJwtManager.verifyHierarchicalToken(token)
-      
+
       if (decoded) {
         res.json({
           success: true,
@@ -67,7 +68,7 @@ app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
           }
         })
       }
-    } catch (error) {
+    } catch (error: unknown) {
       // フォールバック応答
       res.json({
         success: true,
@@ -84,7 +85,7 @@ app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
       })
     }
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('JWT検証エラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -97,7 +98,7 @@ app.post('/api/hotel-member/hierarchy/auth/verify', async (req, res) => {
 app.post('/api/hotel-member/hierarchy/permissions/check-customer-access', async (req, res) => {
   try {
     const { token, target_tenant_id, operation = 'READ' } = req.body
-    
+
     if (!token || !target_tenant_id) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',
@@ -113,7 +114,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-customer-access', async 
       effective_level: 'BASIC'
     })
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('権限チェックエラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -126,7 +127,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-customer-access', async 
 app.post('/api/hotel-member/hierarchy/tenants/accessible', async (req, res) => {
   try {
     const { token, scope_level } = req.body
-    
+
     if (!token) {
       return res.status(400).json({
         error: 'TOKEN_REQUIRED',
@@ -140,7 +141,7 @@ app.post('/api/hotel-member/hierarchy/tenants/accessible', async (req, res) => {
       tenants: ['default', 'hotel-001', 'hotel-002']
     })
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('テナント取得エラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -153,7 +154,7 @@ app.post('/api/hotel-member/hierarchy/tenants/accessible', async (req, res) => {
 app.post('/api/hotel-member/hierarchy/permissions/check-membership-restrictions', async (req, res) => {
   try {
     const { token, operation, data_type } = req.body
-    
+
     if (!token || !operation || !data_type) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',
@@ -168,7 +169,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-membership-restrictions'
       reason: 'Basic permission granted (fallback mode)'
     })
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('会員データ制限チェックエラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -181,7 +182,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-membership-restrictions'
 app.post('/api/hotel-member/hierarchy/permissions/check-analytics-access', async (req, res) => {
   try {
     const { token, analytics_type } = req.body
-    
+
     if (!token || !analytics_type) {
       return res.status(400).json({
         error: 'MISSING_PARAMETERS',
@@ -196,7 +197,7 @@ app.post('/api/hotel-member/hierarchy/permissions/check-analytics-access', async
       reason: 'Basic analytics access granted (fallback mode)'
     })
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('分析権限チェックエラー:', error)
     res.status(500).json({
       error: 'INTERNAL_ERROR',
@@ -220,7 +221,10 @@ app.get('/api/hotel-member/hierarchy/health', async (req, res) => {
 })
 
 // エラーハンドラー
-app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('サーバーエラー:', error)
   res.status(500).json({
     error: 'INTERNAL_ERROR',
@@ -263,4 +267,4 @@ process.on('SIGTERM', () => {
   })
 })
 
-export default app 
+export default app

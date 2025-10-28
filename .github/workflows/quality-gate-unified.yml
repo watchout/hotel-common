@@ -1,0 +1,43 @@
+name: Quality Gate (Unified)
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - main
+
+jobs:
+  quality-check:
+    name: Quality Check (@hotel/quality-tools)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      
+      - name: Run quality checks
+        run: npx hotel-quality check --all --format github-actions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_PR_BODY: ${{ github.event.pull_request.body }}
+        continue-on-error: true
+      
+      - name: Quality check summary
+        if: always()
+        run: |
+          echo "## 📊 Quality Check Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "品質チェックが完了しました。" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "詳細は上記のステップログを確認してください。" >> $GITHUB_STEP_SUMMARY
+

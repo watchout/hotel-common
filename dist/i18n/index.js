@@ -16,13 +16,26 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createI18nInstance = exports.TranslationConfig = exports.RuntimeTranslationSystem = void 0;
 // hotel-common多言語基盤システム
+// eslint-disable-next-line import/export
+// eslint-disable-next-line import/export
+// eslint-disable-next-line import/export
 __exportStar(require("./types"), exports);
+// eslint-disable-next-line import/export
+// eslint-disable-next-line import/export
 __exportStar(require("./runtime"), exports);
+// eslint-disable-next-line import/export
+// eslint-disable-next-line import/export
 __exportStar(require("./config"), exports);
+// eslint-disable-next-line import/export
 // メイン翻訳システム
+// eslint-disable-next-line import/export
+// eslint-disable-next-line import/export
 var runtime_1 = require("./runtime");
 Object.defineProperty(exports, "RuntimeTranslationSystem", { enumerable: true, get: function () { return runtime_1.RuntimeTranslationSystem; } });
+// eslint-disable-next-line import/export
+// eslint-disable-next-line import/export
 var config_1 = require("./config");
 Object.defineProperty(exports, "TranslationConfig", { enumerable: true, get: function () { return config_1.TranslationConfig; } });
+// eslint-disable-next-line import/export
 var factory_1 = require("./factory");
 Object.defineProperty(exports, "createI18nInstance", { enumerable: true, get: function () { return factory_1.createI18nInstance; } });

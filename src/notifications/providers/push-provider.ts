@@ -100,7 +100,7 @@ export class FirebasePushProvider extends PushProvider {
       
       this.messaging = this.admin.messaging()
       this.logger.info('Firebase push provider initialized')
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to initialize Firebase client', { error: error instanceof Error ? error : new Error(String(error)) })
       throw new Error('Firebase initialization failed')
     }
@@ -156,7 +156,7 @@ export class FirebasePushProvider extends PushProvider {
         successCount: response.successCount,
         failureCount: response.failureCount
       }
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to send push notification via Firebase', { error: error instanceof Error ? error : new Error(String(error)) })
       
       return {
@@ -187,7 +187,7 @@ export class OneSignalPushProvider extends PushProvider {
       this.client = new OneSignal.Client(config.appId, config.apiKey)
       
       this.logger.info('OneSignal push provider initialized')
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Failed to initialize OneSignal client', { error: error instanceof Error ? error : new Error(String(error)) })
       throw new Error('OneSignal initialization failed')
     }
@@ -232,7 +232,7 @@ export class OneSignalPushProvider extends PushProvider {
         provider: 'onesignal',
         successCount: response.body.recipients
       }
-    } catch (error) {
+    } catch (error: unknown) {
       const { createErrorLogOption } = require('../../utils/error-helper');
       this.logger.error('Failed to send push notification via OneSignal', createErrorLogOption(error))
       

@@ -1,8 +1,11 @@
 import * as express from 'express'
-import { Request, Response } from 'express'
-import { hotelDb } from '../../../database/prisma'
+
+
 import { authMiddleware } from '../../../auth/middleware'
+import { hotelDb } from '../../../database/prisma'
 import { ResponseHelper } from '../../../standards/api-response-standards'
+
+import type { Request, Response } from 'express'
 
 const router = express.Router()
 
@@ -83,7 +86,7 @@ router.post('/api/v1/devices/check-status', async (req: Request, res: Response) 
         message: 'デバイス情報を取得できませんでした。マイグレーションが必要です。'
       })
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('デバイスステータス確認エラー:', error)
     return res.status(500).json({
       success: false,
@@ -126,7 +129,7 @@ router.get('/api/v1/devices/client-ip', (req: Request, res: Response) => {
         'x-client-ip': xClientIp || null
       }
     })
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('クライアントIP取得エラー:', error)
     return res.status(500).json({
       success: false,
@@ -233,7 +236,7 @@ router.get('/api/v1/devices/count', authMiddleware, async (req: Request & { user
         }
       })
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('デバイス数取得エラー:', error)
     return res.status(500).json({
       success: false,

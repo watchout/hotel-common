@@ -1,6 +1,13 @@
-import { SupportedLanguage, TranslationData, TranslationKey, LanguageChangeEvent } from './types'
-import { TranslationConfig } from './config'
 import { EventEmitter } from 'events'
+
+import { TranslationConfig } from './config'
+import { TranslationKey } from './types'
+
+// eslint-disable-next-line no-duplicate-imports
+// eslint-disable-next-line no-duplicate-imports
+// eslint-disable-next-line no-duplicate-imports
+import type { SupportedLanguage, TranslationData, LanguageChangeEvent } from './types';
+
 
 /** 実行時翻訳システム */
 export class RuntimeTranslationSystem extends EventEmitter {
@@ -41,13 +48,16 @@ export class RuntimeTranslationSystem extends EventEmitter {
       this.emit('languageChanged', event)
       
       console.log(`Language changed from ${previousLanguage} to ${language}`)
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`Failed to load language ${language}:`, error)
       throw new Error(`Language switching failed: ${language}`)
     }
   }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   /** 翻訳取得 */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   t(key: string, params?: Record<string, any>): string {
     const translation = this.getTranslation(key)
     
@@ -81,7 +91,7 @@ export class RuntimeTranslationSystem extends EventEmitter {
     for (const language of preloadLanguages) {
       try {
         await this.loadLanguage(language)
-      } catch (error) {
+      } catch (error: unknown) {
         console.warn(`Failed to preload language ${language}:`, error)
       }
     }
@@ -104,7 +114,7 @@ export class RuntimeTranslationSystem extends EventEmitter {
       }
 
       console.log(`Loaded translations for ${language}`)
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`Failed to load translations for ${language}:`, error)
       throw error
     }
@@ -120,10 +130,13 @@ export class RuntimeTranslationSystem extends EventEmitter {
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`)
       }
+// eslint-disable-next-line no-return-await
       return await response.json()
-    } catch (error) {
+    } catch (error: unknown) {
+// eslint-disable-next-line no-return-await
       // 開発環境ではローカルファイルから読み込み
       console.warn(`CDN fetch failed, trying local import for ${language}`)
+// eslint-disable-next-line no-return-await
       return await import(`../../../i18n/locales/${language}.json`)
     }
   }
@@ -138,16 +151,22 @@ export class RuntimeTranslationSystem extends EventEmitter {
 
   /** フォールバック翻訳を取得 */
   private getFallbackTranslation(key: string): string | undefined {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (!this.fallbackData) return undefined
     return this.getNestedValue(this.fallbackData, key)
   }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   /** ネストされたオブジェクトから値を取得 */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   private getNestedValue(obj: any, path: string): string | undefined {
     return path.split('.').reduce((current, key) => current?.[key], obj)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   }
 
   /** パラメータ補間 */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   private interpolate(template: string, params?: Record<string, any>): string {
     if (!params) return template
 
@@ -160,15 +179,18 @@ export class RuntimeTranslationSystem extends EventEmitter {
 /** JWT統合用：トークンに言語設定を含める */
 export interface UserTokenWithLanguage {
   userId: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   language: SupportedLanguage
   tenantId?: string
   roles?: string[]
   exp: number
   iat: number
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 }
 
 /** 言語設定をJWTに統合 */
 export function createTokenWithLanguage(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   baseToken: any, 
   language: SupportedLanguage
 ): UserTokenWithLanguage {

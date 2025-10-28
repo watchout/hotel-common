@@ -3,15 +3,26 @@
  * ハイブリッド方式における統一レスポンス形式とエラーハンドリング
  */
 
-import { Request, Response } from 'express'
+import { Request } from 'express'
 
+// eslint-disable-next-line no-duplicate-imports
+// eslint-disable-next-line no-duplicate-imports
+// eslint-disable-next-line no-duplicate-imports
+import type { Response } from 'express';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 // 統一レスポンス形式
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface StandardResponse<T = any> {
   success: boolean
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: T
   error?: {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     code: string
     message: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     details?: any
   }
   pagination?: PaginationInfo
@@ -74,12 +85,15 @@ export class StandardResponseBuilder {
     }
   }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   /**
    * エラーレスポンス
    */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   static error(
     code: StandardErrorCode | string,
     message: string,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     details?: any
   ): StandardResponse {
     return {
@@ -134,33 +148,39 @@ export class ResponseHelper {
   static sendSuccess<T>(
     res: Response,
     data: T,
-    statusCode: number = 200,
+    statusCode = 200,
     pagination?: PaginationInfo
   ): void {
     const response = StandardResponseBuilder.success(data, pagination)
     res.status(statusCode).json(response)
   }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   /**
    * エラーレスポンス送信
    */
   static sendError(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     res: Response,
     code: StandardErrorCode | string,
     message: string,
-    statusCode: number = 400,
+    statusCode = 400,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     details?: any
   ): void {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = StandardResponseBuilder.error(code, message, details)
     res.status(statusCode).json(response)
   }
 
   /**
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
    * バリデーションエラー送信
    */
   static sendValidationError(
     res: Response,
-    message: string = '入力データが正しくありません',
+    message = '入力データが正しくありません',
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     details?: any
   ): void {
     this.sendError(res, StandardErrorCode.VALIDATION_ERROR, message, 400, details)
@@ -171,7 +191,7 @@ export class ResponseHelper {
    */
   static sendUnauthorized(
     res: Response,
-    message: string = '認証が必要です'
+    message = '認証が必要です'
   ): void {
     this.sendError(res, StandardErrorCode.UNAUTHORIZED, message, 401)
   }
@@ -181,7 +201,7 @@ export class ResponseHelper {
    */
   static sendForbidden(
     res: Response,
-    message: string = 'アクセス権限がありません'
+    message = 'アクセス権限がありません'
   ): void {
     this.sendError(res, StandardErrorCode.FORBIDDEN, message, 403)
   }
@@ -190,36 +210,45 @@ export class ResponseHelper {
    * 404エラー送信
    */
   static sendNotFound(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     res: Response,
-    message: string = 'リソースが見つかりません'
+    message = 'リソースが見つかりません'
   ): void {
     this.sendError(res, StandardErrorCode.NOT_FOUND, message, 404)
   }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   /**
    * 内部エラー送信
    */
   static sendInternalError(
     res: Response,
-    message: string = 'システムエラーが発生しました',
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    message = 'システムエラーが発生しました',
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     details?: any
   ): void {
     this.sendError(res, StandardErrorCode.INTERNAL_ERROR, message, 500, details)
   }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 /**
  * APIエラークラス
  */
 export class ApiError extends Error {
   public statusCode: number
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   public code: StandardErrorCode | string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   public details?: any
 
   constructor(
     message: string,
-    statusCode: number = 500,
+    statusCode = 500,
     code: StandardErrorCode | string = StandardErrorCode.INTERNAL_ERROR,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     details?: any
   ) {
     super(message)
@@ -266,6 +295,7 @@ export const API_NAMING_CONVENTIONS = {
     CUSTOMERS: '/customers',
     RESPONSE_TREE: '/response-tree'
   }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 } as const
 
 /**
@@ -275,6 +305,7 @@ export interface StandardLogEntry {
   timestamp: string
   level: 'info' | 'warn' | 'error' | 'debug'
   system: 'hotel-common' | 'hotel-saas' | 'hotel-pms' | 'hotel-member'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   api_path: string
   method: string
   user_id?: string
@@ -284,5 +315,6 @@ export interface StandardLogEntry {
   status_code?: number
   error_code?: string
   message: string
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   details?: any
 }

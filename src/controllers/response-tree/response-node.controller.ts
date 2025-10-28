@@ -1,6 +1,8 @@
-import { Request, Response } from 'express';
+
 import { ResponseNodeService } from '../../services/response-tree/response-node.service';
 import { HotelLogger } from '../../utils/logger';
+
+import type { Request, Response } from 'express';
 
 /**
  * レスポンスノードコントローラー
@@ -41,7 +43,7 @@ export class ResponseNodeController {
         success: true,
         data: node
       });
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Error getting node by id:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -67,7 +69,7 @@ export class ResponseNodeController {
         success: true,
         data: children
       });
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Error getting child nodes:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,
@@ -106,7 +108,7 @@ export class ResponseNodeController {
         success: true,
         data: results
       });
-    } catch (error) {
+    } catch (error: unknown) {
       this.logger.error('Error searching nodes:', { error: error instanceof Error ? error : new Error('Unknown error') });
       res.status(500).json({
         success: false,

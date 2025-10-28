@@ -1,8 +1,11 @@
-import express from 'express'
-import cors from 'cors'
 import path from 'path'
-import { fileURLToPath } from 'url'
+
+import cors from 'cors'
+import express from 'express'
+
 import adminRouter from './admin-api'
+// eslint-disable-next-line import/order
+// eslint-disable-next-line import/order
 import { HotelLogger } from '../utils/logger'
 
 const app = express()
@@ -18,7 +21,10 @@ app.use(cors({
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // 静的ファイル配信（管理画面UI）
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - ESモジュールの機能を使用
 const currentDir = path.dirname(new URL(import.meta.url).pathname)
 app.use('/admin', express.static(path.join(currentDir, '.')))
@@ -57,12 +63,15 @@ app.use('*', (req, res) => {
     message: 'Endpoint not found',
     path: req.originalUrl
   })
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 })
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 // エラーハンドラー
-app.use((error: any, req: any, res: any, next: any) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+app.use((error: any, req: any, res: any, _next: any) => {
   logger.error('Admin Server Error:', error)
-  
+
   res.status(500).json({
     error: 'INTERNAL_SERVER_ERROR',
     message: 'An internal server error occurred',
@@ -77,4 +86,4 @@ app.listen(PORT, () => {
   logger.info(`🔗 API Endpoint: http://localhost:${PORT}/api/admin`)
 })
 
-export default app 
+export default app

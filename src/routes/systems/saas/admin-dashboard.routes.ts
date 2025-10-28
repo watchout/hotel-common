@@ -1,10 +1,12 @@
 import express from 'express';
-import { Request, Response } from 'express';
+
 import { verifyAdminAuth } from '../../../auth/middleware';
+import { hotelDb } from '../../../database';
+import { ResponseHelper } from '../../../standards/api-response-standards';
 import { HotelLogger } from '../../../utils/logger';
 import { StandardResponseBuilder } from '../../../utils/response-builder';
-import { ResponseHelper } from '../../../standards/api-response-standards';
-import { hotelDb } from '../../../database';
+
+import type { Request, Response } from 'express';
 
 const router = express.Router();
 const logger = HotelLogger.getInstance();
@@ -93,7 +95,7 @@ router.get('/api/v1/admin/summary', verifyAdminAuth, async (req: Request, res: R
 
     ResponseHelper.sendSuccess(res, { summary });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('サマリー統計取得エラー:', error);
     ResponseHelper.sendInternalError(res, 'サマリー統計取得に失敗しました');
   }
@@ -189,7 +191,7 @@ router.get('/api/v1/admin/dashboard/stats', verifyAdminAuth, async (req: Request
 
     return StandardResponseBuilder.success(res, stats);
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('ダッシュボード統計取得エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('DASHBOARD_STATS_ERROR', 
@@ -242,7 +244,7 @@ router.get('/api/v1/admin/devices/count', verifyAdminAuth, async (req: Request, 
 
     return StandardResponseBuilder.success(res, counts);
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('デバイス数統計取得エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('DEVICE_COUNT_ERROR', 
@@ -311,7 +313,7 @@ router.get('/api/v1/admin/orders/monthly-count', verifyAdminAuth, async (req: Re
       }
     });
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('月次注文数統計取得エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('MONTHLY_ORDER_COUNT_ERROR', 
@@ -424,7 +426,7 @@ router.get('/api/v1/admin/orders', verifyAdminAuth, async (req: Request, res: Re
       }
     }, 200, pagination);
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('管理者オーダー一覧取得エラー:', error);
     ResponseHelper.sendInternalError(res, '管理者オーダー一覧取得に失敗しました');
   }
@@ -495,7 +497,7 @@ router.get('/api/v1/admin/rankings', verifyAdminAuth, async (req: Request, res: 
 
     return StandardResponseBuilder.success(res, rankings);
 
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('ランキング統計取得エラー:', error);
     return res.status(500).json(
       StandardResponseBuilder.error('RANKINGS_ERROR', 

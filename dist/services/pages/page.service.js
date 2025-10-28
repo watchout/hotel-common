@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PageService = void 0;
+const uuid_1 = require("uuid");
 const prisma_1 = require("../../database/prisma");
 const logger_1 = require("../../utils/logger");
-const uuid_1 = require("uuid");
 const logger = logger_1.HotelLogger.getInstance();
 /**
  * ページ管理サービス

@@ -6,8 +6,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
 const http_1 = require("http");
+const express_1 = __importDefault(require("express"));
 const jwt_extension_1 = require("../hierarchy/jwt-extension");
 const app = (0, express_1.default)();
 const server = (0, http_1.createServer)(app);
@@ -202,7 +202,10 @@ app.get('/api/hotel-member/hierarchy/health', async (req, res) => {
     });
 });
 // エラーハンドラー
-app.use((error, req, res, next) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+app.use((error, req, res, _next) => {
     console.error('サーバーエラー:', error);
     res.status(500).json({
         error: 'INTERNAL_ERROR',

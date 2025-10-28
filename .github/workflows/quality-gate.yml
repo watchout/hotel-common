@@ -18,7 +18,12 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          # oxc-parser optionalDependencies問題の根本解決
+          # npm ciではoptionalDependenciesが正しくインストールされない既知のバグ
+          # https://github.com/npm/cli/issues/4828
+          rm -f package-lock.json
+          npm install --no-save
 
       - name: Lint
         run: npx eslint . --ext .ts,.tsx --max-warnings=0

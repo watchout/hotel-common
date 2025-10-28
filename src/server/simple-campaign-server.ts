@@ -1,6 +1,6 @@
-import express from 'express';
 import cors from 'cors';
 import { config } from 'dotenv';
+import express from 'express';
 
 // 環境変数読み込み
 config();
@@ -11,13 +11,16 @@ config();
  */
 class SimpleCampaignServer {
   private app: express.Application;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
   private server: any;
   private port: number;
 
   constructor() {
     this.app = express();
     this.port = parseInt(process.env.HOTEL_COMMON_PORT || '3400');
-    
+
     this.setupMiddleware();
     this.setupRoutes();
   }
@@ -103,7 +106,7 @@ class SimpleCampaignServer {
     // 管理者API - キャンペーン詳細取得
     this.app.get('/api/v1/admin/campaigns/:id', (req, res) => {
       const { id } = req.params;
-      
+
       if (id === '999') {
         return res.status(404).json({
           success: false,
@@ -111,7 +114,7 @@ class SimpleCampaignServer {
           message: 'キャンペーンが見つかりません'
         });
       }
-      
+
       res.json({
         success: true,
         data: {
@@ -148,7 +151,7 @@ class SimpleCampaignServer {
     this.app.put('/api/v1/admin/campaigns/:id', (req, res) => {
       const { id } = req.params;
       const updateData = req.body;
-      
+
       if (id === '999') {
         return res.status(404).json({
           success: false,
@@ -156,7 +159,7 @@ class SimpleCampaignServer {
           message: 'キャンペーンが見つかりません'
         });
       }
-      
+
       res.json({
         success: true,
         data: {
@@ -171,7 +174,7 @@ class SimpleCampaignServer {
     // 管理者API - キャンペーン削除
     this.app.delete('/api/v1/admin/campaigns/:id', (req, res) => {
       const { id } = req.params;
-      
+
       if (id === '999') {
         return res.status(404).json({
           success: false,
@@ -179,7 +182,7 @@ class SimpleCampaignServer {
           message: 'キャンペーンが見つかりません'
         });
       }
-      
+
       res.status(204).send();
     });
 
@@ -250,9 +253,12 @@ class SimpleCampaignServer {
         ]
       });
     });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
     // エラーハンドラー
-    this.app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.app.use((error: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {
       console.error('Server error:', error);
       res.status(500).json({
         error: 'INTERNAL_ERROR',
@@ -292,7 +298,7 @@ class SimpleCampaignServer {
       process.on('SIGINT', () => this.shutdown());
       process.on('SIGTERM', () => this.shutdown());
 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('サーバー起動エラー:', error);
       throw error;
     }
@@ -303,14 +309,14 @@ class SimpleCampaignServer {
    */
   private async shutdown(): Promise<void> {
     console.log('キャンペーンAPI簡易サーバー停止中...');
-    
+
     try {
       if (this.server) {
         this.server.close();
       }
       console.log('キャンペーンAPI簡易サーバー停止完了');
       process.exit(0);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('サーバー停止エラー:', error);
       process.exit(1);
     }
