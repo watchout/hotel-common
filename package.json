@@ -91,14 +91,5 @@
     "ts-node": "^10.9.0",
     "typescript": "^5.0.0",
     "typescript-eslint": "^7.18.0"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "eslint --no-inline-config --fix",
-      "eslint --no-inline-config --max-warnings=50"
-    ],
-    "*.{json,md,yml,yaml}": [
-      "prettier --write"
-    ]
   }
 }

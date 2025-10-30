@@ -1,15 +1,10 @@
-import axios, { AxiosResponse } from 'axios'
+import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 
-import { getTenantManager } from '../multitenancy/unified-tenant-manager'
+import { getTenantManager, type TenantContext } from '../multitenancy/unified-tenant-manager'
 import { HotelLogger } from '../utils/logger'
 import { getRedisClient } from '../utils/redis'
 
-// eslint-disable-next-line no-duplicate-imports
-// eslint-disable-next-line no-duplicate-imports
-// eslint-disable-next-line no-duplicate-imports
-import type { TenantContext } from '../multitenancy/unified-tenant-manager';
-// eslint-disable-next-line no-duplicate-imports
-import type { AxiosInstance, AxiosRequestConfig} from 'axios';
+// 余分な重複importコメント削除
 
 /**
  * 標準化されたAPIクライアント設定
@@ -37,7 +32,7 @@ export interface RetryConfig {
 
 /**
  * 標準化されたAPIクライアント
- * 
+ *
  * 機能:
  * - 統一認証ヘッダー
  * - テナントコンテキスト自動設定
@@ -52,7 +47,7 @@ export class StandardizedApiClient {
   private redis = getRedisClient()
   private tenantManager = getTenantManager()
   private config: StandardizedApiClientConfig
-  
+
   constructor(config: StandardizedApiClientConfig) {
     this.config = {
       timeout: 30000,
@@ -66,7 +61,7 @@ export class StandardizedApiClient {
         ...config.retryConfig
       }
     }
-    
+
     this.client = axios.create({
       baseURL: this.config.baseURL,
       timeout: this.config.timeout,
@@ -75,10 +70,10 @@ export class StandardizedApiClient {
         'Accept': 'application/json'
       }
     })
-    
+
     this.setupInterceptors()
   }
-  
+
   /**
    * インターセプター設定
    */
@@ -87,19 +82,19 @@ export class StandardizedApiClient {
     this.client.interceptors.request.use(
       async (config) => {
         const startTime = Date.now()
-        
+
         // テナントコンテキスト設定
         const tenantContext: TenantContext = {
           tenantId: this.config.tenantId,
           userId: this.config.userId,
           sourceSystem: this.config.sourceSystem,
           requestId: `req_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
         // 統一ヘッダー設定
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore - ヘッダーの型定義の問題
         config.headers = {
           ...config.headers,
@@ -107,52 +102,52 @@ export class StandardizedApiClient {
           'X-Source-System': tenantContext.sourceSystem,
           'X-Request-ID': tenantContext.requestId
         }
-        
+
         if (tenantContext.userId) {
           config.headers['X-User-ID'] = tenantContext.userId
         }
-        
+
         if (this.config.apiKey) {
           config.headers['X-API-Key'] = this.config.apiKey
         }
-        
+
         // リクエストログ
         this.logger.debug('API Request', {
           method: config.method,
           url: config.url,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           tenant: tenantContext.tenantId,
           requestId: tenantContext.requestId
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         })
-        
+
         // メトリクス用データ保存
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore - メタデータの型定義の問題
         config.metadata = {
           startTime,
           tenantContext,
           retryCount: 0
         }
-        
+
         return config
       },
       (error) => {
         this.logger.error('リクエスト準備エラー', error)
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return Promise.reject(error)
       }
     )
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     // レスポンスインターセプター
     this.client.interceptors.response.use(
       async (response) => {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const config = response.config as any
         const endTime = Date.now()
         const duration = endTime - config.metadata.startTime
-        
+
         // レスポンスログ
         this.logger.debug('API Response', {
           method: config.method,
@@ -162,19 +157,19 @@ export class StandardizedApiClient {
           tenant: config.metadata.tenantContext.tenantId,
           requestId: config.metadata.tenantContext.requestId
         })
-        
+
         // キャッシュ保存（GETリクエストのみ）
         if (this.config.enableCache && config.method === 'get') {
           await this.cacheResponse(config.url, response.data)
         }
-        
+
         // テナントアクセスログ記録
         await this.tenantManager.logTenantAccess(
           config.metadata.tenantContext,
           `API:${config.url}`,
           config.method
         )
-        
+
         // メトリクス記録
         this.recordMetrics({
           url: config.url,
@@ -184,7 +179,7 @@ export class StandardizedApiClient {
           tenantId: config.metadata.tenantContext.tenantId,
           retryCount: config.metadata.retryCount
         })
-        
+
         return response
       },
       async (error) => {
@@ -192,12 +187,12 @@ export class StandardizedApiClient {
           this.logger.error('API Error (No Config)', error)
           return Promise.reject(error)
         }
-        
+
         const config = error.config
         const endTime = Date.now()
         const duration = endTime - (config.metadata?.startTime || endTime)
         const retryCount = config.metadata?.retryCount || 0
-        
+
         // エラーログ
         this.logger.error('API Error', {
           method: config.method,
@@ -209,26 +204,26 @@ export class StandardizedApiClient {
           retryCount,
           error: error.message
         })
-        
+
         // リトライ処理
         if (this.shouldRetry(error, retryCount)) {
           config.metadata.retryCount = retryCount + 1
-          
+
           this.logger.info('API Retry', {
             method: config.method,
             url: config.url,
             attempt: config.metadata.retryCount,
             maxRetries: this.config.retryConfig?.maxRetries
           })
-          
+
           // 遅延を入れてリトライ
-          await new Promise(resolve => 
+          await new Promise(resolve =>
             setTimeout(resolve, this.calculateRetryDelay(retryCount))
           )
-          
+
           return this.client(config)
         }
-        
+
         // メトリクス記録（失敗）
         if (config.metadata?.tenantContext) {
           this.recordMetrics({
@@ -241,90 +236,90 @@ export class StandardizedApiClient {
             error: error.message
           })
         }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-        
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         return Promise.reject(error)
       }
     )
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }
-  
+
   /**
    * リトライ判断
    */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private shouldRetry(error: any, retryCount: number): boolean {
     // リトライ設定がなければリトライしない
     if (!this.config.retryConfig) return false
-    
+
     // 最大リトライ回数を超えていればリトライしない
     if (retryCount >= this.config.retryConfig.maxRetries) return false
-    
+
     // レスポンスがなければネットワークエラーとしてリトライ
     if (!error.response) return true
-    
+
     // 設定されたステータスコードならリトライ
     return this.config.retryConfig.retryableStatuses.includes(error.response.status)
   }
-  
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   /**
    * リトライ遅延計算（指数バックオフ）
    */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   private calculateRetryDelay(retryCount: number): number {
     const baseDelay = this.config.retryConfig?.retryDelay || 1000
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return baseDelay * Math.pow(2, retryCount)
   }
-  
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   /**
    * レスポンスキャッシュ
    */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async cacheResponse(url: string, data: any): Promise<void> {
     try {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const cacheKey = `api:${this.config.tenantId}:${url}`
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore - Redisクライアントの型定義の問題
       await this.redis.set(
         cacheKey,
         JSON.stringify(data)
       )
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: unknown) {
       this.logger.warn('キャッシュ保存エラー', error)
     }
   }
-  
+
   /**
    * キャッシュからデータ取得
    */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async getFromCache(url: string): Promise<any | null> {
     try {
       const cacheKey = `api:${this.config.tenantId}:${url}`
       const cached = await this.redis.get(cacheKey)
-      
+
       if (cached) {
         return JSON.parse(cached)
       }
-      
+
       return null
     } catch (error: unknown) {
       this.logger.warn('キャッシュ取得エラー', error)
       return null
     }
   }
-  
+
   /**
    * メトリクス記録
    */
   private recordMetrics(metrics: {
     url: string
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     method: string
     status: number
     duration: number
@@ -333,19 +328,19 @@ export class StandardizedApiClient {
     error?: string
   }): void {
     try {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       // メトリクス記録（実装は別途）
     } catch (error: unknown) {
       this.logger.warn('メトリクス記録エラー', error)
     }
   }
-  
+
   /**
    * GET リクエスト
    */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async get<T = any>(
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     url: string,
     config?: AxiosRequestConfig
   ): Promise<T> {
@@ -355,36 +350,36 @@ export class StandardizedApiClient {
       if (cached) {
         this.logger.debug('Cache Hit', { url, tenant: this.config.tenantId })
         return cached
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       }
     }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const response = await this.client.get<T>(url, config)
     return response.data
   }
-  
+
   /**
    * POST リクエスト
    */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async post<T = any, D = any>(
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     url: string,
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: D,
     config?: AxiosRequestConfig
   ): Promise<T> {
     const response = await this.client.post<T>(url, data, config)
     return response.data
   }
-  
+
   /**
    * PUT リクエスト
    */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async put<T = any, D = any>(
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     url: string,
     data?: D,
     config?: AxiosRequestConfig
@@ -392,12 +387,12 @@ export class StandardizedApiClient {
     const response = await this.client.put<T>(url, data, config)
     return response.data
   }
-  
+
   /**
    * PATCH リクエスト
    */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async patch<T = any, D = any>(
     url: string,
     data?: D,
@@ -406,11 +401,11 @@ export class StandardizedApiClient {
     const response = await this.client.patch<T>(url, data, config)
     return response.data
   }
-  
+
   /**
    * DELETE リクエスト
    */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async delete<T = any>(
     url: string,
     config?: AxiosRequestConfig

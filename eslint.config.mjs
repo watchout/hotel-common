@@ -82,6 +82,7 @@ export default tseslint.config(
       'dist/**',
       '.nuxt/**',
       '.output/**',
+      'src/generated/prisma/**',
       'lib/hotel-common/src/database/generated/prisma/**',
       'backups/**',
     ]

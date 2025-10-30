@@ -1,3 +1,11 @@
 #!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# 既存チェックスクリプト（package.jsonのpre-commit）
+npm run pre-commit
+
+# 変更ファイルに対してeslint/prettierを実行
+npx lint-staged
+#!/bin/sh
 
 npx lint-staged

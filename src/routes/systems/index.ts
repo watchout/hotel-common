@@ -1,6 +1,6 @@
 /**
  * システム別APIルーター統合エクスポート
- * 
+ *
  * ディレクトリ構成:
  * - systems/saas/     - SaaSシステム用API（管理画面、注文、デバイス）
  * - systems/pms/      - PMSシステム用API（予約、部屋管理）
@@ -12,7 +12,10 @@
 export * from './common'
 
 // SaaSシステムAPI
-export * from './saas'
+export { default as adminDashboardRouter } from './saas/admin-dashboard.routes'
+export { default as deviceStatusRouter } from './saas/device-status.routes'
+export { default as deviceRouter } from './saas/device.routes'
+export { default as ordersRouter } from './saas/orders.routes'
 
 // Memberシステムapi
 export * from './member'

@@ -88,6 +88,12 @@ const StaffBulkDeleteSchema = z.object({
  */
 router.get('/staff', sessionAuthMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
+    const tenantId = req.user?.tenant_id;
+    if (!tenantId) {
+      return res.status(401).json(
+        StandardResponseBuilder.error('UNAUTHORIZED', 'Authentication required').response
+      );
+    }
     // UTF-8エンコーディング対応
     if (req.query.search && typeof req.query.search === 'string') {
       try {
@@ -120,7 +126,7 @@ router.get('/staff', sessionAuthMiddleware, requireStaffManagementPermission, as
 
     // 拡張検索条件構築
     const where = buildStaffSearchWhere({
-      tenantId: req.user?.tenant_id!,
+      tenantId: tenantId,
       search,
       email,
       departmentCode,
@@ -163,7 +169,7 @@ router.get('/staff', sessionAuthMiddleware, requireStaffManagementPermission, as
     // Repository経由で取得
     const repo = new StaffRepository();
     const result = await repo.list({
-      tenantId: req.user?.tenant_id!,
+      tenantId: tenantId,
       page,
       pageSize: limitedPageSize,
       search,
@@ -219,6 +225,12 @@ router.get('/staff', sessionAuthMiddleware, requireStaffManagementPermission, as
  */
 router.patch('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
+    const tenantId = req.user?.tenant_id;
+    if (!tenantId) {
+      return res.status(401).json(
+        StandardResponseBuilder.error('UNAUTHORIZED', 'Authentication required').response
+      );
+    }
     const data = StaffBulkUpdateSchema.parse(req.body);
     const { staffIds, updates } = data;
 
@@ -233,8 +245,8 @@ router.patch('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission, 
     const existingStaff = await hotelDb.getAdapter().staff.findMany({
       where: {
         id: { in: staffIds },
-        tenant_id: req.user?.tenant_id!,
-        is_deleted: false
+        is_deleted: false,
+        staff_tenant_memberships: { some: { tenant_id: tenantId } }
       }
     });
 
@@ -259,10 +271,14 @@ router.patch('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission, 
 
     // 権限チェック
     const managerRole = req.user?.role || 'staff';
-    const unauthorizedStaff = existingStaff.filter(staff =>
-      !canManageStaff(managerRole, (staff as any)?.role ?? 'staff') ||
-      (updates.role && !canManageStaff(managerRole, updates.role))
-    );
+    const unauthorizedStaff = existingStaff.filter((staff) => {
+      const roleRaw = (staff as unknown as Record<string, unknown>)['role'];
+      const roleStr = typeof roleRaw === 'string' ? roleRaw : 'staff';
+      return (
+        !canManageStaff(managerRole, roleStr) ||
+        (updates.role && !canManageStaff(managerRole, updates.role))
+      );
+    });
 
     if (unauthorizedStaff.length > 0) {
       return res.status(403).json(
@@ -288,7 +304,7 @@ router.patch('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission, 
     await hotelDb.getAdapter().systemEvent.create({
       data: {
         id: `staff-bulk-update-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         user_id: req.user?.user_id,
         event_type: 'USER_OPERATION',
         source_system: 'hotel-common',
@@ -342,6 +358,12 @@ router.patch('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission, 
  */
 router.delete('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
+    const tenantId = req.user?.tenant_id;
+    if (!tenantId) {
+      return res.status(401).json(
+        StandardResponseBuilder.error('UNAUTHORIZED', 'Authentication required').response
+      );
+    }
     const data = StaffBulkDeleteSchema.parse(req.body);
     const { staffIds, soft } = data;
 
@@ -353,7 +375,13 @@ router.delete('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission,
     });
 
     // 自分自身が含まれていないかチェック
-    if (staffIds.includes(req.user?.user_id!)) {
+    const requesterUserId = req.user?.user_id;
+    if (!requesterUserId) {
+      return res.status(401).json(
+        StandardResponseBuilder.error('UNAUTHORIZED', 'Authentication required').response
+      );
+    }
+    if (staffIds.includes(requesterUserId)) {
       return res.status(400).json(
         StandardResponseBuilder.error('CANNOT_DELETE_SELF', '自分自身を削除対象に含めることはできません').response
       );
@@ -363,8 +391,8 @@ router.delete('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission,
     const existingStaff = await hotelDb.getAdapter().staff.findMany({
       where: {
         id: { in: staffIds },
-        tenant_id: req.user?.tenant_id!,
-        is_deleted: false
+        is_deleted: false,
+        staff_tenant_memberships: { some: { tenant_id: tenantId } }
       }
     });
 
@@ -382,7 +410,11 @@ router.delete('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission,
 
     // 権限チェック
     const managerRole = req.user?.role || 'staff';
-    const unauthorizedStaff = existingStaff.filter(staff => !canManageStaff(managerRole, staff.role));
+    const unauthorizedStaff = existingStaff.filter(staff => {
+      const role = (staff as unknown as Record<string, unknown>)['role'];
+      const roleStr = typeof role === 'string' ? role : 'staff';
+      return !canManageStaff(managerRole, roleStr);
+    });
 
     if (unauthorizedStaff.length > 0) {
       return res.status(403).json(
@@ -418,7 +450,7 @@ router.delete('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission,
     await hotelDb.getAdapter().systemEvent.create({
       data: {
         id: `staff-bulk-delete-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         user_id: req.user?.user_id,
         event_type: 'USER_OPERATION',
         source_system: 'hotel-common',
@@ -430,12 +462,15 @@ router.delete('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission,
           affectedStaffIds: staffIds,
           affectedCount: deleteResult.count,
           softDelete: soft,
-          deletedStaff: existingStaff.map(s => ({
-            id: s.id,
-            email: s.email,
-            name: s.name,
-            role: (s as any)?.role ?? null
-          }))
+          deletedStaff: existingStaff.map((s) => {
+            const roleRaw = (s as unknown as Record<string, unknown>)['role'];
+            return {
+              id: s.id,
+              email: s.email,
+              name: s.name,
+              role: typeof roleRaw === 'string' ? roleRaw : null
+            };
+          })
         },
         status: 'COMPLETED'
       }
@@ -481,6 +516,12 @@ router.delete('/staff/bulk', sessionAuthMiddleware, requireStaffAdminPermission,
 router.get('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const { id } = req.params;
+    const tenantId = req.user?.tenant_id;
+    if (!tenantId) {
+      return res.status(401).json(
+        StandardResponseBuilder.error('UNAUTHORIZED', 'Authentication required').response
+      );
+    }
 
     logger.info('Staff detail request', {
       userId: req.user?.user_id,
@@ -492,9 +533,16 @@ router.get('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermission
     const staff = await hotelDb.getAdapter().staff.findFirst({
       where: {
         id,
-        tenant_id: req.user?.tenant_id!,
-        is_deleted: false
-      }
+        is_deleted: false,
+        staff_tenant_memberships: { some: { tenant_id: tenantId } }
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        is_active: true,
+        // role/departmentはスキーマにないため取得しない
+      } as unknown as Record<string, unknown>
     });
 
     if (!staff) {
@@ -537,6 +585,12 @@ router.get('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermission
 router.post('/staff', sessionAuthMiddleware, requireStaffAdminPermission, async (req: Request & { user?: any }, res: Response) => {
   try {
     const data = StaffCreateSchema.parse(req.body);
+    const tenantId = req.user?.tenant_id;
+    if (!tenantId) {
+      return res.status(401).json(
+        StandardResponseBuilder.error('UNAUTHORIZED', 'Authentication required').response
+      );
+    }
 
     logger.info('Staff create request', {
       userId: req.user?.user_id,
@@ -566,7 +620,7 @@ router.post('/staff', sessionAuthMiddleware, requireStaffAdminPermission, async 
     const emailExists = await checkEmailExists(
       hotelDb.getAdapter(),
       data.email,
-      req.user?.tenant_id!
+      tenantId
     );
 
     if (emailExists) {
@@ -584,14 +638,21 @@ router.post('/staff', sessionAuthMiddleware, requireStaffAdminPermission, async 
     }
 
     // スタッフデータ準備
+    const requesterUserId = req.user?.user_id;
+    if (!requesterUserId) {
+      return res.status(401).json(
+        StandardResponseBuilder.error('UNAUTHORIZED', 'Authentication required').response
+      );
+    }
+
     const staffData = await prepareStaffCreateData({
       email: data.email,
       password: data.password,
       name: data.name,
       role: data.role,
       department: data.department,
-      tenantId: req.user?.tenant_id!,
-      createdBy: req.user?.user_id!
+      tenantId: tenantId,
+      createdBy: requesterUserId
     });
 
     // スタッフ作成
@@ -603,7 +664,7 @@ router.post('/staff', sessionAuthMiddleware, requireStaffAdminPermission, async 
     await hotelDb.getAdapter().systemEvent.create({
       data: {
         id: `staff-create-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         user_id: req.user?.user_id,
         event_type: 'USER_OPERATION',
         source_system: 'hotel-common',
@@ -614,8 +675,8 @@ router.post('/staff', sessionAuthMiddleware, requireStaffAdminPermission, async 
         event_data: {
           email: createdStaff.email,
           name: createdStaff.name,
-          role: createdStaff.role,
-          department: createdStaff.department
+          role: (() => { const v = (createdStaff as unknown as Record<string, unknown>)['role']; return typeof v === 'string' ? v : null })(),
+          department: (() => { const v = (createdStaff as unknown as Record<string, unknown>)['department']; return typeof v === 'string' ? v : null })()
         },
         status: 'COMPLETED'
       }
@@ -657,6 +718,12 @@ router.patch('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermissi
   try {
     const { id } = req.params;
     const data = StaffUpdateSchema.parse(req.body);
+    const tenantId = req.user?.tenant_id;
+    if (!tenantId) {
+      return res.status(401).json(
+        StandardResponseBuilder.error('UNAUTHORIZED', 'Authentication required').response
+      );
+    }
 
     logger.info('Staff update request', {
       userId: req.user?.user_id,
@@ -669,8 +736,8 @@ router.patch('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermissi
     const existingStaff = await hotelDb.getAdapter().staff.findFirst({
       where: {
         id,
-        tenant_id: req.user?.tenant_id!,
-        is_deleted: false
+        is_deleted: false,
+        staff_tenant_memberships: { some: { tenant_id: tenantId } }
       }
     });
 
@@ -687,10 +754,13 @@ router.patch('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermissi
 
     // 権限チェック（自分より上位レベルのスタッフは更新不可）
     const managerRole = req.user?.role || 'staff';
-    if (!canManageStaff(managerRole, (existingStaff as any)?.role ?? 'staff')) {
+    {
+      const targetRoleRaw = (existingStaff as unknown as Record<string, unknown>)['role'];
+      const targetRole = typeof targetRoleRaw === 'string' ? targetRoleRaw : 'staff';
+      if (!canManageStaff(managerRole, targetRole)) {
       logger.warn('Insufficient permission to update higher level staff', {
         managerRole,
-        targetRole: existingStaff.role,
+        targetRole,
         userId: req.user?.user_id,
         targetStaffId: id
       });
@@ -701,7 +771,7 @@ router.patch('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermissi
           '自分より上位レベルのスタッフは更新できません'
         ).response
       );
-    }
+    }}
 
     // roleが変更される場合の権限チェック
     if (data.role && !canManageStaff(managerRole, data.role)) {
@@ -731,7 +801,7 @@ router.patch('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermissi
 
     // スタッフ更新
     const updatedStaff = await hotelDb.getAdapter().staff.update({
-      where: { id },
+      where: ({ id } as any),
       data: updateData
     });
 
@@ -739,7 +809,7 @@ router.patch('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermissi
     await hotelDb.getAdapter().systemEvent.create({
       data: {
         id: `staff-update-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         user_id: req.user?.user_id,
         event_type: 'USER_OPERATION',
         source_system: 'hotel-common',
@@ -751,8 +821,8 @@ router.patch('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermissi
           updatedFields: Object.keys(data),
           previousData: {
             name: existingStaff.name,
-            role: (existingStaff as any)?.role ?? null,
-            department: (existingStaff as any)?.department ?? null,
+            role: (() => { const v = (existingStaff as unknown as Record<string, unknown>)['role']; return typeof v === 'string' ? v : null })(),
+            department: (() => { const v = (existingStaff as unknown as Record<string, unknown>)['department']; return typeof v === 'string' ? v : null })(),
             is_active: existingStaff.is_active
           },
           newData: updateData
@@ -761,7 +831,7 @@ router.patch('/staff/:id', sessionAuthMiddleware, requireStaffManagementPermissi
       }
     });
 
-    const response = mapStaffToApiResponse(updatedStaff);
+    const response = mapStaffToApiResponse(updatedStaff as unknown);
 
     logger.info('Staff updated successfully', {
       userId: req.user?.user_id,
@@ -798,6 +868,12 @@ router.delete('/staff/:id', sessionAuthMiddleware, requireStaffAdminPermission, 
     const { id } = req.params;
     const { soft = 'true' } = req.query;
     const isSoftDelete = soft === 'true';
+    const tenantId = req.user?.tenant_id;
+    if (!tenantId) {
+      return res.status(401).json(
+        StandardResponseBuilder.error('UNAUTHORIZED', 'Authentication required').response
+      );
+    }
 
     logger.info('Staff delete request', {
       userId: req.user?.user_id,
@@ -810,8 +886,8 @@ router.delete('/staff/:id', sessionAuthMiddleware, requireStaffAdminPermission, 
     const existingStaff = await hotelDb.getAdapter().staff.findFirst({
       where: {
         id,
-        tenant_id: req.user?.tenant_id!,
-        is_deleted: false
+        is_deleted: false,
+        staff_tenant_memberships: { some: { tenant_id: tenantId } }
       }
     });
 
@@ -840,10 +916,13 @@ router.delete('/staff/:id', sessionAuthMiddleware, requireStaffAdminPermission, 
 
     // 権限チェック（自分より上位レベルのスタッフは削除不可）
     const managerRole = req.user?.role || 'staff';
-    if (!canManageStaff(managerRole, existingStaff.role)) {
+    {
+      const roleRaw = (existingStaff as unknown as Record<string, unknown>)['role'];
+      const roleStr = typeof roleRaw === 'string' ? roleRaw : 'staff';
+      if (!canManageStaff(managerRole, roleStr)) {
       logger.warn('Insufficient permission to delete higher level staff', {
         managerRole,
-        targetRole: existingStaff.role,
+        targetRole: roleStr,
         userId: req.user?.user_id,
         targetStaffId: id
       });
@@ -854,7 +933,7 @@ router.delete('/staff/:id', sessionAuthMiddleware, requireStaffAdminPermission, 
           '自分より上位レベルのスタッフは削除できません'
         ).response
       );
-    }
+    }}
 
     let deletedAt: Date | null = null;
 
@@ -881,7 +960,7 @@ router.delete('/staff/:id', sessionAuthMiddleware, requireStaffAdminPermission, 
     await hotelDb.getAdapter().systemEvent.create({
       data: {
         id: `staff-delete-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         user_id: req.user?.user_id,
         event_type: 'USER_OPERATION',
         source_system: 'hotel-common',
@@ -893,8 +972,8 @@ router.delete('/staff/:id', sessionAuthMiddleware, requireStaffAdminPermission, 
           deletedStaff: {
             email: existingStaff.email,
             name: existingStaff.name,
-            role: existingStaff.role,
-            department: existingStaff.department
+            role: (existingStaff as unknown as Record<string, unknown>)['role'] ?? null,
+            department: (existingStaff as unknown as Record<string, unknown>)['department'] ?? null
           },
           softDelete: isSoftDelete
         },

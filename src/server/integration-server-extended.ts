@@ -12,7 +12,7 @@ import hotelMemberApiRouter from '../integrations/hotel-member/api-endpoints';
 import pageRoutes from '../routes/systems/common/page.routes';
 import ordersRouter from '../routes/systems/saas/orders.routes';
 
-import type { PrismaClient } from '@prisma/client';
+import type { PrismaClient } from '../generated/prisma';
 // eslint-disable-next-line no-duplicate-imports
 // eslint-disable-next-line no-duplicate-imports
 // eslint-disable-next-line no-duplicate-imports

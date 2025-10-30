@@ -2,16 +2,16 @@
  * Google Playアプリ選択機能のサービス実装
  */
 
-import type { 
-  GooglePlayAppCreateInput, 
-  GooglePlayAppUpdateInput,
+import type { PrismaClient } from '../../generated/prisma';
+import type {
+  GooglePlayAppCreateInput,
   GooglePlayAppListQuery,
+  GooglePlayAppUpdateInput,
   HotelAppCreateInput,
-  HotelAppUpdateInput,
   HotelAppListQuery,
+  HotelAppUpdateInput,
   LayoutAppBlockUpdateInput
 } from './types';
-import type { PrismaClient } from '@prisma/client';
 
 
 export class AppLauncherService {
@@ -29,11 +29,11 @@ export class AppLauncherService {
     const skip = (page - 1) * limit;
 
     const where: any = {};
-    
+
     if (category) {
       where.category = category;
     }
-    
+
     if (approved !== undefined) {
       where.isApproved = approved;
     }
@@ -114,9 +114,9 @@ export class AppLauncherService {
    */
   async listHotelApps(placeId: number, query: HotelAppListQuery = {}) {
     const { isEnabled } = query;
-    
+
     const where: any = { placeId };
-    
+
     if (isEnabled !== undefined) {
       where.isEnabled = isEnabled;
     }
@@ -206,7 +206,7 @@ export class AppLauncherService {
    */
   async updateLayoutAppBlock(data: LayoutAppBlockUpdateInput) {
     const { layoutId, blockId, appConfig } = data;
-    
+
     // 一意のIDを生成
     const id = `${layoutId}-${blockId}`;
 

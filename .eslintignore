@@ -1,9 +1,17 @@
-dist
-node_modules
-coverage
-backups/prisma/**
+# Build output
+dist/**
+build/**
+node_modules/**
+coverage/**
+
+# Prisma自動生成ファイル
+src/generated/prisma/**
 **/@prisma/client/**
 prisma/generated/**
+
+# バックアップディレクトリ
+backups/**
+backup/**
 
 
 

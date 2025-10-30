@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+// PrismaClient 型の直接参照は不要のため削除
 import { v4 as uuidv4 } from 'uuid';
 
 import { hotelDb } from '../../database/index';
@@ -45,7 +45,7 @@ export class ResponseNodeRepository {
       translations: undefined
     };
   }
-  
+
   /**
    * 子ノード一覧を取得
    */
@@ -88,7 +88,7 @@ export class ResponseNodeRepository {
       };
     });
   }
-  
+
   /**
    * ノード検索
    */
