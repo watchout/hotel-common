@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+// PrismaClient 型の直接参照は不要のため削除
 import { v4 as uuidv4 } from 'uuid';
 
 import { hotelDb } from '../../database/index';
@@ -22,18 +22,18 @@ export class ResponseMobileLinkRepository {
       where: { sessionId: data.sessionId },
       select: { id: true }
     });
-    
+
     if (!session) {
       throw new Error('Session not found');
     }
-    
+
     // 6桁のランダムコードを生成
     const linkCode = generateRandomString(6, 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789');
-    
+
     // 有効期限を設定（デフォルト60分）
     const expiresAt = new Date();
     expiresAt.setMinutes(expiresAt.getMinutes() + (data.expiresInMinutes || 60));
-    
+
     return hotelDb.getAdapter().responseTreeMobileLink.create({
       data: {
         id: uuidv4(),
@@ -46,13 +46,13 @@ export class ResponseMobileLinkRepository {
       }
     });
   }
-  
+
   /**
    * モバイル連携を取得
    */
   async findMobileLinkByCode(linkCode: string): Promise<any> {
     const now = new Date();
-    
+
     return hotelDb.getAdapter().responseTreeMobileLink.findFirst({
       where: {
         qrCodeData: `rt:${linkCode}`,
@@ -69,7 +69,7 @@ export class ResponseMobileLinkRepository {
       }
     });
   }
-  
+
   /**
    * モバイル連携を実行
    */
@@ -78,7 +78,7 @@ export class ResponseMobileLinkRepository {
     deviceInfo?: any;
   }): Promise<any> {
     const now = new Date();
-    
+
     const link = await hotelDb.getAdapter().responseTreeMobileLink.findFirst({
       where: {
         qrCodeData: `rt:${linkCode}`,
@@ -86,13 +86,13 @@ export class ResponseMobileLinkRepository {
       },
       select: { id: true }
     });
-    
+
     if (!link) {
       return null;
     }
-    
+
     const connectionId = uuidv4();
-    
+
     return hotelDb.getAdapter().responseTreeMobileLink.update({
       where: { id: link.id },
       data: {
@@ -100,7 +100,7 @@ export class ResponseMobileLinkRepository {
       }
     });
   }
-  
+
   /**
    * モバイル連携を無効化
    */

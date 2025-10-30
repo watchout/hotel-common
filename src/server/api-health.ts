@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client'
 import express from 'express'
+import { PrismaClient } from '../generated/prisma'
 
 /**
  * /api/health エンドポイント用のルーター
@@ -17,17 +17,17 @@ apiHealthRouter.get('/api/health', async (req, res) => {
   try {
     // データベース接続テスト
     await prisma.$queryRaw`SELECT 1 as connection_test`
-    
+
     // レスポンスヘッダー設定（CORS）
-    res.header('Access-Control-Allow-Origin', 
-      req.headers.origin === 'http://localhost:3100' || 
-      req.headers.origin === 'http://localhost:3200' || 
-      req.headers.origin === 'http://localhost:3300' ? 
-      req.headers.origin : 'http://localhost:3100')
+    res.header('Access-Control-Allow-Origin',
+      req.headers.origin === 'http://localhost:3100' ||
+        req.headers.origin === 'http://localhost:3200' ||
+        req.headers.origin === 'http://localhost:3300' ?
+        req.headers.origin : 'http://localhost:3100')
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
     res.header('Access-Control-Allow-Credentials', 'true')
-    
+
     // 正常レスポンス
     res.status(200).json({
       status: 'healthy',
@@ -49,7 +49,7 @@ apiHealthRouter.get('/api/health', async (req, res) => {
     })
   } catch (error: unknown) {
     console.error('Health check error:', error)
-    
+
     // エラーレスポンス
     res.status(500).json({
       status: 'error',
@@ -66,11 +66,11 @@ apiHealthRouter.get('/api/health', async (req, res) => {
 
 // OPTIONSリクエスト対応（CORS プリフライトリクエスト）
 apiHealthRouter.options('/api/health', (req, res) => {
-  res.header('Access-Control-Allow-Origin', 
-    req.headers.origin === 'http://localhost:3100' || 
-    req.headers.origin === 'http://localhost:3200' || 
-    req.headers.origin === 'http://localhost:3300' ? 
-    req.headers.origin : 'http://localhost:3100')
+  res.header('Access-Control-Allow-Origin',
+    req.headers.origin === 'http://localhost:3100' ||
+      req.headers.origin === 'http://localhost:3200' ||
+      req.headers.origin === 'http://localhost:3300' ?
+      req.headers.origin : 'http://localhost:3100')
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization')
   res.header('Access-Control-Allow-Credentials', 'true')

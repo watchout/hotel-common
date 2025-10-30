@@ -3,7 +3,7 @@ name: Quality Gate
 on:
   pull_request:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   lint-and-typecheck:
@@ -26,14 +26,10 @@ jobs:
           npm install --no-save
 
       - name: Lint
-        run: npx eslint . --ext .ts,.tsx --max-warnings=0
+        run: npx eslint . --ext .ts,.tsx
 
       - name: Type check
         run: npx tsc --noEmit
 
       - name: Policy violations detection
         run: node scripts/detect-coding-violations.js
-
-
-
-

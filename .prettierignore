@@ -1,6 +1,16 @@
-dist
-node_modules
-coverage
+# Build output
+dist/**
+build/**
+node_modules/**
+coverage/**
+
+# Auto-generated files
+src/generated/prisma/**
+**/@prisma/client/**
+
+# Backup directories
+backup/**
+backups/**
 
 
 

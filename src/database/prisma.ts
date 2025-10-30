@@ -1,7 +1,6 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../generated/prisma';
 
 import { createPrismaAdapter } from './prisma-adapter';
-import { setupSoftDeleteMiddleware } from './soft-delete-middleware';
 
 // eslint-disable-next-line no-duplicate-imports
 // eslint-disable-next-line no-duplicate-imports
@@ -21,10 +20,10 @@ export class HotelDatabaseClient {
     this.prisma = new PrismaClient({
       log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
     });
-    
+
     // ソフトデリートミドルウェアを設定（一時的に無効化）
     // setupSoftDeleteMiddleware(this.prisma);
-    
+
     this.adapter = createPrismaAdapter(this.prisma);
   }
 
@@ -58,9 +57,9 @@ export class HotelDatabaseClient {
    * トランザクションを実行
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
    */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public async transaction<T>(
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fn: (tx: any) => Promise<T>,
     options?: Parameters<PrismaClient['$transaction']>[1]
   ): Promise<T> {
@@ -104,13 +103,13 @@ export const hotelDb = HotelDatabaseClient.getInstance();
 // 便利なヘルパー関数
 export function getHotelDb(): HotelDatabaseClient {
   return HotelDatabaseClient.getInstance();
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 // トランザクション用のヘルパー関数
 export async function withTransaction<T>(
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fn: (tx: any) => Promise<T>,
   options?: Parameters<PrismaClient['$transaction']>[1]
 ): Promise<T> {

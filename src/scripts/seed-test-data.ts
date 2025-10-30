@@ -1,11 +1,10 @@
 // seed-test-data.ts
 import * as readline from 'readline';
 
-import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
+import { PrismaClient } from '../generated/prisma';
 
-import { hotelDb } from '../database/prisma';
 
 
 /**
@@ -36,36 +35,36 @@ async function confirmDatabaseOperation(message: string): Promise<boolean> {
  */
 async function seedTestData() {
   console.log('🌱 テストデータのシード開始...');
-  
+
   // データベース操作の確認
   const confirmed = await confirmDatabaseOperation(
     'このスクリプトはPrismaを使用してデータベースにテストデータを挿入します。\n' +
     'これはスキーマ定義に基づいた操作ですが、既存データに影響する可能性があります。\n' +
     '続行しますか？'
   );
-  
+
   if (!confirmed) {
     return;
   }
-  
+
   // Prismaクライアントを直接使用（一部のSQL操作用）
   const prisma = new PrismaClient();
-  
+
   try {
     // 1. テナントの作成
     console.log('🏢 テナントを確認・作成中...');
-    
+
     // 既存テナントの確認
     const existingTenants = await prisma.tenant.findMany();
     let defaultTenant;
     let testTenant;
-    
+
     if (existingTenants.length > 0) {
       // 既存テナントを使用
       defaultTenant = existingTenants.find(t => t.name === 'デフォルトホテル') || existingTenants[0];
-      testTenant = existingTenants.find(t => t.name === 'テスト用ホテル') || 
-                  (existingTenants.length > 1 ? existingTenants[1] : existingTenants[0]);
-      
+      testTenant = existingTenants.find(t => t.name === 'テスト用ホテル') ||
+        (existingTenants.length > 1 ? existingTenants[1] : existingTenants[0]);
+
       console.log(`ℹ️ 既存テナントを使用: ${existingTenants.length}件`);
     } else {
       // 新規テナント作成
@@ -82,7 +81,7 @@ async function seedTestData() {
           // createdAt: new Date() // 自動生成されるためコメントアウト
         }
       });
-      
+
       testTenant = await prisma.tenant.create({
         data: {
           id: 'test-tenant',
@@ -96,31 +95,31 @@ async function seedTestData() {
           // createdAt: new Date() // 自動生成されるためコメントアウト
         }
       });
-      
+
       console.log('✅ テナント作成完了');
     }
-    
+
     console.log(`📋 使用テナント: デフォルト=${defaultTenant.name}(${defaultTenant.id}), テスト=${testTenant.name}(${testTenant.id})`);
-    
+
     // 2. プレイスの作成 - スキップ（適切なモデルが見つからないため）
     console.log('🏨 プレイスを確認・作成中...');
     console.log(`ℹ️ プレイス作成はスキップします（適切なモデルが見つからないため）`);
-    
+
     // 3. デバイスの作成
     console.log('📱 デバイスを確認・作成中...');
-    
+
     // 既存デバイスの確認
     const existingDefaultDevices = await prisma.device_rooms.count({
       where: { tenantId: defaultTenant.id }
     });
-    
+
     const existingTestDevices = await prisma.device_rooms.count({
       where: { tenantId: testTenant.id }
     });
-    
+
     let defaultDevicesCreated = 0;
     let testDevicesCreated = 0;
-    
+
     // デフォルトテナント用デバイス
     if (existingDefaultDevices === 0) {
       // デバイスルームを作成
@@ -185,7 +184,7 @@ async function seedTestData() {
     } else {
       console.log(`ℹ️ デフォルトテナント用の既存デバイスを使用: ${existingDefaultDevices}件`);
     }
-    
+
     // テスト用テナント用デバイス
     if (existingTestDevices === 0) {
       const testDevices = await Promise.all([
@@ -237,10 +236,10 @@ async function seedTestData() {
     // 4. スタッフの作成（既存のスタッフテーブルがある場合）
     try {
       console.log('👤 スタッフを確認・作成中...');
-      
+
       // 既存スタッフの確認
       const staffCount = await prisma.$executeRaw`SELECT COUNT(*) FROM staff`;
-      
+
       if (staffCount === 0) {
         // 直接SQLを実行する前に確認
         const sqlConfirmed = await confirmDatabaseOperation(
@@ -248,13 +247,13 @@ async function seedTestData() {
           'これはPrismaモデルが正しく定義されていない場合に使用する例外的な操作です。\n' +
           '続行しますか？'
         );
-        
+
         if (!sqlConfirmed) {
           console.log('ℹ️ スタッフデータの作成をスキップします。');
         } else {
           await prisma.$executeRaw`
             INSERT INTO staff (id, tenant_id, email, password_hash, role, name, created_at, updated_at)
-            VALUES 
+            VALUES
               (${uuidv4()}, ${defaultTenant.id}, 'admin@example.com', ${await bcrypt.hash('admin123', 10)}, 'admin', '管理者', ${new Date()}, ${new Date()}),
               (${uuidv4()}, ${defaultTenant.id}, 'staff@example.com', ${await bcrypt.hash('staff123', 10)}, 'staff', 'スタッフ', ${new Date()}, ${new Date()}),
               (${uuidv4()}, ${testTenant.id}, 'test@example.com', ${await bcrypt.hash('test123', 10)}, 'admin', 'テスト管理者', ${new Date()}, ${new Date()})
@@ -271,7 +270,7 @@ async function seedTestData() {
     // 5. システムプランの作成 - スキップ（スキーマの不一致のため）
     console.log('📋 システムプランを確認・作成中...');
     console.log('ℹ️ システムプラン作成はスキップします（スキーマの不一致のため）');
-    
+
     console.log('🌱 テストデータのシード完了');
   } catch (error: unknown) {
     console.error('❌ テストデータのシード中にエラーが発生しました:', error);

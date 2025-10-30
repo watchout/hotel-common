@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+// PrismaClient 型の直接参照は不要のため削除
 import { v4 as uuidv4 } from 'uuid';
 
 import { hotelDb } from '../../database/index';
@@ -18,7 +18,7 @@ export class ResponseSessionRepository {
     interfaceType: string;
   }): Promise<any> {
     const sessionId = uuidv4();
-    
+
     return hotelDb.getAdapter().responseTreeSession.create({
       data: {
         sessionId,
@@ -31,7 +31,7 @@ export class ResponseSessionRepository {
       }
     });
   }
-  
+
   /**
    * セッションを取得
    */
@@ -68,7 +68,7 @@ export class ResponseSessionRepository {
       }
     });
   }
-  
+
   /**
    * セッションを更新
    */
@@ -82,7 +82,7 @@ export class ResponseSessionRepository {
       data
     });
   }
-  
+
   /**
    * セッション履歴を追加
    */
@@ -95,11 +95,11 @@ export class ResponseSessionRepository {
       where: { sessionId: data.sessionId },
       select: { id: true }
     });
-    
+
     if (!session) {
       throw new Error('Session not found');
     }
-    
+
     return hotelDb.getAdapter().responseTreeHistory.create({
       data: {
         id: uuidv4(),
@@ -110,7 +110,7 @@ export class ResponseSessionRepository {
       }
     });
   }
-  
+
   /**
    * セッション履歴を取得
    */
@@ -119,11 +119,11 @@ export class ResponseSessionRepository {
       where: { sessionId },
       select: { id: true }
     });
-    
+
     if (!session) {
       return [];
     }
-    
+
     return hotelDb.getAdapter().responseTreeHistory.findMany({
       where: { sessionId: session.id },
       include: {
@@ -140,13 +140,13 @@ export class ResponseSessionRepository {
       take: limit
     });
   }
-  
+
   /**
    * セッションを終了
    */
   async endSession(sessionId: string): Promise<any> {
     const now = new Date();
-    
+
     const session = await hotelDb.getAdapter().responseTreeSession.findFirst({
       where: { sessionId },
       select: {
@@ -154,11 +154,11 @@ export class ResponseSessionRepository {
         startedAt: true
       }
     });
-    
+
     if (!session) {
       return null;
     }
-    
+
     await hotelDb.getAdapter().responseTreeSession.update({
       where: { id: session.id },
       data: {
@@ -166,7 +166,7 @@ export class ResponseSessionRepository {
         lastActivityAt: now
       }
     });
-    
+
     return {
       sessionId,
       startedAt: session.startedAt,
