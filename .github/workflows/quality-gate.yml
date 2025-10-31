@@ -26,7 +26,7 @@ jobs:
           npm install --no-save
 
       - name: Lint
-        run: npx eslint . --ext .ts,.tsx
+        run: npx eslint . --ext .ts,.tsx --max-warnings=3500
 
       - name: Type check
         run: npx tsc --noEmit
