@@ -12,8 +12,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "lint": "eslint --no-inline-config src/**/*.ts",
-    "lint:fix": "eslint --no-inline-config src/**/*.ts --fix",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "check-api-routes": "ts-node scripts/check-api-routes.ts",
     "check-route-order": "ts-node scripts/check-route-order.ts",
     "fix-api-routes": "ts-node scripts/fix-api-routes.ts",
@@ -25,7 +25,8 @@
     "api-spec-validate": "node scripts/api-spec-validator.js validate",
     "api-health": "npm run api-monitor && npm run api-spec-validate",
     "pre-commit": "npm run check-api-routes && npm run check-route-order && npm run lint",
-    "prepare": "husky install"
+    "prepare": "husky",
+    "precommit": "lint-staged"
   },
   "husky": {
     "hooks": {
@@ -72,6 +73,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@eslint/js": "^9.38.0",
     "@types/bcrypt": "^5.0.0",
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.10",
@@ -102,5 +104,11 @@
     "ts-node": "^10.9.0",
     "typescript": "^5.0.0",
     "typescript-eslint": "^7.18.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }

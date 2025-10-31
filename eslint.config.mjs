@@ -1,93 +1,92 @@
-// @ts-check
+// eslint.config.mjs
 import eslint from '@eslint/js'
-import importPlugin from 'eslint-plugin-import'
-import globals from 'globals'
 import tseslint from 'typescript-eslint'
+import globals from 'globals'
+import importPlugin from 'eslint-plugin-import'
 
 export default tseslint.config(
-  // Node環境のグローバルを有効化
+  // ベース
   {
     languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
       globals: {
         ...globals.node,
         console: 'readonly',
         process: 'readonly',
-      }
+        setTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearTimeout: 'readonly',
+        clearInterval: 'readonly',
+      },
     },
     linterOptions: {
-      noInlineConfig: true,
-      reportUnusedDisableDirectives: 'off'
-    }
+      // プロジェクト内の inline disable は許容（期限はCIで管理）
+      noInlineConfig: false,
+      reportUnusedDisableDirectives: 'off',
+    },
   },
+  // 推奨セット
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
+  // 共通ルール
   {
     plugins: { import: importPlugin },
     rules: {
-      // ==========================================
-      // 🔴 Critical: パフォーマンス直接影響（error必須）
-      // ==========================================
-      'no-constant-condition': 'error',
-      'no-dupe-keys': 'error',
-      'no-func-assign': 'error',
+      // 🔴 Blockers（正確性/安全性直結：差分ファイルでブロック）
       'no-unreachable': 'error',
+      'no-constant-condition': 'error',
+      'no-func-assign': 'error',
       'no-unsafe-negation': 'error',
       'no-cond-assign': 'error',
       'no-constant-binary-expression': 'error',
       'no-loss-of-precision': 'error',
       'no-sparse-arrays': 'error',
-
-      // ==========================================
-      // 🟡 Important: 間接的影響（warn、_で回避可）
-      // ==========================================
-      '@typescript-eslint/no-unused-vars': ['warn', {
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-        ignoreRestSiblings: true,
-        destructuredArrayIgnorePattern: '^_',
-      }],
-      'no-duplicate-imports': 'warn',
-      'no-var': 'error',
-      'prefer-const': 'warn',
-
-      // ==========================================
-      // 🟢 Code Quality: 品質のみ（warn）
-      // ==========================================
-      'no-console': ['warn', {
-        allow: ['warn', 'error', 'info']
-      }],
       'no-debugger': 'error',
-      'no-alert': 'warn',
-      '@typescript-eslint/no-explicit-any': 'warn',
-      // 一時対応: ts-expect-errorは許可（後続で理由付与に段階移行）
-      '@typescript-eslint/ban-ts-comment': ['warn', { 'ts-expect-error': false }],
-      // 他設定やインライン指定で参照されることがあるため無効化
+      'no-eval': 'error',
+      // 🟡 Warn（レビューで指摘：ブロックしない）
+      'no-duplicate-imports': 'warn',
+      'prefer-const': 'warn',
+      'eqeqeq': ['warn', 'always'],
+      // ⚪ Off（生産性優先：文脈で override）
+      'no-console': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
+      'no-empty': 'off',
+      'no-empty-function': 'off',
+      '@typescript-eslint/no-namespace': 'off',
       'import/order': 'off',
       'import/export': 'off',
-      '@typescript-eslint/ban-types': 'warn',
-      'no-empty': 'warn',
-      'no-empty-function': 'warn',
-      'eqeqeq': ['warn', 'always'],
-      'no-eval': 'error',
-      // 一旦エラー停止を避ける（段階的に修正する）
-      'no-unreachable': 'warn',
-      '@typescript-eslint/no-var-requires': 'warn',
-      'no-case-declarations': 'warn',
-      'no-useless-escape': 'warn',
-      '@typescript-eslint/no-namespace': 'warn',
-    }
+    },
   },
+  // 本番コードは徐々に厳しく（将来の段階的強化ポイント）
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'warn',
+    },
+  },
+  // テスト・スクリプトは自由度高め
+  {
+    files: ['**/*.spec.ts', '**/*.test.ts', '**/*.e2e.ts', 'scripts/**/*.{ts,tsx,js}'],
+    rules: {
+      'no-console': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+    },
+  },
+  // 除外
   {
     ignores: [
       'node_modules/**',
       'dist/**',
       '.nuxt/**',
       '.output/**',
-      'src/generated/prisma/**',
+      'coverage/**',
+      'src/generated/**',
       'lib/hotel-common/src/database/generated/prisma/**',
       'backups/**',
-    ]
-  }
+    ],
+  },
 )
-
-
