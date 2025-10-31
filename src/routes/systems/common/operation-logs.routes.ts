@@ -247,6 +247,8 @@ router.get('/operations/:id', sessionAuthMiddleware, async (req: Request, res: R
  */
 router.post('/operations', sessionAuthMiddleware, async (req: Request, res: Response) => {
   try {
+    const tenantId = (req as any).user?.tenant_id;
+    if (!tenantId) { return ResponseHelper.sendUnauthorized(res, 'テナントIDが取得できません'); }
     const logData = OperationLogSchema.parse(req.body)
 
     // 互換性: type があれば優先して action として扱う
@@ -298,7 +300,7 @@ router.post('/operations', sessionAuthMiddleware, async (req: Request, res: Resp
     const systemEvent = await hotelDb.getAdapter().systemEvent.create({
       data: {
         id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`,
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         user_id: req.user?.user_id,
         event_type: 'USER_OPERATION',
         source_system: 'hotel-common',
@@ -323,7 +325,7 @@ router.post('/operations', sessionAuthMiddleware, async (req: Request, res: Resp
     if ((logData.target_type || '').toLowerCase() === 'room') {
       const details: any = (systemEvent as any).event_data?.details || {}
       await broadcastRoomOperation({
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         room_id: (details.room_id || logData.target_id || '').toString(),
         room_number: details.room_number,
         action: effectiveAction,
