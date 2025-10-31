@@ -36,10 +36,10 @@ jobs:
             **/*.tsx
       - name: ESLint (changed only, block)
         if: steps.cf.outputs.any_changed == 'true'
-        run: npx eslint ${{ steps.cf.outputs.all_changed_files }} --ext .ts,.tsx --max-warnings=0
+        run: npx eslint ${{ steps.cf.outputs.all_changed_files }} --max-warnings=0
       - name: ESLint (whole repo, report only)
         continue-on-error: true
-        run: npx eslint . --ext .ts,.tsx || true
+        run: npx eslint . || true
       - name: Summarize
         if: always()
         run: |
