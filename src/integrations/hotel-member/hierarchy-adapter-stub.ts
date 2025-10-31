@@ -1,6 +1,6 @@
 /**
  * hotel-member階層権限管理アダプタースタブ
- * 
+ *
  * hotel-member FastAPIサーバーとの連携
  * - JWT検証
  * - 階層権限チェック
@@ -54,12 +54,12 @@ export class HotelMemberHierarchyAdapterStub {
     try {
       // TODO: 実際の階層認証システムとの統合が必要
       // 現在はスタブ実装
-      this.logger.debug('階層JWTトークン検証（スタブ）', { 
-        data: { 
-          token_length: params.token.length 
+      this.logger.debug('階層JWTトークン検証（スタブ）', {
+        data: {
+          token_length: params.token.length
         }
       });
-      
+
       return {
         success: true,
         user: {
@@ -101,13 +101,13 @@ export class HotelMemberHierarchyAdapterStub {
     try {
       // TODO: 実際の階層認証システムとの統合が必要
       // 現在はスタブ実装
-      this.logger.debug('顧客データアクセスチェック（スタブ）', { 
+      this.logger.debug('顧客データアクセスチェック（スタブ）', {
         data: {
           operation: params.operation,
           target_tenant: params.target_tenant_id
         }
       });
-      
+
       return {
         allowed: true,
         effective_scope: 'HOTEL',
@@ -134,13 +134,13 @@ export class HotelMemberHierarchyAdapterStub {
     try {
       // TODO: 実際の階層認証システムとの統合が必要
       // 現在はスタブ実装
-      this.logger.debug('会員制限チェック（スタブ）', { 
+      this.logger.debug('会員制限チェック（スタブ）', {
         data: {
           operation: params.operation,
           data_type: params.data_type
         }
       });
-      
+
       return {
         allowed: true
       };
@@ -164,12 +164,12 @@ export class HotelMemberHierarchyAdapterStub {
     try {
       // TODO: 実際の階層認証システムとの統合が必要
       // 現在はスタブ実装
-      this.logger.debug('グループ分析アクセスチェック（スタブ）', { 
+      this.logger.debug('グループ分析アクセスチェック（スタブ）', {
         data: {
           analytics_type: params.analytics_type
         }
       });
-      
+
       return {
         allowed: true,
         effective_level: 'READ_ONLY'
@@ -190,21 +190,22 @@ export class HotelMemberHierarchyAdapterStub {
     token: string;
     scope_level?: string;
   }): Promise<{ success?: boolean, tenants: string[], error?: string }> {
+    let result: { success?: boolean, tenants: string[], error?: string }
     try {
-      // TODO: 実際の階層認証システムとの統合が必要
-      // 現在はスタブ実装
-      return {
+      // TODO: 実際の階層認証システムとの統合が必要（スタブ）
+      result = {
         success: true,
         tenants: ['default', 'tenant_1', 'tenant_2']
-      };
+      }
     } catch (error: unknown) {
       this.logger.error('アクセス可能テナント取得エラー', error as Error);
-      return {
+      result = {
         success: false,
         tenants: [],
         error: error instanceof Error ? error.message : 'テナント取得エラー'
-      };
+      }
     }
+    return result
   }
 
   /**
@@ -215,23 +216,24 @@ export class HotelMemberHierarchyAdapterStub {
     message?: string;
     details?: Record<string, any>;
   }> {
+    let result: { status: 'healthy' | 'degraded' | 'error'; message?: string; details?: Record<string, any> }
     try {
-      // TODO: 実際の階層認証システムとの統合が必要
-      // 現在はスタブ実装
-      return {
+      // TODO: 実際の階層認証システムとの統合が必要（スタブ）
+      result = {
         status: 'healthy',
         details: {
           endpoints_available: 7,
           cache_status: 'active',
           fallback_mode: true
         }
-      };
+      }
     } catch (error: unknown) {
       this.logger.error('ヘルスチェックエラー', error as Error);
-      return {
+      result = {
         status: 'error',
         message: error instanceof Error ? error.message : 'ヘルスチェックエラー'
-      };
+      }
     }
+    return result
   }
 }

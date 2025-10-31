@@ -46,7 +46,6 @@ router.get('/rooms', sessionAuthMiddleware, async (req: Request, res: Response) 
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       );
-      return;
     }
 
     // データベースから客室データを取得
@@ -154,7 +153,6 @@ router.get('/rooms/:id', sessionAuthMiddleware, async (req: Request, res: Respon
       return res.status(400).json(
         StandardResponseBuilder.error('BAD_REQUEST', 'テナントIDが必要です')
       );
-      return;
     }
 
     // データベースから客室詳細を取得
@@ -216,7 +214,6 @@ router.put('/rooms/:id', sessionAuthMiddleware, async (req: Request, res: Respon
       return res.status(400).json(
         StandardResponseBuilder.error('BAD_REQUEST', 'テナントIDが必要です')
       );
-      return;
     }
 
     // 現在の客室情報を取得（更新前の状態を記録するため）

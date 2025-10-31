@@ -89,13 +89,10 @@ export class StandardizedApiClient {
           userId: this.config.userId,
           sourceSystem: this.config.sourceSystem,
           requestId: `req_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         }
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
         // 統一ヘッダー設定
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - ヘッダーの型定義の問題
+        // @ts-expect-error - ヘッダーの型定義の問題
         config.headers = {
           ...config.headers,
           'X-Tenant-ID': tenantContext.tenantId,
@@ -115,15 +112,12 @@ export class StandardizedApiClient {
         this.logger.debug('API Request', {
           method: config.method,
           url: config.url,
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           tenant: tenantContext.tenantId,
           requestId: tenantContext.requestId
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         })
 
         // メトリクス用データ保存
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - メタデータの型定義の問題
+        // @ts-expect-error - メタデータの型定義の問題
         config.metadata = {
           startTime,
           tenantContext,
@@ -266,14 +260,12 @@ export class StandardizedApiClient {
   /**
    * リトライ遅延計算（指数バックオフ）
    */
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   private calculateRetryDelay(retryCount: number): number {
     const baseDelay = this.config.retryConfig?.retryDelay || 1000
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return baseDelay * Math.pow(2, retryCount)
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   /**
    * レスポンスキャッシュ
    */
@@ -282,8 +274,6 @@ export class StandardizedApiClient {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const cacheKey = `api:${this.config.tenantId}:${url}`
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - Redisクライアントの型定義の問題
       await this.redis.set(
         cacheKey,
         JSON.stringify(data)

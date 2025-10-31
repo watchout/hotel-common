@@ -8,7 +8,7 @@ import type { Request } from 'express';
 declare global {
   namespace Express {
     interface Request {
-      // @ts-ignore - 型の互換性の問題
+      // @ts-expect-error - 型の互換性の問題
       user?: {
         user_id?: string;
         tenant_id?: string;

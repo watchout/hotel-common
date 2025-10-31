@@ -170,7 +170,6 @@ export class ResponseNodeRepository {
       data: {
         id: uuidv4(),
         treeId: data.treeId,
-        // @ts-ignore - 型定義が不完全
         nodeType: data.type,
         title: data.title,
         description: data.description,
@@ -198,7 +197,6 @@ export class ResponseNodeRepository {
       data: {
         id: uuidv4(),
         nodeId: data.nodeId,
-        // @ts-ignore - 型定義が不完全
         locale: data.language,
         title: data.title,
         answer: data.answer,
@@ -243,7 +241,6 @@ export class ResponseNodeRepository {
       create: {
         id: uuidv4(),
         nodeId,
-        // @ts-ignore - 型定義が不完全
         locale: language,
         title: data.title || '',
         answer: data.answer,

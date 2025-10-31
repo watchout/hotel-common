@@ -25,7 +25,7 @@ export class WelcomeScreenService {
         startDate: { lte: now },
         endDate: { gte: now },
         welcomeSettings: {
-          // @ts-ignore - 型定義が不完全
+          // @ts-expect-error - 型定義が不完全
           path: '$.enabled',
           equals: true
         }
@@ -55,7 +55,7 @@ export class WelcomeScreenService {
     }
     
     const campaign = campaigns[0];
-    // @ts-ignore - 型定義が不完全
+    // @ts-expect-error - 型定義が不完全
     const translation = campaign.translations?.[0];
     const welcomeSettings = campaign.welcomeSettings as any;
     
@@ -91,7 +91,6 @@ export class WelcomeScreenService {
       const viewHistory = await hotelDb.getAdapter().deviceVideoCache.findFirst({
         where: {
           deviceId,
-          // @ts-ignore - 型定義が不完全
           userId: userId || '',
           viewed: true
         }
@@ -112,7 +111,6 @@ export class WelcomeScreenService {
       where: {
         deviceId_userId: {
           deviceId,
-          // @ts-ignore - 型定義が不完全
           userId: userId || ''
         }
       },
@@ -141,16 +139,16 @@ export class WelcomeScreenService {
         startDate: { lte: now },
         endDate: { gte: now },
         welcomeSettings: {
-          // @ts-ignore - 型定義が不完全
+          // @ts-expect-error - 型定義が不完全
           path: '$.enabled',
           equals: true
         },
         AND: [
           {
             welcomeSettings: {
-              // @ts-ignore - 型定義が不完全
+              // @ts-expect-error - 型定義が不完全
               path: '$.videoUrl',
-              // @ts-ignore - 型定義が不完全
+              // @ts-expect-error - 型定義が不完全
               not: null
             }
           }
@@ -181,7 +179,7 @@ export class WelcomeScreenService {
         startDate: { lte: now },
         endDate: { gte: now },
         welcomeSettings: {
-          // @ts-ignore - 型定義が不完全
+          // @ts-expect-error - 型定義が不完全
           path: '$.enabled',
           equals: true
         },
@@ -201,9 +199,9 @@ export class WelcomeScreenService {
       where: {
         id,
         welcomeSettings: {
-          // @ts-ignore - 型定義が不完全
+          // @ts-expect-error - 型定義が不完全
           path: '$.videoUrl',
-          // @ts-ignore - 型定義が不完全
+          // @ts-expect-error - 型定義が不完全
           not: null
         }
       }

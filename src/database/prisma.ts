@@ -1,3 +1,6 @@
+import { config as loadEnv } from 'dotenv';
+loadEnv();
+// ↑ PrismaClient生成前に.envを確実に読み込む
 import { PrismaClient } from '../generated/prisma';
 
 import { createPrismaAdapter } from './prisma-adapter';

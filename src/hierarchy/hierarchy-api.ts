@@ -125,22 +125,19 @@ export class HierarchyApiManager {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const beforeState = await (hotelDb as any).organization_hierarchy.findUnique({
         where: { id: organizationId }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       })
 
       if (!beforeState) {
         throw new Error('組織が見つかりません')
       }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
       // 2. パス更新が必要かチェック
       let updateData = { ...data }
       if (data.code && data.code !== beforeState.code) {
         const newPath = await this.calculateNewPath(organizationId, data.code)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - 型定義が不完全
+        // @ts-expect-error - 型定義が不完全
         updateData = { ...updateData, path: newPath }
       }
 
@@ -154,7 +151,6 @@ export class HierarchyApiManager {
       // 4. 子組織のパス更新（コード変更時）
       if (data.code && data.code !== beforeState.code) {
         await this.updateChildrenPaths(organizationId, organization.path)
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       }
 
       // 5. 変更イベント発行
@@ -162,7 +158,6 @@ export class HierarchyApiManager {
         operation: 'UPDATE',
         organization_id: organizationId,
         user_id: userId,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
         before_state: beforeState,
         after_state: organization,
         affected_children: await this.getAffectedChildren(organizationId),
@@ -170,8 +165,7 @@ export class HierarchyApiManager {
       })
 
       // 6. キャッシュ無効化
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - 型定義が不完全
+      // @ts-expect-error - 型定義が不完全
       await HierarchyPermissionManager.invalidateHierarchyCache(organizationId)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
@@ -236,7 +230,6 @@ export class HierarchyApiManager {
           deleted_at: new Date()
         }
       })
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
       // 5. 変更イベント発行
       await this.publishHierarchyChangeEvent({
@@ -250,8 +243,7 @@ export class HierarchyApiManager {
       })
 
       // 6. キャッシュ無効化
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - 型定義が不完全
+      // @ts-expect-error - 型定義が不完全
       await HierarchyPermissionManager.invalidateHierarchyCache(organizationId)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
@@ -279,7 +271,6 @@ export class HierarchyApiManager {
     }[],
     userId: string
   ): Promise<DataSharingPolicy[]> {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     try {
       const results: DataSharingPolicy[] = []
 
@@ -295,7 +286,6 @@ export class HierarchyApiManager {
           create: {
             organization_id: organizationId,
             data_type: policy.data_type,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
             sharing_scope: policy.sharing_scope,
             access_level: policy.access_level,
             conditions: policy.conditions || {}
@@ -311,8 +301,7 @@ export class HierarchyApiManager {
       }
 
       // キャッシュ無効化
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - 型定義が不完全
+      // @ts-expect-error - 型定義が不完全
       await HierarchyPermissionManager.invalidateHierarchyCache(organizationId)
 
       this.logger.info(`データ共有ポリシー設定完了: ${organizationId} (ポリシー数: ${policies.length})`)
@@ -360,7 +349,6 @@ export class HierarchyApiManager {
         where: { id: organizationId },
         data: {
           settings: {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
             applied_preset: presetId,
             preset_features: preset.features,
             applied_at: new Date().toISOString(),
@@ -379,7 +367,6 @@ export class HierarchyApiManager {
   }
 
   /**
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
    * テナント-組織関係設定
    */
   static async linkTenantToOrganization(
@@ -399,8 +386,7 @@ export class HierarchyApiManager {
       })
 
       // キャッシュ無効化
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - 型定義が不完全
+      // @ts-expect-error - 型定義が不完全
       await HierarchyPermissionManager.invalidateHierarchyCache(organizationId)
 
       this.logger.info(`テナント-組織関係設定完了: ${tenantId} -> ${organizationId} (${role})`)
@@ -508,7 +494,6 @@ export class HierarchyApiManager {
         path: {
           startsWith: await this.getOrganizationPath(organizationId)
         },
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
         deleted_at: null
       },
       select: { id: true }
@@ -537,7 +522,6 @@ export class HierarchyApiManager {
     })
     return org?.path || ''
   }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
   /**
    * 階層変更イベント発行
@@ -565,8 +549,7 @@ export class HierarchyApiManager {
         reason: event.reason
       }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - 型定義が不完全
+      // @ts-expect-error - 型定義が不完全
       await HotelEventPublisher.publishEvent({
         type: 'system.hierarchy.changed',
         source_system: 'hotel-common',

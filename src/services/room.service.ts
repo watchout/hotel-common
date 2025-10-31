@@ -229,8 +229,7 @@ export class RoomService {
       const hasNext = params.offset + params.limit < total
 
       return {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        // @ts-expect-error
         rooms: rooms as Room[],
         total,
         hasNext
@@ -332,7 +331,7 @@ export class RoomService {
 
       const dataOut: Prisma.RoomUpdateInput = ((): Prisma.RoomUpdateInput => {
         const out: Prisma.RoomUpdateInput = {
-          status: data.status,
+        status: data.status,
           updatedAt: new Date()
         }
         if (data.notes) out.notes = data.notes

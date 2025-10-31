@@ -33,7 +33,7 @@ router.get('/campaigns', verifyAdminAuth, async (req: Request, res: Response) =>
       page,
       limit,
       status,
-      // @ts-ignore - 型定義が不完全
+      // @ts-expect-error - 型定義が不完全
       type,
       displayType,
       search

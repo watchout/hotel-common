@@ -59,7 +59,8 @@ export default tseslint.config(
       'no-debugger': 'error',
       'no-alert': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/ban-ts-comment': 'warn',
+      // 一時対応: ts-expect-errorは許可（後続で理由付与に段階移行）
+      '@typescript-eslint/ban-ts-comment': ['warn', { 'ts-expect-error': false }],
       // 他設定やインライン指定で参照されることがあるため無効化
       'import/order': 'off',
       'import/export': 'off',

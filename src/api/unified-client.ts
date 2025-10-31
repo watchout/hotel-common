@@ -105,18 +105,15 @@ export class HotelUnifiedApiClient {
         where.OR = [
           { name: { contains: filters.search, mode: 'insensitive' } },
           { email: { contains: filters.search, mode: 'insensitive' } },
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           { phone: { contains: filters.search } }
         ]
       }
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       if (filters?.memberOnly) {
         where.member_id = { not: null }
       }
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
+      // @ts-expect-error - Prismaスキーマに存在するが型定義されていないモデル
       const customers = await this.db.customers.findMany({
         where,
         take: filters?.limit || 50,
@@ -132,20 +129,17 @@ export class HotelUnifiedApiClient {
       this.logger.error('Failed to get customers', { error: error as Error })
       return []
     }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   }
 
   async createCustomer(data: {
     name: string
     email?: string
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     phone?: string
     address?: string
     member_id?: string
   }): Promise<customers | null> {
     try {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
+      // @ts-expect-error - Prismaスキーマに存在するが型定義されていないモデル
       const customer = await this.db.customers.create({
         data: {
           id: `cust_${Date.now()}_${Math.random().toString(36).substring(2)}`,
@@ -159,14 +153,12 @@ export class HotelUnifiedApiClient {
 
       await this.logSystemEvent('customer', 'create', customer.id, data)
       return customer
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     } catch (error: unknown) {
       this.logger.error('Failed to create customer', { error: error as Error, data })
       return null
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   async updateCustomer(
     customerId: string,
     data: Partial<customers>,
@@ -174,8 +166,7 @@ export class HotelUnifiedApiClient {
   ): Promise<customers | null> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     try {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
+      // @ts-expect-error - Prismaスキーマに存在するが型定義されていないモデル
       const existing = await this.db.customers.findUnique({
         where: { id: customerId }
       })
@@ -184,7 +175,6 @@ export class HotelUnifiedApiClient {
       if (!existing) {
         return null
       }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
       // PMS更新可能フィールド制限チェック
       if (restrictUpdatableFields && this.config.source === 'hotel-pms') {
@@ -193,7 +183,6 @@ export class HotelUnifiedApiClient {
         const updateData: any = {}
 
         Object.keys(data).forEach(key => {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           if (allowedFields.includes(key) || ['updated_by_system', 'synced_at'].includes(key)) {
             updateData[key] = data[key as keyof customers]
           }
@@ -203,8 +192,7 @@ export class HotelUnifiedApiClient {
         data = updateData
       }
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
+      // @ts-expect-error - Prismaスキーマに存在するが型定義されていないモデル
       const updated = await this.db.customers.update({
         where: { id: customerId },
         data: {
@@ -241,7 +229,6 @@ export class HotelUnifiedApiClient {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const where: any = {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         tenant_id: this.config.tenantId,
         deleted_at: null
       }
@@ -253,7 +240,6 @@ export class HotelUnifiedApiClient {
       if (filters?.dateFrom || filters?.dateTo) {
         where.AND = []
         if (filters.dateFrom) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           where.AND.push({ checkin_date: { gte: filters.dateFrom } })
         }
         if (filters.dateTo) {
@@ -265,13 +251,10 @@ export class HotelUnifiedApiClient {
         where.customer_id = filters.customerId
       }
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
       const reservations = await this.db.reservation.findMany({
         where,
         take: filters?.limit || 100,
         skip: filters?.offset || 0,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         orderBy: { checkinDate: 'asc' }
       })
 
@@ -284,7 +267,6 @@ export class HotelUnifiedApiClient {
   }
 
   async createReservation(data: {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     customer_id?: string
     guest_name: string
     guest_phone?: string
@@ -298,8 +280,6 @@ export class HotelUnifiedApiClient {
   }): Promise<Reservation | null> {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
       const reservation = await this.db.reservation.create({
         data: {
           id: `res-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`, // 必須フィールド
@@ -321,7 +301,6 @@ export class HotelUnifiedApiClient {
           // base_rateフィールドはスキーマに存在しないため削除
           confirmationNumber: this.generateConfirmationCode(),
           status: 'pending', // スキーマのデフォルト値と一致させる
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // payment_statusフィールドはスキーマに存在しないため削除
           specialRequests: data.special_requests
         }
@@ -339,7 +318,6 @@ export class HotelUnifiedApiClient {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // =========================================
   // システムイベント・監査ログ
   // =========================================
@@ -357,8 +335,7 @@ export class HotelUnifiedApiClient {
     try {
       await this.db.systemEvent.create({
         data: {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore - フィールド名の不一致
+          // @ts-expect-error - フィールド名の不一致
           tenantId: this.config.tenantId,
           userId: this.config.userId,
           eventType: this.getEventType(entityType),

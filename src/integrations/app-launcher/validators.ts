@@ -38,7 +38,7 @@ export const validateUniquePackageName = async (req: Request, res: Response, nex
   const { packageName } = req.body;
   
   try {
-    // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
+    // @ts-expect-error - Prismaスキーマに存在するが型定義されていないモデル
   const existingApp = await prisma.googlePlayApp.findUnique({
       where: { packageName }
     });
@@ -62,7 +62,7 @@ export const validateGooglePlayAppExists = async (req: Request, res: Response, n
   const appId = req.params.id;
   
   try {
-    // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
+    // @ts-expect-error - Prismaスキーマに存在するが型定義されていないモデル
   const app = await prisma.googlePlayApp.findUnique({
       where: { id: appId }
     });
@@ -88,7 +88,7 @@ export const validateHotelAppExists = async (req: Request, res: Response, next: 
   const appId = req.params.appId;
   
   try {
-    // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
+    // @ts-expect-error - Prismaスキーマに存在するが型定義されていないモデル
   const hotelApp = await prisma.hotelApp.findUnique({
       where: {
         placeId_appId: {
@@ -119,7 +119,7 @@ export const validateLayoutAppBlockExists = async (req: Request, res: Response, 
   const blockId = req.params.blockId;
   
   try {
-    // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
+    // @ts-expect-error - Prismaスキーマに存在するが型定義されていないモデル
   const layoutAppBlock = await prisma.layoutAppBlock.findUnique({
       where: {
         layoutId_blockId: {

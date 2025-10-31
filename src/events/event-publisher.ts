@@ -372,19 +372,16 @@ export class HotelEventPublisher {
           entity_type: event.type,
           entity_id: eventId,
           action: 'CREATE', // イベント発行
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
           event_data: {
             event_id: eventId,
             event_type: event.type,
             event_action: event.action,
             priority: event.priority,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
             sync_mode: event.sync_mode,
             delivery_guarantee: event.delivery_guarantee,
             correlation_id: event.correlation_id
           },
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore - フィールド名の不一致
+          // @ts-expect-error - フィールド名の不一致
           occurred_at: event.timestamp
         }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -44,12 +44,6 @@ router.post('/migrate-orders', authMiddleware, async (req: Request, res: Respons
       }, { message: `${result.migratedCount}件を移行しましたが、${result.errors.length}件でエラーが発生しました` });
     }
 
-    logger.info('既存注文データ移行完了', {
-      tenantId,
-      migratedCount: result.migratedCount,
-      errorCount: result.errors.length
-    });
-
   } catch (error: unknown) {
     logger.error('既存注文データ移行エラー', error as Error);
     const errorResponse = StandardResponseBuilder.error('INTERNAL_ERROR', '注文データの移行に失敗しました');
@@ -77,8 +71,6 @@ router.get('/statistics', authMiddleware, async (req: Request, res: Response) =>
 
     return StandardResponseBuilder.success(res, { statistics });
 
-    logger.info('セッション統計情報取得完了', { tenantId, statistics });
-
   } catch (error: unknown) {
     logger.error('セッション統計情報取得エラー', error as Error);
     const errorResponse = StandardResponseBuilder.error('INTERNAL_ERROR', 'セッション統計情報の取得に失敗しました');
@@ -105,8 +97,6 @@ router.get('/compatibility-check', authMiddleware, async (req: Request, res: Res
     const compatibility = await SessionMigrationService.checkBackwardCompatibility(tenantId);
 
     return StandardResponseBuilder.success(res, { compatibility });
-
-    logger.info('後方互換性チェック完了', { tenantId, compatibility });
 
   } catch (error: unknown) {
     logger.error('後方互換性チェックエラー', error as Error);
@@ -149,8 +139,6 @@ router.get('/report', authMiddleware, async (req: Request, res: Response) => {
     };
 
     return StandardResponseBuilder.success(res, { report });
-
-    logger.info('移行状況レポート取得完了', { tenantId });
 
   } catch (error: unknown) {
     logger.error('移行状況レポート取得エラー', error as Error);

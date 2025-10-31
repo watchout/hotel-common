@@ -1,10 +1,14 @@
 /**
  * プッシュ通知プロバイダーインターフェース
- * 
+ *
  * 複数のプッシュ通知プロバイダー（Firebase, OneSignal等）を統一インターフェースで扱うための抽象化レイヤー
  */
 
 import { HotelLogger } from '../../utils/logger'
+import * as admin from 'firebase-admin'
+import { readFileSync } from 'fs'
+import * as OneSignal from 'onesignal-node'
+import { createErrorLogOption } from '../../utils/error-helper'
 
 /**
  * プッシュ通知設定
@@ -54,11 +58,11 @@ export interface PushResult {
 export abstract class PushProvider {
   protected logger = HotelLogger.getInstance()
   protected config: PushConfig
-  
+
   constructor(config: PushConfig) {
     this.config = config
   }
-  
+
   /**
    * プッシュ通知送信抽象メソッド
    */
@@ -71,22 +75,23 @@ export abstract class PushProvider {
 export class FirebasePushProvider extends PushProvider {
   private admin: any
   private messaging: any
-  
+
   constructor(config: PushConfig) {
     super(config)
-    
+
     if (!config.serviceAccountPath && !config.projectId) {
       throw new Error('Firebase serviceAccountPath or projectId is required')
     }
-    
+
     try {
       // Firebase Admin SDK初期化
-      this.admin = require('firebase-admin')
-      
+      this.admin = admin
+
       // 認証情報設定
       if (config.serviceAccountPath) {
         // サービスアカウントJSONファイルを使用
-        const serviceAccount = require(config.serviceAccountPath)
+        const json = readFileSync(config.serviceAccountPath, 'utf-8')
+        const serviceAccount = JSON.parse(json)
         this.admin.initializeApp({
           credential: this.admin.credential.cert(serviceAccount),
           databaseURL: config.databaseURL
@@ -97,7 +102,7 @@ export class FirebasePushProvider extends PushProvider {
           projectId: config.projectId
         })
       }
-      
+
       this.messaging = this.admin.messaging()
       this.logger.info('Firebase push provider initialized')
     } catch (error: unknown) {
@@ -105,7 +110,7 @@ export class FirebasePushProvider extends PushProvider {
       throw new Error('Firebase initialization failed')
     }
   }
-  
+
   /**
    * Firebaseでプッシュ通知送信
    */
@@ -135,20 +140,20 @@ export class FirebasePushProvider extends PushProvider {
           }
         }
       }
-      
+
       // トークン配列に送信
       const response = await this.messaging.sendMulticast({
         ...message,
         tokens: data.to
       })
-      
-      this.logger.info('Push notification sent via Firebase', { 
+
+      this.logger.info('Push notification sent via Firebase', {
         data: {
           successCount: response.successCount,
           failureCount: response.failureCount
         }
       })
-      
+
       return {
         success: response.successCount > 0,
         messageId: response.responses[0]?.messageId,
@@ -158,7 +163,7 @@ export class FirebasePushProvider extends PushProvider {
       }
     } catch (error: unknown) {
       this.logger.error('Failed to send push notification via Firebase', { error: error instanceof Error ? error : new Error(String(error)) })
-      
+
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
@@ -173,26 +178,25 @@ export class FirebasePushProvider extends PushProvider {
  */
 export class OneSignalPushProvider extends PushProvider {
   private client: any
-  
+
   constructor(config: PushConfig) {
     super(config)
-    
+
     if (!config.appId || !config.apiKey) {
       throw new Error('OneSignal appId and apiKey are required')
     }
-    
+
     try {
       // OneSignalクライアント初期化
-      const OneSignal = require('onesignal-node')
       this.client = new OneSignal.Client(config.appId, config.apiKey)
-      
+
       this.logger.info('OneSignal push provider initialized')
     } catch (error: unknown) {
       this.logger.error('Failed to initialize OneSignal client', { error: error instanceof Error ? error : new Error(String(error)) })
       throw new Error('OneSignal initialization failed')
     }
   }
-  
+
   /**
    * OneSignalでプッシュ通知送信
    */
@@ -216,16 +220,16 @@ export class OneSignalPushProvider extends PushProvider {
         big_picture: data.imageUrl,
         ttl: data.ttl
       }
-      
+
       const response = await this.client.createNotification(notification)
-      
-      this.logger.info('Push notification sent via OneSignal', { 
+
+      this.logger.info('Push notification sent via OneSignal', {
         data: {
           id: response.body.id,
           recipients: response.body.recipients
         }
       })
-      
+
       return {
         success: true,
         messageId: response.body.id,
@@ -233,9 +237,8 @@ export class OneSignalPushProvider extends PushProvider {
         successCount: response.body.recipients
       }
     } catch (error: unknown) {
-      const { createErrorLogOption } = require('../../utils/error-helper');
       this.logger.error('Failed to send push notification via OneSignal', createErrorLogOption(error))
-      
+
       return {
         success: false,
         error: error instanceof Error ? error.message : String(error),
@@ -256,22 +259,22 @@ export class MockPushProvider extends PushProvider {
     })
     this.logger.info('Mock push provider initialized')
   }
-  
+
   /**
    * モックプッシュ通知送信（実際には送信せず）
    */
   async sendPush(data: PushData): Promise<PushResult> {
     const mockMessageId = `mock-${Date.now()}-${Math.random().toString(36).substring(2, 10)}`
-    
-    this.logger.info('Mock push notification sent', { 
+
+    this.logger.info('Mock push notification sent', {
       data: {
-        to: data.to, 
+        to: data.to,
         title: data.title,
         body: data.body,
         messageId: mockMessageId
       }
     })
-    
+
     return {
       success: true,
       messageId: mockMessageId,

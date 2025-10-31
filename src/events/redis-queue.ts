@@ -259,25 +259,16 @@ export class RedisEventQueue {
     consumerGroup: string,
     consumerId: string,
     callback: (event: HotelEvent, messageId: string) => Promise<void>
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
   ): Promise<void> {
     try {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       const pending = await this.redis.xPending(streamName, consumerGroup)
       
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - プロパティが存在しない
+      // @ts-expect-error - プロパティが存在しない
       if (pending.count > 0) {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - プロパティが存在しない
+        // @ts-expect-error - プロパティが存在しない
         this.logger.info(`未処理メッセージ再処理: ${pending.count}件`)
         
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - 引数の型が不一致
+        // @ts-expect-error - 引数の型が不一致
         const messages = await this.redis.xPendingRange({
           key: streamName,
           group: consumerGroup,
@@ -454,10 +445,8 @@ export class RedisEventQueue {
       // 7日後に自動削除
       await this.redis.expire(logKey, 7 * 24 * 60 * 60)
       
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: unknown) {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       this.logger.error('配信ログ記録エラー:', error)
     }
   }
@@ -468,7 +457,6 @@ export class RedisEventQueue {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getStreamStats(streamName: string): Promise<any> {
     try {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       const info = await this.redis.xInfoStream(streamName)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const groups = await this.redis.xInfoGroups(streamName)
@@ -477,11 +465,7 @@ export class RedisEventQueue {
         stream: info,
         consumer_groups: groups,
         length: info.length,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - プロパティ名の不一致
         first_entry: info.firstEntry,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - プロパティ名の不一致
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         last_entry: info.lastEntry
       }

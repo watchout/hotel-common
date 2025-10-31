@@ -7,7 +7,7 @@ export enum LogLevel {
 
 /**
  * ログエントリーインターフェース
- * 
+ *
  * すべてのログデータは以下の標準フィールドを使用します。
  * カスタムデータは必ず `data` オブジェクト内に配置してください。
  * エラーオブジェクトは必ず `error` フィールドに配置してください。
@@ -17,13 +17,13 @@ export interface LogEntry {
   timestamp: Date
   level: LogLevel
   message: string
-  
+
   // 標準フィールド（オプション）
   module?: string
   tenantId?: string
   userId?: string
   requestId?: string
-  
+
   // 拡張フィールド（オプション）
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,7 +31,7 @@ export interface LogEntry {
   data?: any      // すべてのカスタムデータはここに格納
   error?: Error   // エラーオブジェクトはここに格納
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // 追加のプロパティを許可（型安全性のため）
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -60,7 +60,7 @@ export class HotelLogger {
       enableRedis: false,
       ...config
     }
-    
+
     // nameパラメータをmoduleにマッピング（後方互換性のため）
     if (config.name && !config.module) {
       this.config.module = config.name;
@@ -118,21 +118,21 @@ export class HotelLogger {
     const timestamp = entry.timestamp.toISOString()
     const level = levelNames[entry.level]
     const color = levelColors[entry.level]
-    
+
     let logMessage = `${color}[${timestamp}] ${level}${resetColor}`
-    
+
     if (entry.module) {
       logMessage += ` [${entry.module}]`
     }
-    
+
     if (entry.tenantId) {
       logMessage += ` [tenant:${entry.tenantId}]`
     }
-    
+
     if (entry.requestId) {
       logMessage += ` [req:${entry.requestId}]`
     }
-    
+
     logMessage += `: ${entry.message}`
 
     if (entry.data) {
@@ -163,16 +163,13 @@ export class HotelLogger {
   }
 
   /**
-// eslint-disable-next-line @typescript-eslint/no-var-requires
    * ファイル出力
    */
-// eslint-disable-next-line @typescript-eslint/no-var-requires
   private async logToFile(entry: LogEntry): Promise<void> {
     try {
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-      const fs = require('fs').promises
+      const { promises: fs } = await import('fs')
       const logLine = JSON.stringify(entry) + '\n'
-      await fs.appendFile(this.config.filePath, logLine)
+      await fs.appendFile(this.config.filePath as string, logLine)
     } catch (error: unknown) {
       console.error('Failed to write log to file:', error)
     }
@@ -210,7 +207,7 @@ export class HotelLogger {
    */
   warn(message: string, options?: Partial<LogEntry> | unknown): Promise<void> {
     let normalizedOptions: Partial<LogEntry> = {};
-    
+
     // オプションの正規化
     if (options) {
       if (options instanceof Error) {
@@ -224,7 +221,7 @@ export class HotelLogger {
         normalizedOptions = { data: { message: String(options) } };
       }
     }
-    
+
     return this.log(LogLevel.WARN, message, normalizedOptions);
   }
 
@@ -235,7 +232,7 @@ export class HotelLogger {
    */
   error(message: string, options?: Partial<LogEntry> | unknown): Promise<void> {
     let normalizedOptions: Partial<LogEntry> = {};
-    
+
     // エラーオブジェクトの正規化
     if (options) {
       if (options instanceof Error) {
@@ -244,7 +241,7 @@ export class HotelLogger {
       } else if (typeof options === 'object') {
         // オブジェクトが渡された場合
         normalizedOptions = options as Partial<LogEntry>;
-        
+
         // error フィールドの正規化
         if (normalizedOptions.error && !(normalizedOptions.error instanceof Error)) {
           normalizedOptions = {
@@ -257,7 +254,7 @@ export class HotelLogger {
         normalizedOptions = { error: new Error(String(options)) };
       }
     }
-    
+
     return this.log(LogLevel.ERROR, message, normalizedOptions);
   }
 
@@ -299,4 +296,4 @@ export class HotelLogger {
 // デフォルトロガーインスタンス
 export const logger = HotelLogger.getInstance({
   module: 'hotel-common'
-}) 
+})

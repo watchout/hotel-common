@@ -50,7 +50,6 @@ router.get('/accounting', authMiddleware, async (req: Request, res: Response) =>
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       );
-      return;
     }
 
     // データベースから取引データを取得
@@ -181,7 +180,6 @@ router.get('/accounting/:id', authMiddleware, async (req: Request, res: Response
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       );
-      return;
     }
 
     // データベースから取引詳細を取得
@@ -257,7 +255,6 @@ router.post('/accounting/process-payment', authMiddleware, async (req: Request, 
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       );
-      return;
     }
 
     // ダミー決済処理
@@ -333,7 +330,6 @@ router.get('/accounting/daily-report', authMiddleware, async (req: Request, res:
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       );
-      return;
     }
 
     const reportDate = date ? new Date(date as string) : new Date();

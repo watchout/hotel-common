@@ -22,10 +22,9 @@ export class ResponseSessionRepository {
     return hotelDb.getAdapter().responseTreeSession.create({
       data: {
         sessionId,
-        // @ts-ignore - 型定義が不完全
         deviceId: data.deviceId ? String(data.deviceId) : null,
         roomId: data.roomId,
-        // @ts-ignore - 型定義が不完全
+        // @ts-expect-error - 型定義が不完全
         locale: data.language,
         interfaceType: data.interfaceType
       }

@@ -1,6 +1,6 @@
 /**
  * hotel-member階層権限管理アダプター
- * 
+ *
  * hotel-member FastAPIサーバーとの連携
  * - JWT検証
  * - 階層権限チェック
@@ -54,7 +54,7 @@ export class HotelMemberHierarchyAdapter {
     try {
       // 緊急対応：スタブ実装
       this.logger.debug('階層JWTトークン検証（スタブ）', { token_length: params.token.length });
-      
+
       return {
         success: true,
         user: {
@@ -95,11 +95,11 @@ export class HotelMemberHierarchyAdapter {
   }): Promise<PermissionCheckResult> {
     try {
       // 緊急対応：スタブ実装
-      this.logger.debug('顧客データアクセスチェック（スタブ）', { 
+      this.logger.debug('顧客データアクセスチェック（スタブ）', {
         operation: params.operation,
         target_tenant: params.target_tenant_id
       });
-      
+
       return {
         allowed: true,
         effective_scope: 'HOTEL',
@@ -125,11 +125,11 @@ export class HotelMemberHierarchyAdapter {
   }): Promise<PermissionCheckResult> {
     try {
       // 緊急対応：スタブ実装
-      this.logger.debug('会員制限チェック（スタブ）', { 
+      this.logger.debug('会員制限チェック（スタブ）', {
         operation: params.operation,
         data_type: params.data_type
       });
-      
+
       return {
         allowed: true
       };
@@ -152,10 +152,10 @@ export class HotelMemberHierarchyAdapter {
   }): Promise<PermissionCheckResult> {
     try {
       // 緊急対応：スタブ実装
-      this.logger.debug('グループ分析アクセスチェック（スタブ）', { 
+      this.logger.debug('グループ分析アクセスチェック（スタブ）', {
         analytics_type: params.analytics_type
       });
-      
+
       return {
         allowed: true,
         effective_level: 'READ_ONLY'
@@ -175,17 +175,15 @@ export class HotelMemberHierarchyAdapter {
   static async getAccessibleTenantsForPython(params: {
     token: string;
   }): Promise<{ tenants: string[] }> {
+    let result: { tenants: string[] }
     try {
       // 緊急対応：スタブ実装
-      return {
-        tenants: ['default', 'tenant_1', 'tenant_2']
-      };
+      result = { tenants: ['default', 'tenant_1', 'tenant_2'] }
     } catch (error: unknown) {
       this.logger.error('アクセス可能テナント取得エラー', error as Error);
-      return {
-        tenants: []
-      };
+      result = { tenants: [] }
     }
+    return result
   }
 
   /**
@@ -196,22 +194,24 @@ export class HotelMemberHierarchyAdapter {
     message?: string;
     details?: Record<string, any>;
   }> {
+    let result: { status: 'healthy' | 'degraded' | 'error'; message?: string; details?: Record<string, any> }
     try {
       // 緊急対応：スタブ実装
-      return {
+      result = {
         status: 'healthy',
         details: {
           endpoints_available: 7,
           cache_status: 'active',
           fallback_mode: true
         }
-      };
+      }
     } catch (error: unknown) {
       this.logger.error('ヘルスチェックエラー', error as Error);
-      return {
+      result = {
         status: 'error',
         message: error instanceof Error ? error.message : 'ヘルスチェックエラー'
-      };
+      }
     }
+    return result
   }
 }
