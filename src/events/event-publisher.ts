@@ -400,7 +400,6 @@ export class HotelEventPublisher {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private async handlePublishError(event: HotelEvent, error: any): Promise<void> {
     try {
-// eslint-disable-next-line @typescript-eslint/no-implicit-any-catch
       this.logger.error('イベント発行エラー詳細:', {
         eventType: event.type,
         action: event.action,
@@ -408,14 +407,12 @@ export class HotelEventPublisher {
         targets: event.targets,
         error: error instanceof Error ? error.message : String(error)
       })
-// eslint-disable-next-line @typescript-eslint/no-implicit-any-catch
       
       // エラーイベント発行（循環防止のため最小限）
       if (event.type !== 'system') {
         await this.publishSystemErrorEvent(event, error)
       }
       
-// eslint-disable-next-line @typescript-eslint/no-implicit-any-catch
     } catch (errorHandlingError) {
       this.logger.error('エラーハンドリング中にエラー:', errorHandlingError)
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -442,7 +439,6 @@ export class HotelEventPublisher {
         synced_at: new Date(),
         tenant_id: originalEvent.tenant_id,
         data: {
-// eslint-disable-next-line @typescript-eslint/no-implicit-any-catch
           system_status: 'degraded',
           message: `Event publish failed: ${originalEvent.type}.${originalEvent.action}`,
           error_details: {
@@ -452,7 +448,6 @@ export class HotelEventPublisher {
               event_id: originalEvent.event_id
             },
             error_message: error instanceof Error ? error.message : String(error)
-// eslint-disable-next-line @typescript-eslint/no-implicit-any-catch
           }
         }
       }
@@ -460,7 +455,6 @@ export class HotelEventPublisher {
       // 直接Redis Streamsに送信（循環防止）
       await this.redisQueue.publishToStream('hotel-error-events', errorEvent)
       
-// eslint-disable-next-line @typescript-eslint/no-implicit-any-catch
     } catch (systemErrorError) {
       this.logger.error('システムエラーイベント発行エラー:', systemErrorError)
     }

@@ -112,17 +112,16 @@ export class HotelApiClient {
         timeout: config.timeout
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-implicit-any-catch, @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: AxiosResponse = await this.client.request(axiosConfig)
 
       return {
         success: true,
-        // eslint-disable-next-line @typescript-eslint/no-implicit-any-catch, @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         data: response.data,
         timestamp: new Date(),
         request_id: response.headers['x-request-id'] || crypto.randomUUID()
       }
-      // eslint-disable-next-line @typescript-eslint/no-implicit-any-catch
     } catch (error: unknown) {
       return {
         success: false,

@@ -386,7 +386,6 @@ export class RedisEventQueue {
       } else {
         // 最大リトライ到達 - デッドレターキューまたは手動処理待ち
         await this.redis.xAck(streamName, consumerGroup, message.id)
-// eslint-disable-next-line @typescript-eslint/no-implicit-any-catch
         
         await this.logEventDelivery({
           event_id: message.id,
@@ -395,7 +394,6 @@ export class RedisEventQueue {
           target_systems: eventData.targets,
           delivery_status: 'failed',
           delivery_time: processingTime,
-// eslint-disable-next-line @typescript-eslint/no-implicit-any-catch
           retry_count: currentRetry,
           error_message: `最大リトライ到達: ${error instanceof Error ? error.message : String(error)}`,
           timestamp: new Date()
@@ -404,7 +402,6 @@ export class RedisEventQueue {
         this.logger.error(`メッセージ処理失敗（最大リトライ到達）: ${message.id}`)
       }
 
-// eslint-disable-next-line @typescript-eslint/no-implicit-any-catch
     } catch (logError) {
       this.logger.error('エラーハンドリング中にエラー:', logError)
     }
