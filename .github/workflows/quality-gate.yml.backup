@@ -1,0 +1,35 @@
+name: Quality Gate
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  lint-and-typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          # oxc-parser optionalDependencies問題の根本解決
+          # npm ciではoptionalDependenciesが正しくインストールされない既知のバグ
+          # https://github.com/npm/cli/issues/4828
+          rm -f package-lock.json
+          npm install --no-save
+
+      - name: Lint
+        run: npx eslint . --ext .ts,.tsx --max-warnings=3500
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Policy violations detection
+        run: node scripts/detect-coding-violations.js

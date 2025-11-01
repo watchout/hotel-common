@@ -1,0 +1,107 @@
+// @ts-check
+import eslint from '@eslint/js'
+import importPlugin from 'eslint-plugin-import'
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
+
+export default tseslint.config(
+  // Base configuration
+  {
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        console: 'readonly',
+        process: 'readonly',
+      }
+    },
+    linterOptions: {
+      noInlineConfig: false,
+      reportUnusedDisableDirectives: 'warn'
+    }
+  },
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended,
+  {
+    plugins: { import: importPlugin },
+    rules: {
+      // ==========================================
+      // 🔴 BLOCK: パフォーマンス・正確性・セキュリティ
+      // ==========================================
+      'no-unreachable': 'error',
+      'no-constant-condition': 'error',
+      'no-dupe-keys': 'error',
+      'no-func-assign': 'error',
+      'no-unsafe-negation': 'error',
+      'no-cond-assign': 'error',
+      'no-constant-binary-expression': 'error',
+      'no-loss-of-precision': 'error',
+      'no-sparse-arrays': 'error',
+      'no-debugger': 'error',
+      'no-eval': 'error',
+      'eqeqeq': ['error', 'always'],
+      'no-var': 'error',
+
+      // ==========================================
+      // 🟡 WARN: 可読性・設計（PRコメント、ブロックしない）
+      // ==========================================
+      'no-duplicate-imports': 'warn',
+      'prefer-const': 'warn',
+      '@typescript-eslint/no-unused-vars': ['warn', {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        ignoreRestSiblings: true,
+        destructuredArrayIgnorePattern: '^_',
+      }],
+
+      // ==========================================
+      // ⚪ OFF: スタイル・既存負債（Prettier or 既存凍結）
+      // ==========================================
+      'no-console': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
+      '@typescript-eslint/ban-types': 'off',
+      'no-empty': 'off',
+      'no-empty-function': 'off',
+      'no-alert': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+      'no-case-declarations': 'off',
+      'no-useless-escape': 'off',
+      '@typescript-eslint/no-namespace': 'off',
+      'import/order': 'off',
+      'import/export': 'off',
+    }
+  },
+  // ==========================================
+  // Override: テストファイルはさらに緩和
+  // ==========================================
+  {
+    files: ['**/*.spec.ts', '**/*.test.ts', '**/test/**/*.ts'],
+    rules: {
+      'no-console': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      'eqeqeq': 'off',  // テストではゆるい比較も許容
+    }
+  },
+  // ==========================================
+  // Override: スクリプトファイルも緩和
+  // ==========================================
+  {
+    files: ['scripts/**/*.ts', '**/*.config.ts'],
+    rules: {
+      'no-console': 'off',  // スクリプトではconsole.log OK
+      '@typescript-eslint/no-var-requires': 'off',
+    }
+  },
+  {
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      '.nuxt/**',
+      '.output/**',
+      'src/generated/prisma/**',
+      'lib/hotel-common/src/database/generated/prisma/**',
+      'backups/**',
+    ]
+  }
+)

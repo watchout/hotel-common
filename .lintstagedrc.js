@@ -1,7 +1,7 @@
 module.exports = {
   '*.{ts,tsx,js,jsx}': (filenames) => {
     const filtered = filenames.filter(
-      (f) => !f.includes('dist/') && 
+      (f) => !f.includes('dist/') &&
              !f.includes('backup/') &&
              !f.includes('node_modules/')
     );
@@ -13,7 +13,7 @@ module.exports = {
   },
   '*.{json,md,yml,yaml}': (filenames) => {
     const filtered = filenames.filter(
-      (f) => !f.includes('dist/') && 
+      (f) => !f.includes('dist/') &&
              !f.includes('backup/')
     );
     if (filtered.length === 0) return [];
