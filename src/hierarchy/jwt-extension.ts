@@ -3,17 +3,17 @@ import { hotelDb } from '../database'
 import { HierarchyPermissionManager } from './permission-manager'
 import { HotelLogger } from '../utils/logger'
 
-import type { 
-  HierarchicalJWTPayload, 
-  OrganizationType, 
+import type {
+  HierarchicalJWTPayload,
+  OrganizationType,
   DataType,
   SharingScope,
-  AccessLevel 
+  AccessLevel
 } from './types'
 
 /**
  * 階層管理対応JWT拡張マネージャー
- * 
+ *
  * 機能:
  * - 階層コンテキスト付きJWT生成
  * - 既存JWTの階層情報拡張
@@ -77,21 +77,15 @@ export class HierarchicalJwtManager {
         },
         accessible_tenants: accessibleTenants
       }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // 4. JWT生成
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - 型定義が不完全
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const accessToken = generateToken(hierarchicalPayload as any);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - 型定義が不完全
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const refreshToken = generateToken(hierarchicalPayload as any, { expiresIn: '7d' });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -211,29 +205,23 @@ export class HierarchicalJwtManager {
       }
 
       // 組織ID決定
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      const organizationId = newOrganizationId || 
+      const organizationId = newOrganizationId ||
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (decoded as any).hierarchy_context?.organization_id ||
         await this.findUserOrganization(decoded.user_id, decoded.tenant_id)
 
       if (!organizationId) {
         this.logger.warn(`組織IDが見つかりません: ${decoded.user_id}`)
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
         return existingToken // 階層情報なしで既存トークンを返す
       }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
       // 新しい階層コンテキストで再生成
       const newTokens = await this.generateHierarchicalToken({
         user_id: decoded.user_id,
         tenant_id: decoded.tenant_id,
         email: decoded.email || '',
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - 型定義が不完全
+        // @ts-expect-error - 型定義が不完全
         role: decoded.role,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - 型定義が不完全
         level: decoded.level || 0,
         permissions: decoded.permissions || [],
         organization_id: organizationId
@@ -254,13 +242,15 @@ export class HierarchicalJwtManager {
     userId: string,
     tenantId: string
   ): Promise<string | null> {
+    let result: string | null = null
     try {
       // 緊急対応：スタブ実装
-      return "org_default"
+      result = "org_default"
     } catch (error: unknown) {
       this.logger.error('ユーザー所属組織検索エラー:', error as Error)
-      return null
+      result = null
     }
+    return result
   }
 
   /**
@@ -313,7 +303,7 @@ export class HierarchicalJwtManager {
 
         const token = authHeader.substring(7)
         const decoded = this.verifyHierarchicalToken(token)
-        
+
         if (!decoded) {
           return res.status(401).json({ error: 'Invalid or expired token' })
         }

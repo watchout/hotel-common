@@ -44,7 +44,7 @@ import {
 // PMSシステムAPI
 import { reservationRouter, roomRouter } from '../routes/systems/pms'
 
-import type { PrismaClient } from '@prisma/client'
+import type { PrismaClient } from '../generated/prisma'
 
 
 // 環境変数読み込み

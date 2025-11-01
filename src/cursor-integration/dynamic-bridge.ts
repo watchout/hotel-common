@@ -3,6 +3,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { execSync } from 'child_process';
 
 import { RealGuardrailsValidator } from './guardrails-validator';
 import { RealRAGService } from './rag-service';
@@ -23,22 +24,14 @@ export interface ProjectContext {
 export class DynamicCursorIntegration {
   private ragService: RealRAGService;
   private guardrails: RealGuardrailsValidator;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore - TokenOptimizerクラスが存在しない
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private tokenOptimizer: any;
   private watchInterval: NodeJS.Timeout | null = null;
   private lastContext = '';
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   constructor() {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     this.ragService = new RealRAGService();
     this.guardrails = new RealGuardrailsValidator();
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - TokenOptimizerクラスが存在しない
     this.tokenOptimizer = {};
   }
 
@@ -159,7 +152,6 @@ export class DynamicCursorIntegration {
       project: path.basename(process.cwd())
     };
   }
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
 
   /**
    * 最近の変更取得
@@ -168,8 +160,6 @@ export class DynamicCursorIntegration {
   private async getRecentChanges(): Promise<string[]> {
     try {
       // git log確認（簡易版）
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { execSync } = require('child_process');
       const gitLog = execSync('git log --oneline -5', { encoding: 'utf8' });
       return gitLog.split('\n').filter((line: string) => line.trim());
     } catch (error: unknown) {

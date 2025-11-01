@@ -16,10 +16,6 @@ const logger = new HotelLogger({ module: 'tenant-service-api' });
  */
 export async function getTenantServices(tenantId: string) {
   try {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
     const services = await prisma.tenant_services.findMany({
       where: {
         tenant_id: tenantId
@@ -55,25 +51,17 @@ export async function updateTenantService(
   planType: string,
   isActive: boolean
 ) {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
   try {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // サービスが既に存在するか確認
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
     const existingService = await prisma.tenant_services.findFirst({
       where: {
         tenant_id: tenantId,
         service_type: serviceType
       }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     });
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     if (existingService) {
       // 既存サービスの更新
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
       const updatedService = await prisma.tenant_services.update({
         where: {
           id: existingService.id
@@ -91,16 +79,12 @@ export async function updateTenantService(
         planType, 
         isActive 
       });
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       return {
         success: true,
         data: updatedService
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       };
     } else {
       // 新規サービスの登録
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
       const newService = await prisma.tenant_services.create({
         data: {
           id: `ts_${Math.random().toString(36).substring(2, 10)}`,
@@ -145,18 +129,14 @@ export async function updateTenantService(
  * サービスのプラン制限を取得
  * @param serviceType サービスタイプ ('hotel-saas', 'hotel-pms', 'hotel-member')
  * @param planType プランタイプ ('economy', 'standard', 'premium')
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
  * @param planCategory プランカテゴリ ('omotenasuai', etc.)
  */
 export async function getServicePlanRestrictions(
   serviceType: string,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
   planType: string,
   planCategory = 'omotenasuai'
 ) {
   try {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
     const planRestrictions = await prisma.service_plan_restrictions.findFirst({
       where: {
         service_type: serviceType,
@@ -200,27 +180,21 @@ export async function getServicePlanRestrictions(
  */
 export async function recordServiceUsage(
   tenantId: string,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   serviceType: string,
   month: string,
   data: {
     activeUsersCount?: number;
     activeDevicesCount?: number;
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
     usageData?: Record<string, any>;
   }
 ) {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
   try {
     // 既存の統計データを確認
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
     const existingStat = await prisma.service_usage_statistics.findFirst({
       where: {
         tenant_id: tenantId,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
         service_type: serviceType,
         month
       }
@@ -228,11 +202,8 @@ export async function recordServiceUsage(
 
     if (existingStat) {
       // 既存データの更新
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
       const updatedStat = await prisma.service_usage_statistics.update({
         where: {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
           id: existingStat.id
         },
         data: {
@@ -241,7 +212,6 @@ export async function recordServiceUsage(
           usage_data: data.usageData ? JSON.parse(JSON.stringify(data.usageData)) : existingStat.usage_data,
           updated_at: new Date()
         }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       });
 
       return {
@@ -250,8 +220,6 @@ export async function recordServiceUsage(
       };
     } else {
       // 新規データの登録
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
       const newStat = await prisma.service_usage_statistics.create({
         data: {
           id: `sus_${Math.random().toString(36).substring(2, 10)}`,
@@ -274,7 +242,6 @@ export async function recordServiceUsage(
   } catch (error: unknown) {
     logger.error('サービス利用統計記録エラー', { 
       tenantId, 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       serviceType: serviceType, 
       month, 
       error: error instanceof Error ? error : new Error(String(error)) 
@@ -284,7 +251,6 @@ export async function recordServiceUsage(
       error: 'サービス利用統計の記録に失敗しました'
     };
   }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 }
 
 /**
@@ -294,9 +260,6 @@ export async function recordServiceUsage(
  */
 export async function checkServiceAccess(tenantId: string, serviceType: string) {
   try {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     const service = await prisma.tenant_services.findFirst({
       where: {
         tenant_id: tenantId,
@@ -307,7 +270,6 @@ export async function checkServiceAccess(tenantId: string, serviceType: string) 
     
     if (!service) {
       logger.warn('サービスアクセス拒否', { 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
         tenantId, 
         serviceType: serviceType 
       });
@@ -318,8 +280,6 @@ export async function checkServiceAccess(tenantId: string, serviceType: string) 
     }
     
     // プラン制限を取得
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - Prismaスキーマに存在するが型定義されていないモデル
     const planRestrictions = await prisma.service_plan_restrictions.findFirst({
       where: {
         service_type: serviceType,

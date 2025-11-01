@@ -69,7 +69,6 @@ router.get('/invoices', authMiddleware, async (req: Request, res: Response) => {
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       )
-      return
     }
 
     // データベースから請求書データを取得
@@ -146,12 +145,12 @@ router.get('/invoices', authMiddleware, async (req: Request, res: Response) => {
 
   } catch (error: unknown) {
     logger.error('請求書一覧取得エラー', error as Error)
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, 'クエリパラメータが正しくありません', error.errors)
       return
     }
-    
+
     ResponseHelper.sendInternalError(res, '請求書の取得に失敗しました')
   }
 })
@@ -162,20 +161,22 @@ router.get('/invoices', authMiddleware, async (req: Request, res: Response) => {
  */
 router.post('/invoices', authMiddleware, async (req: Request, res: Response) => {
   try {
+    const tenantId = (req as any).user?.tenant_id;
+    if (!tenantId) { return ResponseHelper.sendUnauthorized(res, 'テナントIDが取得できません'); }
     const invoiceData = InvoiceCreateSchema.parse(req.body)
 
     // 請求書番号生成
     const invoiceNumber = `INV-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`
-    
+
     // 金額計算
-    const subtotal = invoiceData.items.reduce((sum, item) => 
+    const subtotal = invoiceData.items.reduce((sum, item) =>
       sum + (item.quantity * item.unit_price), 0
     )
-    
-    const totalTax = invoiceData.items.reduce((sum, item) => 
+
+    const totalTax = invoiceData.items.reduce((sum, item) =>
       sum + (item.quantity * item.unit_price * item.tax_rate), 0
     )
-    
+
     const totalAmount = subtotal + totalTax
 
     // 注意: 実際のinvoicesテーブルが実装されるまでのプレースホルダー
@@ -203,7 +204,7 @@ router.post('/invoices', authMiddleware, async (req: Request, res: Response) => 
     await hotelDb.getAdapter().systemEvent.create({
       data: {
         id: `acc-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`,
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         user_id: req.user?.user_id,
         event_type: 'ACCOUNTING',
         source_system: 'hotel-common',
@@ -236,12 +237,12 @@ router.post('/invoices', authMiddleware, async (req: Request, res: Response) => 
 
   } catch (error: unknown) {
     logger.error('請求書作成エラー', error as Error)
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, '請求書データが正しくありません', error.errors)
       return
     }
-    
+
     ResponseHelper.sendInternalError(res, '請求書の作成に失敗しました')
   }
 })
@@ -328,6 +329,8 @@ router.get('/invoices/:id', authMiddleware, async (req: Request, res: Response) 
  */
 router.post('/payments', authMiddleware, async (req: Request, res: Response) => {
   try {
+    const tenantId = (req as any).user?.tenant_id;
+    if (!tenantId) { return ResponseHelper.sendUnauthorized(res, 'テナントIDが取得できません'); }
     const paymentData = PaymentRecordSchema.parse(req.body)
 
     // 決済記録作成
@@ -348,7 +351,7 @@ router.post('/payments', authMiddleware, async (req: Request, res: Response) => 
     await hotelDb.getAdapter().systemEvent.create({
       data: {
         id: `pay-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`,
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         user_id: req.user?.user_id,
         event_type: 'ACCOUNTING',
         source_system: 'hotel-common',
@@ -381,12 +384,12 @@ router.post('/payments', authMiddleware, async (req: Request, res: Response) => 
 
   } catch (error: unknown) {
     logger.error('決済記録エラー', error as Error)
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, '決済データが正しくありません', error.errors)
       return
     }
-    
+
     ResponseHelper.sendInternalError(res, '決済の記録に失敗しました')
   }
 })
@@ -405,7 +408,6 @@ router.get('/payments', authMiddleware, async (req: Request, res: Response) => {
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       )
-      return
     }
 
     // データベースから決済データを取得
@@ -478,12 +480,12 @@ router.get('/payments', authMiddleware, async (req: Request, res: Response) => {
 
   } catch (error: unknown) {
     logger.error('決済履歴取得エラー', error as Error)
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, 'クエリパラメータが正しくありません', error.errors)
       return
     }
-    
+
     ResponseHelper.sendInternalError(res, '決済履歴の取得に失敗しました')
   }
 })
@@ -508,7 +510,6 @@ router.get('/reports', authMiddleware, async (req: Request, res: Response) => {
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       )
-      return
     }
 
     // 期間設定
@@ -620,12 +621,12 @@ router.get('/reports', authMiddleware, async (req: Request, res: Response) => {
 
   } catch (error: unknown) {
     logger.error('会計レポート取得エラー', error as Error)
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, 'レポート条件が正しくありません', error.errors)
       return
     }
-    
+
     ResponseHelper.sendInternalError(res, '会計レポートの取得に失敗しました')
   }
 })

@@ -7,6 +7,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { generateToken, verifyToken } from '../../../auth/jwt';
 import { authMiddleware } from '../../../auth/middleware';
+import { validateJwtIntegrity, validateTenantIdHeader } from '../../../auth/tenant-validation-middleware';
+import { hotelDb } from '../../../database';
+import { HotelLogger } from '../../../utils/logger';
+import { getRedisClient } from '../../../utils/redis';
+import { StandardResponseBuilder } from '../../../utils/response-builder';
+import type { HierarchicalJWTPayload } from '../../../auth/types';
 
 const router = express.Router();
 const logger = HotelLogger.getInstance();
@@ -32,7 +38,8 @@ router.post('/login', async (req: Request, res: Response) => {
       where: {
         email,
         is_active: true,
-        is_deleted: false
+        is_deleted: false,
+        ...(tenantId ? { staff_tenant_memberships: { some: { tenant_id: tenantId } } } : {})
       }
     });
 
@@ -42,9 +49,7 @@ router.post('/login', async (req: Request, res: Response) => {
       );
     }
     // 特定のテナントが指定されている場合は、そのテナントのスタッフに限定
-    const candidateStaffList = tenantId
-      ? staffMembers.filter(s => (s as any)?.tenant_id === tenantId)
-      : staffMembers;
+    const candidateStaffList = staffMembers;
 
     if (tenantId && candidateStaffList.length === 0) {
       return res.status(404).json(
@@ -80,21 +85,23 @@ router.post('/login', async (req: Request, res: Response) => {
     const availableTenants = await Promise.all(
       staffMembers.map(async (staffMember) => {
         // tenant_idが空または不正な場合はスキップ
-        if (!staffMember.tenant_id || staffMember.tenant_id.trim() === '') {
+        const tenantIdRaw = (staffMember as unknown as Record<string, unknown>)['tenant_id'];
+        const tenantIdStr = typeof tenantIdRaw === 'string' ? tenantIdRaw : '';
+        if (!tenantIdStr || tenantIdStr.trim() === '') {
           return {
-            tenantId: staffMember.tenant_id || '',
+            tenantId: tenantIdStr,
             staffId: staffMember.id,
-            staffRole: staffMember.role,
+            staffRole: ((staffMember as unknown as Record<string, unknown>)['role'] as string) || 'staff',
             tenant: null
           };
         }
         const tenant = await hotelDb.getAdapter().tenant.findUnique({
-          where: { id: (staffMember as any)?.tenant_id }
+          where: { id: tenantIdStr }
         });
         return {
-          tenantId: (staffMember as any)?.tenant_id,
+          tenantId: tenantIdStr,
           staffId: staffMember.id,
-          staffRole: (staffMember as any)?.role ?? 'staff',
+          staffRole: ((staffMember as unknown as Record<string, unknown>)['role'] as string) || 'staff',
           tenant: tenant
         };
       })
@@ -122,9 +129,9 @@ router.post('/login', async (req: Request, res: Response) => {
       user_id: selectedStaffMember.id,
       tenant_id: selectedTenantId,
       email: selectedStaffMember.email,
-      role: ((selectedStaffMember as any)?.role ?? 'STAFF') as 'STAFF' | 'ADMIN' | 'SUPER_ADMIN' | 'MANAGER' | 'OWNER' | 'SYSTEM',
+      role: (() => { const v = (selectedStaffMember as unknown as Record<string, unknown>)['role']; return (typeof v === 'string' ? v : 'STAFF') as 'STAFF' | 'ADMIN' | 'SUPER_ADMIN' | 'MANAGER' | 'OWNER' | 'SYSTEM'; })(),
       level: 3,
-      permissions: ((selectedStaffMember as any)?.role ?? 'STAFF') === 'SUPER_ADMIN' ? ['*'] : ['tenant:read', 'tenant:write'],
+      permissions: (() => { const v = (selectedStaffMember as unknown as Record<string, unknown>)['role']; return (typeof v === 'string' ? v : 'STAFF') === 'SUPER_ADMIN' ? ['*'] : ['tenant:read', 'tenant:write']; })(),
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + (8 * 60 * 60), // 8時間
       jti: `jwt-${Date.now()}`,
@@ -165,8 +172,8 @@ router.post('/login', async (req: Request, res: Response) => {
       user_id: selectedStaffMember.id,
       tenant_id: selectedTenantId,
       email: selectedStaffMember.email,
-      role: (selectedStaffMember as any)?.role ?? 'STAFF',
-      permissions: selectedStaffMember.role === 'SUPER_ADMIN' ? ['*'] : ['tenant:read', 'tenant:write'],
+      role: (() => { const v = (selectedStaffMember as unknown as Record<string, unknown>)['role']; return typeof v === 'string' ? v : 'STAFF'; })(),
+      permissions: (() => { const v = (selectedStaffMember as unknown as Record<string, unknown>)['role']; return (typeof v === 'string' ? v : 'STAFF') === 'SUPER_ADMIN' ? ['*'] : ['tenant:read', 'tenant:write']; })(),
       accessible_tenants: accessibleTenants,
       created_at: new Date(),
       last_activity: new Date(),
@@ -206,7 +213,7 @@ router.post('/login', async (req: Request, res: Response) => {
           id: selectedStaffMember.id,
           email: selectedStaffMember.email,
           name: selectedStaffMember.name,
-          role: selectedStaffMember.role,
+          role: (() => { const v = (selectedStaffMember as unknown as Record<string, unknown>)['role']; return typeof v === 'string' ? v : 'STAFF'; })(),
           tenantId: selectedTenantId
         },
         tenant: selectedTenant,
@@ -227,7 +234,7 @@ router.post('/login', async (req: Request, res: Response) => {
           id: selectedStaffMember.id,
           email: selectedStaffMember.email,
           name: selectedStaffMember.name,
-      role: (selectedStaffMember as any)?.role ?? 'STAFF',
+          role: (() => { const v = (selectedStaffMember as unknown as Record<string, unknown>)['role']; return typeof v === 'string' ? v : 'STAFF'; })(),
           tenantId: selectedTenantId
         },
         tenant: selectedTenant,
@@ -441,8 +448,8 @@ router.post('/switch-tenant', async (req: Request, res: Response) => {
       const staff = await hotelDb.getAdapter().staff.findFirst({
         where: {
           email: decoded.email,
-          tenant_id: tenantId,
-          is_active: true
+          is_active: true,
+          staff_tenant_memberships: { some: { tenant_id: tenantId } }
         }
       });
 
@@ -462,7 +469,7 @@ router.post('/switch-tenant', async (req: Request, res: Response) => {
       const newTokenPayload: HierarchicalJWTPayload = {
         ...decoded,
         tenant_id: tenantId,
-        role: staff.role as 'STAFF' | 'ADMIN' | 'SUPER_ADMIN' | 'MANAGER' | 'OWNER' | 'SYSTEM',
+        role: (() => { const v = (staff as unknown as Record<string, unknown>)['role']; return (typeof v === 'string' ? v : 'STAFF') as 'STAFF' | 'ADMIN' | 'SUPER_ADMIN' | 'MANAGER' | 'OWNER' | 'SYSTEM'; })(),
         accessible_tenants: updatedAccessibleTenants,
         iat: Math.floor(Date.now() / 1000),
         exp: Math.floor(Date.now() / 1000) + (8 * 60 * 60), // 8時間
@@ -499,7 +506,7 @@ router.post('/switch-tenant', async (req: Request, res: Response) => {
           id: staff.id,
           email: staff.email,
           name: staff.name,
-          role: staff.role,
+          role: (() => { const v = (staff as unknown as Record<string, unknown>)['role']; return typeof v === 'string' ? v : 'STAFF'; })(),
           tenantId
         },
         tenant: {
@@ -728,13 +735,6 @@ router.get('/api/v1/admin/tenant/current', async (req: Request, res: Response) =
  * テナント情報取得
  * GET /api/v1/tenants/:id
  */
-import { validateJwtIntegrity, validateTenantIdHeader } from '../../../auth/tenant-validation-middleware';
-import { hotelDb } from '../../../database';
-import { HotelLogger } from '../../../utils/logger';
-import { getRedisClient } from '../../../utils/redis';
-import { StandardResponseBuilder } from '../../../utils/response-builder';
-
-import type { HierarchicalJWTPayload } from '../../../auth/types';
 
 router.get('/api/v1/tenants/:id', authMiddleware, validateTenantIdHeader, validateJwtIntegrity, async (req: Request & { user?: any }, res: Response) => {
   try {
@@ -802,20 +802,17 @@ router.get('/api/v1/staff/:id', async (req: Request, res: Response) => {
     const staff = await hotelDb.getAdapter().staff.findFirst({
       where: {
         id,
-        tenant_id: tenantId
+      staff_tenant_memberships: { some: { tenant_id: tenantId } }
       },
       select: {
         id: true,
-        tenant_id: true,
         email: true,
         name: true,
-        role: true,
-        department: true,
         is_active: true,
         last_login_at: true,
         created_at: true,
         updated_at: true
-      }
+    } as unknown as Record<string, unknown>
     });
 
     if (!staff) {

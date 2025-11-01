@@ -31,7 +31,7 @@ export async function setupCampaignDatabase(): Promise<void> {
             code: category.code,
             name: category.name,
             description: category.description,
-            // @ts-ignore - 型定義が不完全
+            // @ts-expect-error - 型定義が不完全
             isSystem: category.isSystem,
             isActive: true,
             priority: 0,

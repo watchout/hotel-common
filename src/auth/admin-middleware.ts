@@ -19,10 +19,6 @@ export const adminAuthMiddleware = (req: Request, res: Response, next: NextFunct
       });
     }
     
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - 型の互換性の問題
     const decoded = verifyToken(token) as HierarchicalJWTPayload;
     
     if (decoded.role !== 'ADMIN' && decoded.role !== 'SUPER_ADMIN') {
@@ -31,12 +27,8 @@ export const adminAuthMiddleware = (req: Request, res: Response, next: NextFunct
         error: 'FORBIDDEN',
         message: '管理者権限が必要です'
       });
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - 型の互換性の問題
     req.user = decoded;
     next();
   } catch (error: unknown) {

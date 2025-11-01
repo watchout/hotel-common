@@ -50,7 +50,6 @@ router.get('/accounting', authMiddleware, async (req: Request, res: Response) =>
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       );
-      return;
     }
 
     // データベースから取引データを取得
@@ -158,12 +157,12 @@ router.get('/accounting', authMiddleware, async (req: Request, res: Response) =>
 
   } catch (error: unknown) {
     logger.error('フロントデスク会計取引一覧取得エラー', error as Error);
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, 'クエリパラメータが正しくありません', error.errors);
       return;
     }
-    
+
     ResponseHelper.sendInternalError(res, '会計取引一覧の取得に失敗しました');
   }
 });
@@ -181,7 +180,6 @@ router.get('/accounting/:id', authMiddleware, async (req: Request, res: Response
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       );
-      return;
     }
 
     // データベースから取引詳細を取得
@@ -217,7 +215,7 @@ router.get('/accounting/:id', authMiddleware, async (req: Request, res: Response
       total_amount: transaction.totalAmount,
       status: transaction.status,
       payment_method: transaction.payment?.paymentMethod || null,
-      payment_reference: transaction.payment?.paymentReference || null,
+      payment_reference: ((transaction.payment?.metadata as unknown as { paymentReference?: string })?.paymentReference) || null,
       created_at: transaction.createdAt,
       completed_at: transaction.payment?.processedAt || null,
       items: transaction.invoice?.items || [],
@@ -225,7 +223,7 @@ router.get('/accounting/:id', authMiddleware, async (req: Request, res: Response
         date: transaction.payment.processedAt,
         method: transaction.payment.paymentMethod,
         amount: transaction.payment.amount,
-        reference: transaction.payment.paymentReference,
+        reference: ((transaction.payment.metadata as unknown as { paymentReference?: string })?.paymentReference) || null,
         status: transaction.payment.status
       }] : []
     };
@@ -257,7 +255,6 @@ router.post('/accounting/process-payment', authMiddleware, async (req: Request, 
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       );
-      return;
     }
 
     // ダミー決済処理
@@ -310,12 +307,12 @@ router.post('/accounting/process-payment', authMiddleware, async (req: Request, 
 
   } catch (error: unknown) {
     logger.error('フロントデスク決済処理エラー', error as Error);
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, '決済データが正しくありません', error.errors);
       return;
     }
-    
+
     ResponseHelper.sendInternalError(res, '決済処理に失敗しました');
   }
 });
@@ -333,7 +330,6 @@ router.get('/accounting/daily-report', authMiddleware, async (req: Request, res:
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       );
-      return;
     }
 
     const reportDate = date ? new Date(date as string) : new Date();

@@ -89,15 +89,11 @@ export class UnifiedTenantManager {
         domain: tenant.domain || undefined,
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
         settings: tenant.settings as Record<string, any>,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
         features: tenant.features as string[],
         status: tenant.status as 'active' | 'inactive' | 'suspended'
       }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
       // キャッシュに保存（TTL: 1時間）
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - Redisクライアントの型定義の問題
       await this.redis.set(
         `tenant:${tenantId}`, 
         JSON.stringify(tenantConfig)
@@ -163,17 +159,14 @@ export class UnifiedTenantManager {
     context: TenantContext,
     resource: string,
     action: string
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
   ): Promise<void> {
     try {
       await this.db.tenantAccessLog.create({
         data: {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
           tenant_id: context.tenantId,
           user_id: context.userId,
           source_system: context.sourceSystem,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore - フィールド名の不一致
+          // @ts-expect-error - フィールド名の不一致
           request_id: context.requestId,
           resource,
           action,

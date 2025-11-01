@@ -1,18 +1,7 @@
-import crypto from 'crypto';
-
-import axios from 'axios';
-
-
-import { ERROR_CODES } from '../types/api';
-
-// eslint-disable-next-line no-duplicate-imports
-// eslint-disable-next-line no-duplicate-imports
-// eslint-disable-next-line no-duplicate-imports
-import type { ApiClientConfig, RequestConfig } from '../types/api';
-// eslint-disable-next-line no-duplicate-imports
-import type { ApiError, ApiResponse } from '../types/common';
-// eslint-disable-next-line no-duplicate-imports
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import crypto from 'crypto'
+import { ERROR_CODES, type ApiClientConfig, type RequestConfig } from '../types/api'
+import type { ApiError, ApiResponse } from '../types/common'
 
 // import { JwtManager } from '../auth/jwt'
 
@@ -123,17 +112,16 @@ export class HotelApiClient {
         timeout: config.timeout
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-implicit-any-catch, @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: AxiosResponse = await this.client.request(axiosConfig)
 
       return {
         success: true,
-        // eslint-disable-next-line @typescript-eslint/no-implicit-any-catch, @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         data: response.data,
         timestamp: new Date(),
         request_id: response.headers['x-request-id'] || crypto.randomUUID()
       }
-      // eslint-disable-next-line @typescript-eslint/no-implicit-any-catch
     } catch (error: unknown) {
       return {
         success: false,

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '../generated/prisma'
 
 import { hotelDb } from '../database/prisma'
 
@@ -13,7 +13,7 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('⚠️ データベースリセット処理を開始します...')
   console.log('⚠️ 全てのデータが削除されます。本番環境では絶対に実行しないでください！')
-  
+
   // 環境チェック
   const env = process.env.NODE_ENV || 'development'
   if (env === 'production') {

@@ -159,7 +159,7 @@ export class HotelSaasAuth {
       return { valid: false, error: 'Invalid or expired token' }
     }
     
-    // @ts-ignore - 型定義が不完全
+    // @ts-expect-error - 型定義が不完全
     return { valid: true, payload }
   }
   

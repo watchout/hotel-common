@@ -21,7 +21,7 @@ import type { RedisClientType } from 'redis';
 
 /**
  * Hotel Group階層権限管理システム
- * 
+ *
  * 機能:
  * - 階層スコープ内権限チェック
  * - アクセス可能テナント一覧取得
@@ -54,7 +54,7 @@ export class HierarchyPermissionManager {
   ): Promise<HierarchyAccessResult> {
     try {
       const { user_token, target_resource, operation } = params
-      
+
       this.logger.debug('階層権限チェック開始', {
         userId: user_token.user_id,
         data: {
@@ -89,13 +89,15 @@ export class HierarchyPermissionManager {
     organizationId: string,
     scopeLevel?: SharingScope
   ): Promise<string[]> {
+    let result: string[] = []
     try {
       // 緊急対応：スタブ実装
-      return ["tenant_1", "tenant_2", "tenant_3"]
+      result = ["tenant_1", "tenant_2", "tenant_3"]
     } catch (error: unknown) {
       this.logger.error('アクセス可能テナント取得エラー:', error as Error)
-      return []
+      result = []
     }
+    return result
   }
 
   /**
@@ -105,13 +107,15 @@ export class HierarchyPermissionManager {
     rootOrganizationId?: string,
     maxDepth = 4
   ): Promise<OrganizationHierarchy[]> {
+    let result: OrganizationHierarchy[] = []
     try {
       // 緊急対応：スタブ実装
-      return []
+      result = []
     } catch (error: unknown) {
       this.logger.error('組織階層ツリー取得エラー:', error as Error)
-      return []
+      result = []
     }
+    return result
   }
 
   /**

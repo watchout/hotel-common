@@ -80,16 +80,12 @@ class RealCampaignServer {
     // キャンペーンAPIを統合
     // 統合サーバーとの互換性のためのアダプター
     const integrationServerAdapter = {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       addRouter: (path: string, router: Router) => {
         this.app.use(path, router);
       }
     };
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
     // キャンペーン機能を統合
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - 引数の型が不一致
     integrateCampaignFeature();
 
     // 404エラーハンドラー

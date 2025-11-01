@@ -21,6 +21,7 @@ export type {
 export { HIERARCHY_PRESETS } from './types'
 
 // 核心クラス
+import express from 'express'
 export { HierarchyPermissionManager } from './permission-manager'
 export { HierarchicalJwtManager } from './jwt-extension'
 export { HierarchyApiManager } from './hierarchy-api'
@@ -33,10 +34,10 @@ export { HierarchyMiddleware } from './hierarchy-middleware'
 export async function initializeHierarchySystem(): Promise<void> {
   const { HotelLogger } = await import('../utils/logger')
   const logger = HotelLogger.getInstance()
-  
+
   try {
     logger.info('🏗️ Hotel Group階層権限管理システム初期化中...')
-    
+
     logger.info('✅ 階層権限管理システム初期化完了')
     logger.info(`
 🏗️ Hotel Group階層権限管理システム稼働中
@@ -48,7 +49,7 @@ export async function initializeHierarchySystem(): Promise<void> {
 
 利用可能プリセット:
 - 完全統合型（星野リゾート型）
-- ブランド別管理型（アパグループ型）  
+- ブランド別管理型（アパグループ型）
 - 完全分離型（単独店舗型）
 
 実装機能:
@@ -58,7 +59,7 @@ export async function initializeHierarchySystem(): Promise<void> {
 - Express.jsミドルウェア（HierarchyMiddleware）
 - 統合サービス（HierarchyService）
     `)
-    
+
   } catch (error: unknown) {
     logger.error('階層権限管理システム初期化エラー:', error as Error)
     throw error
@@ -93,7 +94,7 @@ export class HierarchyUtils {
   }
 
   /**
-   * 予約データアクセス権限チェック  
+   * 予約データアクセス権限チェック
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
    */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -279,7 +280,6 @@ export class HierarchyUtils {
         }
       } else {
         details.type_check = true
-// eslint-disable-next-line @typescript-eslint/no-var-requires
       }
 
       details.hierarchy_check = true
@@ -289,10 +289,8 @@ export class HierarchyUtils {
       }
 
     } catch (error: unknown) {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
       return {
         allowed: false,
-// eslint-disable-next-line @typescript-eslint/no-var-requires
         reason: '権限チェック中にエラーが発生しました',
         details
       }
@@ -305,8 +303,6 @@ export class HierarchyUtils {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
  */
 export function createHierarchyRouter() {
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-  const express = require('express')
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const router = express.Router()
 
@@ -392,4 +388,4 @@ export function createHierarchyRouter() {
   )
 
   return router
-} 
+}

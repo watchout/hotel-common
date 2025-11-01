@@ -19,10 +19,7 @@ export class HotelMigrationManager {
   public async getCurrentVersion(): Promise<string | null> {
     try {
       const latestVersion = await this.db.schemaVersion.findFirst({
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - フィールド名の不一致
+        // @ts-expect-error - フィールド名の不一致
         orderBy: { appliedAt: 'desc' }
       })
       return latestVersion?.version || null
@@ -52,12 +49,8 @@ export class HotelMigrationManager {
         // スキーマバージョン記録
         await tx.schemaVersion.create({
                       data: {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
               version,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
               description,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore - フィールド名の不一致
               rollbackSql: rollback_sql || null
             }
         })
@@ -87,25 +80,19 @@ export class HotelMigrationManager {
       })
 
       if (!migration) {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
         this.logger.error('Migration version not found', { version })
         return false
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore - フィールド名の不一致
+      // @ts-expect-error - フィールド名の不一致
       if (!migration.rollbackSql) {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
         this.logger.error('No rollback SQL available', { version })
         return false
       }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
       await hotelDb.transaction(async (tx) => {
         // ロールバックSQL実行
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - フィールド名の不一致
+        // @ts-expect-error - フィールド名の不一致
         await tx.$executeRawUnsafe(migration.rollbackSql!)
 
         // スキーマバージョン削除
@@ -120,20 +107,17 @@ export class HotelMigrationManager {
 
       return true
     } catch (error: unknown) {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
       this.logger.error('Rollback failed', { version, error: error as Error } as any)
       return false
     }
   }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 
   // マイグレーション履歴取得
   public async getMigrationHistory() {
     try {
       return await this.db.schemaVersion.findMany({
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - フィールド名の不一致
+        // @ts-expect-error - フィールド名の不一致
         orderBy: { appliedAt: 'desc' }
       })
     } catch (error: unknown) {

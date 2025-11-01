@@ -615,7 +615,6 @@ export class NotificationService {
     try {
       // 実際の実装ではfetchやaxiosを使用
       this.logger.info('Webhook送信', {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
         data: { endpoint },
         event: data.event
       })
@@ -628,14 +627,12 @@ export class NotificationService {
         data: { endpoint },
         error: new Error(error instanceof Error ? error.message : String(error))
       })
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       return false
     }
   }
   
   /**
    * 通知イベント発行
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
    */
   private async publishNotificationEvent(
     type: NotificationType,
@@ -648,14 +645,12 @@ export class NotificationService {
     }
   ): Promise<void> {
     try {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       const eventPublisher = getEventPublisher()
       
       await eventPublisher.publishEvent({
         event_id: `notification_${Date.now()}`,
         type: 'system',
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - 型定義が不完全
+        // @ts-expect-error - 型定義が不完全
         action: 'notification_sent',
         priority: 'LOW',
         sync_mode: 'realtime',
@@ -667,8 +662,7 @@ export class NotificationService {
         synced_at: new Date(),
         tenant_id: 'system',
         data: {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore - 型定義が不完全
+          // @ts-expect-error - 型定義が不完全
           notification_type: type,
           template_id: data.template_id,
           recipient: data.recipient,

@@ -53,6 +53,8 @@ const CommentCreateSchema = z.object({ content: z.string().min(1), parent_commen
 // GET /api/v1/admin/room-memos?room_number=101
 router.get('/room-memos', authMiddleware, async (req: Request, res: Response) => {
   try {
+    const tenantId = (req as any).user?.tenant_id;
+    if (!tenantId) { return ResponseHelper.sendUnauthorized(res, 'テナントIDが取得できません'); }
     const query = ListQuery.extend({
       room_number: z.string().optional(),
       room_id: z.string().optional()
@@ -63,11 +65,11 @@ router.get('/room-memos', authMiddleware, async (req: Request, res: Response) =>
     let room = null
     if (room_number) {
       room = await hotelDb.getAdapter().room.findFirst({
-        where: { tenantId: req.user?.tenant_id!, roomNumber: room_number }
+        where: { tenantId,  roomNumber: room_number }
       })
     } else if (room_id) {
       room = await hotelDb.getAdapter().room.findFirst({
-        where: { tenantId: req.user?.tenant_id!, id: room_id }
+        where: { tenantId,  id: room_id }
       })
     }
     
@@ -76,7 +78,7 @@ router.get('/room-memos', authMiddleware, async (req: Request, res: Response) =>
     }
 
     const where: any = {
-      tenant_id: req.user?.tenant_id!,
+      tenant_id: tenantId,
       is_deleted: false
     }
     
@@ -126,15 +128,19 @@ router.get('/room-memos', authMiddleware, async (req: Request, res: Response) =>
 // POST /api/v1/admin/room-memos
 router.post('/room-memos', authMiddleware, async (req: Request, res: Response) => {
   try {
+    const tenantId = (req as any).user?.tenant_id;
+    if (!tenantId) { return ResponseHelper.sendUnauthorized(res, 'テナントIDが取得できません'); }
+    const userId = (req as any).user?.user_id;
+    if (!userId) { return ResponseHelper.sendUnauthorized(res, 'ユーザーIDが取得できません'); }
     const data = CreateSchema.parse(req.body)
     const room = await hotelDb.getAdapter().room.findFirst({
-      where: { tenantId: req.user?.tenant_id!, roomNumber: data.room_number }
+      where: { tenantId,  roomNumber: data.room_number }
     })
     if (!room) return ResponseHelper.sendNotFound(res, '指定された客室が見つかりません')
 
     const created = await hotelDb.getAdapter().roomMemo.create({
       data: {
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         room_id: room.id,
         category: data.category,
         visibility: data.visibility,
@@ -143,7 +149,7 @@ router.post('/room-memos', authMiddleware, async (req: Request, res: Response) =
         status: 'pending',
         priority: data.priority,
         due_date: data.due_date ? new Date(data.due_date) : null,
-        created_by_staff_id: req.user?.user_id!,
+        created_by_staff_id: userId,
         assigned_to_staff_id: data.assigned_to_staff_id || null
       }
     })
@@ -152,7 +158,7 @@ router.post('/room-memos', authMiddleware, async (req: Request, res: Response) =
     await hotelDb.getAdapter().systemEvent.create({
       data: {
         id: `log-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         user_id: req.user?.user_id,
         event_type: 'USER_OPERATION',
         source_system: 'hotel-common',
@@ -182,10 +188,14 @@ router.post('/room-memos', authMiddleware, async (req: Request, res: Response) =
 // PUT /api/v1/admin/room-memos/:id
 router.put('/room-memos/:id', authMiddleware, async (req: Request, res: Response) => {
   try {
+    const tenantId = (req as any).user?.tenant_id;
+    if (!tenantId) { return ResponseHelper.sendUnauthorized(res, 'テナントIDが取得できません'); }
+    const userId = (req as any).user?.user_id;
+    if (!userId) { return ResponseHelper.sendUnauthorized(res, 'ユーザーIDが取得できません'); }
     const { id } = req.params
     const changes = UpdateSchema.parse(req.body)
 
-    const memo = await hotelDb.getAdapter().roomMemo.findFirst({ where: { id, tenant_id: req.user?.tenant_id!, is_deleted: false } })
+    const memo = await hotelDb.getAdapter().roomMemo.findFirst({ where: { id, tenant_id: tenantId, is_deleted: false } })
     if (!memo) return ResponseHelper.sendNotFound(res, 'メモが見つかりません')
 
     const updated = await hotelDb.getAdapter().roomMemo.update({
@@ -197,7 +207,7 @@ router.put('/room-memos/:id', authMiddleware, async (req: Request, res: Response
         visibility: changes.visibility ?? undefined,
         visible_roles: changes.visible_roles ?? undefined,
         assigned_to_staff_id: changes.assigned_to_staff_id ?? undefined,
-        updated_by_staff_id: req.user?.user_id!
+        updated_by_staff_id: userId
       }
     })
 
@@ -205,7 +215,7 @@ router.put('/room-memos/:id', authMiddleware, async (req: Request, res: Response
     await hotelDb.getAdapter().systemEvent.create({
       data: {
         id: `log-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         user_id: req.user?.user_id,
         event_type: 'USER_OPERATION',
         source_system: 'hotel-common',
@@ -230,28 +240,32 @@ router.put('/room-memos/:id', authMiddleware, async (req: Request, res: Response
 // PUT /api/v1/admin/room-memos/:id/status
 router.put('/room-memos/:id/status', authMiddleware, async (req: Request, res: Response) => {
   try {
+    const tenantId = (req as any).user?.tenant_id;
+    if (!tenantId) { return ResponseHelper.sendUnauthorized(res, 'テナントIDが取得できません'); }
+    const userId = (req as any).user?.user_id;
+    if (!userId) { return ResponseHelper.sendUnauthorized(res, 'ユーザーIDが取得できません'); }
     const { id } = req.params
     const body = ChangeStatusSchema.parse(req.body)
 
-    const memo = await hotelDb.getAdapter().roomMemo.findFirst({ where: { id, tenant_id: req.user?.tenant_id!, is_deleted: false } })
+    const memo = await hotelDb.getAdapter().roomMemo.findFirst({ where: { id, tenant_id: tenantId, is_deleted: false } })
     if (!memo) return ResponseHelper.sendNotFound(res, 'メモが見つかりません')
 
     await hotelDb.transaction(async (tx) => {
-      await tx.roomMemo.update({ where: { id }, data: { status: body.status, updated_by_staff_id: req.user?.user_id! } })
+      await tx.roomMemo.update({ where: { id }, data: { status: body.status, updated_by_staff_id: userId } })
       await tx.roomMemoStatusLog.create({
         data: {
-          tenant_id: req.user?.tenant_id!,
+          tenant_id: tenantId,
           memo_id: id,
           status_from: (memo as any).status,
           status_to: body.status,
           comment: body.comment || null,
-          changed_by_staff_id: req.user?.user_id!
+          changed_by_staff_id: userId
         }
       })
       await tx.systemEvent.create({
         data: {
           id: `log-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-          tenant_id: req.user?.tenant_id!,
+          tenant_id: tenantId,
           user_id: req.user?.user_id,
           event_type: 'USER_OPERATION',
           source_system: 'hotel-common',
@@ -279,9 +293,11 @@ router.put('/room-memos/:id/status', authMiddleware, async (req: Request, res: R
 // コメント
 router.get('/room-memos/:id/comments', authMiddleware, async (req: Request, res: Response) => {
   try {
+    const tenantId = (req as any).user?.tenant_id;
+    if (!tenantId) { return ResponseHelper.sendUnauthorized(res, 'テナントIDが取得できません'); }
     const { id } = req.params
     const comments = await hotelDb.getAdapter().roomMemoComment.findMany({
-      where: { tenant_id: req.user?.tenant_id!, memo_id: id },
+      where: { tenant_id: tenantId, memo_id: id },
       orderBy: { created_at: 'asc' }
     })
     return ResponseHelper.sendSuccess(res, { comments })
@@ -292,20 +308,24 @@ router.get('/room-memos/:id/comments', authMiddleware, async (req: Request, res:
 
 router.post('/room-memos/:id/comments', authMiddleware, async (req: Request, res: Response) => {
   try {
+    const tenantId = (req as any).user?.tenant_id;
+    if (!tenantId) { return ResponseHelper.sendUnauthorized(res, 'テナントIDが取得できません'); }
+    const userId = (req as any).user?.user_id;
+    if (!userId) { return ResponseHelper.sendUnauthorized(res, 'ユーザーIDが取得できません'); }
     const { id } = req.params
     const body = CommentCreateSchema.parse(req.body)
 
     // 存在確認
-    const memo = await hotelDb.getAdapter().roomMemo.findFirst({ where: { id, tenant_id: req.user?.tenant_id!, is_deleted: false } })
+    const memo = await hotelDb.getAdapter().roomMemo.findFirst({ where: { id, tenant_id: tenantId, is_deleted: false } })
     if (!memo) return ResponseHelper.sendNotFound(res, 'メモが見つかりません')
 
     const created = await hotelDb.getAdapter().roomMemoComment.create({
       data: {
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         memo_id: id,
         parent_comment_id: body.parent_comment_id || null,
         content: body.content,
-        created_by_staff_id: req.user?.user_id!
+        created_by_staff_id: userId
       }
     })
 
@@ -313,7 +333,7 @@ router.post('/room-memos/:id/comments', authMiddleware, async (req: Request, res
     await hotelDb.getAdapter().systemEvent.create({
       data: {
         id: `log-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         user_id: req.user?.user_id,
         event_type: 'USER_OPERATION',
         source_system: 'hotel-common',
@@ -336,8 +356,10 @@ router.post('/room-memos/:id/comments', authMiddleware, async (req: Request, res
 // DELETE /api/v1/admin/room-memos/:id
 router.delete('/room-memos/:id', authMiddleware, async (req: Request, res: Response) => {
   try {
+    const tenantId = (req as any).user?.tenant_id;
+    if (!tenantId) { return ResponseHelper.sendUnauthorized(res, 'テナントIDが取得できません'); }
     const { id } = req.params
-    const memo = await hotelDb.getAdapter().roomMemo.findFirst({ where: { id, tenant_id: req.user?.tenant_id!, is_deleted: false } })
+    const memo = await hotelDb.getAdapter().roomMemo.findFirst({ where: { id, tenant_id: tenantId, is_deleted: false } })
     if (!memo) return ResponseHelper.sendNotFound(res, 'メモが見つかりません')
 
     await hotelDb.getAdapter().roomMemo.update({ where: { id }, data: { is_deleted: true, deleted_at: new Date() } })
@@ -346,7 +368,7 @@ router.delete('/room-memos/:id', authMiddleware, async (req: Request, res: Respo
     await hotelDb.getAdapter().systemEvent.create({
       data: {
         id: `log-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        tenant_id: req.user?.tenant_id!,
+        tenant_id: tenantId,
         user_id: req.user?.user_id,
         event_type: 'USER_OPERATION',
         source_system: 'hotel-common',

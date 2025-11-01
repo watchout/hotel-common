@@ -253,7 +253,7 @@ router.post('/hierarchy/user/permissions-detail', async (req, res) => {
         can_transfer_points: membershipRestrictions.points_transfer.allowed,
         can_access_group_analytics: membershipRestrictions.analytics_access.allowed,
         restrictions: [
-          // @ts-ignore - 型定義が不完全
+          // @ts-expect-error - 型定義が不完全
           ...(membershipRestrictions.tier_management.restrictions || []),
           ...(membershipRestrictions.points_transfer.restrictions || [])
         ]

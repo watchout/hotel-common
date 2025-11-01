@@ -146,7 +146,6 @@ export class ResponseTreeRepository {
     createdBy: string;
     comment?: string;
   }): Promise<any> {
-    // @ts-ignore - Prismaスキーマの型定義が不完全
     return hotelDb.getAdapter().responseTreeVersion.create({
       data: {
         id: uuidv4(), // IDを文字列で自動生成

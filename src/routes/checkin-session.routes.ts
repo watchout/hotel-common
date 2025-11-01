@@ -65,7 +65,6 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です').response
       );
-      return;
     }
 
     // 予約の存在確認
@@ -113,7 +112,7 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
     // 予約ステータスを更新
     await hotelDb.getAdapter().reservation.update({
       where: { id: validatedData.reservationId },
-      data: { 
+      data: {
         status: 'CHECKED_IN',
         updatedAt: new Date()
       }
@@ -122,7 +121,7 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
     // 部屋ステータスを更新
     await hotelDb.getAdapter().room.update({
       where: { id: validatedData.roomId },
-      data: { 
+      data: {
         status: 'occupied',
         updatedAt: new Date()
       }
@@ -132,22 +131,15 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       StandardResponseBuilder.success(res, { session }, 'チェックインセッションを作成しました')
     );
 
-    logger.info('チェックインセッション作成完了', {
-      sessionId: session.id,
-      sessionNumber: session.sessionNumber,
-      tenantId,
-      roomId: validatedData.roomId
-    });
-
   } catch (error: unknown) {
     logger.error('チェックインセッション作成エラー', error as Error);
-    
+
     if (error instanceof z.ZodError) {
       return res.status(400).json(
         StandardResponseBuilder.error('VALIDATION_ERROR', '入力データが正しくありません').response
       );
     }
-    
+
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', 'チェックインセッションの作成に失敗しました').response
     );
@@ -170,7 +162,6 @@ router.get('/:sessionId', authMiddleware, async (req: Request, res: Response) =>
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です').response
       );
-      return;
     }
 
     const session = await hotelDb.getAdapter().checkinSession.findFirst({
@@ -197,12 +188,6 @@ router.get('/:sessionId', authMiddleware, async (req: Request, res: Response) =>
       StandardResponseBuilder.success(res, { session })
     );
 
-    logger.info('セッション詳細取得完了', {
-      sessionId,
-      sessionNumber: session?.sessionNumber,
-      tenantId
-    });
-
   } catch (error: unknown) {
     logger.error('セッション詳細取得エラー', error as Error);
     return res.status(500).json(
@@ -227,7 +212,6 @@ router.get('/by-number/:sessionNumber', authMiddleware, async (req: Request, res
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です').response
       );
-      return;
     }
 
     const session = await hotelDb.getAdapter().checkinSession.findFirst({
@@ -254,12 +238,6 @@ router.get('/by-number/:sessionNumber', authMiddleware, async (req: Request, res
       StandardResponseBuilder.success(res, { session })
     );
 
-    logger.info('セッション番号による取得完了', {
-      sessionNumber,
-      sessionId: session?.id,
-      tenantId
-    });
-
   } catch (error: unknown) {
     logger.error('セッション番号による取得エラー', error as Error);
     return res.status(500).json(
@@ -284,7 +262,6 @@ router.get('/active-by-room/:roomId', authMiddleware, async (req: Request, res: 
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です').response
       );
-      return;
     }
 
     const session = await hotelDb.getAdapter().checkinSession.findFirst({
@@ -305,12 +282,6 @@ router.get('/active-by-room/:roomId', authMiddleware, async (req: Request, res: 
     return res.status(200).json(
       StandardResponseBuilder.success(res, { session })
     );
-
-    logger.info('部屋のアクティブセッション取得完了', {
-      roomId,
-      sessionId: session?.id,
-      tenantId
-    });
 
   } catch (error: unknown) {
     logger.error('部屋のアクティブセッション取得エラー', error as Error);
@@ -337,7 +308,6 @@ router.patch('/:sessionId', authMiddleware, async (req: Request, res: Response) 
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です').response
       );
-      return;
     }
 
     const session = await hotelDb.getAdapter().checkinSession.update({
@@ -354,22 +324,15 @@ router.patch('/:sessionId', authMiddleware, async (req: Request, res: Response) 
       StandardResponseBuilder.success(res, { session }, 'セッションを更新しました')
     );
 
-    logger.info('セッション更新完了', {
-      sessionId,
-      tenantId,
-      updates: validatedData
-    });
-
   } catch (error: unknown) {
     logger.error('セッション更新エラー', error as Error);
-    
+
     if (error instanceof z.ZodError) {
       return res.status(400).json(
         StandardResponseBuilder.error('VALIDATION_ERROR', '更新データが正しくありません').response
       );
-      return;
     }
-    
+
     return res.status(500).json(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
       StandardResponseBuilder.error('INTERNAL_ERROR', 'セッションの更新に失敗しました').response
@@ -392,7 +355,6 @@ router.post('/:sessionId/checkout', authMiddleware, async (req: Request, res: Re
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です').response
       );
-      return;
     }
 
     const checkoutTime = new Date();
@@ -410,7 +372,7 @@ router.post('/:sessionId/checkout', authMiddleware, async (req: Request, res: Re
     // 予約ステータスを更新
     await hotelDb.getAdapter().reservation.update({
       where: { id: session.reservationId },
-      data: { 
+      data: {
         status: 'COMPLETED',
         updatedAt: checkoutTime
       }
@@ -419,7 +381,7 @@ router.post('/:sessionId/checkout', authMiddleware, async (req: Request, res: Re
     // 部屋ステータスを更新
     await hotelDb.getAdapter().room.update({
       where: { id: session.roomId },
-      data: { 
+      data: {
         status: 'cleaning',
         updatedAt: checkoutTime
       }
@@ -428,13 +390,6 @@ router.post('/:sessionId/checkout', authMiddleware, async (req: Request, res: Re
     return res.status(200).json(
       StandardResponseBuilder.success(res, { session }, 'チェックアウトが完了しました')
     );
-
-    logger.info('チェックアウト処理完了', {
-      sessionId,
-      sessionNumber: session.sessionNumber,
-      tenantId,
-      checkoutTime
-    });
 
   } catch (error: unknown) {
     logger.error('チェックアウト処理エラー', error as Error);

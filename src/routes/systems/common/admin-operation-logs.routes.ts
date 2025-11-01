@@ -40,7 +40,6 @@ router.get('/operation-logs', authMiddleware, async (req: Request, res: Response
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       );
-      return;
     }
 
     // 実際のシステムイベントログを取得
@@ -174,12 +173,12 @@ router.get('/operation-logs', authMiddleware, async (req: Request, res: Response
 
   } catch (error: unknown) {
     logger.error('管理者操作ログ一覧取得エラー', error as Error);
-    
+
     if (error instanceof z.ZodError) {
       ResponseHelper.sendValidationError(res, 'クエリパラメータが正しくありません', error.errors);
       return;
     }
-    
+
     ResponseHelper.sendInternalError(res, '操作ログ一覧の取得に失敗しました');
   }
 });
@@ -197,7 +196,6 @@ router.get('/operation-logs/:id', authMiddleware, async (req: Request, res: Resp
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       );
-      return;
     }
 
     const log = await hotelDb.getAdapter().systemEvent.findFirst({
@@ -260,13 +258,12 @@ router.get('/operation-logs/stats', authMiddleware, async (req: Request, res: Re
       return res.status(400).json(
         StandardResponseBuilder.error('TENANT_ID_REQUIRED', 'テナントIDが必要です')
       );
-      return;
     }
 
     // 期間の計算
     const now = new Date();
     let startDate: Date;
-    
+
     switch (period) {
       case '1d':
         startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);

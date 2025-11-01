@@ -1,4 +1,5 @@
 import { hotelDb } from '../database/prisma'
+import type { Prisma } from '../generated/prisma'
 import { HotelLogger } from '../utils/logger'
 
 import type {
@@ -73,9 +74,9 @@ export class RoomService {
         }
       })
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return room as any as Room
     } catch (error: unknown) {
       this.logger.error('部屋作成エラー', error as Error)
@@ -86,27 +87,18 @@ export class RoomService {
   /**
    * 部屋取得（ID指定）
    */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static async getRoomById(id: string, tenantId: string, includeGrade = false): Promise<Room | null> {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     try {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const include: any = {}
-      if (includeGrade) {
-        include.roomGrade = true
-      }
-
       const room = await hotelDb.getAdapter().room.findFirst({
         where: {
           id,
           tenantId: tenantId
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-        },
-        include
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+        }
       })
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return room as any as Room | null
     } catch (error: unknown) {
       this.logger.error('部屋取得エラー', error as Error)
@@ -120,15 +112,15 @@ export class RoomService {
   static async getRoomByNumber(roomNumber: string, tenantId: string): Promise<Room | null> {
     try {
       const room = await hotelDb.getAdapter().room.findFirst({
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         where: {
           roomNumber: roomNumber,
           tenantId: tenantId
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }
       })
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return room as any as Room | null
     } catch (error: unknown) {
       this.logger.error('部屋番号取得エラー', error as Error)
@@ -142,12 +134,12 @@ export class RoomService {
    */
   static async getRooms(params: RoomSearchParams): Promise<{
     rooms: Room[]
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     total: number
     hasNext: boolean
   }> {
     try {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const where: any = {
         tenantId: params.tenant_id
       }
@@ -208,22 +200,16 @@ export class RoomService {
                   }
                 },
                 {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   status: {
                     in: ['confirmed', 'checked_in']
                   }
                 }
               ]
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
             }
           }
         }
-      }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const include: any = {}
-      if (params.include_grade) {
-        include.roomGrade = true
       }
 
       // 総件数取得
@@ -232,22 +218,18 @@ export class RoomService {
       // データ取得
       const rooms = await hotelDb.getAdapter().room.findMany({
         where,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        include,
         orderBy: [
           { floor: 'asc' },
           { roomNumber: 'asc' }
         ],
         skip: params.offset,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
         take: params.limit
       })
 
       const hasNext = params.offset + params.limit < total
 
       return {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        // @ts-expect-error
         rooms: rooms as Room[],
         total,
         hasNext
@@ -275,7 +257,7 @@ export class RoomService {
       })
 
       // 部屋番号の重複チェック（変更される場合）
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (data.room_number) {
         const existingRoom = await hotelDb.getAdapter().room.findFirst({
           where: {
@@ -283,7 +265,7 @@ export class RoomService {
             roomNumber: data.room_number,
             NOT: { id }
           }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         })
 
         if (existingRoom) {
@@ -291,21 +273,27 @@ export class RoomService {
         }
       }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const updateData: any = {
-        ...data,
-        updatedAt: new Date(),
-        // updatedBy_system: 'hotel-common'
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-      }
+      const dataOut: Prisma.RoomUpdateInput = ((): Prisma.RoomUpdateInput => {
+        const out: Prisma.RoomUpdateInput = {
+          updatedAt: new Date()
+        }
+        if (data.room_number !== undefined) out.roomNumber = data.room_number
+        if (data.room_type !== undefined) out.roomType = data.room_type
+        if (data.floor_number !== undefined) out.floor = data.floor_number
+        if (data.capacity !== undefined) out.capacity = data.capacity
+        if (data.amenities !== undefined) out.amenities = data.amenities
+        if (data.notes !== undefined) out.notes = data.notes
+        if (data.status !== undefined) out.status = data.status
+        return out
+      })()
 
       const room = await hotelDb.getAdapter().room.update({
         where: {
           id,
           tenantId: tenantId
         },
-        data: updateData
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data: dataOut
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       })
 
       this.logger.info('部屋更新完了', {
@@ -314,14 +302,14 @@ export class RoomService {
         }
       })
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return room as any as Room
     } catch (error: unknown) {
       this.logger.error('部屋更新エラー', error as Error)
       throw error
     }
   }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
   /**
    * 部屋ステータス更新
@@ -331,7 +319,7 @@ export class RoomService {
     tenantId: string,
     data: UpdateRoomStatusRequest
   ): Promise<Room> {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     try {
       this.logger.info('部屋ステータス更新開始', {
         data: {
@@ -341,37 +329,21 @@ export class RoomService {
         }
       })
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const updateData: any = {
+      const dataOut: Prisma.RoomUpdateInput = ((): Prisma.RoomUpdateInput => {
+        const out: Prisma.RoomUpdateInput = {
         status: data.status,
-        updatedAt: new Date(),
-        // updatedBy: data.updated_by,
-        // updatedBy_system: 'hotel-common'
-      }
-
-      if (data.notes) {
-        updateData.notes = data.notes
-      }
-
-      if (data.maintenance_notes) {
-        updateData.maintenance_notes = data.maintenance_notes
-      }
-
-      // ステータス別の追加処理
-      if (data.status === 'cleaning') {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-        updateData.last_cleaned_at = new Date()
-      } else if (data.status === 'maintenance') {
-        updateData.last_maintenance_at = new Date()
-      }
+          updatedAt: new Date()
+        }
+        if (data.notes) out.notes = data.notes
+        return out
+      })()
 
       const room = await hotelDb.getAdapter().room.update({
         where: {
           id,
           tenantId: tenantId
         },
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-        data: updateData
+        data: dataOut
       })
 
       this.logger.info('部屋ステータス更新完了', {
@@ -381,7 +353,7 @@ export class RoomService {
         }
       })
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return room as any as Room
     } catch (error: unknown) {
       this.logger.error('部屋ステータス更新エラー', error as Error)
@@ -399,7 +371,7 @@ export class RoomService {
           room_id: id,
           tenantId: tenantId
         }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       })
 
       const room = await hotelDb.getAdapter().room.update({
@@ -407,14 +379,14 @@ export class RoomService {
           id,
           tenantId: tenantId
         },
-        data: {
+        data: ((): Record<string, unknown> => ({
           // isActive: false,
           status: 'out_of_order',
           updatedAt: new Date(),
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           // updatedBy: deletedBy,
           // updatedBy_system: 'hotel-common'
-        }
+        }))()
       })
 
       this.logger.info('部屋削除完了', {
@@ -423,8 +395,8 @@ export class RoomService {
         }
       })
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return room as any as Room
     } catch (error: unknown) {
       this.logger.error('部屋削除エラー', error as Error)
@@ -436,7 +408,7 @@ export class RoomService {
    * フロア別部屋取得
    */
   static async getRoomsByFloor(floorNumber: number, tenantId: string): Promise<Room[]> {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     try {
       const rooms = await hotelDb.getAdapter().room.findMany({
         where: {
@@ -445,12 +417,12 @@ export class RoomService {
           // isActive: true
         },
         orderBy: {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           roomNumber: 'asc'
         }
       })
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return rooms as any as Room[]
     } catch (error: unknown) {
       this.logger.error('フロア別部屋取得エラー', error as Error)
@@ -473,7 +445,7 @@ export class RoomService {
         }
       })
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const where: any = {
         tenantId: params.tenant_id,
         // isActive: true,
@@ -519,7 +491,7 @@ export class RoomService {
                 checkout_date: {
                   gt: new Date(params.checkin_date)
                 }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
               },
               {
                 status: {
@@ -533,10 +505,6 @@ export class RoomService {
 
       const rooms = await hotelDb.getAdapter().room.findMany({
         where,
-        include: {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-          // roomGrade: true
-        },
         orderBy: [
           { floor: 'asc' },
           { roomNumber: 'asc' }
@@ -549,7 +517,7 @@ export class RoomService {
         }
       })
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return rooms as any as Room[]
     } catch (error: unknown) {
       this.logger.error('空室検索エラー', error as Error)
@@ -570,13 +538,13 @@ export class RoomService {
     by_type: Record<string, number>
     by_floor: Record<number, number>
   }> {
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     try {
       const [
         total,
         available,
         occupied,
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         cleaning,
         maintenance,
         outOfOrder,
@@ -587,13 +555,13 @@ export class RoomService {
         hotelDb.getAdapter().room.count({ where: { tenantId: tenantId, status: 'available' } }),
         hotelDb.getAdapter().room.count({ where: { tenantId: tenantId, status: 'occupied' } }),
         hotelDb.getAdapter().room.count({ where: { tenantId: tenantId, status: 'cleaning' } }),
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         hotelDb.getAdapter().room.count({ where: { tenantId: tenantId, status: 'maintenance' } }),
         hotelDb.getAdapter().room.count({ where: { tenantId: tenantId, status: 'out_of_order' } }),
         hotelDb.getAdapter().room.groupBy({
           by: ['roomType'],
           where: { tenantId: tenantId },
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           _count: true
         }),
         hotelDb.getAdapter().room.groupBy({
@@ -604,13 +572,13 @@ export class RoomService {
       ])
 
       const byType: Record<string, number> = {}
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       roomsByType.forEach((item: any) => {
         byType[item.roomType] = item._count
       })
 
       const byFloor: Record<number, number> = {}
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       roomsByFloor.forEach((item: any) => {
         byFloor[item.floor_number] = item._count
       })

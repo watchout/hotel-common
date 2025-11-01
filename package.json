@@ -12,8 +12,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint src/**/*.ts --fix",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "check-api-routes": "ts-node scripts/check-api-routes.ts",
     "check-route-order": "ts-node scripts/check-route-order.ts",
     "fix-api-routes": "ts-node scripts/fix-api-routes.ts",
@@ -25,7 +25,8 @@
     "api-spec-validate": "node scripts/api-spec-validator.js validate",
     "api-health": "npm run api-monitor && npm run api-spec-validate",
     "pre-commit": "npm run check-api-routes && npm run check-route-order && npm run lint",
-    "prepare": "husky install"
+    "prepare": "husky",
+    "precommit": "lint-staged"
   },
   "husky": {
     "hooks": {
@@ -43,6 +44,8 @@
   "dependencies": {
     "@iconify/vue": "^4.1.2",
     "@prisma/client": "^5.0.0",
+    "@sendgrid/mail": "^8.1.6",
+    "aws-sdk": "^2.1692.0",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "compression": "^1.7.4",
@@ -51,19 +54,26 @@
     "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "express-rate-limit": "^6.7.0",
+    "firebase-admin": "^13.5.0",
     "glob": "^10.3.10",
     "helmet": "^7.0.0",
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "node-cache": "^5.1.2",
+    "node-fetch": "^2.7.0",
+    "nodemailer": "^7.0.10",
+    "onesignal-node": "^3.4.0",
+    "qrcode": "^1.5.4",
     "redis": "^4.6.13",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
+    "twilio": "^5.10.4",
     "uuid": "^9.0.1",
     "vue": "^3.5.12",
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@eslint/js": "^9.38.0",
     "@types/bcrypt": "^5.0.0",
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.10",
@@ -75,17 +85,30 @@
     "@types/morgan": "^1.9.4",
     "@types/node": "^20.0.0",
     "@types/node-cache": "^4.2.5",
+    "@types/node-fetch": "^2.6.13",
+    "@types/nodemailer": "^7.0.3",
+    "@types/qrcode": "^1.5.6",
     "@types/uuid": "^9.0.7",
-    "@typescript-eslint/eslint-plugin": "^5.59.0",
-    "@typescript-eslint/parser": "^5.59.0",
-    "eslint": "^8.40.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
-    "husky": "^8.0.3",
+    "globals": "^13.24.0",
+    "husky": "^9.1.7",
     "jest": "^29.5.0",
+    "lint-staged": "^16.2.6",
+    "prettier": "^3.6.2",
     "prisma": "^5.0.0",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "typescript-eslint": "^7.18.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }

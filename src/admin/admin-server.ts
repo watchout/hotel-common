@@ -21,11 +21,8 @@ app.use(cors({
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // 静的ファイル配信（管理画面UI）
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore - ESモジュールの機能を使用
+// @ts-expect-error - ESモジュールの機能を使用
 const currentDir = path.dirname(new URL(import.meta.url).pathname)
 app.use('/admin', express.static(path.join(currentDir, '.')))
 

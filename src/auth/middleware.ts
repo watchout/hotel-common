@@ -38,26 +38,16 @@ export const verifyAdminAuth = (req: Request & { user?: any }, res: Response, ne
     return res.status(401).json({ error: 'Authorization header required' });
   }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
   try {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     const token = authHeader.replace('Bearer ', '');
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - 型定義が不完全
     const decoded = jwt.verify(token, JWT_SECRET);
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     
     // 管理者権限チェック
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - 型定義が不完全
+    // @ts-expect-error - 型定義が不完全
     if (!decoded.role || !['ADMIN', 'SUPER_ADMIN'].includes(decoded.role)) {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       return res.status(403).json({ error: 'Admin access required' });
     }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - 型定義が不完全
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
     req.user = decoded;
     next();
@@ -67,27 +57,19 @@ export const verifyAdminAuth = (req: Request & { user?: any }, res: Response, ne
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // テナント認証ミドルウェア
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const verifyTenantAuth = (req: Request & { user?: any }, res: Response, next: NextFunction) => {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
   const authHeader = req.headers.authorization;
   if (!authHeader) {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     return res.status(401).json({ error: 'Authorization header required' });
   }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
   try {
     const token = authHeader.replace('Bearer ', '');
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - 型定義が不完全
     const decoded = jwt.verify(token, JWT_SECRET);
     
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - 型定義が不完全
     req.user = decoded;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
     next();
@@ -220,17 +202,14 @@ export const authMiddleware = (req: Request & { user?: any }, res: Response, nex
     if (!iss || !ALLOWED_ISSUERS.has(iss)) {
       issues.push({ path: ['iss'], message: `Invalid iss: ${iss || 'missing'}` });
     }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     if (!aud || aud !== JWT_AUDIENCE) {
       issues.push({ path: ['aud'], message: `Invalid aud: ${aud || 'missing'} (expected: ${JWT_AUDIENCE})` });
     }
     if (!system || !ALLOWED_SYSTEMS.has(system)) {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
       issues.push({ path: ['system'], message: `Invalid system: ${system || 'missing'}` });
     }
     if (!role || !ALLOWED_ROLES.has(role)) {
       issues.push({ path: ['role'], message: `Invalid role: ${role || 'missing'}` });
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     }
     // ユーザー操作時は sub 必須（role !== system の場合）
     if (role !== 'system' && !sub) {
@@ -239,36 +218,27 @@ export const authMiddleware = (req: Request & { user?: any }, res: Response, nex
 
     // 厳格モードなら拒否、そうでなければWARNで通過
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
     if (issues.length > 0) {
       if (JWT_STRICT_CLAIMS) {
         return res.status(401).json({
           success: false,
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
           error: { code: 'INVALID_CLAIMS', message: 'JWT claims validation failed', details: issues },
           timestamp: new Date().toISOString()
         });
       } else {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
         authLogger.warn('JWT claims validation warnings (non-strict mode):', { issues });
       }
     }
 
     // 正規化（後続で扱いやすいように）
     if (role && req.user) {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
 // eslint-disable-next-line no-empty
       req.user.role = role;
     }
     if (system && req.user) {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       req.user.system = system;
     }
     if (sub && req.user && !req.user.sub) {
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       req.user.sub = sub;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }

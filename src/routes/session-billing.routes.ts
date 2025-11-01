@@ -104,24 +104,15 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       StandardResponseBuilder.success(res, { billing }, 'セッション請求書を作成しました')
     );
 
-    logger.info('セッション請求書作成完了', {
-      billingId: billing.id,
-      billingNumber: billing.billingNumber,
-      sessionId: validatedData.sessionId,
-      totalAmount: calculations.total,
-      tenantId
-    });
-
   } catch (error: unknown) {
     logger.error('セッション請求書作成エラー', error as Error);
-    
+
     if (error instanceof z.ZodError) {
       return res.status(400).json(
         StandardResponseBuilder.error('VALIDATION_ERROR', '入力データが正しくありません').response
       );
-      return;
     }
-    
+
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', 'セッション請求書の作成に失敗しました').response
     );
@@ -202,12 +193,6 @@ router.get('/:billingId', authMiddleware, async (req: Request, res: Response) =>
       StandardResponseBuilder.success(res, { billing: detailedBilling })
     );
 
-    logger.info('セッション請求書取得完了', {
-      billingId,
-      billingNumber: billing?.billingNumber,
-      tenantId
-    });
-
   } catch (error: unknown) {
     logger.error('セッション請求書取得エラー', error as Error);
     return res.status(500).json(
@@ -276,12 +261,6 @@ router.get('/by-session/:sessionId', authMiddleware, async (req: Request, res: R
     return res.status(200).json(
       StandardResponseBuilder.success(res, { billings: formattedBillings })
     );
-
-    logger.info('セッション別請求書一覧取得完了', {
-      sessionId,
-      billingCount: billings.length,
-      tenantId
-    });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: unknown) {
@@ -362,23 +341,15 @@ router.patch('/:billingId', authMiddleware, async (req: Request, res: Response) 
       StandardResponseBuilder.success(res, { billing: updatedBilling }, '請求書を更新しました')
     );
 
-    logger.info('セッション請求書更新完了', {
-      billingId,
-      tenantId,
-      updates: validatedData
-    });
-
   } catch (error: unknown) {
     logger.error('セッション請求書更新エラー', error as Error);
-    
+
     if (error instanceof z.ZodError) {
       return res.status(400).json(
         StandardResponseBuilder.error('VALIDATION_ERROR', '更新データが正しくありません').response
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
       );
-      return;
     }
-    
+
     return res.status(500).json(
       StandardResponseBuilder.error('INTERNAL_ERROR', '請求書の更新に失敗しました').response
     );
@@ -451,7 +422,7 @@ router.post('/:billingId/payment', authMiddleware, async (req: Request, res: Res
       }
     });
 
-    return res.status(200).json(StandardResponseBuilder.success(res, { 
+    return res.status(200).json(StandardResponseBuilder.success(res, {
       billing: updatedBilling,
       payment: {
         amount,
@@ -462,14 +433,7 @@ router.post('/:billingId/payment', authMiddleware, async (req: Request, res: Res
     }, '支払い処理が完了しました')
     );
 
-    logger.info('セッション請求書支払い処理完了', {
-      billingId,
-      paymentAmount: amount,
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-      newPaidAmount,
-      status: newStatus,
-      tenantId
-    });
+    // ログはレスポンス返却後のため実行しない
 
   } catch (error: unknown) {
     logger.error('セッション請求書支払い処理エラー', error as Error);
@@ -521,7 +485,7 @@ router.get('/calculate/:sessionId', authMiddleware, async (req: Request, res: Re
     // 料金計算
     const calculations = await calculateSessionCharges(session, {});
 
-    return res.status(200).json(StandardResponseBuilder.success(res, { 
+    return res.status(200).json(StandardResponseBuilder.success(res, {
       sessionId,
       calculations: {
         roomCharges: calculations.roomCharges,
@@ -535,12 +499,6 @@ router.get('/calculate/:sessionId', authMiddleware, async (req: Request, res: Re
       }
     })
     );
-
-    logger.info('セッション料金計算完了', {
-      sessionId,
-      totalAmount: calculations.total,
-      tenantId
-    });
 
   } catch (error: unknown) {
     logger.error('セッション料金計算エラー', error as Error);
@@ -558,7 +516,7 @@ async function generateBillingNumber(tenantId: string, sessionNumber: string): P
   const today = new Date().toISOString().split('T')[0].replace(/-/g, '');
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const baseNumber = `BILL-${sessionNumber}-${today}`;
-  
+
   // 同日の連番確認
   const existingCount = await hotelDb.getAdapter().sessionBilling.count({
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
